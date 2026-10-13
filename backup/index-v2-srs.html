@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>English Life World</title>
+<style>
+:root{--bg:#fdf6ec;--card:#fff;--ink:#2d2a26;--muted:#7a7166;--accent:#e8743b;--ok:#3a9d5d;--line:#eadfce}
+*{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;font-family:system-ui,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink)}
+header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;max-width:1100px;margin:auto}
+h1{font-size:20px;margin:0}h1 span{color:var(--accent)}
+.prog{font-size:14px;color:var(--muted)}
+main{display:grid;grid-template-columns:1.3fr 1fr;gap:16px;max-width:1100px;margin:auto;padding:0 16px 24px}
+@media(max-width:820px){main{grid-template-columns:1fr}}
+.scene{background:var(--card);border-radius:18px;padding:8px;box-shadow:0 4px 18px #0001}
+.hint{font-size:14px;color:var(--muted);margin:6px 8px}
+svg{width:100%;height:auto;display:block}
+.obj{cursor:pointer;transition:filter .2s}
+.obj:hover,.obj:focus{filter:drop-shadow(0 0 6px var(--accent));outline:none}
+.obj.done .badge{display:block}.badge{display:none}
+.panel{background:var(--card);border-radius:18px;padding:18px;box-shadow:0 4px 18px #0001}
+.empty{color:var(--muted);text-align:center;padding:40px 10px}
+.steps{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:12px}
+.steps button{flex:1;min-width:60px;border:0;background:#f3ebe0;padding:8px 4px;border-radius:10px;font-size:13px;cursor:pointer;color:var(--ink)}
+.steps button.on{background:var(--accent);color:#fff}
+.sent{font-size:24px;font-weight:700;margin:6px 0}
+.sent .w{cursor:pointer;border-radius:4px}.sent .w:hover{background:#ffe3d1}
+.sent .key{color:var(--accent)}
+.vi{color:var(--muted);margin-bottom:12px}
+.btn{border:0;background:var(--accent);color:#fff;padding:10px 14px;border-radius:12px;font-size:15px;cursor:pointer;margin:4px 4px 4px 0}
+.btn.sec{background:#f3ebe0;color:var(--ink)}
+.btn:disabled{opacity:.5;cursor:default}
+.vocab{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.chip{background:#f8f2e9;border:1px solid var(--line);border-radius:10px;padding:6px 10px;cursor:pointer;font-size:14px}
+.chip small{color:var(--muted);display:block}
+.note{background:#fff7e8;border-left:4px solid #f0b54a;padding:8px 10px;border-radius:6px;font-size:14px;margin:10px 0}
+.res{margin-top:10px;font-size:15px}.good{color:var(--ok)}.bad{color:#c0392b}
+.chunk{display:inline-block;background:#f3ebe0;padding:6px 10px;border-radius:8px;margin:3px}
+.chunk.on{background:var(--accent);color:#fff}
+.opts button{display:block;width:100%;text-align:left;margin:6px 0}
+/* animations */
+#char{transition:transform .8s ease}
+.anim-sweep #broomHeld{display:inline}.anim-sweep #broomHeld{animation:sweep .6s ease-in-out infinite alternate;transform-origin:250px 210px}
+@keyframes sweep{from{transform:rotate(-14deg)}to{transform:rotate(14deg)}}
+#broomHeld,#ragHeld,#canHeld,#bookHeld{display:none}
+.anim-wipe #ragHeld{display:inline;animation:wipe .5s ease-in-out infinite alternate}
+@keyframes wipe{from{transform:translateX(-20px)}to{transform:translateX(20px)}}
+.anim-water #canHeld{display:inline;animation:tilt 1s ease-in-out infinite alternate;transform-origin:520px 210px}
+.anim-water #drops{display:inline}#drops{display:none}
+@keyframes tilt{from{transform:rotate(0)}to{transform:rotate(25deg)}}
+.anim-pick #bookHeld{display:inline;animation:lift 1s ease-out forwards}
+.anim-pick #bookFloor{display:none}
+@keyframes lift{from{transform:translateY(60px)}to{transform:translateY(0)}}
+.win-open #winL{transform:scaleX(.25)}.win-open #winR{transform:scaleX(.25)}
+#winL{transform-origin:330px 60px;transition:transform .8s}#winR{transform-origin:430px 60px;transition:transform .8s}
+.hud{display:flex;gap:8px;align-items:center}
+.stat{background:#fff;border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-weight:700;font-size:14px}
+.stat.bump{animation:bump .5s}@keyframes bump{40%{transform:scale(1.2)}}
+.iconbtn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:6px 10px;cursor:pointer;font-size:14px}
+.guide{position:sticky;bottom:12px;max-width:1100px;margin:0 auto 12px;padding:0 16px}
+.guide button{width:100%;display:flex;gap:12px;align-items:center;text-align:left;border:2px solid var(--line);background:#fff;border-radius:16px;padding:10px 14px;cursor:pointer;box-shadow:0 3px 0 var(--line);font-size:15px;color:var(--ink)}
+.guide .face{font-size:34px}.guide b{display:block}.guide span{color:var(--muted)}
+.modal{position:fixed;inset:0;background:#0006;display:flex;align-items:center;justify-content:center;padding:16px;z-index:50}
+.modal .box{background:var(--card);border-radius:18px;padding:18px;max-width:620px;width:100%;max-height:90vh;overflow:auto}
+.box h2{margin:0 0 10px;font-size:18px;display:flex;justify-content:space-between}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px}
+.tile{border:1px solid var(--line);border-radius:12px;padding:10px;position:relative;background:#fffdf8;cursor:pointer}
+.tile::after{content:"";position:absolute;left:10px;right:10px;bottom:4px;height:4px;border-radius:2px;background:var(--sc,#ccc)}
+.tile .en{font-weight:700}.tile .meta{font-size:12px;color:var(--muted)}
+.legend{display:flex;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin:8px 0}
+.legend i{display:inline-block;width:12px;height:4px;border-radius:2px;margin-right:4px;vertical-align:middle}
+.sent .w.lv-new::after{content:attr(data-vi);display:block;font-size:11px;font-weight:400;color:var(--muted);text-align:center}
+.sent .w{display:inline-block}.sent .w.lv-learning{text-decoration:underline dotted var(--accent);text-underline-offset:5px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header><h1>English <span>Life</span> World</h1>
+<div class="hud"><span class="stat" id="pts" title="Điểm năng lượng: có khi học và ôn đúng">⭐ 0</span><span class="prog" id="prog"></span>
+<button class="iconbtn" id="btnBook">📒 Sổ từ</button></div></header>
+<main>
+<section class="scene">
+<p class="hint">🏠 Phòng khách — Nhấn vào một đồ vật để học</p>
+<svg viewBox="0 0 600 340" id="room" role="img" aria-label="Phòng khách">
+ <rect width="600" height="260" fill="#f6e3c6"/><rect y="260" width="600" height="80" fill="#d9a873"/>
+ <line x1="0" y1="260" x2="600" y2="260" stroke="#b9875a" stroke-width="3"/>
+ <!-- window -->
+ <g class="obj" tabindex="0" data-id="open_window" aria-label="window - cửa sổ">
+  <rect x="330" y="40" width="100" height="90" fill="#bfe3ff" stroke="#8a6a4a" stroke-width="6"/>
+  <rect id="winL" x="333" y="43" width="47" height="84" fill="#e9f6ff" stroke="#8a6a4a" stroke-width="2"/>
+  <rect id="winR" x="380" y="43" width="47" height="84" fill="#e9f6ff" stroke="#8a6a4a" stroke-width="2"/>
+  <circle class="badge" cx="428" cy="42" r="10" fill="#3a9d5d"/>
+ </g>
+ <!-- plant -->
+ <g class="obj" tabindex="0" data-id="water_plant" aria-label="plant - cái cây">
+  <rect x="520" y="235" width="40" height="35" rx="4" fill="#c56b3c"/>
+  <ellipse cx="540" cy="215" rx="28" ry="30" fill="#5fae5a"/><ellipse cx="528" cy="200" rx="12" ry="22" fill="#4c9a49"/>
+  <circle class="badge" cx="565" cy="190" r="10" fill="#3a9d5d"/>
+ </g>
+ <!-- table -->
+ <g class="obj" tabindex="0" data-id="wipe_table" aria-label="table - cái bàn">
+  <rect x="120" y="215" width="140" height="12" rx="3" fill="#8a5a3a"/>
+  <rect x="130" y="227" width="10" height="45" fill="#7a4a2a"/><rect x="240" y="227" width="10" height="45" fill="#7a4a2a"/>
+  <circle cx="160" cy="210" r="7" fill="#c9302c" opacity=".5"/>
+  <circle class="badge" cx="258" cy="208" r="10" fill="#3a9d5d"/>
+ </g>
+ <!-- broom -->
+ <g class="obj" tabindex="0" data-id="sweep_floor" aria-label="broom - cây chổi">
+  <rect x="40" y="130" width="6" height="120" fill="#a0703a"/>
+  <path d="M28 250 L58 250 L64 285 L22 285Z" fill="#e1b54a"/>
+  <circle class="badge" cx="60" cy="130" r="10" fill="#3a9d5d"/>
+ </g>
+ <!-- book on floor -->
+ <g class="obj" tabindex="0" data-id="pick_up_book" aria-label="book - quyển sách">
+  <rect id="bookFloor" x="420" y="295" width="40" height="12" rx="2" fill="#3b6ec2"/>
+  <rect x="410" y="285" width="60" height="30" fill="transparent"/>
+  <circle class="badge" cx="470" cy="290" r="10" fill="#3a9d5d"/>
+ </g>
+ <!-- character -->
+ <g id="char">
+  <circle cx="300" cy="150" r="24" fill="#f2c9a0"/>
+  <path d="M276 145 Q300 112 324 145 Q318 128 300 126 Q282 128 276 145Z" fill="#4a3426"/>
+  <circle cx="292" cy="152" r="2.5" fill="#333"/><circle cx="308" cy="152" r="2.5" fill="#333"/>
+  <path d="M292 162 Q300 168 308 162" stroke="#333" stroke-width="2" fill="none"/>
+  <rect x="282" y="174" width="36" height="58" rx="10" fill="#f0a63c"/>
+  <rect x="285" y="232" width="12" height="45" rx="5" fill="#3d5a80"/><rect x="303" y="232" width="12" height="45" rx="5" fill="#3d5a80"/>
+  <g id="broomHeld"><rect x="248" y="190" width="5" height="90" fill="#a0703a"/><path d="M238 280 L262 280 L266 300 L234 300Z" fill="#e1b54a"/></g>
+  <g id="ragHeld"><rect x="230" y="198" width="26" height="12" rx="3" fill="#6fb3d9"/></g>
+  <g id="canHeld"><rect x="320" y="195" width="30" height="22" rx="4" fill="#7aa6c2"/><rect x="348" y="198" width="22" height="4" fill="#7aa6c2"/></g>
+  <g id="bookHeld"><rect x="318" y="190" width="30" height="10" rx="2" fill="#3b6ec2"/></g>
+ </g>
+ <g id="drops"><circle cx="512" cy="205" r="3" fill="#4aa3df"/><circle cx="518" cy="215" r="3" fill="#4aa3df"/></g>
+</svg>
+</section>
+
+<section class="panel" id="panel"><div class="empty">👈 Chọn một đồ vật trong phòng.<br><br>Mỗi đồ vật dạy bạn một hành động và một câu tiếng Anh.</div></section>
+</main>
+<div class="guide"><button id="guide"><span class="face">🧑‍🏫</span><span style="flex:1"><b>Cô Mai</b><span id="guideText"></span></span><span style="font-size:22px;color:var(--accent)">›</span></button></div>
+<div class="modal" id="modal" hidden><div class="box" id="mbox"></div></div>
+
+<script>
+// ===== LESSON DATA (lesson engine nhận dữ liệu — thêm bài mới chỉ cần thêm object) =====
+const LESSONS = [
+ {id:"sweep_floor",object:{en:"broom",vi:"cây chổi",ipa:"/bruːm/"},anim:"anim-sweep",
+  sentence:"I'm sweeping the floor.",vi:"Tôi đang quét sàn nhà.",key:["sweeping","floor"],
+  vocab:[["sweep","/swiːp/","quét"],["floor","/flɔːr/","sàn nhà"],["broom","/bruːm/","cây chổi"]],
+  grammar:"sweep → sweeping: thêm -ing để nói việc <b>đang</b> làm. I'm = I am.",
+  chunks:["I'm sweeping","the floor."],
+  disc:{q:"Bạn nghe thấy từ nào?",ans:"sweep",opts:["sweep","sleep","sweet"]}},
+ {id:"wipe_table",object:{en:"table",vi:"cái bàn",ipa:"/ˈteɪ.bəl/"},anim:"anim-wipe",
+  sentence:"I'm cleaning the table.",vi:"Tôi đang lau bàn.",key:["cleaning","table"],
+  vocab:[["clean","/kliːn/","lau, dọn sạch"],["table","/ˈteɪ.bəl/","cái bàn"],["cloth","/klɒθ/","khăn lau"]],
+  grammar:"Cùng mẫu câu: I'm + động từ-ing + the + đồ vật.",
+  chunks:["I'm cleaning","the table."],
+  disc:{q:"Bạn nghe thấy từ nào?",ans:"clean",opts:["clean","cling","green"]}},
+ {id:"water_plant",object:{en:"plant",vi:"cái cây",ipa:"/plɑːnt/"},anim:"anim-water",
+  sentence:"I'm watering the plants.",vi:"Tôi đang tưới cây.",key:["watering","plants"],
+  vocab:[["water","/ˈwɔː.tər/","nước; tưới nước"],["plant","/plɑːnt/","cái cây"],["plants","/plɑːnts/","những cái cây"]],
+  grammar:"<b>water</b> vừa là danh từ (nước) vừa là động từ (tưới). plants = nhiều cây (thêm -s).",
+  chunks:["I'm watering","the plants."],
+  disc:{q:"Bạn nghe thấy từ nào?",ans:"plant",opts:["plant","plan","planet"]}},
+ {id:"open_window",object:{en:"window",vi:"cửa sổ",ipa:"/ˈwɪn.dəʊ/"},anim:"win-open",
+  sentence:"I'm opening the window.",vi:"Tôi đang mở cửa sổ.",key:["opening","window"],
+  vocab:[["open","/ˈəʊ.pən/","mở"],["close","/kləʊz/","đóng"],["window","/ˈwɪn.dəʊ/","cửa sổ"]],
+  grammar:"Ngược lại: I'm <b>closing</b> the window. (close → closing: bỏ e rồi thêm -ing)",
+  chunks:["I'm opening","the window."],
+  disc:{q:"Bạn nghe thấy từ nào?",ans:"open",opts:["open","often","oven"]}},
+ {id:"pick_up_book",object:{en:"book",vi:"quyển sách",ipa:"/bʊk/"},anim:"anim-pick",
+  sentence:"I'm picking up the book.",vi:"Tôi đang nhặt quyển sách lên.",key:["picking","up","book"],
+  vocab:[["pick up","/pɪk ʌp/","nhặt lên"],["book","/bʊk/","quyển sách"],["put down","/pʊt daʊn/","đặt xuống"]],
+  grammar:"<b>pick up</b> là cụm động từ: nhặt lên. Thêm -ing vào từ đầu: picking up.",
+  chunks:["I'm picking up","the book."],
+  disc:{q:"Bạn nghe thấy từ nào?",ans:"book",opts:["book","boot","look"]}}
+];
+const STEPS=[["look","👀 Xem"],["listen","👂 Nghe"],["shadow","🔁 Nhại"],["disc","🎯 Phân biệt"],["speak","🎤 Nói"],["recall","🧠 Tự nhớ"]];
+
+// ===== PROGRESS (LocalStorage, an toàn khi bị chặn) =====
+const KEY="elw_progress_v1";
+let P={};try{P=JSON.parse(localStorage.getItem(KEY))||{}}catch(e){}
+if(!P.items){P={steps:Object.fromEntries(Object.entries(P).map(([k,v])=>[k,v.steps||{}])),items:{},pts:0}} // nâng cấp dữ liệu cũ
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(P))}catch(e){}};
+
+// ===== SRS (theo kiểu Quy Vân Quán / WaniKani) =====
+// Bậc 1–4: mới học · 5–6: đã thuộc · 7: nhớ lâu · 8: khắc sâu · 9: thành thạo (không ôn nữa)
+const HOUR=36e5, SRS_HOURS=[0,4,8,23,47,167,335,719,2879], DONE=9, KNOWN=5;
+const LABELS=["Chưa học","Mới học","Mới học","Mới học","Mới học","Đã thuộc","Đã thuộc","Nhớ lâu","Khắc sâu","Thành thạo"];
+const stageColor=s=>s<=0?"#ddd":s<KNOWN?"#e8a25a":s<7?"#5e9a6f":s<DONE?"#3f7fa8":"#8a6bb3";
+const PTS={step:1,learn:5,ok:3,hint:1};
+const ivl=s=>SRS_HOURS[Math.max(1,Math.min(s,8))]*HOUR;
+const stage=id=>P.items[id]?P.items[id].s:0;
+function addPts(n){P.pts+=n;const e=document.getElementById("pts");e.textContent="⭐ "+P.pts;e.classList.remove("bump");void e.offsetWidth;e.classList.add("bump")}
+function learn(id){if(P.items[id])return;P.items[id]={s:1,due:Date.now()+ivl(1),ok:0,bad:0};addPts(PTS.learn);toastG(`Đã thêm “${LESSONS.find(l=>l.id===id).sentence}” vào lịch ôn. +${PTS.learn}⭐`)}
+function review(id,grade){const it=P.items[id],now=Date.now();
+ if(grade==="ok"){it.s=Math.min(DONE,it.s+1);it.due=it.s>=DONE?0:now+ivl(it.s);it.ok++;addPts(PTS.ok)}
+ else if(grade==="hint"){it.due=now+ivl(1);it.bad++;addPts(PTS.hint)}
+ else{it.s=Math.max(1,it.s-(it.s>=KNOWN?2:1));it.due=now+ivl(it.s);it.bad++}
+ save();refresh()}
+const dueList=()=>Object.keys(P.items).filter(id=>{const it=P.items[id];return it.s<DONE&&it.due<=Date.now()}).sort((a,b)=>P.items[a].due-P.items[b].due);
+function nextDue(){let b=0;for(const id in P.items){const it=P.items[id];if(it.s<DONE&&(!b||it.due<b))b=it.due}return b}
+function fmtWait(ms){const h=ms/HOUR;return h<1?Math.max(1,Math.round(ms/6e4))+" phút":h<24?Math.round(h)+" giờ":Math.round(h/24)+" ngày"}
+
+function mark(id,step){P.steps[id]=P.steps[id]||{};if(!P.steps[id][step]){P.steps[id][step]=true;addPts(PTS.step)}
+ if(step==="recall")learn(id);save();refresh()}
+function refresh(){
+ let done=0;LESSONS.forEach(l=>{const d=stage(l.id)>0;document.querySelector(`[data-id="${l.id}"]`).classList.toggle("done",d);if(d)done++});
+ document.getElementById("prog").textContent=`✅ ${done}/${LESSONS.length}`;
+ document.getElementById("pts").textContent="⭐ "+P.pts;
+ updateGuide();
+}
+
+// ===== NHÂN VẬT DẪN ĐƯỜNG =====
+let guideAct=null;
+function updateGuide(){const t=document.getElementById("guideText"),due=dueList();
+ const fresh=LESSONS.find(l=>!stage(l.id));
+ if(due.length){t.textContent=`Hôm nay có ${due.length} câu cần ôn. Ôn ngay để không quên nhé!`;guideAct=startReview}
+ else if(fresh){t.textContent=`Hãy học hành động mới: “${fresh.object.en}” (${fresh.object.vi}).`;guideAct=()=>open(fresh)}
+ else{const n=nextDue();t.textContent=n?`Bạn đã học hết phòng này! Lượt ôn tiếp theo sau ${fmtWait(n-Date.now())}.`:"Bạn đã thành thạo tất cả! 🎉";guideAct=openBook}}
+let gTimer;function toastG(msg){const t=document.getElementById("guideText");t.textContent=msg;clearTimeout(gTimer);gTimer=setTimeout(updateGuide,3500)}
+
+// ===== MODAL =====
+const modal=document.getElementById("modal"),mbox=document.getElementById("mbox");
+function showModal(h){mbox.innerHTML=h;modal.hidden=false;mbox.querySelector("[data-close]").onclick=closeModal}
+function closeModal(){modal.hidden=true;speechSynthesis&&speechSynthesis.cancel();refresh()}
+modal.addEventListener("click",e=>{if(e.target===modal)closeModal()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!modal.hidden)closeModal()});
+
+// ===== SỔ TỪ VỰNG =====
+function openBook(){
+ const learned=LESSONS.filter(l=>stage(l.id)>0).length;
+ const cards=LESSONS.map(l=>{const s=stage(l.id),it=P.items[l.id];
+  const when=!s?"":s>=DONE?"Không cần ôn nữa":it.due<=Date.now()?"Cần ôn ngay":"Ôn sau "+fmtWait(it.due-Date.now());
+  return `<div class="tile" style="--sc:${stageColor(s)}" data-open="${l.id}"><div class="en">${s?l.sentence:"🔒 "+l.object.en}</div>
+   <div class="meta">${s?l.vi:l.object.vi}</div><div class="meta"><b>${LABELS[s]}</b>${when?" · "+when:""}</div>
+   ${s?`<div class="meta">${l.vocab.map(v=>v[0]).join(" · ")}</div>`:""}</div>`}).join("");
+ showModal(`<h2>📒 Sổ từ vựng <button class="iconbtn" data-close>✕</button></h2>
+  <div class="meta">Đã học ${learned}/${LESSONS.length} câu · ${dueList().length} câu cần ôn</div>
+  <div class="legend">${[[1,"Mới học"],[5,"Đã thuộc"],[7,"Nhớ lâu / Khắc sâu"],[9,"Thành thạo"],[0,"Chưa học"]].map(([s,t])=>`<span><i style="background:${stageColor(s)}"></i>${t}</span>`).join("")}</div>
+  <div class="tiles">${cards}</div>
+  ${dueList().length?`<button class="btn" id="bookReview" style="margin-top:12px">🔁 Ôn ${dueList().length} câu ngay</button>`:""}`);
+ mbox.querySelectorAll("[data-open]").forEach(t=>t.onclick=()=>{closeModal();open(LESSONS.find(l=>l.id===t.dataset.open))});
+ const br=mbox.querySelector("#bookReview");if(br)br.onclick=startReview;
+}
+document.getElementById("btnBook").onclick=openBook;
+document.getElementById("guide").onclick=()=>guideAct&&guideAct();
+
+// ===== PHIÊN ÔN TẬP =====
+let rq=[],rStats;
+function startReview(){rq=dueList();rStats={ok:0,hint:0,bad:0};nextReview()}
+function nextReview(){
+ if(!rq.length){showModal(`<h2>🎉 Ôn xong! <button class="iconbtn" data-close>✕</button></h2>
+  <p>Đúng: <b class="good">${rStats.ok}</b> · Nhờ gợi ý: <b>${rStats.hint}</b> · Chưa nhớ: <b class="bad">${rStats.bad}</b></p>
+  <p class="hint">Câu đúng sẽ quay lại sau lâu hơn; câu sai sẽ quay lại sớm hơn.</p><button class="btn" data-close2>Xong</button>`);
+  mbox.querySelector("[data-close2]").onclick=closeModal;return}
+ const l=LESSONS.find(x=>x.id===rq[0]),s=stage(l.id);let usedHint=false;
+ play(l);
+ showModal(`<h2>🔁 Ôn tập <span class="meta" style="font-weight:400">còn ${rq.length} câu · ${LABELS[s]}</span><button class="iconbtn" data-close>✕</button></h2>
+  <p>Nhìn nhân vật trong phòng và nói câu tiếng Anh cho:</p><div class="sent" style="font-size:20px">“${l.vi}”</div>
+  <div id="rhint" class="vi"></div>
+  <button class="btn" id="rmic">🎤 Nói</button><button class="btn sec" id="rhintBtn">💡 Gợi ý</button><button class="btn sec" id="rshow">👀 Xem đáp án</button>
+  <div class="res" id="rres"></div><div id="rgrade" hidden style="margin-top:10px">
+   <p class="hint">Bạn tự đánh giá:</p><button class="btn" data-g="ok" style="background:var(--ok)">✅ Tôi nói đúng</button><button class="btn sec" data-g="bad">❌ Chưa nhớ</button></div>`);
+ const $=q=>mbox.querySelector(q);
+ const reveal=()=>{$("#rhint").innerHTML=`<b style="color:var(--ink);font-size:20px">${l.sentence}</b>`;say(l.sentence,.9);$("#rgrade").hidden=false};
+ $("#rhintBtn").onclick=()=>{usedHint=true;$("#rhint").textContent="Gợi ý: "+l.sentence.split(" ").map((w,i)=>i<2?w:w[0]+"…").join(" ")};
+ $("#rshow").onclick=reveal;
+ $("#rmic").onclick=()=>listenTo(l.sentence,$("#rres"),pct=>{reveal();if(pct>=75)$("#rres").innerHTML+=" — Tuyệt!"});
+ mbox.querySelectorAll("[data-g]").forEach(b=>b.onclick=()=>{const g=b.dataset.g==="ok"?(usedHint?"hint":"ok"):"bad";
+  review(l.id,g);rStats[g]++;rq.shift();if(g==="bad")toastG("Câu này sẽ quay lại sớm hơn.");nextReview()});
+}
+
+// ===== AUDIO (giọng đọc trình duyệt – thay bằng file mp3 sau) =====
+let voice=null;
+function pickVoice(){const v=speechSynthesis.getVoices().filter(v=>v.lang.startsWith("en"));voice=v.find(v=>/US|GB/.test(v.lang))||v[0]||null}
+if("speechSynthesis" in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice}
+function say(t,rate=1){return new Promise(r=>{if(!("speechSynthesis" in window)){alert("Trình duyệt không hỗ trợ phát âm.");return r()}
+ speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="en-US";if(voice)u.voice=voice;u.rate=rate;u.onend=r;u.onerror=r;speechSynthesis.speak(u)})}
+
+// ===== SCENE =====
+const room=document.getElementById("room"),charG=document.getElementById("char");
+function play(l){room.classList.remove(...LESSONS.map(x=>x.anim));void room.offsetWidth;room.classList.add(l.anim)}
+document.querySelectorAll(".obj").forEach(o=>{
+ const go=()=>open(LESSONS.find(l=>l.id===o.dataset.id));
+ o.addEventListener("click",go);o.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();go()}})});
+
+// ===== PANEL =====
+const panel=document.getElementById("panel");let cur=null,step="look";
+function open(l){cur=l;step="look";play(l);render();say(l.object.en)}
+function sentHTML(l,hide){const s=stage(l.id),lv=s===0?"lv-new":s<KNOWN?"lv-learning":"";
+ return l.sentence.split(" ").map(w=>{const c=w.replace(/[^\w']/g,""),k=l.key.includes(c);
+  const v=k&&l.vocab.find(x=>c.toLowerCase().startsWith(x[0].split(" ")[0].replace(/e$/,"")));
+  return `<span class="w ${k?"key "+lv:""}" data-w="${c}" data-vi="${v?v[2]:""}">${hide?"___":w}</span>`}).join(" ")}
+function render(){
+ const l=cur;const st=P.steps[l.id]||{};
+ let h=`<div class="steps">${STEPS.map(([k,t])=>`<button class="${k===step?"on":""}" data-s="${k}">${st[k]?"✓ ":""}${t}</button>`).join("")}</div>`;
+ h+=`<div style="color:var(--muted);font-size:14px">${l.object.en} ${l.object.ipa} — ${l.object.vi}</div>`;
+ if(step==="look"){
+  h+=`<div class="sent">${sentHTML(l)}</div><div class="vi">${l.vi}</div>
+  <div class="vocab">${l.vocab.map(v=>`<div class="chip" data-say="${v[0]}">🔊 ${v[0]} <small>${v[1]} · ${v[2]}</small></div>`).join("")}</div>
+  <div class="note">💡 ${l.grammar}</div>
+  <button class="btn" id="next">Tiếp: Nghe →</button>`}
+ if(step==="listen"){
+  h+=`<div class="sent">${sentHTML(l)}</div><div class="vi">${l.vi}</div>
+  <button class="btn" data-play="0.6">🐢 Chậm</button><button class="btn" data-play="1">▶️ Tự nhiên</button>
+  <p class="hint">Nhấn vào từng từ trong câu để nghe riêng.</p><button class="btn sec" id="next">Tiếp: Nhại →</button>`}
+ if(step==="shadow"){
+  h+=`<div class="sent">${sentHTML(l)}</div><p>Nghe từng cụm, dừng lại, rồi nói theo to lên:</p>
+  <div id="chunks">${l.chunks.map((c,i)=>`<span class="chunk" data-i="${i}">${c}</span>`).join("")}</div>
+  <button class="btn" id="shadowGo">▶️ Bắt đầu nhại</button>
+  <hr style="border:0;border-top:1px solid var(--line);margin:14px 0">
+  <p>Thu âm giọng bạn và so sánh với giọng mẫu:</p>
+  <button class="btn" id="rec">⏺ Thu âm</button><button class="btn sec" id="myplay" disabled>🎧 Nghe giọng tôi</button><button class="btn sec" data-play="1">🔊 Giọng mẫu</button>
+  <div class="res" id="recres"></div><button class="btn sec" id="next">Tiếp →</button>`}
+ if(step==="disc"){
+  const opts=[...l.disc.opts].sort(()=>Math.random()-.5);
+  h+=`<p><b>${l.disc.q}</b></p><button class="btn" id="discPlay">🔊 Nghe</button>
+  <div class="opts">${opts.map(o=>`<button class="btn sec" data-ans="${o}">${o}</button>`).join("")}</div><div class="res" id="discres"></div>`}
+ if(step==="speak"||step==="recall"){
+  const hide=step==="recall";
+  h+=hide?`<p>Câu đã bị ẩn. Nhìn nhân vật và <b>tự nói</b> câu tiếng Anh.</p><div class="sent">${sentHTML(l,true)}</div><div class="vi">Gợi ý: ${l.vi}</div>`
+   :`<p>Nói câu này vào micro:</p><div class="sent">${sentHTML(l)}</div>`;
+  h+=`<button class="btn" id="mic">🎤 Bấm và nói</button><button class="btn sec" id="replayAnim">🎬 Xem lại hành động</button>
+  <div class="res" id="speakres"></div>
+  <p class="hint">Lưu ý: hệ thống so khớp chữ được nhận diện, không phải chấm điểm phát âm chính xác.</p>
+  <button class="btn sec" id="selfok">Tôi đã nói được ✓</button>`}
+ panel.innerHTML=h;bind();
+}
+function goNext(){mark(cur.id,step);const i=STEPS.findIndex(s=>s[0]===step);step=STEPS[Math.min(i+1,STEPS.length-1)][0];render()}
+function bind(){
+ const l=cur,$=s=>panel.querySelector(s);
+ panel.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{step=b.dataset.s;render()});
+ panel.querySelectorAll("[data-say]").forEach(b=>b.onclick=()=>say(b.dataset.say,.8));
+ panel.querySelectorAll(".w").forEach(b=>b.onclick=()=>say(b.dataset.w,.8));
+ panel.querySelectorAll("[data-play]").forEach(b=>b.onclick=()=>{play(l);say(l.sentence,+b.dataset.play)});
+ if($("#next"))$("#next").onclick=goNext;
+ if($("#shadowGo"))$("#shadowGo").onclick=async()=>{const cs=panel.querySelectorAll(".chunk");
+  for(let r=0;r<2;r++)for(let i=0;i<cs.length;i++){cs.forEach(c=>c.classList.remove("on"));cs[i].classList.add("on");
+   await say(l.chunks[i],.75);await new Promise(x=>setTimeout(x,1800))}
+  cs.forEach(c=>c.classList.remove("on"));await say(l.sentence,.9)};
+ if($("#rec"))setupRec($("#rec"),$("#myplay"),$("#recres"));
+ if($("#discPlay")){$("#discPlay").onclick=()=>say(l.disc.ans,.8);
+  panel.querySelectorAll("[data-ans]").forEach(b=>b.onclick=()=>{const ok=b.dataset.ans===l.disc.ans;
+   $("#discres").innerHTML=ok?`<span class="good">✅ Đúng rồi! "${l.disc.ans}"</span> <button class="btn sec" id="n2">Tiếp →</button>`
+    :`<span class="bad">❌ Chưa đúng. Nghe lại "${b.dataset.ans}" và "${l.disc.ans}" để so sánh.</span>`;
+   if(!ok){say(b.dataset.ans,.8).then(()=>say(l.disc.ans,.8))}else panel.querySelector("#n2").onclick=goNext})}
+ if($("#mic"))$("#mic").onclick=()=>listenTo(l.sentence,$("#speakres"),pct=>{if(pct>=75){$("#speakres").insertAdjacentHTML("beforeend",` <button class="btn" id="n3">Tuyệt! Tiếp →</button>`);$("#n3").onclick=goNext}});
+ if($("#replayAnim"))$("#replayAnim").onclick=()=>play(l);
+ if($("#selfok"))$("#selfok").onclick=goNext;
+}
+
+// ===== RECORDING (MediaRecorder) =====
+let rec=null,chunks=[],myUrl=null;
+function setupRec(btn,pbtn,res){
+ if(!navigator.mediaDevices||!window.MediaRecorder){btn.disabled=true;res.textContent="Trình duyệt không hỗ trợ thu âm. Hãy nhại theo to lên.";return}
+ btn.onclick=async()=>{
+  if(rec&&rec.state==="recording"){rec.stop();return}
+  try{const s=await navigator.mediaDevices.getUserMedia({audio:true});rec=new MediaRecorder(s);chunks=[];
+   rec.ondataavailable=e=>chunks.push(e.data);
+   rec.onstop=()=>{s.getTracks().forEach(t=>t.stop());myUrl=URL.createObjectURL(new Blob(chunks));pbtn.disabled=false;btn.textContent="⏺ Thu lại";res.textContent="Đã thu xong. Nghe giọng bạn rồi nghe giọng mẫu."};
+   rec.start();btn.textContent="⏹ Dừng";res.textContent="Đang thu… nói: "+cur.sentence;
+  }catch(e){res.textContent="Không mở được micro. Kiểm tra quyền truy cập micro."}};
+ pbtn.onclick=()=>myUrl&&new Audio(myUrl).play();
+}
+
+// ===== SPEECH RECOGNITION =====
+function norm(s){return s.toLowerCase().replace(/i am/g,"i'm").replace(/[^a-z' ]/g,"").split(/\s+/).filter(Boolean)}
+function listenTo(target,out,cb){
+ const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(!SR){out.innerHTML="Trình duyệt chưa hỗ trợ nhận diện giọng nói (dùng Chrome/Edge). Hãy tự nói rồi bấm “Tôi đã nói được”.";return}
+ const r=new SR();r.lang="en-US";r.interimResults=false;r.maxAlternatives=3;
+ out.textContent="🎙 Đang nghe…";
+ r.onresult=e=>{const said=e.results[0][0].transcript;const a=norm(said),b=norm(target);
+  const hit=b.filter(w=>a.includes(w)).length,pct=Math.round(hit/b.length*100);
+  const miss=b.filter(w=>!a.includes(w));
+  out.innerHTML=`Máy nghe được: “<i>${said}</i>”<br>Khớp: <b class="${pct>=75?"good":"bad"}">${pct}%</b>`+
+   (miss.length?` — thiếu/sai: ${miss.map(w=>`<b>${w}</b>`).join(", ")}`:"")+
+   (pct>=75?"":" — thử lại nhé!");cb&&cb(pct)};
+ r.onerror=e=>out.textContent="Không nghe rõ ("+e.error+"). Thử lại hoặc kiểm tra micro.";
+ r.start();
+}
+refresh();
+</script>
+</body>
+</html>
