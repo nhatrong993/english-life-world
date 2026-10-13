@@ -1,0 +1,1021 @@
+{
+ "actions": [
+  {
+   "id": "open_fridge",
+   "room": "living",
+   "obj": "fridge",
+   "label": "Open the fridge",
+   "labelVi": "Mở tủ lạnh",
+   "sentence": "I'm opening the fridge.",
+   "vi": "Tôi đang mở tủ lạnh."
+  },
+  {
+   "id": "take_milk",
+   "room": "living",
+   "obj": "fridge",
+   "label": "Take the milk out",
+   "labelVi": "Lấy sữa ra",
+   "sentence": "I'm taking the milk out of the fridge.",
+   "vi": "Tôi đang lấy sữa ra khỏi tủ lạnh."
+  },
+  {
+   "id": "put_milk_back",
+   "room": "living",
+   "obj": "fridge",
+   "label": "Put the milk back",
+   "labelVi": "Cất sữa lại",
+   "sentence": "I'm putting the milk back in the fridge.",
+   "vi": "Tôi đang cất sữa lại vào tủ lạnh."
+  },
+  {
+   "id": "close_fridge",
+   "room": "living",
+   "obj": "fridge",
+   "label": "Close the fridge",
+   "labelVi": "Đóng tủ lạnh",
+   "sentence": "I'm closing the fridge.",
+   "vi": "Tôi đang đóng tủ lạnh."
+  },
+  {
+   "id": "pick_up_cup",
+   "room": "living",
+   "obj": "cup",
+   "label": "Pick up the cup",
+   "labelVi": "Cầm cốc lên",
+   "sentence": "I'm picking up the cup.",
+   "vi": "Tôi đang cầm cái cốc lên."
+  },
+  {
+   "id": "put_cup_on_table",
+   "room": "living",
+   "obj": "cup",
+   "label": "Put the cup on the table",
+   "labelVi": "Đặt cốc lên bàn",
+   "sentence": "I'm putting the cup on the table.",
+   "vi": "Tôi đang đặt chiếc cốc lên bàn."
+  },
+  {
+   "id": "pour_milk",
+   "room": "living",
+   "obj": "cup",
+   "label": "Pour milk into the cup",
+   "labelVi": "Rót sữa vào cốc",
+   "sentence": "I'm pouring milk into the cup.",
+   "vi": "Tôi đang rót sữa vào cốc."
+  },
+  {
+   "id": "drink_from_cup",
+   "room": "living",
+   "obj": "cup",
+   "label": "Drink from the cup",
+   "labelVi": "Uống từ cốc",
+   "sentence": "I'm drinking from the cup.",
+   "vi": "Tôi đang uống bằng cái cốc."
+  },
+  {
+   "id": "wipe_table",
+   "room": "living",
+   "obj": "table",
+   "label": "Clean the table",
+   "labelVi": "Lau bàn",
+   "sentence": "I'm cleaning the table.",
+   "vi": "Tôi đang lau bàn."
+  },
+  {
+   "id": "put_book_on_table",
+   "room": "living",
+   "obj": "book",
+   "label": "Put the book on the table",
+   "labelVi": "Đặt sách lên bàn",
+   "sentence": "I'm putting the book on the table.",
+   "vi": "Tôi đang đặt quyển sách lên bàn."
+  },
+  {
+   "id": "sweep_under_table",
+   "room": "living",
+   "obj": "broom",
+   "label": "Sweep under the table",
+   "labelVi": "Quét dưới gầm bàn",
+   "sentence": "I'm sweeping under the table.",
+   "vi": "Tôi đang quét dưới gầm bàn."
+  },
+  {
+   "id": "pull_out_chair",
+   "room": "living",
+   "obj": "chair",
+   "label": "Pull out the chair",
+   "labelVi": "Kéo ghế ra",
+   "sentence": "I'm pulling out the chair.",
+   "vi": "Tôi đang kéo ghế ra."
+  },
+  {
+   "id": "sit_on_chair",
+   "room": "living",
+   "obj": "chair",
+   "label": "Sit on the chair",
+   "labelVi": "Ngồi xuống ghế",
+   "sentence": "I'm sitting on the chair.",
+   "vi": "Tôi đang ngồi trên ghế."
+  },
+  {
+   "id": "get_up",
+   "room": "*",
+   "obj": "chair",
+   "label": "Get up",
+   "labelVi": "Đứng dậy",
+   "sentence": "I'm getting up.",
+   "vi": "Tôi đang đứng dậy."
+  },
+  {
+   "id": "push_chair_in",
+   "room": "living",
+   "obj": "chair",
+   "label": "Push the chair in",
+   "labelVi": "Đẩy ghế vào",
+   "sentence": "I'm pushing the chair in.",
+   "vi": "Tôi đang đẩy ghế vào."
+  },
+  {
+   "id": "sweep_floor",
+   "room": "living",
+   "obj": "broom",
+   "label": "Sweep the floor",
+   "labelVi": "Quét nhà",
+   "sentence": "I'm sweeping the floor.",
+   "vi": "Tôi đang quét sàn nhà."
+  },
+  {
+   "id": "open_window",
+   "room": "living",
+   "obj": "window",
+   "label": "Open the window",
+   "labelVi": "Mở cửa sổ",
+   "sentence": "I'm opening the window.",
+   "vi": "Tôi đang mở cửa sổ."
+  },
+  {
+   "id": "close_window",
+   "room": "living",
+   "obj": "window",
+   "label": "Close the window",
+   "labelVi": "Đóng cửa sổ",
+   "sentence": "I'm closing the window.",
+   "vi": "Tôi đang đóng cửa sổ."
+  },
+  {
+   "id": "water_plant",
+   "room": "living",
+   "obj": "plant",
+   "label": "Water the plants",
+   "labelVi": "Tưới cây",
+   "sentence": "I'm watering the plants.",
+   "vi": "Tôi đang tưới cây."
+  },
+  {
+   "id": "pick_up_book",
+   "room": "living",
+   "obj": "book",
+   "label": "Pick up the book",
+   "labelVi": "Nhặt sách lên",
+   "sentence": "I'm picking up the book.",
+   "vi": "Tôi đang nhặt quyển sách lên."
+  },
+  {
+   "id": "turn_on_tv",
+   "room": "living",
+   "obj": "tv",
+   "label": "Turn on the TV",
+   "labelVi": "Bật ti vi",
+   "sentence": "I'm turning on the TV.",
+   "vi": "Tôi đang bật ti vi."
+  },
+  {
+   "id": "watch_tv",
+   "room": "living",
+   "obj": "tv",
+   "label": "Watch TV",
+   "labelVi": "Xem ti vi",
+   "sentence": "I'm watching TV.",
+   "vi": "Tôi đang xem ti vi."
+  },
+  {
+   "id": "turn_off_tv",
+   "room": "living",
+   "obj": "tv",
+   "label": "Turn off the TV",
+   "labelVi": "Tắt ti vi",
+   "sentence": "I'm turning off the TV.",
+   "vi": "Tôi đang tắt ti vi."
+  },
+  {
+   "id": "turn_on_stove",
+   "room": "kitchen",
+   "obj": "stove",
+   "label": "Turn on the stove",
+   "labelVi": "Bật bếp",
+   "sentence": "I'm turning on the stove.",
+   "vi": "Tôi đang bật bếp."
+  },
+  {
+   "id": "fry_egg",
+   "room": "kitchen",
+   "obj": "stove",
+   "label": "Fry an egg",
+   "labelVi": "Rán trứng",
+   "sentence": "I'm frying an egg.",
+   "vi": "Tôi đang rán một quả trứng."
+  },
+  {
+   "id": "turn_off_stove",
+   "room": "kitchen",
+   "obj": "stove",
+   "label": "Turn off the stove",
+   "labelVi": "Tắt bếp",
+   "sentence": "I'm turning off the stove.",
+   "vi": "Tôi đang tắt bếp."
+  },
+  {
+   "id": "fill_kettle",
+   "room": "kitchen",
+   "obj": "kettle",
+   "label": "Fill the kettle",
+   "labelVi": "Đổ nước vào ấm",
+   "sentence": "I'm filling the kettle with water.",
+   "vi": "Tôi đang đổ nước vào ấm."
+  },
+  {
+   "id": "boil_water",
+   "room": "kitchen",
+   "obj": "kettle",
+   "label": "Boil some water",
+   "labelVi": "Đun nước",
+   "sentence": "I'm boiling some water.",
+   "vi": "Tôi đang đun nước."
+  },
+  {
+   "id": "pour_hot_water",
+   "room": "kitchen",
+   "obj": "kettle",
+   "label": "Pour the hot water",
+   "labelVi": "Rót nước nóng",
+   "sentence": "I'm pouring hot water into a mug.",
+   "vi": "Tôi đang rót nước nóng vào cốc."
+  },
+  {
+   "id": "wash_rice",
+   "room": "kitchen",
+   "obj": "ricecooker",
+   "label": "Wash the rice",
+   "labelVi": "Vo gạo",
+   "sentence": "I'm washing the rice.",
+   "vi": "Tôi đang vo gạo."
+  },
+  {
+   "id": "cook_rice",
+   "room": "kitchen",
+   "obj": "ricecooker",
+   "label": "Cook the rice",
+   "labelVi": "Nấu cơm",
+   "sentence": "I'm cooking rice in the rice cooker.",
+   "vi": "Tôi đang nấu cơm bằng nồi cơm điện."
+  },
+  {
+   "id": "serve_rice",
+   "room": "kitchen",
+   "obj": "ricecooker",
+   "label": "Serve the rice",
+   "labelVi": "Xới cơm ra bát",
+   "sentence": "I'm putting some rice in a bowl.",
+   "vi": "Tôi đang xới cơm ra bát."
+  },
+  {
+   "id": "open_microwave",
+   "room": "kitchen",
+   "obj": "microwave",
+   "label": "Open the microwave",
+   "labelVi": "Mở lò vi sóng",
+   "sentence": "I'm opening the microwave.",
+   "vi": "Tôi đang mở lò vi sóng."
+  },
+  {
+   "id": "heat_up_food",
+   "room": "kitchen",
+   "obj": "microwave",
+   "label": "Heat up the food",
+   "labelVi": "Hâm nóng đồ ăn",
+   "sentence": "I'm heating up the food in the microwave.",
+   "vi": "Tôi đang hâm nóng đồ ăn bằng lò vi sóng."
+  },
+  {
+   "id": "close_microwave",
+   "room": "kitchen",
+   "obj": "microwave",
+   "label": "Close the microwave",
+   "labelVi": "Đóng lò vi sóng",
+   "sentence": "I'm closing the microwave door.",
+   "vi": "Tôi đang đóng cửa lò vi sóng."
+  },
+  {
+   "id": "turn_on_faucet",
+   "room": "kitchen",
+   "obj": "sink",
+   "label": "Turn on the faucet",
+   "labelVi": "Mở vòi nước",
+   "sentence": "I'm turning on the faucet.",
+   "vi": "Tôi đang mở vòi nước."
+  },
+  {
+   "id": "wash_dishes",
+   "room": "kitchen",
+   "obj": "sink",
+   "label": "Wash the dishes",
+   "labelVi": "Rửa bát",
+   "sentence": "I'm washing the dishes.",
+   "vi": "Tôi đang rửa bát đĩa."
+  },
+  {
+   "id": "wash_hands",
+   "room": "kitchen",
+   "obj": "sink",
+   "label": "Wash my hands",
+   "labelVi": "Rửa tay",
+   "sentence": "I'm washing my hands.",
+   "vi": "Tôi đang rửa tay."
+  },
+  {
+   "id": "turn_off_faucet",
+   "room": "kitchen",
+   "obj": "sink",
+   "label": "Turn off the faucet",
+   "labelVi": "Khoá vòi nước",
+   "sentence": "I'm turning off the faucet.",
+   "vi": "Tôi đang khoá vòi nước."
+  },
+  {
+   "id": "put_dishes_in_rack",
+   "room": "kitchen",
+   "obj": "dishrack",
+   "label": "Put the dishes in the rack",
+   "labelVi": "Úp bát lên giá",
+   "sentence": "I'm putting the dishes in the dish rack.",
+   "vi": "Tôi đang úp bát đĩa lên giá."
+  },
+  {
+   "id": "dry_plates",
+   "room": "kitchen",
+   "obj": "dishrack",
+   "label": "Dry the plates",
+   "labelVi": "Lau khô đĩa",
+   "sentence": "I'm drying the plates with a towel.",
+   "vi": "Tôi đang lau khô đĩa bằng khăn."
+  },
+  {
+   "id": "open_cabinet",
+   "room": "kitchen",
+   "obj": "cabinet",
+   "label": "Open the cabinet",
+   "labelVi": "Mở tủ bếp",
+   "sentence": "I'm opening the cabinet.",
+   "vi": "Tôi đang mở tủ bếp."
+  },
+  {
+   "id": "put_plates_away",
+   "room": "kitchen",
+   "obj": "cabinet",
+   "label": "Put the plates away",
+   "labelVi": "Cất đĩa vào tủ",
+   "sentence": "I'm putting the plates away in the cabinet.",
+   "vi": "Tôi đang cất đĩa vào tủ bếp."
+  },
+  {
+   "id": "close_cabinet",
+   "room": "kitchen",
+   "obj": "cabinet",
+   "label": "Close the cabinet",
+   "labelVi": "Đóng tủ bếp",
+   "sentence": "I'm closing the cabinet.",
+   "vi": "Tôi đang đóng tủ bếp."
+  },
+  {
+   "id": "set_the_table",
+   "room": "kitchen",
+   "obj": "diningtable",
+   "label": "Set the table",
+   "labelVi": "Bày bàn ăn",
+   "sentence": "I'm setting the table.",
+   "vi": "Tôi đang bày bàn ăn."
+  },
+  {
+   "id": "eat_breakfast",
+   "room": "kitchen",
+   "obj": "diningtable",
+   "label": "Have breakfast",
+   "labelVi": "Ăn sáng",
+   "sentence": "I'm having breakfast at the table.",
+   "vi": "Tôi đang ăn sáng ở bàn."
+  },
+  {
+   "id": "get_up_from_table",
+   "room": "kitchen",
+   "obj": "diningtable",
+   "label": "Get up from the table",
+   "labelVi": "Đứng dậy khỏi bàn",
+   "sentence": "I'm getting up from the table.",
+   "vi": "Tôi đang đứng dậy khỏi bàn ăn."
+  },
+  {
+   "id": "clear_the_table",
+   "room": "kitchen",
+   "obj": "diningtable",
+   "label": "Clear the table",
+   "labelVi": "Dọn bàn",
+   "sentence": "I'm clearing the table.",
+   "vi": "Tôi đang dọn bàn ăn."
+  },
+  {
+   "id": "toast_bread",
+   "room": "kitchen",
+   "obj": "toaster",
+   "label": "Toast some bread",
+   "labelVi": "Nướng bánh mì",
+   "sentence": "I'm toasting some bread.",
+   "vi": "Tôi đang nướng bánh mì."
+  },
+  {
+   "id": "take_out_toast",
+   "room": "kitchen",
+   "obj": "toaster",
+   "label": "Take out the toast",
+   "labelVi": "Lấy bánh mì ra",
+   "sentence": "I'm taking the toast out of the toaster.",
+   "vi": "Tôi đang lấy bánh mì nướng ra khỏi máy."
+  },
+  {
+   "id": "make_coffee",
+   "room": "kitchen",
+   "obj": "coffeemaker",
+   "label": "Make coffee",
+   "labelVi": "Pha cà phê",
+   "sentence": "I'm making coffee.",
+   "vi": "Tôi đang pha cà phê."
+  },
+  {
+   "id": "pour_coffee",
+   "room": "kitchen",
+   "obj": "coffeemaker",
+   "label": "Pour the coffee",
+   "labelVi": "Rót cà phê",
+   "sentence": "I'm pouring coffee into a mug.",
+   "vi": "Tôi đang rót cà phê vào cốc."
+  },
+  {
+   "id": "drink_coffee",
+   "room": "kitchen",
+   "obj": "coffeemaker",
+   "label": "Drink the coffee",
+   "labelVi": "Uống cà phê",
+   "sentence": "I'm drinking my coffee.",
+   "vi": "Tôi đang uống cà phê."
+  },
+  {
+   "id": "take_out_trash",
+   "room": "kitchen",
+   "obj": "trashbin",
+   "label": "Take out the trash",
+   "labelVi": "Đổ rác",
+   "sentence": "I'm taking out the trash.",
+   "vi": "Tôi đang mang rác đi đổ."
+  },
+  {
+   "id": "put_in_new_bag",
+   "room": "kitchen",
+   "obj": "trashbin",
+   "label": "Put in a new bag",
+   "labelVi": "Thay túi rác mới",
+   "sentence": "I'm putting a new bag in the bin.",
+   "vi": "Tôi đang lót túi mới vào thùng rác."
+  },
+  {
+   "id": "turn_off_alarm",
+   "room": "bedroom",
+   "obj": "alarmclock",
+   "label": "Turn off the alarm",
+   "labelVi": "Tắt báo thức",
+   "sentence": "I'm turning off the alarm.",
+   "vi": "Tôi đang tắt chuông báo thức."
+  },
+  {
+   "id": "set_alarm",
+   "room": "bedroom",
+   "obj": "alarmclock",
+   "label": "Set the alarm",
+   "labelVi": "Hẹn giờ báo thức",
+   "sentence": "I'm setting the alarm for six o'clock.",
+   "vi": "Tôi đang hẹn giờ báo thức lúc sáu giờ."
+  },
+  {
+   "id": "lie_down",
+   "room": "bedroom",
+   "obj": "bed",
+   "label": "Lie down on the bed",
+   "labelVi": "Nằm xuống giường",
+   "sentence": "I'm lying down on the bed.",
+   "vi": "Tôi đang nằm xuống giường."
+  },
+  {
+   "id": "sit_on_bed",
+   "room": "bedroom",
+   "obj": "bed",
+   "label": "Sit on the bed",
+   "labelVi": "Ngồi lên giường",
+   "sentence": "I'm sitting on the edge of the bed.",
+   "vi": "Tôi đang ngồi ở mép giường."
+  },
+  {
+   "id": "get_out_of_bed",
+   "room": "bedroom",
+   "obj": "bed",
+   "label": "Get out of bed",
+   "labelVi": "Ra khỏi giường",
+   "sentence": "I'm getting out of bed.",
+   "vi": "Tôi đang ra khỏi giường."
+  },
+  {
+   "id": "make_bed",
+   "room": "bedroom",
+   "obj": "bed",
+   "label": "Make the bed",
+   "labelVi": "Dọn giường",
+   "sentence": "I'm making the bed.",
+   "vi": "Tôi đang dọn giường."
+  },
+  {
+   "id": "pick_up_pillow",
+   "room": "bedroom",
+   "obj": "pillow",
+   "label": "Pick up the pillow",
+   "labelVi": "Nhặt gối lên",
+   "sentence": "I'm picking up the pillow.",
+   "vi": "Tôi đang nhặt cái gối lên."
+  },
+  {
+   "id": "fluff_pillow",
+   "room": "bedroom",
+   "obj": "pillow",
+   "label": "Fluff up the pillow",
+   "labelVi": "Vỗ gối cho phồng",
+   "sentence": "I'm fluffing up the pillow.",
+   "vi": "Tôi đang vỗ cho gối phồng lên."
+  },
+  {
+   "id": "fold_blanket",
+   "room": "bedroom",
+   "obj": "blanket",
+   "label": "Fold the blanket",
+   "labelVi": "Gấp chăn",
+   "sentence": "I'm folding the blanket.",
+   "vi": "Tôi đang gấp chăn."
+  },
+  {
+   "id": "spread_blanket",
+   "room": "bedroom",
+   "obj": "blanket",
+   "label": "Spread the blanket",
+   "labelVi": "Trải chăn ra",
+   "sentence": "I'm spreading the blanket over the bed.",
+   "vi": "Tôi đang trải chăn lên giường."
+  },
+  {
+   "id": "open_wardrobe",
+   "room": "bedroom",
+   "obj": "wardrobe",
+   "label": "Open the wardrobe",
+   "labelVi": "Mở tủ quần áo",
+   "sentence": "I'm opening the wardrobe.",
+   "vi": "Tôi đang mở tủ quần áo."
+  },
+  {
+   "id": "take_out_shirt",
+   "room": "bedroom",
+   "obj": "wardrobe",
+   "label": "Take out a shirt",
+   "labelVi": "Lấy áo ra",
+   "sentence": "I'm taking a shirt out of the wardrobe.",
+   "vi": "Tôi đang lấy một chiếc áo ra khỏi tủ."
+  },
+  {
+   "id": "hang_up_shirt",
+   "room": "bedroom",
+   "obj": "wardrobe",
+   "label": "Hang up the shirt",
+   "labelVi": "Treo áo lên",
+   "sentence": "I'm hanging up my shirt.",
+   "vi": "Tôi đang treo áo lên."
+  },
+  {
+   "id": "close_wardrobe",
+   "room": "bedroom",
+   "obj": "wardrobe",
+   "label": "Close the wardrobe",
+   "labelVi": "Đóng tủ quần áo",
+   "sentence": "I'm closing the wardrobe.",
+   "vi": "Tôi đang đóng tủ quần áo."
+  },
+  {
+   "id": "turn_on_lamp",
+   "room": "bedroom",
+   "obj": "lamp",
+   "label": "Turn on the lamp",
+   "labelVi": "Bật đèn ngủ",
+   "sentence": "I'm turning on the bedside lamp.",
+   "vi": "Tôi đang bật đèn ngủ."
+  },
+  {
+   "id": "read_in_bed",
+   "room": "bedroom",
+   "obj": "lamp",
+   "label": "Read in bed",
+   "labelVi": "Đọc sách trên giường",
+   "sentence": "I'm reading a book in bed.",
+   "vi": "Tôi đang đọc sách trên giường."
+  },
+  {
+   "id": "turn_off_lamp",
+   "room": "bedroom",
+   "obj": "lamp",
+   "label": "Turn off the lamp",
+   "labelVi": "Tắt đèn ngủ",
+   "sentence": "I'm turning off the lamp.",
+   "vi": "Tôi đang tắt đèn ngủ."
+  },
+  {
+   "id": "open_curtains",
+   "room": "bedroom",
+   "obj": "curtains",
+   "label": "Open the curtains",
+   "labelVi": "Kéo rèm ra",
+   "sentence": "I'm opening the curtains.",
+   "vi": "Tôi đang kéo rèm ra."
+  },
+  {
+   "id": "look_out_window",
+   "room": "bedroom",
+   "obj": "curtains",
+   "label": "Look out of the window",
+   "labelVi": "Nhìn ra cửa sổ",
+   "sentence": "I'm looking out of the window.",
+   "vi": "Tôi đang nhìn ra ngoài cửa sổ."
+  },
+  {
+   "id": "close_curtains",
+   "room": "bedroom",
+   "obj": "curtains",
+   "label": "Close the curtains",
+   "labelVi": "Kéo rèm lại",
+   "sentence": "I'm closing the curtains.",
+   "vi": "Tôi đang kéo rèm lại."
+  },
+  {
+   "id": "pick_up_clothes",
+   "room": "bedroom",
+   "obj": "laundry",
+   "label": "Put dirty clothes in the basket",
+   "labelVi": "Bỏ đồ bẩn vào giỏ",
+   "sentence": "I'm putting my dirty clothes in the laundry basket.",
+   "vi": "Tôi đang bỏ quần áo bẩn vào giỏ đồ giặt."
+  },
+  {
+   "id": "empty_basket",
+   "room": "bedroom",
+   "obj": "laundry",
+   "label": "Empty the laundry basket",
+   "labelVi": "Đổ giỏ đồ giặt",
+   "sentence": "I'm emptying the laundry basket.",
+   "vi": "Tôi đang lấy hết đồ trong giỏ ra để giặt."
+  },
+  {
+   "id": "look_in_mirror",
+   "room": "bedroom",
+   "obj": "mirror",
+   "label": "Look in the mirror",
+   "labelVi": "Soi gương",
+   "sentence": "I'm looking in the mirror.",
+   "vi": "Tôi đang soi gương."
+  },
+  {
+   "id": "brush_hair",
+   "room": "bedroom",
+   "obj": "mirror",
+   "label": "Brush my hair",
+   "labelVi": "Chải tóc",
+   "sentence": "I'm brushing my hair.",
+   "vi": "Tôi đang chải tóc."
+  },
+  {
+   "id": "put_on_slippers",
+   "room": "bedroom",
+   "obj": "slippers",
+   "label": "Put on my slippers",
+   "labelVi": "Đi dép vào",
+   "sentence": "I'm putting on my slippers.",
+   "vi": "Tôi đang đi dép vào."
+  },
+  {
+   "id": "take_off_slippers",
+   "room": "bedroom",
+   "obj": "slippers",
+   "label": "Take off my slippers",
+   "labelVi": "Cởi dép ra",
+   "sentence": "I'm taking off my slippers.",
+   "vi": "Tôi đang cởi dép ra."
+  },
+  {
+   "id": "charge_phone",
+   "room": "bedroom",
+   "obj": "phone",
+   "label": "Charge my phone",
+   "labelVi": "Sạc điện thoại",
+   "sentence": "I'm charging my phone.",
+   "vi": "Tôi đang sạc điện thoại."
+  },
+  {
+   "id": "unplug_charger",
+   "room": "bedroom",
+   "obj": "phone",
+   "label": "Unplug the charger",
+   "labelVi": "Rút sạc ra",
+   "sentence": "I'm unplugging the charger.",
+   "vi": "Tôi đang rút sạc ra."
+  },
+  {
+   "id": "check_phone",
+   "room": "bedroom",
+   "obj": "phone",
+   "label": "Check my messages",
+   "labelVi": "Xem tin nhắn",
+   "sentence": "I'm checking my messages.",
+   "vi": "Tôi đang xem tin nhắn."
+  },
+  {
+   "id": "go_living",
+   "room": "*",
+   "obj": "door",
+   "label": "Go to the living room",
+   "labelVi": "Đi vào phòng khách",
+   "sentence": "I'm going to the living room.",
+   "vi": "Tôi đang đi vào phòng khách."
+  },
+  {
+   "id": "go_kitchen",
+   "room": "*",
+   "obj": "door",
+   "label": "Go to the kitchen",
+   "labelVi": "Đi vào bếp",
+   "sentence": "I'm going to the kitchen.",
+   "vi": "Tôi đang đi vào bếp."
+  },
+  {
+   "id": "go_bedroom",
+   "room": "*",
+   "obj": "door",
+   "label": "Go to the bedroom",
+   "labelVi": "Đi vào phòng ngủ",
+   "sentence": "I'm going to the bedroom.",
+   "vi": "Tôi đang đi vào phòng ngủ."
+  },
+  {
+   "id": "sit_on_sofa",
+   "room": "living",
+   "obj": "sofa",
+   "label": "Sit on the sofa",
+   "labelVi": "Ngồi xuống sofa",
+   "sentence": "I'm sitting on the sofa.",
+   "vi": "Tôi đang ngồi trên ghế sofa.",
+   "new": true
+  },
+  {
+   "id": "lie_on_sofa",
+   "room": "living",
+   "obj": "sofa",
+   "label": "Lie on the sofa",
+   "labelVi": "Nằm trên sofa",
+   "sentence": "I'm lying on the sofa.",
+   "vi": "Tôi đang nằm trên ghế sofa.",
+   "new": true
+  },
+  {
+   "id": "get_up_from_sofa",
+   "room": "living",
+   "obj": "sofa",
+   "label": "Get up from the sofa",
+   "labelVi": "Đứng dậy khỏi sofa",
+   "sentence": "I'm getting up from the sofa.",
+   "vi": "Tôi đang đứng dậy khỏi ghế sofa.",
+   "new": true
+  },
+  {
+   "id": "fluff_cushion",
+   "room": "living",
+   "obj": "sofa",
+   "label": "Fluff the cushion",
+   "labelVi": "Vỗ phồng gối tựa",
+   "sentence": "I'm fluffing the cushion.",
+   "vi": "Tôi đang vỗ cho gối tựa phồng lên.",
+   "new": true
+  },
+  {
+   "id": "fold_throw",
+   "room": "living",
+   "obj": "sofa",
+   "label": "Fold the blanket",
+   "labelVi": "Gấp chăn mỏng",
+   "sentence": "I'm folding the blanket.",
+   "vi": "Tôi đang gấp chăn.",
+   "new": true
+  },
+  {
+   "id": "read_on_sofa",
+   "room": "living",
+   "obj": "sofa",
+   "label": "Read a book on the sofa",
+   "labelVi": "Đọc sách trên sofa",
+   "sentence": "I'm reading a book on the sofa.",
+   "vi": "Tôi đang đọc sách trên ghế sofa.",
+   "new": true
+  },
+  {
+   "id": "pet_cat",
+   "room": "living",
+   "obj": "cat",
+   "label": "Pet the cat",
+   "labelVi": "Vuốt ve mèo",
+   "sentence": "I'm petting the cat.",
+   "vi": "Tôi đang vuốt ve con mèo.",
+   "new": true
+  },
+  {
+   "id": "feed_cat",
+   "room": "living",
+   "obj": "cat",
+   "label": "Feed the cat",
+   "labelVi": "Cho mèo ăn",
+   "sentence": "I'm feeding the cat.",
+   "vi": "Tôi đang cho mèo ăn.",
+   "new": true
+  },
+  {
+   "id": "give_cat_water",
+   "room": "living",
+   "obj": "cat",
+   "label": "Give the cat some water",
+   "labelVi": "Cho mèo uống nước",
+   "sentence": "I'm giving the cat some water.",
+   "vi": "Tôi đang cho mèo uống nước.",
+   "new": true
+  },
+  {
+   "id": "play_with_cat",
+   "room": "living",
+   "obj": "cat",
+   "label": "Play with the cat",
+   "labelVi": "Chơi với mèo",
+   "sentence": "I'm playing with the cat.",
+   "vi": "Tôi đang chơi với con mèo.",
+   "new": true
+  },
+  {
+   "id": "brush_cat",
+   "room": "living",
+   "obj": "cat",
+   "label": "Brush the cat",
+   "labelVi": "Chải lông mèo",
+   "sentence": "I'm brushing the cat.",
+   "vi": "Tôi đang chải lông cho mèo.",
+   "new": true
+  },
+  {
+   "id": "call_cat",
+   "room": "living",
+   "obj": "cat",
+   "label": "Call the cat",
+   "labelVi": "Gọi mèo",
+   "sentence": "I'm calling the cat.",
+   "vi": "Tôi đang gọi con mèo.",
+   "new": true
+  },
+  {
+   "id": "turn_on_floor_lamp",
+   "room": "living",
+   "obj": "floorlamp",
+   "label": "Turn on the floor lamp",
+   "labelVi": "Bật đèn cây",
+   "sentence": "I'm turning on the floor lamp.",
+   "vi": "Tôi đang bật đèn cây.",
+   "new": true
+  },
+  {
+   "id": "turn_off_floor_lamp",
+   "room": "living",
+   "obj": "floorlamp",
+   "label": "Turn off the floor lamp",
+   "labelVi": "Tắt đèn cây",
+   "sentence": "I'm turning off the floor lamp.",
+   "vi": "Tôi đang tắt đèn cây.",
+   "new": true
+  },
+  {
+   "id": "open_living_curtains",
+   "room": "living",
+   "obj": "livcurtains",
+   "label": "Open the curtains",
+   "labelVi": "Kéo rèm ra",
+   "sentence": "I'm opening the curtains.",
+   "vi": "Tôi đang kéo rèm ra.",
+   "new": true
+  },
+  {
+   "id": "close_living_curtains",
+   "room": "living",
+   "obj": "livcurtains",
+   "label": "Close the curtains",
+   "labelVi": "Kéo rèm lại",
+   "sentence": "I'm closing the curtains.",
+   "vi": "Tôi đang kéo rèm lại.",
+   "new": true
+  },
+  {
+   "id": "turn_on_fan",
+   "room": "living",
+   "obj": "fan",
+   "label": "Turn on the fan",
+   "labelVi": "Bật quạt",
+   "sentence": "I'm turning on the fan.",
+   "vi": "Tôi đang bật quạt.",
+   "new": true
+  },
+  {
+   "id": "turn_off_fan",
+   "room": "living",
+   "obj": "fan",
+   "label": "Turn off the fan",
+   "labelVi": "Tắt quạt",
+   "sentence": "I'm turning off the fan.",
+   "vi": "Tôi đang tắt quạt.",
+   "new": true
+  },
+  {
+   "id": "pick_up_remote",
+   "room": "living",
+   "obj": "remote",
+   "label": "Pick up the remote control",
+   "labelVi": "Cầm điều khiển",
+   "sentence": "I'm picking up the remote control.",
+   "vi": "Tôi đang cầm cái điều khiển lên.",
+   "new": true
+  },
+  {
+   "id": "listen_to_music",
+   "room": "living",
+   "obj": "speaker",
+   "label": "Listen to music",
+   "labelVi": "Nghe nhạc",
+   "sentence": "I'm listening to music.",
+   "vi": "Tôi đang nghe nhạc.",
+   "new": true
+  }
+ ],
+ "objects": {
+  "fridge": null,
+  "cup": null,
+  "table": null,
+  "book": null,
+  "broom": null,
+  "chair": null,
+  "window": null,
+  "plant": null,
+  "tv": null,
+  "stove": null,
+  "kettle": null,
+  "ricecooker": null,
+  "microwave": null,
+  "sink": null,
+  "dishrack": null,
+  "cabinet": null,
+  "diningtable": null,
+  "toaster": null,
+  "coffeemaker": null,
+  "trashbin": null,
+  "alarmclock": null,
+  "bed": null,
+  "pillow": null,
+  "blanket": null,
+  "wardrobe": null,
+  "lamp": null,
+  "curtains": null,
+  "laundry": null,
+  "mirror": null,
+  "slippers": null,
+  "phone": null,
+  "door": null
+ }
+}

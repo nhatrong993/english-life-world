@@ -1,0 +1,15 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Rooms harness</title>
+<style>body{margin:0;background:#f6efe4}#room{width:1000px;height:640px;display:block}</style>
+<style id="baseCss"></style><style id="roomCss"></style></head>
+<body><svg id="room" viewBox="0 0 1000 640" xmlns="http://www.w3.org/2000/svg"><g id="shell"></g><g id="world"><g id="roomRoot"></g></g></svg>
+<script src="rooms.js"></script>
+<script>
+window.renderRoom=function(id,W,charSvg){const R=ELW_ROOMS[id];
+ document.getElementById("roomCss").textContent=R.css;
+ document.getElementById("shell").innerHTML=R.shellSvg;
+ const root=document.getElementById("roomRoot");root.innerHTML=R.worldSvg;
+ if(charSvg){root.insertAdjacentHTML("beforeend",charSvg)}
+ // depth sort like the app
+ const kids=[...root.children].filter(e=>e.dataset&&e.dataset.base);kids.sort((a,b)=>+a.dataset.base-+b.dataset.base);kids.forEach(k=>root.appendChild(k));
+ R.applyState(W,root);return true};
+</script></body></html>

@@ -1,0 +1,22 @@
+import { execSync } from "child_process";
+const { chromium } = await import(execSync("npm root -g").toString().trim() + "/playwright/index.mjs");
+const dir = new URL(".", import.meta.url).pathname;
+const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 1100, height: 1000 } });
+const errs = []; p.on("pageerror", e => errs.push(e.message));
+await p.goto("file://" + dir + "../index.html"); await p.waitForTimeout(800);
+await p.addScriptTag({ path: dir + "needs.js" });
+const r = await p.evaluate(async () => {
+  const N = window.ELW_NEEDS; N.set({ catHunger: 95, catThirst: 70, plantThirst: 95, roomDust: 90, energy: 20, mood: 30, catBowlDirty: 70 });
+  const world = document.getElementById("world"); N.decorate(world, { room: "living" });
+  const div = document.createElement("div"); div.style.cssText = "width:370px;background:#fff;padding:10px;border:1px solid #e3d6c3;border-radius:12px;position:fixed;right:8px;top:8px;z-index:99";
+  document.body.appendChild(div); const q = []; N.renderPanel(div, { speak: () => {}, enqueue: id => q.push(id) }); div.querySelector("[data-go]").click();
+  await new Promise(r => setTimeout(r, 700));
+  const hit = id => { const r = document.getElementById(id).getBoundingClientRect(); const e = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2); return !!(e && e.closest("#" + id)); };
+  const topHit = id => { const r = document.getElementById(id).getBoundingClientRect(); const e = document.elementFromPoint(r.left + r.width / 2, r.top + 4); return e && e.closest(".nd-layer") ? "BLOCKED" : "ok"; };
+  return { inds: document.querySelectorAll(".nd-layer .nd-ind").length, cat: hit("o-cat"), plant: hit("o-plant"), catTop: topHit("o-cat"), droop: document.getElementById("o-plant").classList.contains("nd-droop"), q };
+});
+await p.locator("#room").scrollIntoViewIfNeeded();
+await p.screenshot({ path: dir + "needs.png" });
+console.log(JSON.stringify(r), "errors:", errs);
+if (!r.cat || !r.plant || r.catTop !== "ok" || errs.length || r.q[0] !== "feed_cat") process.exit(1);
+await b.close();

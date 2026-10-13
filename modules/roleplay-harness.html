@@ -1,0 +1,11 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Roleplay harness</title>
+<style>body{margin:0;padding:12px;background:#f6efe4;font-family:system-ui}#log{white-space:pre-wrap;overflow-wrap:anywhere;font:12px monospace;color:#6b5a4a;margin-top:8px}</style></head>
+<body><div id="rp"></div><div id="log"></div>
+<script src="speaking-coach.js"></script><script src="roleplay.js"></script>
+<script>
+window.enqueued=[];window.ended=[];
+window.player=ELW_ROLEPLAY.createPlayer({container:document.getElementById("rp"),
+  speak:()=>new Promise(r=>setTimeout(r,20)),enqueue:id=>enqueued.push(id),delay:30,
+  correction:ELW_SPEAKING.correction,listen:()=>Promise.resolve("yes sure"),
+  onEnd:(id,s)=>{ended.push([id,s]);document.getElementById("log").textContent+=id+" "+JSON.stringify(s)+"\n"}});
+</script></body></html>

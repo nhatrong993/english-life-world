@@ -1,0 +1,1227 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>English Life World</title>
+<style>
+:root{--bg:#f6efe4;--card:#fffdf9;--ink:#2d2a26;--muted:#7a7166;--accent:#e8743b;--ok:#3a9d5d;--line:#e3d6c3;--shadow:0 6px 24px #5a3d1f1a}
+*{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;font-family:system-ui,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink)}
+header{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 16px;max-width:1280px;margin:auto;flex-wrap:wrap}
+h1{font-size:20px;margin:0}h1 span{color:var(--accent)}
+.hud{display:flex;gap:8px;align-items:center}
+.stat{background:#fff;border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-weight:700;font-size:14px}
+.stat.bump{animation:bump .5s}@keyframes bump{40%{transform:scale(1.2)}}
+.iconbtn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:6px 10px;cursor:pointer;font-size:14px;color:var(--ink)}
+main{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(320px,1fr);gap:16px;max-width:1280px;margin:auto;padding:0 16px 16px}
+@media(max-width:900px){main{grid-template-columns:1fr}}
+.scene{background:var(--card);border-radius:20px;padding:8px;box-shadow:var(--shadow);position:relative;align-self:start}
+.scene-bar{display:flex;justify-content:space-between;align-items:center;margin:4px 8px 6px;font-size:14px;color:var(--muted);gap:8px}
+#room{width:100%;height:auto;display:block;border-radius:14px;touch-action:manipulation}
+.obj{cursor:pointer}
+.hit{fill:transparent}
+.obj:hover .vec,.obj:focus .vec,.obj.sel .vec{filter:drop-shadow(0 0 5px #ffb46a) drop-shadow(0 0 2px #e8743b)}
+.obj:focus{outline:none}
+.obj.pulse .vec{animation:pulse 1s ease-in-out 3}@keyframes pulse{50%{filter:drop-shadow(0 0 12px #ff9a3c)}}
+.tag{pointer-events:none;font:700 13px system-ui;fill:#5a3d1f;paint-order:stroke;stroke:#fffdf9;stroke-width:4px;opacity:0;transition:opacity .2s}
+.obj:hover .tag,.obj:focus .tag,.obj.sel .tag,.show-tags .tag{opacity:1}
+/* character parts */
+#char .legB,#char .legF{transform-origin:0 -58px}
+#char #upper{transform-origin:0 0;transition:transform .35s}
+#char #arm{transform-origin:0 0;transition:transform .35s}
+#char.walk .legF{animation:legs .45s ease-in-out infinite alternate}
+#char.walk .legB{animation:legs .45s ease-in-out infinite alternate-reverse}
+#char.walk #bob{animation:bob .45s ease-in-out infinite alternate}
+@keyframes legs{from{transform:rotate(-18deg)}to{transform:rotate(18deg)}}
+@keyframes bob{to{transform:translateY(-3px)}}
+#char.idle #bob{animation:breathe 2.4s ease-in-out infinite}@keyframes breathe{50%{transform:translateY(-1.5px)}}
+#char.reach #arm{transform:rotate(-80deg)}
+#char.bend #upper{transform:rotate(28deg)}#char.bend #arm{transform:rotate(-20deg)}
+#char.drink #arm{transform:rotate(-150deg)}
+#char.pour #arm{transform:rotate(-95deg)}#char.pour #hand>*{transform:rotate(-70deg)}
+#char.sweep #arm{animation:sweepA .5s ease-in-out infinite alternate}@keyframes sweepA{from{transform:rotate(-5deg)}to{transform:rotate(-38deg)}}
+#char.wipe #arm{animation:wipeA .45s ease-in-out infinite alternate}@keyframes wipeA{from{transform:rotate(-60deg)}to{transform:rotate(-95deg)}}
+#char.water #arm{transform:rotate(-70deg)}#char.water #hand>*{transform:rotate(35deg);transition:transform .4s}
+#char.sit #upper{transform:translateY(30px)}#char.sit .legs{transform:scaleY(.42) translateY(-6px)}
+#char.sit .legF{transform:rotate(-60deg)}
+#char .legs{transform-origin:0 0;transition:transform .35s}
+.door{transform-origin:960px 0;transition:transform .6s ease}
+.fridge-open .door{transform:scaleX(.12)}
+.pane{transition:transform .7s}.win-open #paneL{transform:scaleX(.22)}.win-open #paneR{transform:scaleX(.22)}
+#paneL{transform-origin:438px 0}#paneR{transform-origin:582px 0}
+#drops{opacity:0}.watering #drops{opacity:1;animation:drop .6s linear infinite}@keyframes drop{to{transform:translateY(14px)}}
+.dust{opacity:0;transition:opacity .6s}.dusty .dust{opacity:.75}
+.sparkle{opacity:0}.shine .sparkle{animation:sp 1.2s ease}@keyframes sp{30%{opacity:1}100%{opacity:0}}
+#leaves{transform-origin:236px 372px;animation:sway 4s ease-in-out infinite}@keyframes sway{50%{transform:rotate(1.5deg)}}
+#steam{animation:steam 3s ease-in-out infinite;opacity:.5}@keyframes steam{50%{transform:translateY(-6px);opacity:.15}}
+/* panel */
+.panel{background:var(--card);border-radius:20px;padding:16px;box-shadow:var(--shadow)}
+.empty{color:var(--muted);text-align:center;padding:12px 10px}
+.ohead{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.ohead b{font-size:22px}.ohead span{color:var(--muted)}
+.acts{display:flex;flex-direction:column;gap:6px}
+.act{display:flex;align-items:center;gap:10px;text-align:left;border:1px solid var(--line);background:#fff;border-radius:12px;padding:9px 12px;cursor:pointer;font-size:15px;color:var(--ink)}
+.act:hover:not(:disabled){border-color:var(--accent);background:#fff6ef}
+.act:disabled{opacity:.55;cursor:not-allowed}
+.act .dot{width:10px;height:10px;border-radius:50%;flex:none}
+.act small{display:block;color:var(--muted);font-size:13px}
+.act .why{color:#b05a2a;font-size:12px}
+.steps{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:12px}
+.steps button{flex:1;min-width:58px;border:0;background:#f3ebe0;padding:8px 4px;border-radius:10px;font-size:13px;cursor:pointer;color:var(--ink)}
+.steps button.on{background:var(--accent);color:#fff}
+.sent{font-size:23px;font-weight:700;margin:6px 0;line-height:1.7}
+.sent .w{cursor:pointer;border-radius:4px;display:inline-block}.sent .w:hover{background:#ffe3d1}
+.sent .key{color:var(--accent)}
+.sent .w.lv-new::after{content:attr(data-vi);display:block;font-size:11px;font-weight:400;color:var(--muted);text-align:center;line-height:1}
+.sent .w.lv-learning{text-decoration:underline dotted var(--accent);text-underline-offset:5px}
+.vi{color:var(--muted);margin-bottom:10px}
+.btn{border:0;background:var(--accent);color:#fff;padding:10px 14px;border-radius:12px;font-size:15px;cursor:pointer;margin:4px 4px 4px 0}
+.btn.sec{background:#f3ebe0;color:var(--ink)}.btn:disabled{opacity:.5;cursor:default}
+.vocab{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.chip{background:#f8f2e9;border:1px solid var(--line);border-radius:10px;padding:6px 10px;cursor:pointer;font-size:14px}
+.chip small{color:var(--muted);display:block}
+.note{background:#fff7e8;border-left:4px solid #f0b54a;padding:8px 10px;border-radius:6px;font-size:14px;margin:10px 0}
+.pat{font-size:14px;color:var(--muted)}.pat b{color:var(--ink)}
+.res{margin-top:10px;font-size:15px}.good{color:var(--ok)}.bad{color:#c0392b}
+.chunk{display:inline-block;background:#f3ebe0;padding:6px 10px;border-radius:8px;margin:3px}.chunk.on{background:var(--accent);color:#fff}
+.opts button{display:block;width:100%;text-align:left;margin:6px 0}
+.hint{font-size:13px;color:var(--muted)}
+.back{background:none;border:0;color:var(--accent);cursor:pointer;font-size:14px;padding:0;margin-bottom:6px}
+.guide{position:sticky;bottom:12px;max-width:1280px;margin:0 auto 12px;padding:0 16px;z-index:5}
+.guide button{width:100%;display:flex;gap:12px;align-items:center;text-align:left;border:2px solid var(--line);background:#fff;border-radius:16px;padding:10px 14px;cursor:pointer;box-shadow:0 3px 0 var(--line);font-size:15px;color:var(--ink)}
+.guide .face{font-size:34px}.guide b{display:block}.guide span{color:var(--muted)}
+.modal{position:fixed;inset:0;background:#0006;display:flex;align-items:center;justify-content:center;padding:16px;z-index:50}
+.modal .box{background:var(--card);border-radius:18px;padding:18px;max-width:720px;width:100%;max-height:90vh;overflow:auto}
+.box h2{margin:0 0 10px;font-size:18px;display:flex;justify-content:space-between;gap:8px}
+.box h3{font-size:15px;margin:14px 0 6px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px}
+.tile{border:1px solid var(--line);border-radius:12px;padding:10px 10px 14px;position:relative;background:#fffdf8;cursor:pointer}
+.tile::after{content:"";position:absolute;left:10px;right:10px;bottom:5px;height:4px;border-radius:2px;background:var(--sc,#ccc)}
+.tile .en{font-weight:700;font-size:14px}.meta{font-size:12px;color:var(--muted)}
+.legend{display:flex;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin:8px 0}
+.legend i{display:inline-block;width:12px;height:4px;border-radius:2px;margin-right:4px;vertical-align:middle}
+#char.point #arm{transform:rotate(-70deg)}
+#char.sit.drink #arm{transform:rotate(-150deg)}
+.tvscreen{fill:#2b3440;transition:fill .4s}
+.tv-on .tvscreen{fill:#6fb3d9;animation:tvf 1.6s steps(2) infinite}
+@keyframes tvf{50%{fill:#8fd19a}}
+.tv-on .tvglow{opacity:.35}.tvglow{opacity:0;transition:opacity .4s}
+.side{display:flex;flex-direction:column;gap:16px;min-width:0}
+.leftcol{display:flex;flex-direction:column;gap:16px;min-width:0}
+.leftcol .scene{align-self:stretch}
+.card2{background:var(--card);border-radius:20px;padding:14px 16px;box-shadow:var(--shadow)}
+.card2 h2{font-size:16px;margin:0 0 8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.card2 h2 .meta{font-weight:400}
+.ctrls{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.ctrls .iconbtn{font-size:13px;padding:6px 9px}
+.iconbtn.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.q{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px;max-height:260px;overflow:auto}
+.q li{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:10px;padding:6px 8px;font-size:14px;background:#fff}
+.q li .n{width:20px;text-align:right;color:var(--muted);font-variant-numeric:tabular-nums}
+.q li .t{flex:1;min-width:0}.q li .t small{display:block;color:var(--muted);font-size:12px}
+.q li .st{font-size:12px;white-space:nowrap}
+.q li.running{border-color:var(--accent);background:#fff6ef}
+.q li.done .st{color:var(--ok)}.q li.blocked{background:#fdf0ec}.q li.blocked .st{color:#c0392b}
+.q li.cancelled{opacity:.55}.q li.hl{outline:2px solid var(--accent)}
+.q li button{border:0;background:none;cursor:pointer;font-size:13px;padding:2px 4px;color:var(--muted)}
+.confirm{background:#fff7e8;border:1px solid #f0b54a;border-radius:10px;padding:8px 10px;font-size:14px;margin:6px 0}
+.saved{display:flex;flex-direction:column;gap:4px;margin-top:8px}
+.saved div{display:flex;gap:6px;align-items:center;font-size:14px}.saved div span{flex:1;min-width:0}
+.saveform{display:flex;gap:6px;margin-top:6px}.saveform input{flex:1;min-width:0;border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-size:14px}
+.story{font-size:17px;line-height:1.7}
+.story .s{cursor:pointer;border-radius:4px}.story .s:hover,.story .s.hl{background:#ffe3d1}
+.story .s.blocked{text-decoration:line-through;color:var(--muted)}
+.story-vi{color:var(--muted);font-size:14px;margin-top:6px}
+.story-simple div{padding:2px 0}
+.empty2{color:var(--muted);font-size:14px}
+.rtabs{display:flex;gap:4px;flex-wrap:wrap}
+.rtabs button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:5px 12px;font-size:13px;cursor:pointer;color:var(--ink)}
+.rtabs button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+#room{transition:opacity .25s}
+.xtabs{display:flex;gap:4px;margin:10px 0 6px;flex-wrap:wrap}
+.xlist{display:flex;flex-direction:column;gap:4px;font-size:14px}
+.xlist div{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}.xlist small{color:var(--muted)}
+.dlg-list{display:flex;flex-wrap:wrap;gap:6px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header><h1>English <span>Life</span> World</h1>
+<div class="hud"><span class="stat" id="pts" title="Điểm: có khi học và ôn đúng">⭐ 0</span><span class="stat" id="prog"></span>
+<button class="iconbtn" id="btnBook">📒 Sổ từ</button></div></header>
+<main>
+<div class="leftcol"><section class="scene">
+ <div class="scene-bar"><span class="rtabs" id="roomTabs" role="tablist" aria-label="Chọn phòng"></span>
+  <span><button class="iconbtn" id="btnTags">🏷 Tên đồ vật</button> <button class="iconbtn" id="btnReset" title="Đưa mọi đồ vật về chỗ cũ">↺ Dọn phòng</button></span></div>
+ <svg id="room" viewBox="0 0 1000 640" role="application" aria-label="Căn phòng tương tác">
+  <defs>
+   <linearGradient id="gWall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7e6cf"/><stop offset="1" stop-color="#efd6b6"/></linearGradient>
+   <linearGradient id="gLeft" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e2c29c"/><stop offset="1" stop-color="#ecd2b0"/></linearGradient>
+   <linearGradient id="gFloor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d6a676"/><stop offset="1" stop-color="#c28a5a"/></linearGradient>
+   <linearGradient id="gFridge" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#f4f8fb"/><stop offset="1" stop-color="#d5e1ea"/></linearGradient>
+   <radialGradient id="gLight" cx=".5" cy=".3" r=".7"><stop offset="0" stop-color="#fff6d8" stop-opacity=".55"/><stop offset="1" stop-color="#fff6d8" stop-opacity="0"/></radialGradient>
+   <filter id="soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="4"/></filter>
+  </defs>
+  <g id="shell-living">
+  <!-- room shell -->
+  <rect x="120" y="0" width="880" height="330" fill="url(#gWall)"/>
+  <polygon points="0,0 120,0 120,330 0,640" fill="url(#gLeft)"/>
+  <polygon points="120,330 1000,330 1000,640 0,640" fill="url(#gFloor)"/>
+  <g stroke="#b77c4d" stroke-opacity=".35">
+   <line x1="120" y1="330" x2="0" y2="640"/><line x1="300" y1="330" x2="230" y2="640"/><line x1="480" y1="330" x2="460" y2="640"/><line x1="660" y1="330" x2="690" y2="640"/><line x1="840" y1="330" x2="920" y2="640"/>
+  </g>
+  <rect x="120" y="318" width="880" height="12" fill="#c99668"/>
+  <polygon points="120,318 120,330 0,640 0,600" fill="#b9875a"/>
+  <rect x="120" y="0" width="880" height="330" fill="url(#gLight)"/>
+  <!-- wall decor -->
+  <rect x="190" y="90" width="90" height="70" rx="4" fill="#fff" stroke="#a8784e" stroke-width="5"/><path d="M198 150 L225 118 L245 140 L258 126 L272 150Z" fill="#8cc08a"/><circle cx="255" cy="108" r="7" fill="#f5c45a"/>
+  <g id="steam"><path d="M732 222 q-6 -10 0 -18 q6 -8 0 -16" stroke="#fff" stroke-width="3" fill="none"/></g>
+  <!-- rug -->
+  <ellipse cx="510" cy="520" rx="260" ry="70" fill="#e9b7a0" opacity=".8"/><ellipse cx="510" cy="520" rx="230" ry="56" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="3" stroke-dasharray="8 8"/>
+  <g class="dust" id="dust"><circle cx="470" cy="590" r="4" fill="#8a6a50"/><circle cx="530" cy="598" r="3" fill="#8a6a50"/><circle cx="560" cy="585" r="2.5" fill="#8a6a50"/><circle cx="430" cy="540" r="3" fill="#8a6a50"/><circle cx="600" cy="545" r="2.5" fill="#8a6a50"/></g>
+
+  </g>
+  <g id="shell-other"></g>
+  <g id="world">
+   <!-- tv -->
+   <g class="obj" id="o-tv" data-obj="tv" data-base="362" tabindex="0" aria-label="TV, ti vi">
+    <g class="vec">
+     <ellipse cx="355" cy="362" rx="70" ry="7" fill="#000" opacity=".15" filter="url(#soft)"/>
+     <rect x="292" y="300" width="126" height="60" rx="5" fill="#b98a5e"/><rect x="300" y="312" width="52" height="40" rx="3" fill="#a87a50"/><rect x="358" y="312" width="52" height="40" rx="3" fill="#a87a50"/>
+     <rect x="350" y="288" width="10" height="14" fill="#555"/><rect x="330" y="296" width="50" height="6" rx="2" fill="#555"/>
+     <ellipse class="tvglow" cx="355" cy="250" rx="90" ry="60" fill="#bfe6ff"/>
+     <rect x="298" y="208" width="114" height="82" rx="6" fill="#30343b"/><rect class="tvscreen" x="304" y="214" width="102" height="70" rx="3"/>
+    </g>
+    <text class="tag" x="355" y="200" text-anchor="middle">TV · ti vi</text>
+   </g>
+   <!-- window -->
+   <g class="obj" id="o-window" data-obj="window" data-base="100" tabindex="0" aria-label="window, cửa sổ">
+    <g class="vec">
+     <rect x="430" y="60" width="160" height="150" rx="6" fill="#bfe3ff" stroke="#a8784e" stroke-width="8"/>
+     <path d="M434 170 Q480 150 520 165 T586 160 L586 206 L434 206Z" fill="#9fd39a"/>
+     <circle cx="555" cy="95" r="14" fill="#fff3b0"/>
+     <rect id="paneL" class="pane" x="438" y="64" width="72" height="142" fill="#eaf6ff" fill-opacity=".75" stroke="#a8784e" stroke-width="3"/>
+     <rect id="paneR" class="pane" x="510" y="64" width="72" height="142" fill="#eaf6ff" fill-opacity=".75" stroke="#a8784e" stroke-width="3"/>
+     <rect x="420" y="210" width="180" height="10" rx="3" fill="#c99668"/>
+    </g>
+    <text class="tag" x="510" y="50" text-anchor="middle">window · cửa sổ</text>
+   </g>
+   <!-- counter -->
+   <g id="counter" data-base="361">
+    <rect x="660" y="250" width="180" height="110" fill="#e9e1d4"/><rect x="660" y="240" width="180" height="14" rx="3" fill="#b98a5e"/>
+    <rect x="672" y="268" width="74" height="80" rx="4" fill="#f4eee4" stroke="#cbbfae"/><rect x="756" y="268" width="74" height="80" rx="4" fill="#f4eee4" stroke="#cbbfae"/>
+    <circle cx="738" cy="308" r="3" fill="#a8784e"/><circle cx="764" cy="308" r="3" fill="#a8784e"/>
+   </g>
+   <!-- fridge -->
+   <g class="obj" id="o-fridge" data-obj="fridge" data-base="362" tabindex="0" aria-label="fridge, tủ lạnh">
+    <g class="vec">
+     <ellipse cx="905" cy="362" rx="62" ry="8" fill="#000" opacity=".15" filter="url(#soft)"/>
+     <rect x="850" y="110" width="110" height="250" rx="12" fill="#cfdde7"/>
+     <g id="fridgeInside"><rect x="858" y="118" width="94" height="234" rx="6" fill="#f2fbff"/>
+      <rect x="858" y="195" width="94" height="4" fill="#bcd3e0"/><rect x="858" y="265" width="94" height="4" fill="#bcd3e0"/>
+      <rect x="866" y="244" width="22" height="20" rx="4" fill="#f6b38f"/><circle cx="935" cy="187" r="7" fill="#e7564d"/><circle cx="922" cy="189" r="6" fill="#f2a33a"/>
+      <rect x="912" y="330" width="34" height="14" rx="4" fill="#9fd39a"/></g>
+     <g class="door"><rect x="850" y="110" width="110" height="250" rx="12" fill="url(#gFridge)" stroke="#b7c7d3" stroke-width="2"/>
+      <line x1="850" y1="190" x2="960" y2="190" stroke="#b7c7d3" stroke-width="2"/>
+      <rect x="862" y="140" width="6" height="34" rx="3" fill="#9aaab6"/><rect x="862" y="210" width="6" height="50" rx="3" fill="#9aaab6"/>
+      <rect x="900" y="150" width="20" height="16" rx="2" fill="#f5c45a" transform="rotate(-8 910 158)"/></g>
+    </g>
+    <text class="tag" x="905" y="100" text-anchor="middle">fridge · tủ lạnh</text>
+   </g>
+   <!-- plant -->
+   <g class="obj" id="o-plant" data-obj="plant" data-base="376" tabindex="0" aria-label="plant, cái cây">
+    <g class="vec">
+     <ellipse cx="236" cy="376" rx="34" ry="7" fill="#000" opacity=".15" filter="url(#soft)"/>
+     <g id="leaves"><ellipse cx="236" cy="300" rx="38" ry="44" fill="#5fae5a"/><ellipse cx="216" cy="286" rx="16" ry="32" fill="#4c9a49" transform="rotate(-20 216 286)"/><ellipse cx="258" cy="290" rx="14" ry="30" fill="#6dbb66" transform="rotate(22 258 290)"/></g>
+     <path d="M210 330 L262 330 L254 376 L218 376Z" fill="#c56b3c"/><rect x="206" y="326" width="60" height="10" rx="3" fill="#d27a48"/>
+     <g id="drops"><circle cx="262" cy="318" r="3" fill="#4aa3df"/><circle cx="268" cy="326" r="3" fill="#4aa3df"/></g>
+    </g>
+    <text class="tag" x="236" y="245" text-anchor="middle">plant · cái cây</text>
+   </g>
+   <!-- broom spot (prop rendered via props) -->
+   <g class="obj" id="o-broom" data-obj="broom" data-base="430" tabindex="0" aria-label="broom, cây chổi">
+    <rect class="hit" x="130" y="290" width="70" height="150"/>
+    <g class="vec" id="broomSlot"></g>
+    <text class="tag" x="165" y="285" text-anchor="middle">broom · cây chổi</text>
+   </g>
+   <!-- table -->
+   <g class="obj" id="o-table" data-obj="table" data-base="522" tabindex="0" aria-label="table, cái bàn">
+    <g class="vec">
+     <rect class="hit" x="370" y="418" width="280" height="108"/><ellipse cx="510" cy="522" rx="150" ry="14" fill="#000" opacity=".18" filter="url(#soft)"/>
+     <rect x="392" y="446" width="12" height="76" fill="#7a4a2a"/><rect x="616" y="446" width="12" height="76" fill="#7a4a2a"/>
+     <rect x="420" y="440" width="10" height="70" fill="#6a3f22"/><rect x="590" y="440" width="10" height="70" fill="#6a3f22"/>
+     <polygon points="398,424 622,424 648,446 372,446" fill="#a8693e"/><rect x="372" y="446" width="276" height="10" fill="#8a5432"/>
+     <circle class="sparkle" cx="450" cy="430" r="5" fill="#fff"/><circle class="sparkle" cx="580" cy="432" r="4" fill="#fff"/>
+    </g>
+    <text class="tag" x="510" y="412" text-anchor="middle">table · cái bàn</text>
+   </g>
+   <!-- chair -->
+   <g class="obj" id="o-chair" data-obj="chair" data-base="528" tabindex="0" aria-label="chair, cái ghế">
+    <g class="vec" id="chairG"><rect class="hit" x="-42" y="395" width="84" height="135"/>
+     <ellipse cx="0" cy="528" rx="38" ry="7" fill="#000" opacity=".16" filter="url(#soft)"/>
+     <rect x="-26" y="478" width="7" height="50" fill="#6a3f22"/><rect x="20" y="478" width="7" height="50" fill="#6a3f22"/>
+     <rect x="20" y="398" width="8" height="84" rx="3" fill="#7a4a2a"/><rect x="14" y="404" width="20" height="44" rx="5" fill="#e8743b"/>
+     <polygon points="-30,470 28,470 34,482 -36,482" fill="#e8743b"/><rect x="-36" y="482" width="70" height="7" fill="#c85f2b"/>
+    </g>
+    <text class="tag" id="chairTag" x="0" y="390" text-anchor="middle">chair · cái ghế</text>
+   </g>
+   <!-- book on floor spot -->
+   <g class="obj" id="o-book" data-obj="book" data-base="590" tabindex="0" aria-label="book, quyển sách">
+    <g class="vec" id="bookSlot"></g>
+    <text class="tag" id="bookTag" x="400" y="560" text-anchor="middle">book · quyển sách</text>
+   </g>
+   <!-- cup clickable wrapper -->
+   <g class="obj" id="o-cup" data-obj="cup" data-base="363" tabindex="0" aria-label="cup, cái cốc">
+    <g class="vec" id="cupSlot"></g>
+    <text class="tag" id="cupTag" x="720" y="215" text-anchor="middle">cup · cái cốc</text>
+   </g>
+   <g id="milkSlot" data-base="363"></g>
+   <!-- character -->
+   <g id="char" class="idle" data-base="420" transform="translate(560,420)">
+    <ellipse cx="0" cy="0" rx="26" ry="7" fill="#000" opacity=".2"/>
+    <g id="flip"><g id="bob">
+     <g class="legs">
+      <g class="legB"><rect x="-10" y="-58" width="11" height="56" rx="5" fill="#34507a"/><ellipse cx="-3" cy="-2" rx="9" ry="5" fill="#3a2a22"/></g>
+      <g class="legF"><rect x="-1" y="-58" width="11" height="56" rx="5" fill="#3d5a80"/><ellipse cx="7" cy="-2" rx="9" ry="5" fill="#4a352a"/></g>
+     </g>
+     <g transform="translate(0,-56)"><g id="upper">
+      <rect x="-8" y="-46" width="8" height="38" rx="4" fill="#e39a3a"/>
+      <rect x="-17" y="-52" width="34" height="56" rx="12" fill="#f0a63c"/><rect x="-17" y="-8" width="34" height="10" rx="4" fill="#d48a2a"/>
+      <rect x="-5" y="-60" width="10" height="10" fill="#f2c9a0"/>
+      <circle cx="0" cy="-78" r="23" fill="#f2c9a0"/>
+      <path d="M-23 -80 Q-22 -106 2 -104 Q24 -102 23 -82 Q14 -94 -2 -92 Q-14 -92 -23 -80Z" fill="#4a3426"/>
+      <path d="M-23 -82 Q-30 -66 -20 -60 Q-22 -72 -18 -80Z" fill="#4a3426"/>
+      <circle cx="11" cy="-77" r="2.8" fill="#2d2a26"/><circle cx="-1" cy="-77" r="2.5" fill="#2d2a26"/>
+      <path d="M2 -66 Q8 -62 13 -66" stroke="#9a4a3a" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <circle cx="16" cy="-70" r="4" fill="#f7a8a0" opacity=".6"/>
+      <g transform="translate(4,-44)"><g id="arm">
+       <rect x="-5" y="0" width="11" height="44" rx="5.5" fill="#f0a63c"/><circle cx="0.5" cy="46" r="6.5" fill="#f2c9a0"/>
+       <g id="hand" transform="translate(0.5,46)"></g>
+      </g></g>
+     </g></g>
+    </g></g>
+   </g>
+  </g>
+ </svg>
+</section>
+<div id="leftSlot"></div></div>
+<div class="side"><section class="panel" id="panel"><div class="empty">👈 Nhấn vào một đồ vật trong phòng<br>(tủ lạnh, cốc, bàn, ghế, chổi…)<br><br>Mỗi đồ vật có nhiều hành động.<br>Nhân vật sẽ đi tới và làm thật cho bạn xem.<br>Các hành động nối tiếp nhau thành <b>chuỗi</b> và một <b>đoạn văn</b>.</div></section>
+<section class="card2" id="seqCard" aria-label="Chuỗi hành động"></section>
+<section class="card2" id="storyCard" aria-label="Đoạn văn"></section>
+<section class="card2" id="dlgCard" aria-label="Hội thoại gia đình"></section>
+<div id="invWrap"></div>
+</div>
+</main>
+<div class="guide"><button id="guide"><span class="face">🧑‍🏫</span><span style="flex:1"><b>Cô Mai</b><span id="guideText"></span></span><span style="font-size:22px;color:var(--accent)">›</span></button></div>
+<div class="modal" id="modal" hidden><div class="box" id="mbox"></div></div>
+
+<script src="modules/levels.js"></script>
+<script src="modules/rooms.js"></script>
+<script src="modules/voices-dialogue.js"></script>
+<script src="modules/inventory.js"></script>
+<script>
+"use strict";
+const SVGNS="http://www.w3.org/2000/svg";
+const $id=id=>document.getElementById(id);
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const reduceMotion=matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* =====================================================================
+   1. ASSET MANIFEST — ảnh thật (từ Antigravity) thay cho hình vẽ tạm.
+   App thử tải từng file; có thì dùng, không có thì giữ hình vẽ SVG.
+   ===================================================================== */
+const ASSETS={
+ "obj-window":{file:"assets/objects/window.png",target:"o-window"},
+ "obj-plant":{file:"assets/objects/plant.png",target:"o-plant"},
+ "obj-table":{file:"assets/objects/table.png",target:"o-table"},
+ "prop-cup":{file:"assets/objects/cup.png",prop:"cup"},
+ "prop-milk":{file:"assets/objects/milk.png",prop:"milk"},
+ "prop-book":{file:"assets/objects/book.png",prop:"book"},
+ "prop-broom":{file:"assets/objects/broom.png",prop:"broom"},
+};
+const assetStatus={};
+
+/* =====================================================================
+   2. PROPS — đồ vật di chuyển được (vẽ với gốc toạ độ ở đáy giữa)
+   ===================================================================== */
+const PROP_SVG={
+ cup:`<rect class="hit" x="-18" y="-32" width="36" height="36"/><path d="M-11 -24 L11 -24 L9 0 L-9 0Z" fill="#fff" stroke="#c9b7a2" stroke-width="1.5"/><path d="M11 -19 q9 2 0 12" stroke="#c9b7a2" stroke-width="3" fill="none"/><rect class="fill" x="-9" y="-20" width="18" height="5" fill="#fff8ec" opacity="0"/>`,
+ milk:`<rect x="-10" y="-36" width="20" height="36" rx="3" fill="#fff" stroke="#9ab8d0" stroke-width="1.5"/><path d="M-10 -36 L0 -46 L10 -36Z" fill="#7fb2dc"/><rect x="-10" y="-24" width="20" height="10" fill="#7fb2dc"/>`,
+ book:`<rect class="hit" x="-26" y="-18" width="52" height="24"/><rect x="-20" y="-9" width="40" height="9" rx="2" fill="#3b6ec2"/><rect x="-18" y="-7" width="36" height="5" fill="#f4efe4"/>`,
+ broom:`<rect x="-2.5" y="-118" width="5" height="96" rx="2" fill="#a0703a"/><path d="M-11 -24 L11 -24 L17 0 L-17 0Z" fill="#e1b54a"/><path d="M-9 -10 L9 -10" stroke="#c8962f"/>`,
+ cloth:`<rect x="-12" y="-8" width="24" height="10" rx="3" fill="#6fb3d9"/>`,
+ can:`<rect x="-12" y="-22" width="24" height="22" rx="4" fill="#7aa6c2"/><path d="M12 -18 L26 -28" stroke="#7aa6c2" stroke-width="4"/>`,
+};
+// vị trí đặt đồ (đáy đồ vật) + chiều sâu vẽ
+const LOCS={
+ cup:{counter:{x:720,y:241,b:363},table:{x:470,y:432,b:523},tableR:{x:628,y:434,b:523}},
+ milk:{fridge:{x:878,y:263,b:363},table:{x:515,y:430,b:524},counter:{x:790,y:241,b:363}},
+ book:{floor:{x:400,y:585,b:590},table:{x:565,y:436,b:524}},
+ broom:{wall:{x:168,y:430,b:431}},
+};
+const slotOf={cup:"cupSlot",book:"bookSlot",broom:"broomSlot",milk:"milkSlot"};
+const props={};
+function makeProp(name){const g=document.createElementNS(SVGNS,"g");g.classList.add("prop");g.dataset.prop=name;g.innerHTML=PROP_SVG[name];props[name]=g;return g}
+["cup","milk","book","broom"].forEach(makeProp);
+
+/* =====================================================================
+   3. OBJECTS & ACTIONS — dữ liệu học. Mỗi hành động = 1 bài học (id cũ được giữ)
+   ===================================================================== */
+const OBJECTS={
+ tv:{en:"TV",vi:"ti vi",ipa:"/ˌtiːˈviː/",acts:["turn_on_tv","watch_tv","turn_off_tv"]},
+ fridge:{en:"fridge",vi:"tủ lạnh",ipa:"/frɪdʒ/",acts:["open_fridge","take_milk","put_milk_back","close_fridge"]},
+ cup:{en:"cup",vi:"cái cốc",ipa:"/kʌp/",acts:["pick_up_cup","put_cup_on_table","pour_milk","drink_from_cup"]},
+ table:{en:"table",vi:"cái bàn",ipa:"/ˈteɪ.bəl/",acts:["wipe_table","put_cup_on_table","put_book_on_table","sweep_under_table","sit_on_chair"]},
+ chair:{en:"chair",vi:"cái ghế",ipa:"/tʃeər/",acts:["pull_out_chair","sit_on_chair","get_up","push_chair_in"]},
+ broom:{en:"broom",vi:"cây chổi",ipa:"/bruːm/",acts:["sweep_floor","sweep_under_table"]},
+ window:{en:"window",vi:"cửa sổ",ipa:"/ˈwɪn.dəʊ/",acts:["open_window","close_window"]},
+ plant:{en:"plant",vi:"cái cây",ipa:"/plɑːnt/",acts:["water_plant"]},
+ book:{en:"book",vi:"quyển sách",ipa:"/bʊk/",acts:["pick_up_book","put_book_on_table"]},
+};
+const V={ // từ vựng dùng chung
+ open:["open","/ˈəʊ.pən/","mở"],close:["close","/kləʊz/","đóng"],fridge:["fridge","/frɪdʒ/","tủ lạnh"],door:["door","/dɔːr/","cánh cửa"],
+ take:["take out","/teɪk aʊt/","lấy ra"],milk:["milk","/mɪlk/","sữa"],put:["put","/pʊt/","đặt, để"],back:["put back","/pʊt bæk/","để lại chỗ cũ"],
+ pick:["pick up","/pɪk ʌp/","nhặt lên, cầm lên"],cup:["cup","/kʌp/","cái cốc"],on:["on","/ɒn/","trên, lên"],table:["table","/ˈteɪ.bəl/","cái bàn"],
+ pour:["pour","/pɔːr/","rót"],into:["into","/ˈɪn.tuː/","vào trong"],drink:["drink","/drɪŋk/","uống"],from:["from","/frɒm/","từ"],
+ clean:["clean","/kliːn/","lau, dọn sạch"],cloth:["cloth","/klɒθ/","khăn lau"],book:["book","/bʊk/","quyển sách"],
+ sweep:["sweep","/swiːp/","quét"],floor:["floor","/flɔːr/","sàn nhà"],under:["under","/ˈʌn.dər/","bên dưới"],broom:["broom","/bruːm/","cây chổi"],
+ pull:["pull out","/pʊl aʊt/","kéo ra"],push:["push in","/pʊʃ ɪn/","đẩy vào"],chair:["chair","/tʃeər/","cái ghế"],sit:["sit","/sɪt/","ngồi"],
+ getup:["get up","/ɡet ʌp/","đứng dậy"],turnon:["turn on","/tɜːn ɒn/","bật"],turnoff:["turn off","/tɜːn ɒf/","tắt"],tv:["TV","/ˌtiːˈviː/","ti vi"],watch:["watch","/wɒtʃ/","xem"],sip:["sip","/sɪp/","ngụm"],window:["window","/ˈwɪn.dəʊ/","cửa sổ"],water:["water","/ˈwɔː.tər/","nước; tưới nước"],plants:["plants","/plɑːnts/","những cái cây"],
+};
+const A=(id,obj,label,labelVi,sentence,vi,key,vocab,grammar,chunks,disc,patterns,pre,seq,also)=>({id,obj,label,labelVi,sentence,vi,key,vocab:vocab.map(k=>V[k]),grammar,chunks,disc,patterns,pre,seq,also:also||[]});
+const busy=item=>W.hand&&W.hand!==item?`Tay đang cầm ${OBJ_VI[W.hand]}. Hãy đặt xuống trước.`:null;
+const OBJ_VI={cup:"cái cốc",milk:"hộp sữa",book:"quyển sách",broom:"cây chổi",cloth:"khăn lau",can:"bình tưới"};
+
+const ACTIONS=[
+ A("open_fridge","fridge","Open the fridge","Mở tủ lạnh","I'm opening the fridge.","Tôi đang mở tủ lạnh.",["opening","fridge"],["open","fridge","door"],
+  "open → opening: thêm -ing để nói việc <b>đang</b> làm. I'm = I am.",["I'm opening","the fridge."],{ans:"fridge",opts:["fridge","bridge","fresh"]},
+  ["I'm opening the <b>door</b>.","I'm opening the <b>window</b>."],
+  ()=>W.fridge==="open"?"Tủ lạnh đang mở rồi.":null,
+  ()=>[["walk","fridge"],["pose","reach",450],["set","fridge","open"],["wait",500],["pose","idle",1]]),
+ A("take_milk","fridge","Take the milk out","Lấy sữa ra","I'm taking the milk out of the fridge.","Tôi đang lấy sữa ra khỏi tủ lạnh.",["taking","milk","fridge"],["take","milk","fridge"],
+  "<b>take … out of …</b> = lấy … ra khỏi …. Đồ vật nằm giữa: take <b>the milk</b> out.",["I'm taking the milk","out of the fridge."],{ans:"milk",opts:["milk","milky","meal"]},
+  ["I'm taking the <b>eggs</b> out of the fridge.","I'm taking a <b>book</b> out of my bag."],
+  ()=>W.milk!=="fridge"?"Sữa không còn trong tủ lạnh.":busy("milk"),
+  ()=>{const opened=W.fridge==="closed";return[["walk","fridge"],...(opened?[["pose","reach",400],["set","fridge","open"],["wait",350]]:[]),["pose","reach",500],["take","milk"],...(opened?[["pose","idle",350],["pose","reach",350],["set","fridge","closed"]]:[]),["pose","idle",1]]}),
+ A("put_milk_back","fridge","Put the milk back","Cất sữa lại","I'm putting the milk back in the fridge.","Tôi đang cất sữa lại vào tủ lạnh.",["putting","milk","back","fridge"],["back","milk","fridge"],
+  "<b>put … back</b> = để lại chỗ cũ. Ngược nghĩa với take … out.",["I'm putting the milk back","in the fridge."],{ans:"back",opts:["back","bag","black"]},
+  ["I'm putting the <b>book</b> back.","I'm putting the <b>cup</b> back."],
+  ()=>W.milk==="fridge"?"Sữa đang ở trong tủ lạnh rồi.":busy("milk"),
+  ()=>[...fetchSteps("milk"),["walk","fridge"],["pose","reach",350],["set","fridge","open"],["wait",300],["pose","reach",400],["place","milk","fridge"],["pose","reach",350],["set","fridge","closed"],["pose","idle",1]]),
+ A("close_fridge","fridge","Close the fridge","Đóng tủ lạnh","I'm closing the fridge.","Tôi đang đóng tủ lạnh.",["closing","fridge"],["close","fridge","door"],
+  "close → closing: bỏ <b>e</b> rồi thêm -ing.",["I'm closing","the fridge."],{ans:"close",opts:["close","clothes","clock"]},
+  ["I'm closing the <b>door</b>.","I'm closing the <b>window</b>."],
+  ()=>W.fridge==="closed"?"Tủ lạnh đang đóng rồi.":null,
+  ()=>[["walk","fridge"],["pose","reach",450],["set","fridge","closed"],["pose","idle",1]]),
+
+ A("pick_up_cup","cup","Pick up the cup","Cầm cốc lên","I'm picking up the cup.","Tôi đang cầm cái cốc lên.",["picking","up","cup"],["pick","cup"],
+  "<b>pick up</b> là cụm động từ: cầm lên, nhặt lên. Thêm -ing vào từ đầu: picking up.",["I'm picking up","the cup."],{ans:"cup",opts:["cup","cap","cop"]},
+  ["I'm picking up the <b>book</b>.","I'm picking up my <b>phone</b>."],
+  ()=>W.cup==="hand"?"Bạn đang cầm cốc rồi.":busy("cup"),
+  ()=>[...fetchSteps("cup"),["pose","idle",1]]),
+ A("put_cup_on_table","cup","Put the cup on the table","Đặt cốc lên bàn","I'm putting the cup on the table.","Tôi đang đặt chiếc cốc lên bàn.",["putting","cup","table"],["put","cup","on","table"],
+  "Mẫu câu: <b>put + đồ vật + on + nơi chốn</b> = đặt cái gì lên đâu.",["I'm putting the cup","on the table."],{ans:"put",opts:["put","foot","pot"]},
+  ["Put the <b>book</b> on the table.","Put the <b>phone</b> on the table."],
+  ()=>W.cup==="table"||W.cup==="tableR"?"Cốc đang ở trên bàn rồi.":W.sitting&&W.cup!=="hand"?"Hãy đứng dậy để lấy cốc.":busy("cup"),
+  ()=>W.sitting?[["pose","reach",500],["place","cup","tableR"],["pose","idle",1]]:[...fetchSteps("cup"),["walk","tableL"],["pose","reach",450],["place","cup","table"],["pose","idle",1]],["table"]),
+ A("pour_milk","cup","Pour milk into the cup","Rót sữa vào cốc","I'm pouring milk into the cup.","Tôi đang rót sữa vào cốc.",["pouring","milk","cup"],["pour","milk","into","cup"],
+  "<b>into</b> = vào trong. pour A into B = rót A vào B.",["I'm pouring milk","into the cup."],{ans:"pour",opts:["pour","power","poor"]},
+  ["I'm pouring <b>water</b> into the cup.","I'm pouring <b>coffee</b> into the cup."],
+  ()=>W.cup!=="table"?"Hãy đặt cốc lên bàn trước (Put the cup on the table).":W.cupLevel>=2?"Cốc đã đầy sữa rồi. Uống đi nào!":busy("milk"),
+  ()=>[...fetchSteps("milk"),["walk","tableL"],["pose","pour",900],["set","cupLevel",2],["pose","reach",300],["place","milk","table"],["pose","idle",1]],["fridge"]),
+ A("drink_from_cup","cup","Drink from the cup","Uống từ cốc","I'm drinking from the cup.","Tôi đang uống bằng cái cốc.",["drinking","cup"],["drink","from","cup"],
+  "drink → drinking. Tiếng Việt nói “uống bằng cốc”, tiếng Anh dùng <b>from</b>.",["I'm drinking","from the cup."],{ans:"drink",opts:["drink","drank","trick"]},
+  ["I'm drinking <b>milk</b>.","I'm drinking <b>water</b>."],
+  ()=>W.cupLevel>0?(W.sitting&&W.cup!=="hand"?"Bạn đang ngồi mà không cầm cốc. Hãy cầm cốc trước khi ngồi.":busy("cup")):"Cốc đang rỗng. Hãy rót sữa trước (Pour milk into the cup).",
+  ()=>[...fetchSteps("cup"),["pose","drink",900],["sip"],["pose","idle",1]]),
+
+ A("wipe_table","table","Clean the table","Lau bàn","I'm cleaning the table.","Tôi đang lau bàn.",["cleaning","table"],["clean","table","cloth"],
+  "Cùng mẫu câu: I'm + động từ-ing + the + đồ vật.",["I'm cleaning","the table."],{ans:"clean",opts:["clean","cling","green"]},
+  ["I'm cleaning the <b>window</b>.","I'm cleaning the <b>floor</b>."],
+  ()=>busy(null),
+  ()=>[["walk","tableL"],["spawn","cloth"],["pose","wipe",1600],["fx","shine"],["despawn"],["pose","idle",1]]),
+ A("put_book_on_table","book","Put the book on the table","Đặt sách lên bàn","I'm putting the book on the table.","Tôi đang đặt quyển sách lên bàn.",["putting","book","table"],["put","book","on","table"],
+  "Mẫu câu giống “Put the cup on the table”: chỉ đổi đồ vật!",["I'm putting the book","on the table."],{ans:"book",opts:["book","boot","look"]},
+  ["Put the <b>cup</b> on the table.","Put the <b>milk</b> on the table."],
+  ()=>W.book==="table"?"Sách đang ở trên bàn rồi.":busy("book"),
+  ()=>[...fetchSteps("book"),["walk","tableL"],["pose","reach",500],["place","book","table"],["pose","idle",1]],["table"]),
+ A("sweep_under_table","broom","Sweep under the table","Quét dưới gầm bàn","I'm sweeping under the table.","Tôi đang quét dưới gầm bàn.",["sweeping","under","table"],["sweep","under","table","broom"],
+  "<b>under</b> = bên dưới. on the table (trên bàn) ↔ under the table (dưới bàn).",["I'm sweeping","under the table."],{ans:"under",opts:["under","onto","wonder"]},
+  ["The cat is <b>under</b> the table.","The book is <b>on</b> the table."],
+  ()=>busy("broom"),
+  ()=>[...fetchSteps("broom"),["walk","underTable"],["pose","sweep",1800],["fx","clean"],["walk","broom"],["pose","reach",400],["place","broom","wall"],["pose","idle",1]],["table"]),
+
+ A("pull_out_chair","chair","Pull out the chair","Kéo ghế ra","I'm pulling out the chair.","Tôi đang kéo ghế ra.",["pulling","out","chair"],["pull","chair"],
+  "<b>pull out</b> = kéo ra. Ngược lại: <b>push in</b> = đẩy vào.",["I'm pulling out","the chair."],{ans:"pull",opts:["pull","pool","full"]},
+  ["Please pull out the chair.","I'm pulling out the <b>drawer</b>."],
+  ()=>W.sitting?"Bạn đang ngồi trên ghế.":W.chair==="out"?"Ghế đã được kéo ra rồi.":null,
+  ()=>[["walk","chairSide"],["pose","reach",400],["set","chair","out"],["wait",400],["pose","idle",1]]),
+ A("sit_on_chair","chair","Sit on the chair","Ngồi xuống ghế","I'm sitting on the chair.","Tôi đang ngồi trên ghế.",["sitting","chair"],["sit","chair","table"],
+  "sit → sitting: gấp đôi phụ âm <b>t</b> rồi thêm -ing.",["I'm sitting","on the chair."],{ans:"sit",opts:["sit","seat","set"]},
+  ["I'm sitting <b>at the table</b>.","Please <b>sit down</b>."],
+  ()=>W.sitting?"Bạn đang ngồi rồi.":null,
+  ()=>[...(W.chair==="in"?[["walk","chairSide"],["pose","reach",400],["set","chair","out"],["wait",300]]:[]),["walk","seat"],["sit"]],["table"]),
+ A("get_up","chair","Get up","Đứng dậy","I'm getting up.","Tôi đang đứng dậy.",["getting","up"],["getup","chair"],
+  "get → getting: gấp đôi <b>t</b>. <b>get up</b> = đứng dậy (hoặc thức dậy).",["I'm getting up."],{ans:"up",opts:["up","app","cup"]},
+  ["I <b>get up</b> at 6 a.m.","Please <b>stand up</b>."],
+  ()=>W.sitting?null:"Bạn đang đứng rồi. Hãy ngồi xuống trước.",
+  ()=>[["stand"],["pose","idle",300]]),
+ A("push_chair_in","chair","Push the chair in","Đẩy ghế vào","I'm pushing the chair in.","Tôi đang đẩy ghế vào.",["pushing","chair"],["push","chair","table"],
+  "<b>push … in</b>: đồ vật đứng giữa — push <b>the chair</b> in.",["I'm pushing","the chair in."],{ans:"push",opts:["push","bush","pull"]},
+  ["Please push your chair in.","I'm pushing the <b>door</b>."],
+  ()=>W.sitting?"Hãy đứng dậy trước.":W.chair==="in"?"Ghế đã ở sát bàn rồi.":null,
+  ()=>[["walk","chairSide"],["pose","reach",400],["set","chair","in"],["wait",300],["pose","idle",1]]),
+
+ A("sweep_floor","broom","Sweep the floor","Quét nhà","I'm sweeping the floor.","Tôi đang quét sàn nhà.",["sweeping","floor"],["sweep","floor","broom"],
+  "sweep → sweeping: thêm -ing để nói việc <b>đang</b> làm. I'm = I am.",["I'm sweeping","the floor."],{ans:"sweep",opts:["sweep","sleep","sweet"]},
+  ["I'm sweeping the <b>kitchen</b>.","I'm sweeping <b>under the table</b>."],
+  ()=>busy("broom"),
+  ()=>[...fetchSteps("broom"),["walk","floorMid"],["pose","sweep",1800],["fx","clean"],["walk","broom"],["pose","reach",400],["place","broom","wall"],["pose","idle",1]]),
+ A("open_window","window","Open the window","Mở cửa sổ","I'm opening the window.","Tôi đang mở cửa sổ.",["opening","window"],["open","close","window"],
+  "Ngược lại: I'm <b>closing</b> the window. (close → closing: bỏ e rồi thêm -ing)",["I'm opening","the window."],{ans:"open",opts:["open","often","oven"]},
+  ["I'm opening the <b>fridge</b>.","I'm opening the <b>door</b>."],
+  ()=>W.window==="open"?"Cửa sổ đang mở rồi.":null,
+  ()=>[["walk","window"],["pose","reach",500],["set","window","open"],["pose","idle",1]]),
+ A("close_window","window","Close the window","Đóng cửa sổ","I'm closing the window.","Tôi đang đóng cửa sổ.",["closing","window"],["close","window"],
+  "close → closing. Giống “I'm closing the fridge”.",["I'm closing","the window."],{ans:"close",opts:["close","clothes","cloud"]},
+  ["I'm closing the <b>fridge</b>.","I'm closing the <b>door</b>."],
+  ()=>W.window==="closed"?"Cửa sổ đang đóng rồi.":null,
+  ()=>[["walk","window"],["pose","reach",500],["set","window","closed"],["pose","idle",1]]),
+ A("water_plant","plant","Water the plants","Tưới cây","I'm watering the plants.","Tôi đang tưới cây.",["watering","plants"],["water","plants"],
+  "<b>water</b> vừa là danh từ (nước) vừa là động từ (tưới). plants = nhiều cây (thêm -s).",["I'm watering","the plants."],{ans:"plant",opts:["plant","plan","planet"]},
+  ["I'm watering the <b>flowers</b>.","I'm drinking <b>water</b>."],
+  ()=>busy(null),
+  ()=>[["walk","plant"],["spawn","can"],["pose","water",300],["fx","watering",1500],["despawn"],["pose","idle",1]]),
+ A("pick_up_book","book","Pick up the book","Nhặt sách lên","I'm picking up the book.","Tôi đang nhặt quyển sách lên.",["picking","up","book"],["pick","book"],
+  "<b>pick up</b> là cụm động từ: nhặt lên. Thêm -ing vào từ đầu: picking up.",["I'm picking up","the book."],{ans:"book",opts:["book","boot","look"]},
+  ["I'm picking up the <b>cup</b>.","I'm picking up my <b>bag</b>."],
+  ()=>W.book==="hand"?"Bạn đang cầm sách rồi.":W.book!=="floor"?"Sách không nằm dưới sàn. (Thử “Put the book on the table” hoặc dọn phòng ↺)":busy("book"),
+  ()=>[...fetchSteps("book"),["pose","idle",1]]),
+];
+ACTIONS.push(
+ A("turn_on_tv","tv","Turn on the TV","Bật ti vi","I'm turning on the TV.","Tôi đang bật ti vi.",["turning","TV"],["turnon","tv"],
+  "<b>turn on</b> = bật (máy móc, đèn). Ngược lại: <b>turn off</b> = tắt.",["I'm turning on","the TV."],{ans:"on",opts:["on","off","own"]},
+  ["I'm turning on the <b>light</b>.","I'm turning on the <b>fan</b>."],
+  ()=>W.tv==="on"?"Ti vi đang bật rồi.":null,
+  ()=>W.sitting?[["pose","point",450],["set","tv","on"],["pose","idle",1]]:[["walk","tv"],["pose","reach",400],["set","tv","on"],["pose","idle",1]]),
+ A("watch_tv","tv","Watch TV","Xem ti vi","I'm watching TV.","Tôi đang xem ti vi.",["watching","TV"],["watch","tv"],
+  "watch → watching. Nói <b>watch TV</b> (không có “the”).",["I'm watching TV."],{ans:"watch",opts:["watch","wash","which"]},
+  ["I'm watching <b>a movie</b>.","I'm watching <b>the news</b>."],
+  ()=>W.tv!=="on"?"Hãy bật ti vi trước (Turn on the TV).":W.activity==="watching"?"Bạn đang xem ti vi rồi.":null,
+  ()=>[["face","tv"],["activity","watching"],["wait",700]]),
+ A("turn_off_tv","tv","Turn off the TV","Tắt ti vi","I'm turning off the TV.","Tôi đang tắt ti vi.",["turning","off","TV"],["turnoff","tv"],
+  "<b>turn off</b> = tắt. Ngược lại: <b>turn on</b> = bật.",["I'm turning off","the TV."],{ans:"off",opts:["off","of","on"]},
+  ["I'm turning off the <b>light</b>.","Please turn off your <b>phone</b>."],
+  ()=>W.tv!=="on"?"Ti vi đang tắt rồi.":null,
+  ()=>W.sitting?[["pose","point",450],["set","tv","off"],["pose","idle",1]]:[["walk","tv"],["pose","reach",400],["set","tv","off"],["pose","idle",1]])
+);
+// Hành động làm được khi đang ngồi (không bắt đứng dậy)
+const SIT_OK=new Set(["drink_from_cup","turn_on_tv","turn_off_tv","watch_tv","get_up","put_cup_on_table"]);
+// Dữ liệu kể chuyện: [cụm động từ, cụm có trạng từ/tính từ (chỉ khi đúng với trạng thái), tiếng Việt]
+const STORY={
+ open_fridge:["open the fridge","open the fridge","mở tủ lạnh"],
+ take_milk:["take the milk out of the fridge","take the cold milk out of the fridge","lấy sữa ra khỏi tủ lạnh"],
+ put_milk_back:["put the milk back in the fridge","put the milk back in the fridge","cất sữa lại vào tủ lạnh"],
+ close_fridge:["close the fridge","gently close the fridge","đóng tủ lạnh"],
+ pick_up_cup:["pick up the cup","pick up the cup","cầm cái cốc lên"],
+ put_cup_on_table:["put the cup on the table","carefully put the cup on the table","đặt cái cốc lên bàn"],
+ pour_milk:["pour milk into the cup","slowly pour cold milk into the cup","rót sữa vào cốc"],
+ drink_from_cup:["take a sip of milk","take a small sip of milk","uống một ngụm sữa"],
+ wipe_table:["clean the table","wipe the table clean","lau bàn"],
+ put_book_on_table:["put the book on the table","put the book neatly on the table","đặt quyển sách lên bàn"],
+ sweep_under_table:["sweep under the table","carefully sweep under the table","quét dưới gầm bàn"],
+ pull_out_chair:["pull out the chair","pull out the chair","kéo ghế ra"],
+ sit_on_chair:["sit down on the chair","sit down comfortably on the chair","ngồi xuống ghế"],
+ get_up:["get up","slowly get up","đứng dậy"],
+ push_chair_in:["push the chair in","push the chair in","đẩy ghế vào"],
+ sweep_floor:["sweep the floor","sweep the floor","quét nhà"],
+ open_window:["open the window","open the window","mở cửa sổ"],
+ close_window:["close the window","close the window","đóng cửa sổ"],
+ water_plant:["water the plant","gently water the plant","tưới cây"],
+ pick_up_book:["pick up the book","pick up the book","nhặt quyển sách lên"],
+ turn_on_tv:["turn on the TV","turn on the TV","bật ti vi"],
+ watch_tv:["watch TV","relax and watch TV","xem ti vi"],
+ turn_off_tv:["turn off the TV","turn off the TV","tắt ti vi"],
+};
+// ===== Ghép các phòng từ module rooms.js =====
+const ROOMS=window.ELW_ROOMS||{};
+const ROOM_NAMES={living:["Living room","Phòng khách"]};
+ACTIONS.forEach(a=>{a.room=a.id==="get_up"?"*":"living"});
+Object.values(OBJECTS).forEach(o=>o.room="living");
+for(const r of Object.values(ROOMS)){ROOM_NAMES[r.id]=[r.name,r.nameVi];
+ for(const [k,o] of Object.entries(r.objects)){if(OBJECTS[k])console.warn("trùng đồ vật",k);OBJECTS[k]={...o,room:r.id}}
+ for(const ra of r.actions){ACTIONS.push({...ra,also:[],room:r.id,pre:()=>ra.pre(W),seq:()=>ra.seq(W)});if(ra.sitOk)SIT_OK.add(ra.id);if(ra.story)STORY[ra.id]=ra.story}
+ Object.assign(PROP_SVG,r.props||{});
+}
+OBJECTS.door={en:"door",vi:"cửa",ipa:"/dɔːr/",acts:[],room:"*"};
+const GO_TXT={living:["the living room","phòng khách","vào phòng khách"],kitchen:["the kitchen","phòng bếp","vào bếp"],bedroom:["the bedroom","phòng ngủ","vào phòng ngủ"]};
+for(const t of Object.keys(ROOM_NAMES)){const [en,vi,viGo]=GO_TXT[t]||[ROOM_NAMES[t][0],ROOM_NAMES[t][1],ROOM_NAMES[t][1]];
+ const a=A("go_"+t,"door","Go to "+en,"Đi "+viGo,`I'm going to ${en}.`,`Tôi đang đi ${viGo}.`,["going",en.split(" ").pop().replace(".","")],[],
+  "go → going. Nói <b>go to the kitchen</b>; riêng <b>go home</b> thì không có “to”.",["I'm going",`to ${en}.`],{ans:"go",opts:["go","goal","grow"]},
+  [`I'm going to <b>the bathroom</b>.`,`I'm going <b>home</b>.`],()=>W.room===t?`Bạn đang ở ${vi} rồi.`:null,()=>[["walk",DOOR_SPOT[W.room]],["room",t]]);
+ a.vocab=[["go to","/ɡəʊ tuː/","đi đến"],[en.replace("the ",""),"",vi]];a.room="*";ACTIONS.push(a);STORY["go_"+t]=["go to "+en,"walk into "+en,"đi "+viGo];}
+const DOOR_SPOT={living:"door_living",kitchen:"k_door",bedroom:"b_door"};
+const ACT=Object.fromEntries(ACTIONS.map(a=>[a.id,a]));
+ACTIONS.forEach(a=>{a.object=OBJECTS[a.obj]});
+
+/* =====================================================================
+   4. WORLD STATE — trạng thái phòng (lưu riêng, không đụng tiến độ học)
+   ===================================================================== */
+const WKEY="elw_world_v1";
+const W0={fridge:"closed",window:"closed",chair:"in",milk:"fridge",cup:"counter",book:"floor",broom:"wall",hand:null,sitting:false,cupLevel:0,tv:"off",activity:null,x:560,y:420,dir:1};
+for(const r of Object.values(window.ELW_ROOMS||{}))Object.assign(W0,r.W0);W0.room="living";
+let W={...W0};try{Object.assign(W,JSON.parse(localStorage.getItem(WKEY))||{})}catch(e){}
+if(W.room===undefined){} // trạng thái phòng mới sẽ lấy mặc định
+if(W.cupFull!==undefined){W.cupLevel=W.cupFull?2:0;delete W.cupFull}
+const saveW=()=>{try{localStorage.setItem(WKEY,JSON.stringify(W))}catch(e){}};
+
+// điểm đứng tương tác (chân nhân vật) + hướng nhìn
+const SPOTS={fridge:{x:800,y:400,d:1},counter:{x:705,y:398,d:1},tableL:{x:335,y:478,d:1},chairSide:{x:790,y:540,d:-1},seat:{x:0,y:530,d:-1},
+ window:{x:510,y:360,d:1},plant:{x:300,y:392,d:-1},bookFloor:{x:345,y:592,d:1},broom:{x:222,y:440,d:-1},floorMid:{x:440,y:598,d:1},underTable:{x:330,y:520,d:1},tv:{x:420,y:385,d:-1},tableR:{x:700,y:478,d:-1},door_living:{x:70,y:606,d:-1}};
+for(const r of Object.values(window.ELW_ROOMS||{}))Object.assign(SPOTS,r.spots);
+const itemSpot={counter:"counter",table:"tableL",tableR:"tableR",fridge:"fridge",floor:"bookFloor",wall:"broom"};
+const CHAIR_X={in:690,out:760};
+function fetchSteps(item){ // các bước để lấy đồ vào tay (dùng cho hành động kết hợp)
+ if(W[item]==="hand")return[];
+ const loc=W[item];const s=[["walk",itemSpot[loc]]];
+ if(loc==="fridge")s.push(["pose","reach",350],["set","fridge","open"],["wait",300]);
+ s.push(["pose",loc==="floor"?"bend":"reach",500],["take",item]);
+ if(loc==="fridge")s.push(["pose","reach",300],["set","fridge","closed"]);
+ return s;
+}
+
+/* ---------- vẽ trạng thái ---------- */
+const room=$id("room"),charG=$id("char"),world=$id("world"),handG=$id("hand");
+function charScale(y){return 0.95+(y-330)/310*0.5}
+function placeChar(){const s=charScale(W.y)*1.25;charG.setAttribute("transform",`translate(${W.x},${W.y}) scale(${s.toFixed(3)})`);
+ $id("flip").setAttribute("transform",`scale(${W.dir},1)`);charG.dataset.base=W.y+(W.sitting?3:0);sortDepth()}
+function sortDepth(){const kids=[...world.children].filter(e=>e.dataset&&e.dataset.base);kids.sort((a,b)=>+a.dataset.base-+b.dataset.base);kids.forEach(k=>world.appendChild(k))}
+function applyState(){
+ $id("o-fridge").classList.toggle("fridge-open",W.fridge==="open");
+ $id("o-window").classList.toggle("win-open",W.window==="open");
+ const cx=CHAIR_X[W.chair];$id("chairG").setAttribute("transform",`translate(${cx},0)`);$id("chairTag").setAttribute("x",cx);
+ $id("o-chair").dataset.base=528;
+ for(const name of ["cup","milk","book","broom"]){
+  const p=props[name],loc=W[name];
+  if(loc==="hand"){handG.appendChild(p);p.setAttribute("transform",name==="broom"?"translate(0,70)":"translate(0,14)");p.style.display="";continue}
+  const L=LOCS[name][loc]||Object.values(LOCS[name])[0];
+  const slot=$id(slotOf[name]);slot.appendChild(p);p.setAttribute("transform",`translate(${L.x},${L.y})`);
+  const host=name==="milk"?slot:slot.closest(".obj");host.dataset.base=L.b;
+  p.style.display=(name==="milk"&&loc==="fridge"&&W.fridge!=="open")?"none":"";
+ }
+ $id("cupTag").setAttribute("x",LOCS.cup[W.cup]?LOCS.cup[W.cup].x:W.x);$id("cupTag").setAttribute("y",LOCS.cup[W.cup]?LOCS.cup[W.cup].y-36:W.y-200);
+ $id("bookTag").setAttribute("x",LOCS.book[W.book]?LOCS.book[W.book].x:W.x);$id("bookTag").setAttribute("y",LOCS.book[W.book]?LOCS.book[W.book].y-22:W.y-200);
+ const fl=props.cup.querySelector(".fill");if(fl)fl.setAttribute("opacity",W.cupLevel>=2?1:W.cupLevel===1?.55:0);
+ $id("o-tv").classList.toggle("tv-on",W.tv==="on");
+ charG.classList.toggle("sit",W.sitting);
+ if(W.room!=="living"&&ROOMS[W.room]&&ROOMS[W.room].applyState){try{ROOMS[W.room].applyState(W,world)}catch(e){console.error(e)}}
+ if(W.room!=="bedroom")room.classList.remove("b-lying");
+ renderTabs();
+ placeChar();saveW();
+}
+
+/* ---------- di chuyển nhân vật ---------- */
+const TABLE_BOX={x1:350,x2:670,y1:420,y2:528};
+const OBST={living:[TABLE_BOX]};for(const r of Object.values(window.ELW_ROOMS||{}))OBST[r.id]=r.obstacles||[];
+const inBox=(p,B)=>p.x>B.x1&&p.x<B.x2&&p.y>B.y1&&p.y<B.y2;
+function crossesBox(a,b,B){for(let t=0;t<=1;t+=.04){if(inBox({x:a.x+(b.x-a.x)*t,y:a.y+(b.y-a.y)*t},B))return true}return false}
+function route(a,b){const boxes=(OBST[W.room]||[]).filter(B=>!inBox(a,B)&&!inBox(b,B));const B=boxes.find(B=>crossesBox(a,b,B));if(!B)return[b];
+ const lane=Math.max(345,Math.min(630,(a.y+b.y)/2<(B.y1+B.y2)/2?B.y1-14:B.y2+14));return[{x:a.x,y:lane},{x:b.x,y:lane},b]}
+class Abort extends Error{}
+let token=0;const alive=tk=>{if(tk!==token)throw new Abort()};
+async function moveTo(spot,tk){
+ const tgt={...spot};if(spot===SPOTS.seat)tgt.x=CHAIR_X[W.chair]-4;
+ const pts=route({x:W.x,y:W.y},tgt);
+ if(pts.some(p=>Math.hypot(p.x-W.x,p.y-W.y)>8))W.activity=null; // rời chỗ thì thôi xem TV
+ charG.classList.remove("idle");charG.classList.add("walk");
+ try{for(const p of pts){const sx=W.x,sy=W.y,dist=Math.hypot(p.x-sx,p.y-sy);if(dist<2)continue;
+  if(Math.abs(p.x-sx)>4)W.dir=p.x>sx?1:-1;
+  const dur=reduceMotion?1:dist/0.45;const t0=performance.now();
+  await new Promise(res=>{function f(now){if(tk!==token)return res();const k=Math.min(1,(now-t0)/dur),e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;
+   W.x=sx+(p.x-sx)*e;W.y=sy+(p.y-sy)*e;placeChar();k<1?requestAnimationFrame(f):res()}requestAnimationFrame(f)});alive(tk)}}
+ finally{charG.classList.remove("walk")}
+ W.dir=spot.d||W.dir;placeChar();
+}
+const POSES=["reach","bend","drink","pour","sweep","wipe","water","point"];
+// Tư thế tay/thân là một lớp riêng: không xoá trạng thái ngồi, cầm cốc hay xem TV
+async function pose(name,ms){POSES.forEach(p=>charG.classList.remove(p));charG.classList.remove("idle");
+ if(name==="idle"){charG.classList.add("idle");return}charG.classList.add(name);await sleep(reduceMotion?Math.min(ms,150):ms*0.8)}
+
+/* ---------- chạy các bước của một hành động (có thể huỷ an toàn) ---------- */
+async function runSeq(steps,tk){
+ for(const s of steps){alive(tk);const [op,a,b]=s;
+  if(op==="walk")await moveTo(SPOTS[a],tk);
+  else if(op==="pose")await pose(a,b);
+  else if(op==="wait")await sleep(reduceMotion?50:a*0.8);
+  else if(op==="set"){W[a]=b;applyState()}
+  else if(op==="take"){W[a]="hand";W.hand=a;applyState()}
+  else if(op==="place"){W[a]=b;W.hand=null;applyState()}
+  else if(op==="spawn"){const g=makeTemp(a);handG.appendChild(g);await sleep(120)}
+  else if(op==="despawn"){handG.querySelectorAll(".temp").forEach(e=>e.remove())}
+  else if(op==="sit"){W.sitting=true;W.dir=-1;applyState();await sleep(400)}
+  else if(op==="stand"){W.sitting=false;W.activity=null;if(W.room==="living"){applyState();W.x=CHAIR_X[W.chair]+70;W.y=545}else{if("b_lying" in W)W.b_lying=false;applyState();W.y=Math.min(625,W.y+18)}placeChar();await sleep(250)}
+  else if(op==="room"){await switchRoom(a,tk)}
+  else if(op==="sip"){W.cupLevel=Math.max(0,W.cupLevel-1);applyState()}
+  else if(op==="face"){const t=SPOTS[a];if(t)W.dir=t.x<W.x?-1:1;placeChar()}
+  else if(op==="activity"){W.activity=a;applyState()}
+  else if(op==="fx"){if(a==="clean"){room.classList.remove("dusty")}else if(a==="shine"){const t=$id("o-table");t.classList.remove("shine");void t.getBBox();t.classList.add("shine")}
+   else if(a==="watering"){$id("o-plant").classList.add("watering");await sleep(b||1000);$id("o-plant").classList.remove("watering")}}
+ }
+}
+function makeTemp(name){const g=document.createElementNS(SVGNS,"g");g.classList.add("temp");g.innerHTML=PROP_SVG[name];g.setAttribute("transform","translate(0,10)");return g}
+
+/* =====================================================================
+   4b. BỘ ĐIỀU PHỐI CHUỖI HÀNH ĐỘNG
+   Mỗi mục: pending → running → done | blocked | cancelled.
+   Điều kiện được kiểm tra đúng lúc tới lượt (theo trạng thái thật của phòng).
+   ===================================================================== */
+let queue=[],paused=false,pumping=false,uidN=1,hlUid=null;
+let running=false; // đang chạy một hành động
+const mkItem=id=>({uid:uidN++,id,status:"pending",why:"",ctx:null,auto:false});
+function enqueue(id){if(paused&&!queue.some(q=>q.status==="pending"))paused=false;queue.push(mkItem(id));renderSeq();if(!paused)pump()}
+async function pump(){
+ if(pumping)return;pumping=true;const tk=token;
+ try{while(!paused&&tk===token){const it=queue.find(q=>q.status==="pending");if(!it)break;await execItem(it,tk)}}
+ catch(e){if(!(e instanceof Abort))console.error(e)}
+ finally{pumping=false;running=false;document.body.classList.remove("running");renderSeq();renderStory();if(selObj&&!cur)renderObject();
+  if(tk===token&&!queue.some(q=>q.status==="pending")&&narr.mode==="after"&&queue.some(q=>q.status==="done"))speakStory()}
+}
+async function execItem(it,tk){
+ const a=ACT[it.id];
+ // cần đứng mà đang ngồi → chèn "Get up" thật vào chuỗi (để đoạn văn đúng sự thật)
+ const needTravel=a.room&&a.room!=="*"&&a.room!==W.room;
+ if(W.sitting&&(needTravel||(!SIT_OK.has(a.id)&&!a.pre()))){const g=mkItem("get_up");g.auto=true;queue.splice(queue.indexOf(it),0,g);await execItem(g,tk);alive(tk)}
+ if(a.room&&a.room!=="*"&&a.room!==W.room){const g=mkItem("go_"+a.room);g.auto=true;queue.splice(queue.indexOf(it),0,g);await execItem(g,tk);alive(tk)}
+ const why=a.pre();
+ if(why){it.status="blocked";it.why=why;renderSeq();renderStory();toastG(`Không làm được “${a.label}”: ${why}`);if(dlgPlayer&&!it.auto)dlgPlayer.actionDone(it.id,false);return}
+ it.status="running";running=true;document.body.classList.add("running");
+ it.ctx={watching:W.activity==="watching",sitting:W.sitting,cupLevel:W.cupLevel,milkFromFridge:W.milk==="fridge"};
+ renderSeq();if(selObj&&!cur)renderObject();
+ narrate(a); // giọng đọc bắt đầu cùng lúc với chuyển động, không chờ
+ try{await runSeq(a.seq(),tk);it.status="done";
+  if(W.activity!=="watching"&&!W.sitting)await pose("idle");else if(!charG.classList.contains("idle"))pose("idle");
+ }catch(e){if(e instanceof Abort){it.status="cancelled"}throw e}
+ finally{renderSeq();renderStory();if(dlgPlayer&&!it.auto&&(it.status==="done"||it.status==="blocked"))dlgPlayer.actionDone(it.id,it.status==="done")}
+}
+function resetScene(){
+ token++;speechStop();
+ queue.forEach(q=>{if(q.status==="running")q.status="cancelled"});paused=true;running=false;
+ const keep={x:W.x,y:W.y,dir:W.dir};W={...W0,...keep};
+ handG.querySelectorAll(".temp").forEach(e=>e.remove());room.classList.add("dusty");POSES.forEach(p=>charG.classList.remove(p));
+ if(typeof renderRoom==="function")renderRoom();
+ applyState();pose("idle");if(selObj&&!cur)renderObject();renderSeq();renderStory();
+}
+/* =====================================================================
+   5. TIẾN ĐỘ + SRS (giữ nguyên dữ liệu & thuật toán bản trước)
+   ===================================================================== */
+const KEY="elw_progress_v1";
+let P={};try{P=JSON.parse(localStorage.getItem(KEY))||{}}catch(e){}
+if(!P.items){P={steps:Object.fromEntries(Object.entries(P).map(([k,v])=>[k,v.steps||{}])),items:{},pts:0}}
+P.steps=P.steps||{};P.pts=P.pts||0;
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(P))}catch(e){}};
+const HOUR=36e5,SRS_HOURS=[0,4,8,23,47,167,335,719,2879],DONE=9,KNOWN=5;
+const LABELS=["Chưa học","Mới học","Mới học","Mới học","Mới học","Đã thuộc","Đã thuộc","Nhớ lâu","Khắc sâu","Thành thạo"];
+const stageColor=s=>s<=0?"#ddd":s<KNOWN?"#e8a25a":s<7?"#5e9a6f":s<DONE?"#3f7fa8":"#8a6bb3";
+const PTS={step:1,learn:5,ok:3,hint:1};
+const ivl=s=>SRS_HOURS[Math.max(1,Math.min(s,8))]*HOUR;
+const stage=id=>P.items[id]?P.items[id].s:0;
+function addPts(n){P.pts+=n;const e=$id("pts");e.textContent="⭐ "+P.pts;e.classList.remove("bump");void e.offsetWidth;e.classList.add("bump")}
+function learn(id){if(P.items[id])return;P.items[id]={s:1,due:Date.now()+ivl(1),ok:0,bad:0};addPts(PTS.learn);toastG(`Đã thêm “${ACT[id].sentence}” vào lịch ôn. +${PTS.learn}⭐`)}
+function review(id,grade){const it=P.items[id],now=Date.now();
+ if(grade==="ok"){it.s=Math.min(DONE,it.s+1);it.due=it.s>=DONE?0:now+ivl(it.s);it.ok++;addPts(PTS.ok)}
+ else if(grade==="hint"){it.due=now+ivl(1);it.bad++;addPts(PTS.hint)}
+ else{it.s=Math.max(1,it.s-(it.s>=KNOWN?2:1));it.due=now+ivl(it.s);it.bad++}
+ save();refresh()}
+const dueList=()=>Object.keys(P.items).filter(id=>ACT[id]&&P.items[id].s<DONE&&P.items[id].due<=Date.now()).sort((a,b)=>P.items[a].due-P.items[b].due);
+function nextDue(){let b=0;for(const id in P.items){const it=P.items[id];if(ACT[id]&&it.s<DONE&&(!b||it.due<b))b=it.due}return b}
+function fmtWait(ms){const h=ms/HOUR;return h<1?Math.max(1,Math.round(ms/6e4))+" phút":h<24?Math.round(h)+" giờ":Math.round(h/24)+" ngày"}
+function mark(id,step){P.steps[id]=P.steps[id]||{};if(!P.steps[id][step]){P.steps[id][step]=true;addPts(PTS.step)}
+ if(step==="recall")learn(id);save();refresh()}
+function refresh(){
+ const done=ACTIONS.filter(a=>stage(a.id)>0).length;
+ $id("prog").textContent=`✅ ${done}/${ACTIONS.length}`;$id("pts").textContent="⭐ "+P.pts;updateGuide();
+}
+
+/* ---------- Cô Mai ---------- */
+let guideAct=null,gTimer;
+function updateGuide(){const t=$id("guideText"),due=dueList(),fresh=ACTIONS.find(a=>a.room===W.room&&!stage(a.id)&&!a.pre());if(pumping){t.textContent="Đang chạy chuỗi hành động… bạn có thể chọn thêm hành động.";return}
+ if(due.length){t.textContent=`Hôm nay có ${due.length} câu cần ôn. Ôn ngay để không quên nhé!`;guideAct=startReview}
+ else if(fresh){t.textContent=`Thử hành động mới: “${fresh.label}” (${fresh.labelVi}).`;guideAct=()=>{selectObject(fresh.obj);enqueue(fresh.id)}}
+ else{const n=nextDue();t.textContent=n?`Giỏi lắm! Lượt ôn tiếp theo sau ${fmtWait(n-Date.now())}. Bấm ↺ Dọn phòng để làm lại các hành động.`:"Bạn đã thành thạo tất cả! 🎉";guideAct=openBook}}
+function toastG(msg){$id("guideText").textContent=msg;clearTimeout(gTimer);gTimer=setTimeout(updateGuide,4000)}
+
+/* =====================================================================
+   6. ÂM THANH, THU ÂM, NHẬN DIỆN GIỌNG
+   ===================================================================== */
+let voice=null;
+function pickVoice(){const v=speechSynthesis.getVoices().filter(v=>v.lang.startsWith("en"));voice=v.find(v=>/en-US/.test(v.lang))||v[0]||null}
+if("speechSynthesis" in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice}
+function say(t,rate=1){if(window.ELW_VOICES)return ELW_VOICES.speak(t,narr.voice||"adult_female",{rate});return new Promise(r=>{if(!("speechSynthesis" in window)){toastG("Trình duyệt không hỗ trợ phát âm.");return r()}
+ speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="en-US";if(voice)u.voice=voice;u.rate=rate;u.onend=r;u.onerror=r;speechSynthesis.speak(u);setTimeout(r,8000)})}
+let rec=null,chunks=[],myUrl=null;
+function setupRec(btn,pbtn,res){
+ if(!navigator.mediaDevices||!window.MediaRecorder){btn.disabled=true;res.textContent="Trình duyệt không hỗ trợ thu âm. Hãy nhại theo to lên.";return}
+ btn.onclick=async()=>{if(rec&&rec.state==="recording"){rec.stop();return}
+  try{const s=await navigator.mediaDevices.getUserMedia({audio:true});rec=new MediaRecorder(s);chunks=[];
+   rec.ondataavailable=e=>chunks.push(e.data);
+   rec.onstop=()=>{s.getTracks().forEach(t=>t.stop());myUrl=URL.createObjectURL(new Blob(chunks));pbtn.disabled=false;btn.textContent="⏺ Thu lại";res.textContent="Đã thu xong. Nghe giọng bạn rồi nghe giọng mẫu."};
+   rec.start();btn.textContent="⏹ Dừng";res.textContent="Đang thu… nói: "+cur.sentence;
+  }catch(e){res.textContent="Không mở được micro. Kiểm tra quyền truy cập micro."}};
+ pbtn.onclick=()=>myUrl&&new Audio(myUrl).play();
+}
+function norm(s){return s.toLowerCase().replace(/i am/g,"i'm").replace(/[^a-z' ]/g,"").split(/\s+/).filter(Boolean)}
+function listenTo(target,out,cb){
+ const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(!SR){out.innerHTML="Trình duyệt chưa hỗ trợ nhận diện giọng nói (dùng Chrome/Edge). Hãy tự nói rồi tự đánh giá.";return}
+ const r=new SR();r.lang="en-US";r.interimResults=false;out.textContent="🎙 Đang nghe…";
+ r.onresult=e=>{const said=e.results[0][0].transcript,a=norm(said),b=norm(target);
+  const pct=Math.round(b.filter(w=>a.includes(w)).length/b.length*100),miss=b.filter(w=>!a.includes(w));
+  out.innerHTML=`Máy nghe được: “<i>${said}</i>”<br>Khớp: <b class="${pct>=75?"good":"bad"}">${pct}%</b>`+(miss.length?` — thiếu/sai: ${miss.map(w=>`<b>${w}</b>`).join(", ")}`:"")+(pct>=75?"":" — thử lại nhé!");cb&&cb(pct)};
+ r.onerror=e=>out.textContent="Không nghe rõ ("+e.error+"). Thử lại hoặc kiểm tra micro.";r.start();
+}
+
+/* =====================================================================
+   7. GIAO DIỆN: chọn đồ vật → chọn hành động → học 6 bước
+   ===================================================================== */
+const panel=$id("panel");let selObj=null,cur=null,step="look";
+const STEPS=[["look","👀 Xem"],["listen","👂 Nghe"],["shadow","🔁 Nhại"],["disc","🎯 Phân biệt"],["speak","🎤 Nói"],["recall","🧠 Tự nhớ"]];
+function selectObject(id){selObj=id;cur=null;document.querySelectorAll(".obj").forEach(o=>o.classList.toggle("sel",o.dataset.obj===id));renderObject();say(OBJECTS[id].en)}
+function renderObject(){
+ const o=OBJECTS[selObj];const acts=o.acts.map(i=>ACT[i]);
+ const learned=acts.filter(a=>stage(a.id)>0).length,busyQ=pumping||queue.some(q=>q.status==="pending");
+ panel.innerHTML=`<div class="ohead"><b>${o.en}</b><span>${o.ipa} · ${o.vi}</span><button class="iconbtn" data-say="${o.en}">🔊</button><span style="margin-left:auto" class="meta">${learned}/${acts.length} đã học</span></div>
+ <p class="hint">${busyQ?"Đang chạy chuỗi: hành động bạn chọn sẽ được <b>thêm vào cuối chuỗi</b>.":"Chọn hành động — nhân vật làm ngay và thêm vào chuỗi của bạn:"}</p>
+ <div class="acts">${acts.map(a=>{const why=busyQ?null:a.pre();return `<div style="display:flex;gap:6px"><button class="act" style="flex:1" data-act="${a.id}" ${why?"disabled":""}>
+  <span class="dot" style="background:${stageColor(stage(a.id))}" title="${LABELS[stage(a.id)]}"></span>
+  <span style="flex:1"><b>${a.label}</b><small>${a.labelVi}</small>${why?`<span class="why">${why}</span>`:""}</span><span>＋</span></button>
+  <button class="iconbtn" data-learn="${a.id}" title="Học câu này">📖</button></div>`}).join("")}</div>`;
+ panel.querySelector("[data-say]").onclick=()=>say(o.en,.8);
+ panel.querySelectorAll("[data-act]").forEach(b=>b.onclick=()=>{enqueue(b.dataset.act);renderObject()});
+ panel.querySelectorAll("[data-learn]").forEach(b=>b.onclick=()=>openLesson(b.dataset.learn));
+}
+function openLesson(id){const a=ACT[id];selObj=a.obj;cur=a;step="look";render();say(a.sentence,.95)}
+function sentHTML(l,hide){const s=stage(l.id),lv=s===0?"lv-new":s<KNOWN?"lv-learning":"";
+ return l.sentence.split(" ").map(w=>{const c=w.replace(/[^\w']/g,""),k=l.key.includes(c);
+  const v=k&&l.vocab.find(x=>{const base=x[0].split(" ")[0].replace(/e$/,"");return c.toLowerCase().startsWith(base.slice(0,Math.max(3,base.length-1)))});
+  return `<span class="w ${k?"key "+lv:""}" data-w="${c}" data-vi="${v?v[2]:""}">${hide?"___":w}</span>`}).join(" ")}
+function render(){
+ const l=cur,st=P.steps[l.id]||{};
+ let h=`<button class="back" id="backObj">← ${l.object.en} · các hành động khác</button>
+ <div class="steps">${STEPS.map(([k,t])=>`<button class="${k===step?"on":""}" data-s="${k}">${st[k]?"✓ ":""}${t}</button>`).join("")}</div>`;
+ if(step==="look"){
+  h+=`<div class="sent">${sentHTML(l)}</div><div class="vi">${l.vi}</div>
+  <div class="vocab">${l.vocab.map(v=>`<div class="chip" data-say="${v[0]}">🔊 ${v[0]} <small>${v[1]} · ${v[2]}</small></div>`).join("")}</div>
+  <div class="note">💡 ${l.grammar}</div>
+  <div class="pat">🔁 Cùng mẫu câu: ${l.patterns.map(p=>`<div>• ${p}</div>`).join("")}</div>
+  <button class="btn" id="next">Tiếp: Nghe →</button><button class="btn sec" id="redo">🎬 Làm hành động này</button>`}
+ if(step==="listen"){
+  h+=`<div class="sent">${sentHTML(l)}</div><div class="vi">${l.vi}</div>
+  <button class="btn" data-play="0.6">🐢 Chậm</button><button class="btn" data-play="1">▶️ Tự nhiên</button>
+  <p class="hint">Nhấn vào từng từ trong câu để nghe riêng.</p><button class="btn sec" id="next">Tiếp: Nhại →</button>`}
+ if(step==="shadow"){
+  h+=`<div class="sent">${sentHTML(l)}</div><p>Nghe từng cụm, dừng lại, rồi nói theo to lên:</p>
+  <div id="chunks">${l.chunks.map((c,i)=>`<span class="chunk" data-i="${i}">${c}</span>`).join("")}</div>
+  <button class="btn" id="shadowGo">▶️ Bắt đầu nhại</button><hr style="border:0;border-top:1px solid var(--line);margin:14px 0">
+  <p>Thu âm giọng bạn và so sánh với giọng mẫu:</p>
+  <button class="btn" id="rec">⏺ Thu âm</button><button class="btn sec" id="myplay" disabled>🎧 Giọng tôi</button><button class="btn sec" data-play="1">🔊 Giọng mẫu</button>
+  <div class="res" id="recres"></div><button class="btn sec" id="next">Tiếp →</button>`}
+ if(step==="disc"){const opts=[...l.disc.opts].sort(()=>Math.random()-.5);
+  h+=`<p><b>Bạn nghe thấy từ nào?</b></p><button class="btn" id="discPlay">🔊 Nghe</button>
+  <div class="opts">${opts.map(o=>`<button class="btn sec" data-ans="${o}">${o}</button>`).join("")}</div><div class="res" id="discres"></div>`}
+ if(step==="speak"||step==="recall"){const hide=step==="recall";
+  h+=hide?`<p>Câu đã bị ẩn. Nhìn nhân vật và <b>tự nói</b> câu tiếng Anh.</p><div class="sent">${sentHTML(l,true)}</div><div class="vi">Gợi ý: ${l.vi}</div>`
+   :`<p>Nói câu này vào micro:</p><div class="sent">${sentHTML(l)}</div>`;
+  h+=`<button class="btn" id="mic">🎤 Bấm và nói</button><div class="res" id="speakres"></div>
+  <p class="hint">Hệ thống so khớp chữ được nhận diện, không phải chấm điểm phát âm chính xác.</p>
+  <button class="btn sec" id="selfok">Tôi đã nói được ✓</button>`}
+ panel.innerHTML=h;bind();
+}
+function goNext(){mark(cur.id,step);const i=STEPS.findIndex(s=>s[0]===step);
+ if(step==="recall"){selectObject(cur.obj);return}
+ step=STEPS[Math.min(i+1,STEPS.length-1)][0];render()}
+function bind(){
+ const l=cur,q=s=>panel.querySelector(s);
+ q("#backObj").onclick=()=>selectObject(l.obj);
+ panel.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{step=b.dataset.s;render()});
+ panel.querySelectorAll("[data-say]").forEach(b=>b.onclick=()=>say(b.dataset.say,.8));
+ panel.querySelectorAll(".w").forEach(b=>b.onclick=()=>say(b.dataset.w,.8));
+ panel.querySelectorAll("[data-play]").forEach(b=>b.onclick=()=>say(l.sentence,+b.dataset.play));
+ if(q("#next"))q("#next").onclick=goNext;
+ if(q("#redo"))q("#redo").onclick=()=>{enqueue(l.id);toastG("Đã thêm vào chuỗi: "+l.label)};
+ if(q("#shadowGo"))q("#shadowGo").onclick=async()=>{const cs=panel.querySelectorAll(".chunk");
+  for(let r=0;r<2;r++)for(let i=0;i<cs.length;i++){cs.forEach(c=>c.classList.remove("on"));cs[i].classList.add("on");await say(l.chunks[i],.75);await sleep(1800)}
+  cs.forEach(c=>c.classList.remove("on"));await say(l.sentence,.9)};
+ if(q("#rec"))setupRec(q("#rec"),q("#myplay"),q("#recres"));
+ if(q("#discPlay")){q("#discPlay").onclick=()=>say(l.disc.ans,.8);
+  panel.querySelectorAll("[data-ans]").forEach(b=>b.onclick=()=>{const ok=b.dataset.ans===l.disc.ans;
+   q("#discres").innerHTML=ok?`<span class="good">✅ Đúng rồi! “${l.disc.ans}”</span> <button class="btn sec" id="n2">Tiếp →</button>`
+    :`<span class="bad">❌ Chưa đúng. Nghe lại “${b.dataset.ans}” và “${l.disc.ans}” để so sánh.</span>`;
+   if(!ok)say(b.dataset.ans,.8).then(()=>say(l.disc.ans,.8));else q("#n2").onclick=goNext})}
+ if(q("#mic"))q("#mic").onclick=()=>listenTo(l.sentence,q("#speakres"),pct=>{if(pct>=75){q("#speakres").insertAdjacentHTML("beforeend",` <button class="btn" id="n3">Tuyệt! Tiếp →</button>`);q("#n3").onclick=goNext}});
+ if(q("#selfok"))q("#selfok").onclick=goNext;
+}
+function pulse(obj){const o=document.querySelector(`[data-obj="${obj}"]`);if(!o)return;o.classList.remove("pulse");void o.getBBox();o.classList.add("pulse")}
+
+/* scene clicks */
+function bindObj(o){const go=()=>{if(!running)selectObject(o.dataset.obj)};
+ o.addEventListener("click",go);o.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();go()}})}
+document.querySelectorAll(".obj").forEach(bindObj);
+charG.style.cursor="pointer";
+charG.addEventListener("click",()=>{if(running)return;const h=W.hand;if(W.sitting)selectObject("chair");else if(h&&OBJECTS[h])selectObject(h);else if(h==="milk")selectObject("fridge");else toastG(W.sitting?"Bạn đang ngồi. Chọn ghế → Get up để đứng dậy.":"Xin chào! Hãy nhấn vào một đồ vật để mình làm cho bạn xem.")});
+$id("btnTags").onclick=()=>room.classList.toggle("show-tags");
+$id("btnReset").onclick=()=>askReset();
+
+/* =====================================================================
+   8. MODAL: sổ từ & phiên ôn
+   ===================================================================== */
+const modal=$id("modal"),mbox=$id("mbox");
+function showModal(h){mbox.innerHTML=h;modal.hidden=false;const c=mbox.querySelector("[data-close]");if(c)c.onclick=closeModal}
+function closeModal(){modal.hidden=true;if("speechSynthesis" in window)speechSynthesis.cancel();refresh();if(selObj&&!cur)renderObject()}
+modal.addEventListener("click",e=>{if(e.target===modal)closeModal()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!modal.hidden)closeModal()});
+function openBook(){
+ const learned=ACTIONS.filter(a=>stage(a.id)>0).length;
+ const groups=Object.entries(OBJECTS).map(([oid,o])=>{const list=ACTIONS.filter(a=>a.obj===oid);if(!list.length)return"";
+  return `<h3>${o.en} · ${o.vi}</h3><div class="tiles">${list.map(l=>{const s=stage(l.id),it=P.items[l.id];
+   const when=!s?"":s>=DONE?"Không cần ôn nữa":it.due<=Date.now()?"Cần ôn ngay":"Ôn sau "+fmtWait(it.due-Date.now());
+   return `<div class="tile" style="--sc:${stageColor(s)}" data-open="${l.id}"><div class="en">${s?l.sentence:"🔒 "+l.label}</div>
+    <div class="meta">${s?l.vi:l.labelVi}</div><div class="meta"><b>${LABELS[s]}</b>${when?" · "+when:""}</div></div>`}).join("")}</div>`}).join("");
+ showModal(`<h2>📒 Sổ từ vựng <button class="iconbtn" data-close>✕</button></h2>
+  <div class="meta">Đã học ${learned}/${ACTIONS.length} câu · ${dueList().length} câu cần ôn</div>
+  <div class="legend">${[[1,"Mới học"],[5,"Đã thuộc"],[7,"Nhớ lâu / Khắc sâu"],[9,"Thành thạo"],[0,"Chưa học"]].map(([s,t])=>`<span><i style="background:${stageColor(s)}"></i>${t}</span>`).join("")}</div>
+  ${groups}${dueList().length?`<button class="btn" id="bookReview" style="margin-top:12px">🔁 Ôn ${dueList().length} câu ngay</button>`:""}`);
+ mbox.querySelectorAll("[data-open]").forEach(t=>t.onclick=()=>{const a=ACT[t.dataset.open];closeModal();selectObject(a.obj);if(stage(a.id)){cur=a;step="look";render()}});
+ const br=mbox.querySelector("#bookReview");if(br)br.onclick=startReview;
+}
+$id("btnBook").onclick=openBook;$id("guide").onclick=()=>guideAct&&guideAct();
+let rq=[],rStats;
+function startReview(){rq=dueList();rStats={ok:0,hint:0,bad:0};nextReview()}
+function nextReview(){
+ if(!rq.length){showModal(`<h2>🎉 Ôn xong! <button class="iconbtn" data-close>✕</button></h2>
+  <p>Đúng: <b class="good">${rStats.ok}</b> · Nhờ gợi ý: <b>${rStats.hint}</b> · Chưa nhớ: <b class="bad">${rStats.bad}</b></p>
+  <p class="hint">Câu đúng sẽ quay lại sau lâu hơn; câu sai sẽ quay lại sớm hơn.</p><button class="btn" id="close2">Xong</button>`);
+  $id("close2").onclick=closeModal;return}
+ const l=ACT[rq[0]],s=stage(l.id);let usedHint=false;pulse(l.obj);
+ showModal(`<h2>🔁 Ôn tập <span class="meta" style="font-weight:400">còn ${rq.length} câu · ${LABELS[s]}</span><button class="iconbtn" data-close>✕</button></h2>
+  <p>Đồ vật: <b>${l.object.en}</b> (${l.object.vi}). Nói câu tiếng Anh cho:</p><div class="sent" style="font-size:20px">“${l.vi}”</div>
+  <div id="rhint" class="vi"></div>
+  <button class="btn" id="rmic">🎤 Nói</button><button class="btn sec" id="rhintBtn">💡 Gợi ý</button><button class="btn sec" id="rshow">👀 Xem đáp án</button>
+  <div class="res" id="rres"></div><div id="rgrade" hidden style="margin-top:10px">
+   <p class="hint">Bạn tự đánh giá:</p><button class="btn" data-g="ok" style="background:var(--ok)">✅ Tôi nói đúng</button><button class="btn sec" data-g="bad">❌ Chưa nhớ</button></div>`);
+ const q=s=>mbox.querySelector(s);
+ const reveal=()=>{q("#rhint").innerHTML=`<b style="color:var(--ink);font-size:20px">${l.sentence}</b>`;say(l.sentence,.9);q("#rgrade").hidden=false};
+ q("#rhintBtn").onclick=()=>{usedHint=true;q("#rhint").textContent="Gợi ý: "+l.sentence.split(" ").map((w,i)=>i<2?w:w[0]+"…").join(" ")};
+ q("#rshow").onclick=reveal;
+ q("#rmic").onclick=()=>listenTo(l.sentence,q("#rres"),()=>reveal());
+ mbox.querySelectorAll("[data-g]").forEach(b=>b.onclick=()=>{const g=b.dataset.g==="ok"?(usedHint?"hint":"ok"):"bad";
+  review(l.id,g);rStats[g]++;rq.shift();nextReview()});
+}
+
+/* =====================================================================
+   9. TẢI ẢNH THẬT THEO MANIFEST (nếu có)
+   ===================================================================== */
+function loadAssets(){
+ for(const [id,a] of Object.entries(ASSETS)){
+  const img=new Image();
+  img.onload=()=>{assetStatus[id]="ok";
+   if(a.prop){const p=props[a.prop],bb=p.getBBox();[...p.children].forEach(c=>{if(!c.classList.contains("hit")&&!c.classList.contains("fill"))c.remove()});
+    const im=document.createElementNS(SVGNS,"image");im.setAttribute("href",a.file);["x","y","width","height"].forEach(k=>im.setAttribute(k,bb[k]));im.setAttribute("preserveAspectRatio","xMidYMax meet");
+    const fl=p.querySelector(".fill");fl?p.insertBefore(im,fl):p.appendChild(im)}
+   else{const g=$id(a.target).querySelector(".vec"),bb=g.getBBox();const im=document.createElementNS(SVGNS,"image");
+    im.setAttribute("href",a.file);["x","y","width","height"].forEach(k=>im.setAttribute(k,bb[k]));im.setAttribute("preserveAspectRatio","xMidYMax meet");
+    [...g.children].forEach(c=>{if(!c.id)c.style.display="none"});g.appendChild(im)}};
+  img.onerror=()=>{assetStatus[id]="missing"};img.src=a.file;
+ }
+ setTimeout(()=>console.info("[assets]",assetStatus),1500);
+}
+
+/* =====================================================================
+   10. GIỌNG ĐỌC SONG SONG + KỂ CHUYỆN
+   ===================================================================== */
+const PKEY="elw_prefs_v1";
+let narr={mode:"live",storyMode:"natural",rich:true,showVi:true};
+try{Object.assign(narr,JSON.parse(localStorage.getItem(PKEY))||{})}catch(e){}
+const savePrefs=()=>{try{localStorage.setItem(PKEY,JSON.stringify(narr))}catch(e){}};
+function narrate(a){if(narr.mode==="live")say(a.sentence,.95)} // không await: chuyển động chạy tiếp
+function speechStop(){try{speechSynthesis.cancel()}catch(e){}}
+
+/* Action log (sự kiện thật) → đoạn văn (biên tập). Đoạn văn KHÔNG bao giờ được dùng làm trạng thái. */
+const VI_CONN={First:"Đầu tiên,",Then:"Sau đó,",Next:"Tiếp theo,","After that":"Sau đó nữa,",Finally:"Cuối cùng,",While:"Trong lúc xem ti vi,",Every:"Thỉnh thoảng,"};
+function vpOf(it,rich){const d=STORY[it.id];if(!d)return[ACT[it.id].label.toLowerCase(),ACT[it.id].labelVi.toLowerCase()];
+ let en=rich?d[1]:d[0];
+ if(it.id==="pour_milk"&&rich&&!it.ctx.milkFromFridge)en="slowly pour milk into the cup"; // chỉ nói "cold" khi sữa vừa lấy từ tủ lạnh
+ return[en,d[2]]}
+function buildStory(){
+ const done=queue.filter(q=>q.status==="done");if(!done.length)return[];
+ if(narr.storyMode!=="simple"&&window.ELW_LEVELS){if(!/^[ABC][12]$/.test(narr.storyMode))narr.storyMode="A2";
+  return ELW_LEVELS.build(done.map(q=>({uid:q.uid,id:q.id,ctx:q.ctx||{}})),narr.storyMode,{rich:narr.rich,fallback:id=>STORY[id]?[STORY[id][narr.rich?1:0],STORY[id][2]]:null})}
+ if(narr.storyMode==="simple")return done.map(it=>{const [en,vi]=vpOf(it,false);return{uids:[it.uid],en:`I ${en}.`,vi:`Tôi ${vi}.`}});
+ // gom thành mệnh đề: hành động trong lúc xem TV đứng riêng; còn lại ghép từng cặp bằng "and"
+ const cl=[];
+ for(const it of done){const special=it.ctx.watching&&it.id==="drink_from_cup";const last=cl[cl.length-1];
+  if(!special&&last&&!last.special&&last.items.length<2&&it.id!=="watch_tv"&&last.items[0].id!=="watch_tv")last.items.push(it);
+  else cl.push({special,items:[it]})}
+ let sipWhile=0;
+ return cl.map((c,k)=>{const n=cl.length;let pre,preVi;
+  if(c.special){pre=sipWhile++?"Every now and then, I":"While I'm watching TV, I";preVi=VI_CONN[sipWhile>1?"Every":"While"]}
+  else if(n===1){pre="I";preVi=""}
+  else if(k===0){pre="First, I";preVi=VI_CONN.First}
+  else if(k===n-1){pre="Finally, I";preVi=VI_CONN.Finally}
+  else{const w=["Then","Next","After that"][(k-1)%3];pre=w+", I";preVi=VI_CONN[w]}
+  const parts=c.items.map(it=>vpOf(it,narr.rich));
+  const vi=(preVi?preVi+" tôi ":"Tôi ")+parts.map(p=>p[1]).join(" và ")+".";
+  return{uids:c.items.map(i=>i.uid),en:`${pre} ${parts.map(p=>p[0]).join(" and ")}.`,vi}});
+}
+/* ---------- Ngôi kể (I / He / She / tên) + thì (hiện tại / quá khứ) ----------
+   Biến đổi trên câu đã ghép: chủ ngữ "I" → người khác, chia lại động từ chính theo ngôi và thì. */
+const POV={i:{en:"I",poss:"my",refl:"myself",obj:"me",vi:"tôi"},he:{en:"he",pron:"he",poss:"his",refl:"himself",obj:"him",vi:"anh ấy"},she:{en:"she",pron:"she",poss:"her",refl:"herself",obj:"her",vi:"cô ấy"},
+ tom:{en:"Tom",pron:"he",poss:"his",refl:"himself",obj:"him",vi:"Tom"},anna:{en:"Anna",pron:"she",poss:"her",refl:"herself",obj:"her",vi:"Anna"}};
+const IRR={be:"was",go:"went",do:"did",have:"had",make:"made",take:"took",put:"put",get:"got",sit:"sat",set:"set",drink:"drank",eat:"ate",sweep:"swept",hang:"hung",lie:"lay",
+ read:"read",spread:"spread",find:"found",bring:"brought",hold:"held",leave:"left",wake:"woke",feed:"fed",sleep:"slept",buy:"bought",keep:"kept",begin:"began",choose:"chose",
+ wear:"wore",see:"saw",sink:"sank",swing:"swung",draw:"drew",throw:"threw",rise:"rose",shut:"shut",cut:"cut",run:"ran",lay:"laid",unwind:"unwound",give:"gave",come:"came",
+ shake:"shook",stand:"stood",fall:"fell",feel:"felt",think:"thought",say:"said",tell:"told",know:"knew",grow:"grew",light:"lit",spend:"spent",send:"sent",catch:"caught",fry:"fried",dry:"dried",empty:"emptied"};
+const DOUBLE=new Set(["stop","plug","unplug","grab","drop","step","sip","slip","mop","nod","rub","wrap","chop","pat","tap","hug","drag","jog","plan","shop","pop","scrub"]);
+const VERBS=new Set(["open","close","take","put","pick","pour","drink","wipe","clean","sweep","pull","push","sit","get","water","turn","watch","switch","settle","sink","ease","give",
+ "set","fill","tuck","return","grab","lift","run","lay","place","swing","fish","slip","nudge","shut","rise","draw","throw","retrieve","flick","unwind","nurse","stop","make",
+ "hang","lie","read","spread","eat","find","bring","hold","leave","wake","go","walk","plug","unplug","cut","fry","dry","empty","shake","feed","sleep","buy","keep","begin","choose",
+ "wear","see","do","boil","cook","wash","serve","heat","toast","brew","check","look","brush","fold","fluff","charge","rinse","relax","carry","sip","smile","enjoy","finish",
+ "start","sweep","press","stir","scrub","chop","add","use","leave","move","help","switch","plug","toss","pack","tidy","straighten","put","set","sink","settle","ease"]);
+const ADV=/^(\w+ly|also|then|still|always|just|now|again|soon)$/i;
+function third(v){if(v==="have")return"has";if(v==="do")return"does";if(v==="go")return"goes";if(/(s|sh|ch|x|z|o)$/.test(v))return v+"es";if(/[^aeiou]y$/.test(v))return v.slice(0,-1)+"ies";return v+"s"}
+function past(v){if(IRR[v])return IRR[v];if(/e$/.test(v))return v+"d";if(/[^aeiou]y$/.test(v))return v.slice(0,-1)+"ied";if(DOUBLE.has(v))return v+v.slice(-1)+"ed";return v+"ed"}
+function conj(v,pv,tense){const low=v.toLowerCase();if(!VERBS.has(low)&&!IRR[low])return null;return tense==="past"?past(low):(pv==="i"?low:third(low))}
+function povEn(text,pv,tense,ctx){ctx=ctx||{sent:0};if(pv==="i"&&tense!=="past")return text;const P=POV[pv];
+ // dạng rút gọn / trợ động từ đi với I
+ text=text.replace(/\bI'm\b/g,tense==="past"?`${P.en} was`:(pv==="i"?"I'm":`${P.en} is`))
+  .replace(/\bI've\b/g,tense==="past"?`${P.en} had`:(pv==="i"?"I've":`${P.en} has`))
+  .replace(/\bI have\b/g,tense==="past"?`${P.en} had`:(pv==="i"?"I have":`${P.en} has`))
+  .replace(/\bI am\b/g,tense==="past"?`${P.en} was`:`${P.en} is`);
+ const tk=text.split(/(\s+|[,.;!?])/);let subj=false,chain=false,usedName=ctx.sent%2===1;
+ for(let i=0;i<tk.length;i++){const w=tk[i];if(!w||/^\s+$/.test(w))continue;
+  if(/^[,.;!?]$/.test(w)){if(w!==","){chain=false;ctx.sent++;usedName=ctx.sent%2===1}subj=false;continue}
+  if(w==="I"){tk[i]=(P.pron&&usedName)?P.pron:P.en;usedName=true;subj=true;continue}
+  if(subj){if(ADV.test(w))continue;const c=conj(w,pv,tense);if(c){tk[i]=c;chain=true}subj=false;continue}
+  if(chain&&w==="and"){let j=i+1;while(j<tk.length&&(!tk[j]||/^\s+$/.test(tk[j])||ADV.test(tk[j])))j++;
+   if(j<tk.length){const c=conj(tk[j],pv,tense);if(c&&!/ing$/.test(tk[j]))tk[j]=c}continue}
+  if(/^(my|My)$/.test(w))tk[i]=w==="My"?P.poss[0].toUpperCase()+P.poss.slice(1):P.poss;
+  else if(w==="myself")tk[i]=P.refl;else if(w==="me")tk[i]=P.obj;}
+ return tk.join("").replace(/(^|[.!?]\s+)([a-z])/g,(m,a,b)=>a+b.toUpperCase())}
+function povVi(text,pv,tense){const name=POV[pv].vi;let t=text.replace(/(^|[\s,.(])([Tt])ôi(?=[\s,.)])/g,(m,a,T)=>a+(T==="T"?name[0].toUpperCase()+name.slice(1):name));
+ if(tense==="past")t=t.replace(new RegExp("("+name.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+")\\s(?!đã|đang)","gi"),"$1 đã ");return t}
+const storyFinal=()=>{const c={sent:0};return buildStory().map(x=>({...x,en:povEn(x.en,narr.pov||"i",narr.tense||"present",c),vi:povVi(x.vi,narr.pov||"i",narr.tense||"present")}))};
+const storyText=()=>storyFinal().map(x=>x.en).join(" ");
+/* ---------- Cách đọc theo cấp độ: tốc độ, ngắt cụm, nối âm ---------- */
+const READ_LV={simple:{rate:.75,mode:"chunk",pause:650},A1:{rate:.72,mode:"chunk",pause:700},A2:{rate:.8,mode:"chunk",pause:500},
+ B1:{rate:.9,mode:"chunk",pause:280},B2:{rate:1,mode:"flow",pause:0},C1:{rate:1.08,mode:"flow",pause:0},C2:{rate:1.15,mode:"flow",pause:0}};
+const SPEEDS={auto:null,slow:.7,medium:.9,natural:1.05};
+function readCfg(){const L=READ_LV[narr.storyMode]||READ_LV.A2;
+ return{rate:SPEEDS[narr.speed||"auto"]||L.rate,mode:(narr.readMode&&narr.readMode!=="auto")?narr.readMode:L.mode,pause:L.pause||400}}
+// Tách câu thành cụm ý (chunks) để ngắt nghỉ: dấu câu, từ nối, giới từ dài
+function chunksOf(t){return t.split(/(?<=[,.;:!?])\s+|\s+(?=\b(?:and then|and|then|while|after|before|as|once|without|which|so)\b)/i).map(x=>x.trim()).filter(Boolean)}
+async function readAloud(t){t=t.replace(/‿/g," ");const c=readCfg();
+ if(c.mode==="flow")return say(t,c.rate);
+ const tk=token;for(const part of chunksOf(t)){if(tk!==token)return;await say(part,c.rate);await sleep(c.pause)}}
+// Đánh dấu nối âm: phụ âm cuối + nguyên âm đầu (pick‿up, turn‿on), và "r" nối (for‿a)
+function linkify(t){return t.replace(/\b([A-Za-z']*[bcdfgklmnpqrstvxz]|[A-Za-z']*[^aeiou\s]e|[A-Za-z']*r)\s+(?=[aeiouAEIOU]\w)/g,(m,w)=>{
+ if(/^(a|the|to|I)$/i.test(w))return m;return w+"‿"})}
+function speakStory(){const t=storyText();if(t)readAloud(t)}
+
+/* ---------- Diễn lại toàn bộ chuỗi trong lúc đọc đoạn văn ---------- */
+let reenacting=false;
+async function reenactStory(){
+ const segs=storyFinal();if(!segs.length||pumping||reenacting)return;
+ reenacting=true;paused=true;resetScene();const tk=token;renderStory();
+ try{for(let k=0;k<segs.length;k++){alive(tk);const sg=segs[k];
+   storyCard.querySelectorAll(".s").forEach((el,i)=>el.classList.toggle("hl",i===k));hlUid=sg.uids;renderSeq();
+   const talk=readAloud(sg.en);
+   const acts=(async()=>{for(const u of sg.uids){const q=queue.find(x=>x.uid===u);if(!q)continue;const a=ACT[q.id];if(a.pre())continue;
+     running=true;document.body.classList.add("running");await runSeq(a.seq(),tk);
+     if(W.activity!=="watching"&&!W.sitting)await pose("idle")}})();
+   await Promise.all([talk,acts]);}
+ }catch(e){if(!(e instanceof Abort))console.error(e)}
+ finally{reenacting=false;running=false;document.body.classList.remove("running");hlUid=null;renderSeq();
+  storyCard.querySelectorAll(".s").forEach(el=>el.classList.remove("hl"))}
+}
+
+const storyCard=$id("storyCard");
+function renderStory(){
+ const st=storyFinal();
+ storyCard.innerHTML=`<h2>📝 Đoạn văn của tôi <span class="meta">${st.length?"tự ghép từ các hành động đã làm":""}</span></h2>
+ <div class="ctrls">
+  <button class="iconbtn ${narr.storyMode==="simple"?"on":""}" data-sm="simple">Từng câu</button>${(window.ELW_LEVELS?ELW_LEVELS.LEVELS:[]).map(L=>`<button class="iconbtn ${narr.storyMode===L.id?"on":""}" data-sm="${L.id}" title="${L.vi}">${L.id}</button>`).join("")}
+  <select id="povSel" class="iconbtn" title="Ngôi kể">${Object.entries({i:"I · tôi",he:"He · anh ấy",she:"She · cô ấy",tom:"Tom",anna:"Anna"}).map(([k,v])=>`<option value="${k}">${v}</option>`).join("")}</select>
+  <select id="tenseSel" class="iconbtn" title="Thì"><option value="present">Hiện tại</option><option value="past">Quá khứ</option></select>
+  <button class="iconbtn ${narr.rich?"on":""}" id="tRich" title="Thêm trạng từ, tính từ khi đúng với tình huống">✨ Trạng từ/tính từ</button>
+  <button class="iconbtn ${narr.showVi?"on":""}" id="tVi">🇻🇳 Dịch</button>
+ </div>
+ ${st.length?(narr.storyMode==="simple"?`<div class="story story-simple">${st.map(x=>`<div><span class="s" data-u="${x.uids.join(",")}">${narr.showLink?linkify(x.en):x.en}</span>${narr.showVi?` <span class="story-vi">— ${x.vi}</span>`:""}</div>`).join("")}</div>`
+   :`<div class="story">${st.map(x=>`<span class="s" data-u="${x.uids.join(",")}">${narr.showLink?linkify(x.en):x.en}</span>`).join(" ")}</div>${narr.showVi?`<div class="story-vi">${st.map(x=>x.vi).join(" ")}</div>`:""}`)
+  :`<p class="empty2">Chưa có hành động nào hoàn thành. Chọn vài hành động (ví dụ: lấy sữa → đặt cốc lên bàn → ngồi → bật TV → uống) để tạo đoạn văn.</p>`}
+ <div class="ctrls" style="margin-top:10px">
+  <button class="iconbtn on" id="sAct" ${st.length?"":"disabled"} title="Đặt lại phòng, nhân vật làm lại từng hành động khi câu tương ứng được đọc">🎬 Diễn lại + đọc</button>
+  <button class="iconbtn" id="sPlay" ${st.length?"":"disabled"}>🔊 Chỉ nghe</button>
+  <button class="iconbtn" id="sPause">⏯ Dừng/tiếp tục đọc</button>
+  <button class="iconbtn" id="sSpeak" ${st.length?"":"disabled"}>🎤 Luyện nói</button>
+  ${window.ELW_VOICES?`<label class="meta" style="display:flex;align-items:center;gap:4px">Giọng <select id="voiceSel" class="iconbtn">${ELW_VOICES.PROFILES.map(v=>`<option value="${v.id}">${v.vi}</option>`).join("")}</select></label>`:""}
+  <label class="meta" style="display:flex;align-items:center;gap:4px">Tốc độ
+   <select id="speedSel" class="iconbtn"><option value="auto">theo cấp độ</option><option value="slow">chậm</option><option value="medium">vừa</option><option value="natural">tự nhiên</option></select></label>
+  <label class="meta" style="display:flex;align-items:center;gap:4px">Cách đọc
+   <select id="rmodeSel" class="iconbtn"><option value="auto">theo cấp độ</option><option value="chunk">ngắt từng cụm</option><option value="flow">liền mạch, nối âm</option></select></label>
+  <button class="iconbtn ${narr.showLink?"on":""}" id="tLink" title="Hiện ký hiệu nối âm ‿ giữa các từ">‿ Nối âm</button>
+  <span class="meta" id="readInfo"></span>
+  <label class="meta" style="display:flex;align-items:center;gap:4px">Chế độ đọc
+   <select id="narrMode" class="iconbtn"><option value="live">đọc khi làm</option><option value="after">đọc cả đoạn khi xong</option><option value="off">tắt tiếng</option></select></label>
+ </div><div class="res" id="sRes"></div><div id="extras"></div>`;
+ storyCard.querySelector("#narrMode").value=narr.mode;
+ const vs=storyCard.querySelector("#voiceSel");if(vs){vs.value=narr.voice||"adult_female";vs.onchange=e=>{narr.voice=e.target.value;savePrefs();if(dlgPlayer)dlgPlayer.meVoice=narr.voice;say("Hello! This is my voice.")}}
+ renderExtras(st);
+ storyCard.querySelector("#narrMode").onchange=e=>{narr.mode=e.target.value;savePrefs();if(narr.mode==="off")speechStop()};
+ storyCard.querySelectorAll("[data-sm]").forEach(b=>b.onclick=()=>{narr.storyMode=b.dataset.sm;savePrefs();renderStory()});
+ storyCard.querySelector("#tRich").onclick=()=>{narr.rich=!narr.rich;savePrefs();renderStory()};
+ storyCard.querySelector("#tVi").onclick=()=>{narr.showVi=!narr.showVi;savePrefs();renderStory()};
+ storyCard.querySelector("#sPlay").onclick=speakStory;
+ storyCard.querySelector("#sAct").onclick=reenactStory;
+ const sp=storyCard.querySelector("#speedSel"),rm=storyCard.querySelector("#rmodeSel");sp.value=narr.speed||"auto";rm.value=narr.readMode||"auto";
+ sp.onchange=e=>{narr.speed=e.target.value;savePrefs();renderStory()};rm.onchange=e=>{narr.readMode=e.target.value;savePrefs();renderStory()};
+ storyCard.querySelector("#tLink").onclick=()=>{narr.showLink=!narr.showLink;savePrefs();renderStory()};
+ {const c=readCfg();storyCard.querySelector("#readInfo").textContent=`(${narr.storyMode==="simple"?"Từng câu":narr.storyMode}: tốc độ ×${c.rate}, ${c.mode==="flow"?"liền mạch":"ngắt cụm"})`}
+ const pvs=storyCard.querySelector("#povSel"),tns=storyCard.querySelector("#tenseSel");pvs.value=narr.pov||"i";tns.value=narr.tense||"present";
+ pvs.onchange=e=>{narr.pov=e.target.value;savePrefs();renderStory()};tns.onchange=e=>{narr.tense=e.target.value;savePrefs();renderStory()};
+ storyCard.querySelector("#sPause").onclick=()=>{try{speechSynthesis.paused?speechSynthesis.resume():speechSynthesis.pause()}catch(e){}};
+ storyCard.querySelector("#sSpeak").onclick=()=>listenTo(storyText(),storyCard.querySelector("#sRes"));
+ storyCard.querySelectorAll(".s").forEach(el=>el.onclick=()=>{const u=el.dataset.u.split(",").map(Number);hlUid=u;
+  storyCard.querySelectorAll(".s").forEach(x=>x.classList.toggle("hl",x===el));renderSeq();
+  u.forEach(id=>{const q=queue.find(x=>x.uid===id);if(q)pulse(ACT[q.id].obj)});readAloud(el.textContent)});
+}
+
+/* ---------- Chuỗi hành động: play/pause/lưu/tải/phát lại ---------- */
+const SKEY="elw_sequences_v1";
+function loadSeqs(){try{const d=JSON.parse(localStorage.getItem(SKEY));if(d&&d.v===1&&Array.isArray(d.list))return d.list.filter(x=>x&&typeof x.name==="string"&&Array.isArray(x.ids)).map(x=>({...x,ids:x.ids.filter(i=>ACT[i])}))}catch(e){}return[]}
+function saveSeqs(list){try{localStorage.setItem(SKEY,JSON.stringify({v:1,list}));return true}catch(e){toastG("Không lưu được (trình duyệt chặn bộ nhớ).");return false}}
+let confirmReset=false,renaming=-1;
+const ST_LABEL={pending:"chờ",running:"▶ đang làm",done:"✓ xong",blocked:"⛔ không làm được",cancelled:"✕ đã huỷ"};
+const seqCard=$id("seqCard");
+function renderSeq(){
+ const seqs=loadSeqs(),nDone=queue.filter(q=>q.status==="done").length;
+ seqCard.innerHTML=`<h2>🎬 Chuỗi hành động của tôi <span class="meta">${queue.length?`${nDone}/${queue.length} xong${paused&&queue.some(q=>q.status==="pending")?" · đang tạm dừng":""}`:""}</span></h2>
+ <div class="ctrls">
+  <button class="iconbtn ${paused?"":"on"}" id="qPlay">${paused?"▶ Chạy":"⏸ Tạm dừng"}</button>
+  <button class="iconbtn" id="qRewind" title="Dừng và đưa chuỗi về đầu, không đổi căn phòng">⏮ Về đầu</button>
+  <button class="iconbtn" id="qReplay" title="Đặt lại phòng rồi chạy lại cả chuỗi">🔁 Phát lại</button>
+  <button class="iconbtn" id="qClear">🧹 Xoá chuỗi</button>
+  <button class="iconbtn" id="qReset">↺ Đặt lại phòng</button>
+ </div>
+ ${confirmReset?`<div class="confirm">Đưa nhân vật và mọi đồ vật về vị trí ban đầu? Điểm, lịch ôn và sổ từ <b>không</b> bị ảnh hưởng.
+   <div class="ctrls" style="margin:6px 0 0"><button class="iconbtn on" id="cYes">Đặt lại</button><button class="iconbtn" id="cNo">Huỷ</button></div></div>`:""}
+ ${queue.length?`<ol class="q">${queue.map((q,i)=>{const a=ACT[q.id];return `<li class="${q.status} ${hlUid&&hlUid.includes(q.uid)?"hl":""}">
+   <span class="n">${i+1}</span><span class="t"><b>${a.label}</b>${q.auto?" <i class='meta'>(tự thêm)</i>":""}<small>${a.labelVi} · ${a.object.en}${q.status==="blocked"?" — "+q.why:""}</small></span>
+   <span class="st">${ST_LABEL[q.status]}</span>
+   ${q.status==="pending"?`<button data-up="${i}" title="Lên">↑</button><button data-dn="${i}" title="Xuống">↓</button><button data-rm="${i}" title="Xoá">✕</button>`:""}</li>`}).join("")}</ol>`
+  :`<p class="empty2">Bấm vào đồ vật rồi chọn hành động để thêm vào chuỗi. Bấm ⏸ Tạm dừng để xếp nhiều hành động trước, rồi ▶ Chạy.</p>`}
+ <div class="saveform"><input id="seqName" placeholder="Tên chuỗi, ví dụ: Having Milk While Watching TV" maxlength="60"><button class="iconbtn" id="qSave">💾 Lưu</button></div>
+ ${seqs.length?`<div class="saved">${seqs.map((x,i)=>renaming===i?`<div><input id="rnIn" value="${x.name.replace(/"/g,"&quot;")}" class="iconbtn" style="flex:1;min-width:0"><button class="iconbtn" data-rnok="${i}">OK</button></div>`
+   :`<div><span>📁 <b>${x.name.replace(/</g,"&lt;")}</b> <span class="meta">${x.ids.length} hành động</span></span><button class="iconbtn" data-load="${i}">Mở</button><button class="iconbtn" data-rn="${i}">✎</button><button class="iconbtn" data-del="${i}">🗑</button></div>`).join("")}</div>`:""}`;
+ const $q=x=>seqCard.querySelector(x);
+ $q("#qPlay").onclick=()=>{if(paused){paused=false;pump()}else paused=true;renderSeq()};
+ $q("#qRewind").onclick=()=>{token++;speechStop();paused=true;queue=queue.filter(q=>!q.auto).map(q=>({...q,status:"pending",why:"",ctx:null}));hlUid=null;renderSeq();renderStory();if(selObj&&!cur)renderObject()};
+ $q("#qReplay").onclick=replay;
+ $q("#qClear").onclick=()=>{token++;speechStop();queue=[];paused=false;hlUid=null;renderSeq();renderStory();if(selObj&&!cur)renderObject()};
+ $q("#qReset").onclick=askReset;
+ if(confirmReset){$q("#cYes").onclick=()=>{confirmReset=false;resetScene();toastG("Đã đặt lại phòng. Tiến độ học vẫn giữ nguyên.")};$q("#cNo").onclick=()=>{confirmReset=false;renderSeq()}}
+ seqCard.querySelectorAll("[data-up]").forEach(b=>b.onclick=()=>moveItem(+b.dataset.up,-1));
+ seqCard.querySelectorAll("[data-dn]").forEach(b=>b.onclick=()=>moveItem(+b.dataset.dn,1));
+ seqCard.querySelectorAll("[data-rm]").forEach(b=>b.onclick=()=>{queue.splice(+b.dataset.rm,1);renderSeq()});
+ $q("#qSave").onclick=()=>{const name=$q("#seqName").value.trim(),ids=queue.filter(q=>!q.auto&&q.status!=="blocked").map(q=>q.id);
+  if(!name){toastG("Hãy đặt tên cho chuỗi trước khi lưu.");$q("#seqName").focus();return}
+  if(!ids.length){toastG("Chuỗi đang trống.");return}
+  const list=loadSeqs().filter(x=>x.name!==name);list.push({name,ids,at:Date.now()});if(saveSeqs(list)){toastG(`Đã lưu chuỗi “${name}”.`);renderSeq()}};
+ seqCard.querySelectorAll("[data-load]").forEach(b=>b.onclick=()=>{const x=loadSeqs()[+b.dataset.load];token++;speechStop();paused=true;queue=x.ids.map(mkItem);hlUid=null;renderSeq();renderStory();toastG(`Đã mở “${x.name}”. Bấm 🔁 Phát lại để chạy từ đầu.`)});
+ seqCard.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{const l=loadSeqs();l.splice(+b.dataset.del,1);saveSeqs(l);renderSeq()});
+ seqCard.querySelectorAll("[data-rn]").forEach(b=>b.onclick=()=>{renaming=+b.dataset.rn;renderSeq();$q("#rnIn").focus()});
+ seqCard.querySelectorAll("[data-rnok]").forEach(b=>b.onclick=()=>{const l=loadSeqs(),v=$q("#rnIn").value.trim();if(v){l[+b.dataset.rnok].name=v;saveSeqs(l)}renaming=-1;renderSeq()});
+}
+function moveItem(i,d){const j=i+d;if(j<0||j>=queue.length||queue[j].status!=="pending")return;[queue[i],queue[j]]=[queue[j],queue[i]];renderSeq()}
+function askReset(){confirmReset=true;renderSeq();seqCard.scrollIntoView({block:"nearest",behavior:"smooth"})}
+function replay(){if(!queue.length){toastG("Chuỗi đang trống.");return}
+ const ids=queue.filter(q=>!q.auto).map(q=>q.id);resetScene();queue=ids.map(mkItem);paused=false;hlUid=null;renderSeq();renderStory();pump()}
+
+/* =====================================================================
+   11. HỌC THÊM: chunks, từ mới, ngữ pháp theo trình độ
+   ===================================================================== */
+let xTab="chunks";
+function renderExtras(st){const box=$id("extras");if(!box)return;
+ if(!st.length||!window.ELW_LEVELS||narr.storyMode==="simple"){box.innerHTML="";return}
+ let x;try{x=ELW_LEVELS.extras(queue.filter(q=>q.status==="done").map(q=>({uid:q.uid,id:q.id,ctx:q.ctx||{}})),narr.storyMode,{rich:narr.rich,fallback:id=>STORY[id]?[STORY[id][0],STORY[id][2]]:null})}catch(e){box.innerHTML="";return}
+ const T={chunks:"🧩 Chunks",words:"📚 Từ mới",grammar:"📐 Ngữ pháp"};
+ const body=xTab==="chunks"?x.chunks.map(c=>`<div><button class="iconbtn" data-x="${c.en}">🔊</button><b>${c.en}</b><small>${c.vi}</small></div>`).join("")
+  :xTab==="words"?x.words.map(w=>`<div><button class="iconbtn" data-x="${w.en}">🔊</button><b>${w.en}</b><small>${w.ipa||""} · ${w.vi}</small></div>`).join("")
+  :x.grammar.map(g=>`<div style="display:block"><b>${g.title}</b><br><small>${g.vi_explain}</small><br><i>${g.example}</i></div>`).join("");
+ box.innerHTML=`<div class="xtabs">${Object.entries(T).map(([k,t])=>`<button class="iconbtn ${xTab===k?"on":""}" data-xt="${k}">${t}</button>`).join("")}</div><div class="xlist">${body||'<span class="empty2">Chưa có mục nào.</span>'}</div>`;
+ box.querySelectorAll("[data-xt]").forEach(b=>b.onclick=()=>{xTab=b.dataset.xt;renderExtras(st)});
+ box.querySelectorAll("[data-x]").forEach(b=>b.onclick=()=>say(b.dataset.x,.85));
+}
+
+/* =====================================================================
+   12. NHIỀU PHÒNG: phòng khách, bếp, phòng ngủ
+   ===================================================================== */
+const shellLiving=$id("shell-living"),shellOther=$id("shell-other");
+[...world.children].forEach(e=>{if(e.id!=="char")e.dataset.room="living"});
+(function injectCss(){let c=Object.values(ROOMS).map(r=>r.css||"").join("\n");if(window.ELW_DIALOGUE)c+="\n"+ELW_DIALOGUE.css;const st=document.createElement("style");st.textContent=c;document.head.appendChild(st)})();
+function renderTabs(){const t=$id("roomTabs");if(!t)return;
+ t.innerHTML=Object.entries(ROOM_NAMES).map(([id,[en,vi]])=>`<button role="tab" aria-selected="${W.room===id}" class="${W.room===id?"on":""}" data-room="${id}" title="${en}">${{living:"🛋",kitchen:"🍳",bedroom:"🛏"}[id]||"🚪"} ${vi}</button>`).join("");
+ t.querySelectorAll("[data-room]").forEach(b=>b.onclick=()=>{if(b.dataset.room!==W.room)enqueue("go_"+b.dataset.room)})}
+let shownRoom=null;
+function renderRoom(){if(shownRoom===W.room)return;shownRoom=W.room;
+ const liv=W.room==="living";shellLiving.style.display=liv?"":"none";
+ [...world.children].forEach(e=>{if(e.dataset.room==="living")e.style.display=liv?"":"none"});
+ world.querySelectorAll(":scope > [data-room]:not([data-room=living])").forEach(e=>e.remove());
+ shellOther.innerHTML="";
+ if(!liv){const r=ROOMS[W.room];shellOther.innerHTML=r.shellSvg;const g=document.createElementNS(SVGNS,"g");g.innerHTML=r.worldSvg;
+  [...g.children].forEach(e=>{e.dataset.room=r.id;world.appendChild(e);if(e.classList.contains("obj"))bindObj(e)});
+  ["k_","b_"].forEach(()=>{});}
+ if(selObj&&OBJECTS[selObj]&&OBJECTS[selObj].room!==W.room&&!cur){selObj=null;panel.innerHTML=`<div class="empty">👈 ${ROOM_NAMES[W.room][1]}: nhấn vào một đồ vật.</div>`}
+ if(inv)inv.refresh&&inv.refresh();
+}
+async function switchRoom(id,tk){room.style.opacity=0;await sleep(reduceMotion?10:260);alive(tk);
+ W.room=id;W.activity=null;renderRoom();const e=id==="living"?{x:120,y:600,d:1}:ROOMS[id].entry;W.x=e.x;W.y=e.y;W.dir=e.d;applyState();
+ room.style.opacity=1;await sleep(reduceMotion?10:260)}
+const _applyState=applyState;
+
+/* =====================================================================
+   13. HỘI THOẠI GIA ĐÌNH (nhân vật Mẹ)
+   ===================================================================== */
+let dlgPlayer=null,mom=null;
+function renderDlg(){const c=$id("dlgCard");if(!window.ELW_DIALOGUE){c.hidden=true;return}
+ c.innerHTML=`<h2>💬 Hội thoại với Mẹ <span class="meta">nghe, chọn câu trả lời, nhân vật làm theo</span></h2>
+ <div class="dlg-list">${ELW_DIALOGUE.SCRIPTS.map(s=>`<button class="iconbtn" data-dlg="${s.id}" title="${s.titleVi}">${s.level} · ${s.title}</button>`).join("")}</div><div id="dlgBox" style="margin-top:8px"></div>`;
+ c.querySelectorAll("[data-dlg]").forEach(b=>b.onclick=()=>startDialogue(b.dataset.dlg));
+}
+function startDialogue(id){
+ if(!mom){mom=ELW_DIALOGUE.makeMom(SVGNS);mom.dataset.room="living";mom.dataset.base=600;mom.setAttribute("transform","translate(150,600) scale(1.6)");world.appendChild(mom);sortDepth()}
+ mom.style.display=W.room==="living"?"":"none";
+ if(dlgPlayer)dlgPlayer.stop();
+ dlgPlayer=ELW_DIALOGUE.createPlayer({container:$id("dlgBox"),speak:(t,v)=>window.ELW_VOICES?ELW_VOICES.speak(t,v):say(t),enqueue:aid=>enqueue(aid),meVoice:narr.voice||"young_male",
+  onLine:l=>{if(mom){mom.classList.toggle("talk",l.who==="mom");setTimeout(()=>mom.classList.remove("talk"),1800)}},onDone:()=>toastG("Hoàn thành hội thoại! 🎉")});
+ dlgPlayer.start(id);
+}
+
+/* =====================================================================
+   14. KHO ĐỒ: 150+ từ vựng theo phòng, tìm kiếm, đố nhanh
+   ===================================================================== */
+let inv=null;P.inv=P.inv||{};
+function catalogAll(){const out=[];const add=(list,room)=>(list||[]).forEach(c=>out.push({...c,room}));
+ add(window.ELW_ROOMS_CATALOG_LIVING,"living");for(const r of Object.values(ROOMS))add(r.catalog,r.id);return out}
+const CAT=catalogAll();
+function objForCatalog(c){const en=c.en.toLowerCase();return Object.keys(OBJECTS).find(k=>OBJECTS[k].room===c.room&&(OBJECTS[k].en.toLowerCase()===en||k===en||(en==="refrigerator"&&k==="fridge")||(en==="television"&&k==="tv")))}
+if(window.ELW_INVENTORY){inv=ELW_INVENTORY.mount($id("invWrap"),{getCatalog:()=>CAT,
+ rooms:Object.entries(ROOM_NAMES).map(([id,[name,nameVi]])=>({id,name,nameVi})),currentRoom:()=>W.room,
+ interactiveIds:()=>new Set(CAT.filter(c=>c.room===W.room&&objForCatalog(c)).map(c=>c.id)),
+ onSelectInteractive:id=>{const c=CAT.find(x=>x.id===id),k=c&&objForCatalog(c);if(k){selectObject(k);pulse(k);$id("room").scrollIntoView({block:"nearest",behavior:"smooth"})}},
+ speak:t=>say(t,.85),isLearned:id=>!!P.inv[id],toggleLearned:id=>{P.inv[id]=!P.inv[id];save()}});}
+
+$id("leftSlot").replaceWith($id("panel"),$id("storyCard"));renderRoom();room.classList.add("dusty");applyState();pose("idle");refresh();renderSeq();renderStory();renderDlg();loadAssets();
+window.ELW={linkify:t=>linkify(t),chunksOf:t=>chunksOf(t),readCfg:()=>readCfg(),reenact:()=>reenactStory(),setPov:(p,t)=>{narr.pov=p;narr.tense=t;renderStory()},storyFinal:()=>storyFinal(),ACTIONS,state:()=>W,queue:()=>queue,story:()=>buildStory(),enqueue,replay,resetScene,assets:assetStatus,idle:()=>!pumping&&!queue.some(q=>q.status==="pending")};
+</script>
+</body>
+</html>

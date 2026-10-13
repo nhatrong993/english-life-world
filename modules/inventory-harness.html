@@ -1,0 +1,16 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Inventory harness</title>
+<style>:root{--bg:#f6efe4;--card:#fffdf9;--ink:#2d2a26;--muted:#7a7166;--accent:#e8743b;--ok:#3a9d5d;--line:#e3d6c3}
+body{margin:0;padding:16px;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}#box{max-width:900px;margin:auto}</style>
+</head><body><div id="box"></div>
+<script src="catalog-sample.js"></script><script src="inventory.js"></script>
+<script>
+window.LOG={speak:[],toggle:[],select:[]};var learned=new Set(["sofa"]);
+var S=window.ELW_CATALOG_SAMPLE;
+window.INV=ELW_INVENTORY.mount(document.getElementById("box"),{
+ getCatalog:function(){return S.catalog},rooms:S.rooms,currentRoom:function(){return "living"},
+ interactiveIds:function(){return new Set(["sofa","tv","rug","bookshelf"])},
+ onSelectInteractive:function(id){LOG.select.push(id)},speak:function(t){LOG.speak.push(t)},
+ isLearned:function(id){return learned.has(id)},toggleLearned:function(id){LOG.toggle.push(id);learned.has(id)?learned.delete(id):learned.add(id)}});
+INV.open();
+</script></body></html>

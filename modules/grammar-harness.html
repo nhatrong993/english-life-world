@@ -1,0 +1,11 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sổ lỗi harness</title><style>body{margin:0;padding:12px;background:#f6efe4;font-family:system-ui}.panel{background:#fffdf9;border-radius:20px;padding:14px;box-shadow:0 6px 24px #5a3d1f1a;margin-bottom:12px}</style></head>
+<body><div class="panel" id="book"></div><div class="panel" id="quiz"></div>
+<script src="grammar.js"></script>
+<script>
+ELW_MISTAKES.clear();
+["I has drink milk yesterday","He don't like coffee.","He don't like coffee.","I want go to the kitchen.","I has a cat.","I open fridge.","<b>I very like</b> milk"].forEach(s=>ELW_MISTAKES.add(ELW_GRAMMAR.check(s),"Harness"));
+window.spoken=[];ELW_MISTAKES.renderBook(document.getElementById("book"),{speak:t=>spoken.push(t)});
+ELW_MISTAKES.renderBook(document.getElementById("quiz"),{speak:t=>spoken.push(t)});
+document.querySelector('#quiz [data-act="quiz"]').click();
+</script></body></html>

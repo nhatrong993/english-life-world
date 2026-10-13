@@ -1,0 +1,10 @@
+const {chromium}=await import(process.argv[2]);
+const d="/mnt/user-data/outputs/english-life-world/modules/";
+const b=await chromium.launch(),p=await b.newPage({viewport:{width:390,height:700}});
+await p.setContent(`<body style="margin:0;padding:16px;background:#f7efe3;font-family:sans-serif"><div id=s></div><p id=t style="font-size:18px;line-height:1.8;background:#fffaf2;border:1px solid #e3d6c3;border-radius:12px;padding:12px"></p></body>`);
+await p.addScriptTag({path:d+"reading.js"});
+await p.evaluate(()=>{const R=ELW_READING;const st=document.createElement("style");st.textContent=R.css;document.head.append(st);
+R.renderSettings(document.getElementById("s"),{showLinking:true},()=>{}, "C2");
+document.getElementById("t").innerHTML=R.linkify("After setting the cup down on the table and pouring myself some cold milk, I pick the cup up. Once I've settled on the chair, I switch on the TV and watch it the next day.","C2")+R.legend;});
+const o=await p.evaluate(()=>document.documentElement.scrollWidth);console.log("scrollWidth",o);if(o>390)process.exit(1);
+await p.screenshot({path:d+"reading.png",fullPage:true});await b.close();

@@ -1,0 +1,15 @@
+const assert=require('assert');
+require('./speaking-coach.js');
+const S=global.ELW_SPEAKING;
+assert(S,'module exports');
+assert.equal(S.normalize("I'm making breakfast!"),"i'm making breakfast");
+assert.equal(S.compare("I am making breakfast","I'm making breakfast").score,100);
+assert.equal(S.compare("I make the bed","I make bed").score,75);
+assert(S.correction("She go to work").tips.some(x=>x.includes("goes")));
+assert(S.correction("I very like coffee").tips.length>0);
+assert(S.correction("I am agree").tips.some(x=>x.includes("I agree")));
+assert(S.correction("She have a cat").tips.some(x=>x.includes("has")));
+assert(S.correction("I didn't went home yesterday").tips.some(x=>x.includes("I didn't go")));
+assert(S.SCENARIOS.length>=4);
+assert(S.getReply('morning','Yes, I slept pretty well.').includes('What are you going to do first?'));
+console.log('OK: speaking coach normalization, comparison, correction, scenarios and fallback dialogue');

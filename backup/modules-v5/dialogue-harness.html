@@ -1,0 +1,24 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Dialogue harness</title>
+<style>body{background:#f6efe4;font-family:system-ui,sans-serif;margin:16px;display:flex;gap:16px;align-items:flex-start}svg{width:360px;background:#fffdf9;border:1px solid #e3d6c3;border-radius:16px}#dlg{width:480px}</style>
+<script>
+(function(){
+  if (location.search.indexOf('nosynth') >= 0) { Object.defineProperty(window,'speechSynthesis',{value:undefined,configurable:true}); return; }
+  var voices=[{name:"Microsoft David - English (United States)",lang:"en-US"},{name:"Microsoft Zira - English (United States)",lang:"en-US"},
+    {name:"Google UK English Male",lang:"en-GB"},{name:"Samantha",lang:"en-US"},{name:"Google Deutsch",lang:"de-DE"}];
+  window.__spoken=[];
+  var mock={getVoices:function(){return voices},cancel:function(){},speak:function(u){__spoken.push({t:u.text,v:u.voice&&u.voice.name,p:u.pitch});setTimeout(function(){u.onend&&u.onend()},5)},speaking:false,pending:false};
+  Object.defineProperty(window,'speechSynthesis',{value:mock,configurable:true});
+  window.SpeechSynthesisUtterance=window.SpeechSynthesisUtterance||function(t){this.text=t};
+})();
+</script>
+<script src="voices-dialogue.js"></script></head><body>
+<svg id="stage" viewBox="0 0 1000 640"><rect x="0" y="500" width="1000" height="140" fill="#e9d8bf"/></svg>
+<div id="dlg"></div>
+<script>
+var st=document.getElementById('stage');var s=document.createElement('style');s.textContent=ELW_DIALOGUE.css;document.head.appendChild(s);
+var mom=ELW_DIALOGUE.makeMom('http://www.w3.org/2000/svg');mom.setAttribute('transform','translate(500,560) scale(2.4)');st.appendChild(mom);
+window.__actions=[];
+window.player=ELW_DIALOGUE.createPlayer({container:document.getElementById('dlg'),
+  enqueue:function(id){__actions.push(id);setTimeout(function(){player.actionDone(id,true)},10)},
+  onLine:function(l){mom.classList.toggle('talk',l.who==='mom');mom.classList.toggle('idle',l.who!=='mom')}});
+</script></body></html>
