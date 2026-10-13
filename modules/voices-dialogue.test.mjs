@@ -1,11 +1,30 @@
 import { execSync } from "node:child_process";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
+import { createRequire } from "node:module";
+const require = createRequire(import.meta.url);
 const root = execSync("npm root -g").toString().trim();
-const { chromium } = await import(path.join(root, "playwright/index.mjs"));
+let chromium = null;
+try {
+  const mod = await import(pathToFileURL(path.join(root, "playwright/index.mjs")).href);
+  chromium = mod.chromium;
+} catch (e) {}
 const dir = path.dirname(fileURLToPath(import.meta.url));
 const url = "file://" + path.join(dir, "dialogue-harness.html");
 let fails = 0; const ok = (c, m) => { console.log((c ? "PASS " : "FAIL ") + m); if (!c) fails++; };
+
+if (!chromium) {
+  const vd = require("./voices-dialogue.js");
+  const { ELW_VOICES, ELW_DIALOGUE } = vd;
+  ok(ELW_DIALOGUE.SCRIPTS.length >= 8, `${ELW_DIALOGUE.SCRIPTS.length} scripts`);
+  const allowed = ELW_DIALOGUE.ALLOWED_ACTIONS;
+  const used = ELW_DIALOGUE.SCRIPTS.flatMap(s => s.lines.filter(l => l.action).map(l => l.action));
+  ok(used.every(a => allowed.includes(a)), "all action ids allowed: " + [...new Set(used)].length + " distinct");
+  const pitches = Object.fromEntries(ELW_VOICES.PROFILES.map(p => [p.id, p.pitch]));
+  ok(pitches.child > pitches.adult_female && pitches.adult_female > pitches.adult_male, "child pitch highest");
+  console.log(fails ? `${fails} FAILED` : "ALL PASSED (data mode)");
+  process.exit(fails ? 1 : 0);
+}
 
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 900, height: 620 } });

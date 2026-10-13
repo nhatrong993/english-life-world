@@ -4,6 +4,7 @@
  * child and elderly voices are approximated with pitch/rate shaping on an adult voice. */
 (function () {
   "use strict";
+  var root = typeof window !== "undefined" ? window : globalThis;
   var MALE = /David|Guy|Daniel|Alex\b|Fred|Tom\b|Mark|George|Ryan|Aaron|Arthur|Oliver|Eric|Christopher|Roger|Brian|James|Steffan|Ralph|Albert|Rishi|Thomas|Lee\b|Gordon|William|Prabhat|Ravi|Junior|Male|\bman\b|x-(iom|iob|tpd|iol|gbd|gbb|rjs)/i;
   var FEMALE = /Zira|Samantha|Aria|Jenny|Karen|Moira|Tessa|Victoria|Susan|Hazel|Libby|Sonia|Emma|Ava\b|Allison|Fiona|Kate|Serena|Michelle|Natasha|Ana\b|Kathy|Catherine|Heera|Neerja|Clara|Female|woman|Google US English|x-(tpf|sfg|tpc|iog|gba|gbc|gbg|fis)/i;
   var CHILD = /\bAna\b|Junior|Child|Kid|Ivy|Maisie/i;
@@ -92,7 +93,7 @@
     });
   }
   function preview(profileId) { return speak(prof(profileId).line, profileId); }
-  window.ELW_VOICES = { PROFILES: PROFILES, pick: pick, speak: speak, available: available, describe: describe, preview: preview, allocate: allocate };
+  root.ELW_VOICES = { PROFILES: PROFILES, pick: pick, speak: speak, available: available, describe: describe, preview: preview, allocate: allocate };
 
   /* ---------------- Dialogue ---------------- */
   var NS = "http://www.w3.org/2000/svg";
@@ -326,6 +327,7 @@
     return api;
   }
 
-  window.ELW_DIALOGUE = { makeMom: makeMom, css: css, SCRIPTS: SCRIPTS, createPlayer: createPlayer,
+  root.ELW_DIALOGUE = { makeMom: makeMom, css: css, SCRIPTS: SCRIPTS, createPlayer: createPlayer,
     ALLOWED_ACTIONS: ["open_fridge","take_milk","put_milk_back","close_fridge","pick_up_cup","put_cup_on_table","pour_milk","drink_from_cup","wipe_table","put_book_on_table","sweep_under_table","pull_out_chair","sit_on_chair","get_up","push_chair_in","sweep_floor","open_window","close_window","water_plant","pick_up_book","turn_on_tv","watch_tv","turn_off_tv"] };
+  if (typeof module !== "undefined" && module.exports) module.exports = { ELW_VOICES: root.ELW_VOICES, ELW_DIALOGUE: root.ELW_DIALOGUE };
 })();

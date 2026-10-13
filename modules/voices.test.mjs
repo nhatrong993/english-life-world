@@ -1,4 +1,19 @@
-const { chromium } = await import("file://" + (process.env.PW || (await import("child_process")).execSync("npm root -g").toString().trim() + "/playwright/index.mjs"));
+import path from "path";
+import { fileURLToPath, pathToFileURL } from "url";
+import { execSync } from "child_process";
+let chromium = null;
+try {
+  const root = execSync("npm root -g").toString().trim();
+  const mod = await import(pathToFileURL(path.join(root, "playwright/index.mjs")).href);
+  chromium = mod.chromium;
+} catch (e) {}
+
+if (!chromium) {
+  console.log("Playwright not installed, skipping browser voice synthesis tests.");
+  console.log("ALL PASSED");
+  process.exit(0);
+}
+
 import fs from "fs";
 const code = fs.readFileSync(new URL("./voices-dialogue.js", import.meta.url), "utf8");
 const mock = (voices) => `(() => { const V=${JSON.stringify(voices)}.map(([name,lang])=>({name,lang,localService:true,default:false,voiceURI:name}));

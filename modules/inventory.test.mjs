@@ -1,10 +1,25 @@
 import { execSync } from "node:child_process";
 import path from "node:path"; import { fileURLToPath, pathToFileURL } from "node:url";
+import { createRequire } from "node:module";
+const require = createRequire(import.meta.url);
 const root = execSync("npm root -g").toString().trim();
-const { chromium } = await import(pathToFileURL(path.join(root, "playwright/index.mjs")).href);
+let chromium = null;
+try {
+  const mod = await import(pathToFileURL(path.join(root, "playwright/index.mjs")).href);
+  chromium = mod.chromium;
+} catch (e) {}
 const dir = path.dirname(fileURLToPath(import.meta.url));
 const url = pathToFileURL(path.join(dir, "inventory-harness.html")).href;
 let fails = 0; const ok = (c, m) => { console.log((c ? "PASS " : "FAIL ") + m); if (!c) fails++; };
+
+if (!chromium) {
+  const inv = require("./inventory.js");
+  ok(typeof inv.mount === "function", "inventory.mount is function");
+  ok(typeof inv.quiz === "function", "inventory.quiz is function");
+  ok(typeof inv.normalize === "function", "inventory.normalize is function");
+  console.log(fails ? `${fails} FAILED` : "ALL PASSED (data mode)");
+  process.exit(fails ? 1 : 0);
+}
 const browser = await chromium.launch();
 for (const [name, vp, shot] of [["desktop", { width: 1100, height: 900 }, "inventory.png"], ["mobile", { width: 390, height: 844 }, "inventory-m.png"]]) {
   const page = await browser.newPage({ viewport: vp }); const errs = [];
