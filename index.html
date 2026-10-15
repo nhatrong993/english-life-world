@@ -660,6 +660,8 @@ main{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(320px,1fr);gap:16
 <script src="modules/vocab-3000.js"></script>
 <script>
 "use strict";
+/* Cờ debug: thêm ?debug=1 vào URL để hiện các badge kỹ thuật (vd: ID phiên Pet Adventure). Mặc định ẩn. */
+try{if(/(^|[?&])debug=1([&#]|$)/.test(location.search))window.ELW_DEBUG=true}catch(e){}
 const SVGNS="http://www.w3.org/2000/svg";
 const $id=id=>document.getElementById(id);
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
@@ -718,32 +720,32 @@ const OBJECTS={
  fridge:{en:"fridge",vi:"tủ lạnh",ipa:"/frɪdʒ/",acts:["open_fridge","take_milk","put_milk_back","close_fridge"]},
  cup:{en:"cup",vi:"cái cốc",ipa:"/kʌp/",acts:["pick_up_cup","put_cup_on_table","pour_milk","drink_from_cup"]},
  table:{en:"table",vi:"cái bàn",ipa:"/ˈteɪ.bəl/",acts:["sit_at_the_table","wipe_table","put_cup_on_table","put_book_on_table","sweep_under_table","sit_on_chair"]},
- chair:{en:"chair",vi:"cái ghế",ipa:"/tʃeər/",acts:["pull_out_chair","sit_on_chair","get_up","push_chair_in"]},
+ chair:{en:"chair",vi:"cái ghế",ipa:"/tʃerr/",acts:["pull_out_chair","sit_on_chair","get_up","push_chair_in"]},
  broom:{en:"broom",vi:"cây chổi",ipa:"/bruːm/",acts:["sweep_floor","sweep_under_table"]},
- window:{en:"window",vi:"cửa sổ",ipa:"/ˈwɪn.dəʊ/",acts:["open_window","close_window"]},
+ window:{en:"window",vi:"cửa sổ",ipa:"/ˈwɪn.doʊ/",acts:["open_window","close_window"]},
  plant:{en:"plant",vi:"cái cây",ipa:"/plɑːnt/",acts:["water_plant"]},
  book:{en:"book",vi:"quyển sách",ipa:"/bʊk/",acts:["pick_up_book","put_book_on_table"]},
- sofa:{en:"sofa",vi:"ghế sofa",ipa:"/ˈsəʊ.fə/",acts:["sit_on_sofa","lie_on_sofa","get_up_from_sofa","fluff_cushion","fold_throw","read_on_sofa"]},
+ sofa:{en:"sofa",vi:"ghế sofa",ipa:"/ˈsoʊ.fə/",acts:["sit_on_sofa","lie_on_sofa","get_up_from_sofa","fluff_cushion","fold_throw","read_on_sofa"]},
  cat:{en:"cat",vi:"con mèo",ipa:"/kæt/",acts:["call_cat","pet_cat","feed_cat","give_cat_water","play_with_cat","brush_cat"]},
  floorlamp:{en:"floor lamp",vi:"đèn cây",ipa:"/ˈflɔː læmp/",acts:["turn_on_floor_lamp","turn_off_floor_lamp"]},
  livcurtains:{en:"curtains",vi:"rèm cửa",ipa:"/ˈkɜː.tənz/",acts:["open_living_curtains","close_living_curtains"]},
  fan:{en:"fan",vi:"cái quạt",ipa:"/fæn/",acts:["turn_on_fan","turn_off_fan"]},
- remote:{en:"remote control",vi:"cái điều khiển",ipa:"/rɪˌməʊt kənˈtrəʊl/",acts:["pick_up_remote","turn_on_tv","turn_off_tv"]},
+ remote:{en:"remote control",vi:"cái điều khiển",ipa:"/rɪˌmoʊt kənˈtroʊl/",acts:["pick_up_remote","turn_on_tv","turn_off_tv"]},
  speaker:{en:"speaker",vi:"cái loa",ipa:"/ˈspiː.kər/",acts:["listen_to_music"]},
 };
 const V={ // từ vựng dùng chung
- open:["open","/ˈəʊ.pən/","mở"],close:["close","/kləʊz/","đóng"],fridge:["fridge","/frɪdʒ/","tủ lạnh"],door:["door","/dɔːr/","cánh cửa"],
+ open:["open","/ˈoʊ.pən/","mở"],close:["close","/kloʊz/","đóng"],fridge:["fridge","/frɪdʒ/","tủ lạnh"],door:["door","/dɔːr/","cánh cửa"],
  take:["take out","/teɪk aʊt/","lấy ra"],milk:["milk","/mɪlk/","sữa"],put:["put","/pʊt/","đặt, để"],back:["put back","/pʊt bæk/","để lại chỗ cũ"],
- pick:["pick up","/pɪk ʌp/","nhặt lên, cầm lên"],cup:["cup","/kʌp/","cái cốc"],on:["on","/ɒn/","trên, lên"],table:["table","/ˈteɪ.bəl/","cái bàn"],
- pour:["pour","/pɔːr/","rót"],into:["into","/ˈɪn.tuː/","vào trong"],drink:["drink","/drɪŋk/","uống"],from:["from","/frɒm/","từ"],
- clean:["clean","/kliːn/","lau, dọn sạch"],cloth:["cloth","/klɒθ/","khăn lau"],book:["book","/bʊk/","quyển sách"],
+ pick:["pick up","/pɪk ʌp/","nhặt lên, cầm lên"],cup:["cup","/kʌp/","cái cốc"],on:["on","/ɑn/","trên, lên"],table:["table","/ˈteɪ.bəl/","cái bàn"],
+ pour:["pour","/pɔːr/","rót"],into:["into","/ˈɪn.tuː/","vào trong"],drink:["drink","/drɪŋk/","uống"],from:["from","/frɑm/","từ"],
+ clean:["clean","/kliːn/","lau, dọn sạch"],cloth:["cloth","/klɑθ/","khăn lau"],book:["book","/bʊk/","quyển sách"],
  sweep:["sweep","/swiːp/","quét"],floor:["floor","/flɔːr/","sàn nhà"],under:["under","/ˈʌn.dər/","bên dưới"],broom:["broom","/bruːm/","cây chổi"],
- pull:["pull out","/pʊl aʊt/","kéo ra"],push:["push in","/pʊʃ ɪn/","đẩy vào"],chair:["chair","/tʃeər/","cái ghế"],sit:["sit","/sɪt/","ngồi"],
- getup:["get up","/ɡet ʌp/","đứng dậy"],turnon:["turn on","/tɜːn ɒn/","bật"],turnoff:["turn off","/tɜːn ɒf/","tắt"],tv:["TV","/ˌtiːˈviː/","ti vi"],watch:["watch","/wɒtʃ/","xem"],sip:["sip","/sɪp/","ngụm"],window:["window","/ˈwɪn.dəʊ/","cửa sổ"],water:["water","/ˈwɔː.tər/","nước; tưới nước"],plants:["plants","/plɑːnts/","những cái cây"],
- sofa:["sofa","/ˈsəʊ.fə/","ghế sofa"],lie:["lie","/laɪ/","nằm"],cushion:["cushion","/ˈkʊʃ.ən/","gối tựa"],fluff:["fluff","/flʌf/","vỗ cho phồng"],fold:["fold","/fəʊld/","gấp"],
+ pull:["pull out","/pʊl aʊt/","kéo ra"],push:["push in","/pʊʃ ɪn/","đẩy vào"],chair:["chair","/tʃerr/","cái ghế"],sit:["sit","/sɪt/","ngồi"],
+ getup:["get up","/ɡet ʌp/","đứng dậy"],turnon:["turn on","/tɜːn ɑn/","bật"],turnoff:["turn off","/tɜːn ɑf/","tắt"],tv:["TV","/ˌtiːˈviː/","ti vi"],watch:["watch","/wɑtʃ/","xem"],sip:["sip","/sɪp/","ngụm"],window:["window","/ˈwɪn.doʊ/","cửa sổ"],water:["water","/ˈwɔː.tər/","nước; tưới nước"],plants:["plants","/plɑːnts/","những cái cây"],
+ sofa:["sofa","/ˈsoʊ.fə/","ghế sofa"],lie:["lie","/laɪ/","nằm"],cushion:["cushion","/ˈkʊʃ.ən/","gối tựa"],fluff:["fluff","/flʌf/","vỗ cho phồng"],fold:["fold","/foʊld/","gấp"],
  blanket:["blanket","/ˈblæŋ.kɪt/","cái chăn"],read:["read","/riːd/","đọc"],cat:["cat","/kæt/","con mèo"],pet:["pet","/pet/","vuốt ve"],feed:["feed","/fiːd/","cho ăn"],
  give:["give","/ɡɪv/","đưa, cho"],play:["play with","/pleɪ wɪð/","chơi với"],brush:["brush","/brʌʃ/","chải"],call:["call","/kɔːl/","gọi"],lamp:["floor lamp","/ˈflɔː læmp/","đèn cây"],
- curtains:["curtains","/ˈkɜː.tənz/","rèm cửa"],fan:["fan","/fæn/","cái quạt"],remote:["remote control","/rɪˌməʊt kənˈtrəʊl/","cái điều khiển"],listen:["listen to","/ˈlɪs.ən tuː/","nghe"],music:["music","/ˈmjuː.zɪk/","âm nhạc"],
+ curtains:["curtains","/ˈkɜː.tənz/","rèm cửa"],fan:["fan","/fæn/","cái quạt"],remote:["remote control","/rɪˌmoʊt kənˈtroʊl/","cái điều khiển"],listen:["listen to","/ˈlɪs.ən tuː/","nghe"],music:["music","/ˈmjuː.zɪk/","âm nhạc"],
 };
 const A=(id,obj,label,labelVi,sentence,vi,key,vocab,grammar,chunks,disc,patterns,pre,seq,also)=>({id,obj,label,labelVi,sentence,vi,key,vocab:vocab.map(k=>V[k]),grammar,chunks,disc,patterns,pre,seq,also:also||[]});
 const busy=item=>W.hand&&W.hand!==item&&W.hand!=="remote"?`Tay đang cầm ${OBJ_VI[W.hand]}. Hãy đặt xuống trước.`:null;
@@ -965,7 +967,7 @@ ACTIONS.push(
   ()=>W.fan==="on"?"Quạt đang chạy rồi.":null,
   ()=>[["walk","fan"],["pose","bend",450],["set","fan","on"],["pose","idle",1]]),
  A("turn_off_fan","fan","Turn off the fan","Tắt quạt","I'm turning off the fan.","Tôi đang tắt quạt.",["turning","off","fan"],["turnoff","fan"],
-  "<b>turn off</b> = tắt. off /ɒf/ khác of /əv/.",["I'm turning off","the fan."],{ans:"off",opts:["off","of","on"]},
+  "<b>turn off</b> = tắt. off /ɑf/ khác of /əv/.",["I'm turning off","the fan."],{ans:"off",opts:["off","of","on"]},
   ["I'm turning off <b>the TV</b>.","I'm turning off <b>the light</b>."],
   ()=>W.fan!=="on"?"Quạt đang tắt rồi.":null,
   ()=>[["walk","fan"],["pose","bend",450],["set","fan","off"],["pose","idle",1]]),
@@ -1066,11 +1068,11 @@ for(const t of Object.keys(ROOM_NAMES)){const [en,vi,viGo]=GO_TXT[t]||[ROOM_NAME
  const a=A("go_"+t,"door",(g&&g.label)||("Go to "+en),(g&&g.labelVi)||("Đi "+viGo),(g&&g.sentence)||`I'm going to ${en}.`,(g&&g.vi)||`Tôi đang đi ${viGo}.`,(g&&g.key)||["going",en.split(" ").pop().replace(".","")],[],
   (g&&g.grammar)||"go → going. Nói <b>go to the kitchen</b>; riêng <b>go home</b> thì không có “to”.",(g&&g.chunks)||["I'm going",`to ${en}.`],{ans:"go",opts:["go","goal","grow"]},
   (g&&g.patterns)||[`I'm going to <b>the bathroom</b>.`,`I'm going <b>home</b>.`],()=>W.room===t?`Bạn đang ở ${vi} rồi.`:null,()=>[["walk",DOOR_SPOT[W.room]],["room",t]]);
- a.vocab=(g&&g.vocab)||[["go to","/ɡəʊ tuː/","đi đến"],[en.replace("the ",""),"",vi]];a.room="*";ACTIONS.push(a);STORY["go_"+t]=(g&&g.story)||["go to "+en,"walk into "+en,"đi "+viGo];}
+ a.vocab=(g&&g.vocab)||[["go to","/ɡoʊ tuː/","đi đến"],[en.replace("the ",""),"",vi]];a.room="*";ACTIONS.push(a);STORY["go_"+t]=(g&&g.story)||["go to "+en,"walk into "+en,"đi "+viGo];}
 {const a=A("go_home","door","Go home","Về nhà","I'm going home.","Tôi về nhà.",["going","home"],[],
  "go → going. Nói <b>go home</b> (về nhà) — không có “to” trước home.",["I'm going","home."],{ans:"go",opts:["go","goal","grow"]},
  [`I'm going <b>home</b>.`,`Let's <b>go home</b>.`],()=>roomTopic(W.room)==="home"?"Bạn đang ở nhà rồi.":null,dest=>[["walk",DOOR_SPOT[W.room]],["room",dest||"living"]]);
- a.vocab=[["go home","/ɡəʊ həʊm/","về nhà"]];a.room="*";ACTIONS.push(a);STORY.go_home=["go home","go home","về nhà"];}
+ a.vocab=[["go home","/ɡoʊ hoʊm/","về nhà"]];a.room="*";ACTIONS.push(a);STORY.go_home=["go home","go home","về nhà"];}
 const DOOR_SPOT={living:"door_living"};
 for(const r of Object.values(ROOMS)){const k=Object.keys(r.spots||{}).find(x=>/_door$/.test(x));if(k)DOOR_SPOT[r.id]=k}
 const ACT=Object.fromEntries(ACTIONS.map(a=>[a.id,a]));
@@ -1303,6 +1305,9 @@ function findFixer(id,why){
 /* Bong bóng nói gọn, bám theo nhân vật */
 let cbG=null,cbT=0,cbRaf=0;
 function charSay(text){try{
+ /* QA 2026-10-15: phòng thủ dấu cách — mọi bong bóng nhân vật đi qua đây.
+    Sửa lỗi dính chữ chắc chắn sai: dấu phẩy dính liền chữ cái (",please" → ", please"). */
+ text=String(text==null?"":text).replace(/,([A-Za-z])/g,", $1");
  if(!cbG){cbG=document.createElementNS(SVGNS,"g");cbG.setAttribute("pointer-events","none");cbG.setAttribute("class","cbub");room.appendChild(cbG)}
  room.appendChild(cbG);const fs=26,maxW=330;
  cbG.innerHTML=`<rect rx="16" fill="#fff" stroke="#e8743b" stroke-width="3"/><path fill="#fff" stroke="#e8743b" stroke-width="3" stroke-linejoin="round"/><text font-size="${fs}" font-weight="700" fill="#3b2a1a" font-family="inherit"></text>`;
@@ -1402,7 +1407,7 @@ const stageColor=s=>s<=0?"#ddd":s<KNOWN?"#e8a25a":s<7?"#5e9a6f":s<DONE?"#3f7fa8"
 const PTS={step:1,learn:5,ok:3,hint:1};
 const ivl=s=>SRS_HOURS[Math.max(1,Math.min(s,8))]*HOUR;
 const stage=id=>P.items[id]?P.items[id].s:0;
-function addPts(n){P.pts+=n;const e=$id("pts");e.textContent="⭐ "+P.pts;e.classList.remove("bump");void e.offsetWidth;e.classList.add("bump")}
+function addPts(n){P.pts+=n;save();const e=$id("pts");e.textContent="⭐ "+P.pts;e.classList.remove("bump");void e.offsetWidth;e.classList.add("bump")}
 function learn(id){if(P.items[id])return;P.items[id]={s:1,due:Date.now()+ivl(1),ok:0,bad:0};addPts(PTS.learn);toastG(`Đã thêm “${ACT[id].sentence}” vào lịch ôn. +${PTS.learn}⭐`)}
 function review(id,grade){const it=P.items[id],now=Date.now();
  if(grade==="ok"){it.s=Math.min(DONE,it.s+1);it.due=it.s>=DONE?0:now+ivl(it.s);it.ok++;addPts(PTS.ok)}
@@ -1541,7 +1546,7 @@ function bind(){
   panel.querySelectorAll("[data-ans]").forEach(b=>b.onclick=()=>{const ok=b.dataset.ans===l.disc.ans;
    q("#discres").innerHTML=ok?`<span class="good">✅ Đúng rồi! “${l.disc.ans}”</span> <button class="btn sec" id="n2">Tiếp →</button>`
     :`<span class="bad">❌ Chưa đúng. Nghe lại “${b.dataset.ans}” và “${l.disc.ans}” để so sánh.</span>`;
-   if(!ok)say(b.dataset.ans,.8).then(()=>say(l.disc.ans,.8));else q("#n2").onclick=goNext})}
+   if(!ok)say(b.dataset.ans,.8).then(()=>say(l.disc.ans,.8));else{q("#n2").onclick=goNext;addPts(PTS.ok);toastG(`Nghe đúng! +${PTS.ok}⭐`)}})}
  if(q("#mic"))q("#mic").onclick=()=>listenTo(l.sentence,q("#speakres"),pct=>{if(pct>=75){q("#speakres").insertAdjacentHTML("beforeend",` <button class="btn" id="n3">Tuyệt! Tiếp →</button>`);q("#n3").onclick=goNext}});
  if(q("#selfok"))q("#selfok").onclick=goNext;
 }
@@ -1962,7 +1967,8 @@ if(window.ELW_INVENTORY){inv=ELW_INVENTORY.mount($id("invWrap"),{getCatalog:()=>
  rooms:Object.entries(ROOM_NAMES).map(([id,[name,nameVi]])=>({id,name,nameVi})),currentRoom:()=>W.room,
  interactiveIds:()=>new Set(CAT.filter(c=>c.room===W.room&&objForCatalog(c)).map(c=>c.id)),
  onSelectInteractive:id=>{const c=CAT.find(x=>x.id===id),k=c&&objForCatalog(c);if(k){selectObject(k);pulse(k);$id("room").scrollIntoView({block:"nearest",behavior:"smooth"})}},
- speak:t=>say(t,.85),isLearned:id=>!!P.inv[id],toggleLearned:id=>{P.inv[id]=!P.inv[id];save()}});}
+ speak:t=>say(t,.85),isLearned:id=>!!P.inv[id],toggleLearned:id=>{P.inv[id]=!P.inv[id];save()},
+ onQuizCorrect:()=>{addPts(PTS.ok);toastG(`Đố đúng! +${PTS.ok}⭐`)}});}
 
 const qc=document.createElement("section");qc.className="card2";qc.id="quickCard";const evc=document.createElement("section");evc.className="card2";evc.id="evTray";const rpc=document.createElement("section");rpc.className="card2";rpc.id="rpCard";rpc.hidden=true;const msc=document.createElement("section");msc.className="card2";msc.id="missionCard";$id("leftSlot").replaceWith($id("panel"));const sideCol=document.querySelector(".side");if(sideCol){sideCol.insertBefore(msc,sideCol.firstChild);sideCol.append(evc,qc,rpc)}/* ---------- Cô Mai: gợi ý nhanh + thói quen hằng ngày ---------- */
 let lastDone=null;
@@ -1986,9 +1992,21 @@ function renderQuick(){const c=$id("quickCard");if(!c)return;
 }
 const _renderSeqQ=renderSeq;renderSeq=function(){_renderSeqQ();if(!pumping)renderQuick()};
 (function(){const ls=$id("langSel");ls.innerHTML=Object.entries(LANGS).map(([k,v])=>`<option value="${k}" title="${v.name}">${v.flag||""} ${k.toUpperCase()}</option>`).join("");ls.value=curLang();ls.title="Ngôn ngữ dịch: "+((LANGS[curLang()]||{}).name||"Tiếng Việt");
- ls.onchange=e=>{narr.lang=e.target.value;ls.title="Ngôn ngữ dịch: "+((LANGS[curLang()]||{}).name||"Tiếng Việt");savePrefs();renderStory();renderSeq();if(selObj&&!cur)renderObject();else if(cur)render();renderQuick()}})();
+ ls.onchange=e=>{narr.lang=e.target.value;ls.title="Ngôn ngữ dịch: "+((LANGS[curLang()]||{}).name||"Tiếng Việt");savePrefs();renderStory();renderSeq();if(selObj&&!cur)renderObject();else if(cur)render();renderQuick();
+ /* QA 2026-10-15: bảng dịch i18n chỉ phủ một phần (~107/1155 hành động) — báo rõ để nút không "chết lặng" */
+ try{const L=curLang();if(L!=="vi"){const n=Object.keys((I18N.actions||{})).length;toastG(`Đã chuyển sang ${((LANGS[L]||{}).name)||L}: ${n} hành động có bản dịch sẽ đổi; câu chưa có bản dịch vẫn hiển thị tiếng Việt.`)}else toastG("Đã chuyển về tiếng Việt.")}catch(_){}}})();
 (function(){const st=document.createElement("style");st.textContent=(window.ELW_READING&&ELW_READING.css)||"";document.head.appendChild(st)})();
 renderRoom();room.classList.add("dusty");applyState();pose("idle");refresh();renderSeq();renderStory();$id("dlgCard").hidden=true; /* Hội thoại với Mẹ đã được thay bằng Nhiệm vụ + nhập vai theo hành động */
+/* QA 2026-10-15 (#10): modal chào mừng lần đầu — hiện 1 lần, hướng dẫn ngắn cho người mới */
+(function(){try{if(localStorage.getItem("elw_welcome_v1"))return}catch(e){return}
+ const css="#elwWelcome{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;background:rgba(45,42,38,.45);padding:16px;box-sizing:border-box}#elwWelcome .ww-card{background:#fffdf9;border:2px solid #e8743b;border-radius:20px;max-width:430px;width:100%;padding:22px 20px;box-shadow:0 18px 50px rgba(45,42,38,.3);font-family:inherit;color:#2d2a26}#elwWelcome h2{margin:0 0 6px;font-size:19px}#elwWelcome h2 span{color:#e8743b}#elwWelcome .ww-sub{margin:0 0 12px;font-size:13.5px;color:#7a7166}#elwWelcome ol{margin:0 0 14px;padding-left:22px;font-size:14px;line-height:1.65}#elwWelcome ol b{color:#c2410c}#elwWelcome .ww-go{display:block;width:100%;border:0;border-radius:12px;background:#e8743b;color:#fff;font-weight:800;font-size:15px;padding:11px;cursor:pointer}#elwWelcome .ww-go:hover{background:#c2410c}#elwWelcome .ww-skip{display:block;width:100%;border:0;background:none;color:#7a7166;font-size:12.5px;margin-top:8px;cursor:pointer;text-decoration:underline}";
+ const st=document.createElement("style");st.textContent=css;document.head.appendChild(st);
+ const w=document.createElement("div");w.id="elwWelcome";w.setAttribute("role","dialog");w.setAttribute("aria-label","Chào mừng");
+ w.innerHTML=`<div class="ww-card"><h2>👋 Chào mừng đến <span>English Life World</span>!</h2><p class="ww-sub">Ngôi nhà tiếng Anh của bạn — học qua cuộc sống hằng ngày cùng gia đình và cún Milu 🐕</p><ol><li>🏠 <b>Chọn phòng</b> (khách, bếp, ngủ…) hoặc chủ đề bên ngoài.</li><li>👆 <b>Bấm vào đồ vật</b>, chọn hành động — nhân vật làm ngay và nói tiếng Anh.</li><li>🎯 <b>Làm nhiệm vụ</b>, chăm Milu, ôn từ trong 📒 Sổ từ để lên điểm ⭐.</li></ol><button class="ww-go" type="button">Bắt đầu học →</button><button class="ww-skip" type="button">Để sau</button></div>`;
+ const done=()=>{try{localStorage.setItem("elw_welcome_v1","1")}catch(e){}w.remove()};
+ w.querySelector(".ww-go").onclick=done;w.querySelector(".ww-skip").onclick=done;
+ w.addEventListener("click",e=>{if(e.target===w)done()});
+ document.body.appendChild(w);})();
 /* ===== Sửa câu mạnh hơn: thay bộ sửa của speaking-coach bằng ELW_GRAMMAR, lưu lỗi vào sổ ===== */
 if(window.ELW_SPEAKING&&window.ELW_GRAMMAR){const old=t=>({text:t,tips:["Câu của bạn ổn! Thử nói dài hơn với một lý do hoặc chi tiết."]});
  window.ELW_CORRECT=function(text){let r;try{r=ELW_GRAMMAR.check(text)}catch(e){return old(text)}
@@ -2031,7 +2049,10 @@ function startScene(sc){const c=$id("rpCard");if(!c||!window.ELW_ROLEPLAY)return
 function listenOnce(){return new Promise((res,rej)=>{const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return rej(new Error("unsupported"));
  const r=new SR();r.lang="en-US";r.interimResults=false;r.onresult=e=>{const t=e.results[0][0].transcript;try{window.ELW_DAY&&ELW_DAY.onSpeak(t)}catch(_){};res(t)};r.onerror=e=>rej(e);r.start()})}
 function showDiary(){if(!window.ELW_DAY)return;const entry=ELW_DAY.endOfDay(dayItems,items=>{const segs=window.ELW_LEVELS?ELW_LEVELS.build(items,narr.storyMode==="simple"?"A2":narr.storyMode,{rich:narr.rich,fallback:id=>STORY[id]?[STORY[id][0],STORY[id][2]]:null}):[];
-  const c={sent:0};return{en:segs.map(x=>povEn(x.en,narr.pov||"i","past",c)).join(" "),vi:segs.map(x=>povVi(x.vi,narr.pov||"i","past")).join(" ")}});
+  const c={sent:0};let en=segs.map(x=>povEn(x.en,narr.pov||"i","past",c)).join(" ");
+  /* QA 2026-10-15: gộp cụm lặp "went to the X and went to the Y" → "went to the X and the Y" */
+  en=en.replace(/\bwent to the ([A-Za-z][A-Za-z ]*?) and went to the /g,"went to the $1 and the ");
+  return{en,vi:segs.map(x=>povVi(x.vi,narr.pov||"i","past")).join(" ")}});
  showModal(`<h2>📔 Nhật ký cuối ngày <button class="iconbtn" data-close>✕</button></h2><div id="diaryBox"></div>`);
  ELW_DAY.renderDiary($id("diaryBox"),{speak:t=>readAloud(t),onSave:()=>{toastG("Đã lưu nhật ký! 📔");dayItems=[]}})}
 if(window.ELW_DAY){try{const st=document.createElement("style");st.textContent=ELW_DAY.css||"";document.head.appendChild(st);
@@ -2104,7 +2125,7 @@ window.ELW={mission:()=>window.ELW_MISSION,OBJECTS:()=>OBJECTS,startScene:id=>st
  const save=()=>{try{localStorage.setItem(K,JSON.stringify(st))}catch(e){}};
  const sh=document.createElement("div");sh.id="topicSheet";sh.hidden=true;sh.setAttribute("role","dialog");sh.setAttribute("aria-label","Chọn chủ đề");document.body.appendChild(sh);
  function askCode(){const i=sh.querySelector("#tsCode");if(i){i.focus();sh.querySelector("#tsMsg").textContent="Chủ đề này đang khóa. Nhập mã để mở."}}
- function draw(){sh.innerHTML=`<div class="ts"><h3>Chủ đề học</h3><p class="sub">“Nhà ở” đang chơi được. ${st.unlocked?"Đã mở khóa: tích chọn chủ đề muốn học tiếp, app làm theo thứ tự bạn chọn.":"Các chủ đề khác đang khóa 🔒. Nhập mã để mở khóa."}</p>${st.unlocked?"":`<form id="tsLock" class="tslock"><input id="tsCode" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="Mã 4 số" aria-label="Mã mở khóa"><button type="submit">🔓 Mở khóa</button><span id="tsMsg" role="status"></span></form>`}<div class="tgrid">${TOPICS.map(t=>{const p=st.picked.indexOf(t.id);return `<button class="tcard ${curTopic===t.id||t.live||(st.unlocked&&t.built&&t.built())?"live":p>=0?"picked":""}" data-topic="${t.id}" aria-pressed="${t.live||p>=0}"><span class="tb">${curTopic===t.id?"Đang học":t.live?"Vào học":!st.unlocked?"🔒 Khóa":t.built&&t.built()?"▶ Vào học":p>=0?"✓ Đã chọn #"+(p+1):"Sắp có"}</span><span class="ti">${t.icon}</span><span class="tn">${t.vi}</span><span class="te">${t.en}</span><span class="tw">${t.words}</span><span class="tareas">${(t.areas||[]).map(a=>`<i>${a}</i>`).join("")}</span></button>`}).join("")}</div><label class="tsfriend"><input type="checkbox" id="tsFriend" ${window.ELW_LIFE&&ELW_LIFE.companionOn()?"checked":""}> 🧑‍🦱 Đi cùng bạn Linh khi ra ngoài <small>(quán cà phê, siêu thị, công viên, nhà hàng, dã ngoại, trường học…)</small></label><div class="tsfoot"><button id="tsClose" style="background:#e8743b;color:#fff">Xong</button></div></div>`;
+ function draw(){sh.innerHTML=`<div class="ts"><h3>Chủ đề học</h3><p class="sub">“Nhà ở” đang chơi được. ${st.unlocked?"Đã mở khóa: tích chọn chủ đề muốn học tiếp, app làm theo thứ tự bạn chọn.":"Các chủ đề khác đang khóa 🔒. Nhập mã để mở khóa."}</p>${st.unlocked?"":`<form id="tsLock" class="tslock"><input id="tsCode" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="Mã 4 số" aria-label="Mã mở khóa"><button type="submit">🔓 Mở khóa</button><span id="tsMsg" role="status"></span><span class="meta" style="flex-basis:100%;font-size:12px">💡 Chưa có mã? Nhắn cho English Life World để nhận mã mở khóa.</span></form>`}<div class="tgrid">${TOPICS.map(t=>{const p=st.picked.indexOf(t.id);return `<button class="tcard ${curTopic===t.id||t.live||(st.unlocked&&t.built&&t.built())?"live":p>=0?"picked":""}" data-topic="${t.id}" aria-pressed="${t.live||p>=0}"><span class="tb">${curTopic===t.id?"Đang học":t.live?"Vào học":!st.unlocked?"🔒 Khóa":t.built&&t.built()?"▶ Vào học":p>=0?"✓ Đã chọn #"+(p+1):"Sắp có"}</span><span class="ti">${t.icon}</span><span class="tn">${t.vi}</span><span class="te">${t.en}</span><span class="tw">${t.words}</span><span class="tareas">${(t.areas||[]).map(a=>`<i>${a}</i>`).join("")}</span></button>`}).join("")}</div><label class="tsfriend"><input type="checkbox" id="tsFriend" ${window.ELW_LIFE&&ELW_LIFE.companionOn()?"checked":""}> 🧑‍🦱 Đi cùng bạn Linh khi ra ngoài <small>(quán cà phê, siêu thị, công viên, nhà hàng, dã ngoại, trường học…)</small></label><div class="tsfoot"><button id="tsClose" style="background:#e8743b;color:#fff">Xong</button></div></div>`;
   sh.querySelectorAll("[data-topic]").forEach(b=>b.onclick=()=>{const t=TOPICS.find(x=>x.id===b.dataset.topic);if(t.live){enterTopic("home");return}if(!st.unlocked){askCode();return}if(t.built&&t.built()){enterTopic(t.id);return}const i=st.picked.indexOf(t.id);i>=0?st.picked.splice(i,1):st.picked.push(t.id);save();draw()});
   const lk=sh.querySelector("#tsLock");if(lk)lk.onsubmit=e=>{e.preventDefault();const v=sh.querySelector("#tsCode").value.trim();if(v==="6789"){st.unlocked=true;save();draw()}else{const m=sh.querySelector("#tsMsg");m.textContent="Sai mã, thử lại nhé.";sh.querySelector("#tsCode").value=""}};
   $id("tsClose").onclick=()=>sh.hidden=true;const fr=$id("tsFriend");if(fr)fr.onchange=()=>{try{ELW_LIFE.setCompanion(fr.checked);syncFriendBtn()}catch(e){}}}

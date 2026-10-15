@@ -41,7 +41,7 @@
   });
 
   const PLACE_META = Object.freeze({
-    home:       { id: "home",       nameVi: "Ở nhà",                  nameEn: "At Home",             npcName: "Mom",           npcLabel: "Mom 👩",            npcIcon: "👩",   voice: "mom" },
+    home:       { id: "home",       nameVi: "nhà",                     nameEn: "Home",                npcName: "Mom",           npcLabel: "Mom 👩",            npcIcon: "👩",   voice: "mom" },
     park:       { id: "park",       nameVi: "Công viên",              nameEn: "Greenwood Park",      npcName: "Park Staff",    npcLabel: "Park Staff 🌳",     npcIcon: "🌳",   voice: "clerk" },
     cafe:       { id: "cafe",       nameVi: "Quán cà phê",            nameEn: "Cozy Café",           npcName: "Barista",       npcLabel: "Barista 🧑‍🍳",      npcIcon: "🧑‍🍳", voice: "barista" },
     market:     { id: "market",     nameVi: "Siêu thị",               nameEn: "Fresh Supermarket",   npcName: "Store Greeter", npcLabel: "Store Greeter 💁",  npcIcon: "💁",   voice: "clerk" },

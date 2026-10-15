@@ -537,7 +537,7 @@ const SC_OBJECTS={
   acts:["borrow_storybook","return_library_book","look_up_word_in_dictionary","ask_librarian_for_recommendation","read_comic_book_summary","organize_bookshelf_row"]},
  globe:{en:"world globe",vi:"quả địa cầu",ipa:"/wɜːrld ɡloʊb/",
   acts:["spin_the_globe","find_country_on_globe","trace_equator_on_globe","compare_time_zones_globe","quiz_classmate_capitals"]},
- sciencetable:{en:"science table",vi:"bàn thí nghiệm khoa học",ipa:"/ˈsaɪəns ˈteɪbəl/",
+ sciencetable:{en:"science table",vi:"bàn thí nghiệm khoa học",ipa:"/ˈsaɪrns ˈteɪbəl/",
   acts:["look_through_microscope","water_class_plant","measure_plant_growth","mix_color_beakers","write_lab_observation"]},
  locker:{en:"student locker",vi:"tủ đồ cá nhân",ipa:"/ˈstuːdənt ˈlɑːkər/",
   acts:["open_student_locker","put_away_jacket","get_pe_shoes_from_locker","decorate_locker_door","lock_student_locker"]},

@@ -122,6 +122,13 @@ html, body {
   .hud::-webkit-scrollbar {
     display: none !important;
   }
+  /* QA 2026-10-15: thanh tab Chơi/Học/Nhiệm vụ (sticky, z-index 30) bị header sticky
+     (z-index 65) đè lên khi cuộn → combobox ngôn ngữ chặn mất click vào tab.
+     Cho tab dính NGAY DƯỚI header thay vì chui xuống dưới nó. */
+  #w3dModeTabs.w3d-mode-tabs {
+    top: calc(var(--uimb-header-h, 30px) + 4px) !important;
+    z-index: 64 !important;
+  }
   header .stat, header .iconbtn, header #petMiniHud, header #btnProBadge {
     min-height: 22px !important;
     height: 22px !important;

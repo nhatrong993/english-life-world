@@ -933,7 +933,7 @@
 
     const session = unified.adventureSession || {};
     const ctx = unified.context || {};
-    const placeMeta = (advApi && advApi.PLACE_META && advApi.PLACE_META[ctx.place]) || { nameVi: "Ở nhà", nameEn: "At Home" };
+    const placeMeta = (advApi && advApi.PLACE_META && advApi.PLACE_META[ctx.place]) || { nameVi: "nhà", nameEn: "Home" };
     const wxMeta = (advApi && advApi.WEATHER_META && advApi.WEATHER_META[ctx.weather]) || { icon: "☀️", vi: "Nắng đẹp", en: "Sunny" };
     const sitMeta = (advApi && advApi.SITUATION_META && advApi.SITUATION_META[ctx.situation]) || { icon: "😊", vi: "Bình thường", en: "Normal" };
 
@@ -1024,7 +1024,7 @@
       `</button>` +
       `</div>` +
       `<div class="pet-adv-meta-badges">` +
-      `<span class="pet-adv-badge" data-badge-session>🆔 Phiên: <code>${esc(session.sessionId)}</code></span>` +
+      (window.ELW_DEBUG ? `<span class="pet-adv-badge" data-badge-session>🆔 Phiên: <code>${esc(session.sessionId)}</code></span>` : "") +
       `<span class="pet-adv-badge" data-badge-pet>${pet.icon || "🐕"} Pet: <b>${esc(pet.name)} (${esc(unified.activePetId)})</b></span>` +
       `<span class="pet-adv-badge" data-badge-sources>🚪 Nguồn vào: <b>${esc(entrySources.join(", "))}</b></span>` +
       `<span class="pet-adv-badge" data-badge-place>📍 ${esc(placeMeta.nameVi)} (${esc(ctx.place)}/${esc(ctx.zone)})</span>` +

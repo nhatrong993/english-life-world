@@ -65,6 +65,7 @@ function mount(container,o){
   var getCatalog=o.getCatalog||function(){return [];},rooms=o.rooms||[];
   var curRoom=o.currentRoom||function(){return null;},inter=o.interactiveIds||function(){return new Set();};
   var speak=o.speak||function(){},isLearned=o.isLearned||function(){return false;},toggle=o.toggleLearned||function(){},sel=o.onSelectInteractive||function(){};
+  var quizOk=o.onQuizCorrect||function(){};
   var st={open:false,tab:"list",q:"",room:curRoom()||"all",cat:"all",shown:PAGE,quiz:null};
   var card=document.createElement("section");card.className="inv-card";
   container.appendChild(card);
@@ -149,7 +150,7 @@ function mount(container,o){
     if(b.classList.contains("inv-star")){toggle(id);render(keyOf(b));return;}
     if(b.classList.contains("inv-go")&&id){sel(id);return;}
     var z=st.quiz;
-    if(b.classList.contains("inv-qopt")&&z&&z.picked==null){var k=+b.dataset.k,q=z.items[z.i];z.picked=k;if(q.options[k]===q.answer_en)z.score++;speak(q.answer_en);render(".inv-qnext");return;}
+    if(b.classList.contains("inv-qopt")&&z&&z.picked==null){var k=+b.dataset.k,q=z.items[z.i];z.picked=k;if(q.options[k]===q.answer_en){z.score++;try{quizOk()}catch(e){}}speak(q.answer_en);render(".inv-qnext");return;}
     if(b.classList.contains("inv-qsay")){speak(z.items[z.i].answer_en);return;}
     if(b.classList.contains("inv-qnext")){z.i++;z.picked=null;render(z.i>=z.items.length?".inv-qnew":".inv-qopt");return;}
     if(b.classList.contains("inv-qnew")){newQuiz();render(".inv-qopt");return;}

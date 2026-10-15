@@ -30,11 +30,11 @@ Object.assign(MKV, {
   dispenser: ["dispenser", "/dɪˈspen.sər/", "hộp/cây lấy giấy hoặc dung dịch", "n"],
   deal: ["weekly deals", "/ˈwiːk.li diːlz/", "ưu đãi trong tuần", "n"],
   halfprice: ["half price", "/hɑːf praɪs/", "nửa giá (giảm 50%)", "n"],
-  kiosk: ["coupon kiosk", "/ˈkuː.pɒn ˈkiː.ɒsk/", "cây in phiếu giảm giá", "n"],
+  kiosk: ["coupon kiosk", "/ˈkuː.pɑn ˈkiː.ɑsk/", "cây in phiếu giảm giá", "n"],
   voucher: ["voucher", "/ˈvaʊ.tʃər/", "phiếu mua hàng giảm giá", "n"],
   directory: ["store directory", "/stɔːr dəˈrek.tər.i/", "bảng sơ đồ siêu thị", "n"],
   section: ["section", "/ˈsek.ʃən/", "khu vực, gian hàng", "n"],
-  locker: ["parcel locker", "/ˈpɑː.səl ˈlɒk.ər/", "tủ gửi đồ", "n"],
+  locker: ["parcel locker", "/ˈpɑː.səl ˈlɑk.ər/", "tủ gửi đồ", "n"],
   wristband: ["key wristband", "/kiː ˈrɪst.bænd/", "vòng đeo chìa khóa tủ", "n"],
   umbrella: ["umbrella", "/ʌmˈbrel.ə/", "chiếc ô / dù", "n"],
   sleeve: ["plastic sleeve", "/ˈplæs.tɪk sliːv/", "túi bọc ô ướt", "n"],
@@ -44,16 +44,16 @@ Object.assign(MKV, {
   greeter: ["welcome greeter", "/ˈwel.kəm ˈɡriː.tər/", "nhân viên đón khách", "n"],
   childseat: ["child seat", "/tʃaɪld siːt/", "ghế ngồi trẻ em", "n"],
   kiddie: ["kiddie cart", "/ˈkɪd.i kɑːt/", "xe đẩy trẻ em hình ô tô", "n"],
-  totebag: ["canvas tote bag", "/ˈkæn.vəs təʊt bæɡ/", "túi vải bố", "n"],
+  totebag: ["canvas tote bag", "/ˈkæn.vəs toʊt bæɡ/", "túi vải bố", "n"],
   sturdy: ["sturdy", "/ˈstɜː.di/", "chắc chắn, bền", "adj"],
-  banner: ["special offer", "/ˈspeʃ.əl ˈɒf.ər/", "ưu đãi đặc biệt", "n"],
+  banner: ["special offer", "/ˈspeʃ.əl ˈɑf.ər/", "ưu đãi đặc biệt", "n"],
   pastry: ["pastries", "/ˈpeɪ.striz/", "bánh ngọt nướng", "n"],
   atm: ["ATM", "/ˌeɪ.tiːˈem/", "cây rút tiền tự động", "n"],
   withdraw: ["withdraw", "/wɪðˈdrɔː/", "rút tiền", "v"],
   cooler: ["water cooler", "/ˈwɔː.tər ˈkuː.lər/", "bình nước uống", "n"],
   recycle: ["recycling bin", "/riːˈsaɪ.klɪŋ bɪn/", "thùng tái chế", "n"],
   bench: ["waiting bench", "/ˈweɪ.tɪŋ bentʃ/", "ghế chờ nghỉ chân", "n"],
-  list: ["shopping list", "/ˈʃɒp.ɪŋ lɪst/", "danh sách đồ cần mua", "n"],
+  list: ["shopping list", "/ˈʃɑp.ɪŋ lɪst/", "danh sách đồ cần mua", "n"],
   /* Produce & Bakery */
   lemon: ["lemons", "/ˈlem.ənz/", "quả chanh vàng", "n"],
   tangerine: ["tangerines", "/ˌtæn.dʒəˈriːnz/", "quả quýt", "n"],
@@ -63,8 +63,8 @@ Object.assign(MKV, {
   mist: ["cool mist", "/kuːl mɪst/", "làn sương mát", "n"],
   spinach: ["spinach", "/ˈspɪn.ɪtʃ/", "rau chân vịt (cải bó xôi)", "n"],
   crisp: ["crisp", "/krɪsp/", "tươi giòn", "adj"],
-  romaine: ["romaine lettuce", "/rəʊˈmeɪn ˈlet.ɪs/", "xà lách romaine", "n"],
-  potato: ["potatoes", "/pəˈteɪ.təʊz/", "khoai tây", "n"],
+  romaine: ["romaine lettuce", "/roʊˈmeɪn ˈlet.ɪs/", "xà lách romaine", "n"],
+  potato: ["potatoes", "/pəˈteɪ.toʊz/", "khoai tây", "n"],
   onion: ["red onions", "/red ˈʌn.jənz/", "hành tím", "n"],
   pesticide: ["pesticides", "/ˈpes.tɪ.saɪdz/", "thuốc trừ sâu", "n"],
   pineapple: ["pineapple", "/ˈpaɪnˌæp.əl/", "quả dứa (thơm)", "n"],
@@ -72,19 +72,19 @@ Object.assign(MKV, {
   watermelon: ["watermelon", "/ˈwɔː.təˌmel.ən/", "dưa hấu", "n"],
   fruitcup: ["mixed fruit cup", "/mɪkst fruːt kʌp/", "cốc trái cây cắt sẵn", "n"],
   basil: ["fresh basil", "/freʃ ˈbæz.əl/", "rau húng quế tươi", "n"],
-  cilantro: ["cilantro", "/sɪˈlæn.trəʊ/", "rau mùi (ngò rí)", "n"],
+  cilantro: ["cilantro", "/sɪˈlæn.troʊ/", "rau mùi (ngò rí)", "n"],
   mushroom: ["mushrooms", "/ˈmʌʃ.ruːmz/", "nấm tươi", "n"],
-  rollbag: ["produce bag", "/ˈprɒd.juːs bæɡ/", "túi nilon đựng rau quả", "n"],
-  croissant: ["butter croissant", "/ˈbʌt.ər ˈkwæs.ɒ̃/", "bánh sừng bò bơ", "n"],
+  rollbag: ["produce bag", "/ˈprɑd.juːs bæɡ/", "túi nilon đựng rau quả", "n"],
+  croissant: ["butter croissant", "/ˈbʌt.ər ˈkwæs.ɑ̃/", "bánh sừng bò bơ", "n"],
   flaky: ["flaky", "/ˈfleɪ.ki/", "giòn xốp ngàn lớp", "adj"],
-  cinnamon: ["cinnamon roll", "/ˈsɪn.ə.mən rəʊl/", "bánh cuộn quế", "n"],
-  icing: ["chocolate icing", "/ˈtʃɒk.lət ˈaɪ.sɪŋ/", "kem phủ sô-cô-la", "n"],
-  sourdough: ["sourdough loaf", "/ˈsaʊə.dəʊ ləʊf/", "ổ bánh mì men tự nhiên", "n"],
+  cinnamon: ["cinnamon roll", "/ˈsɪn.ə.mən roʊl/", "bánh cuộn quế", "n"],
+  icing: ["chocolate icing", "/ˈtʃɑk.lət ˈaɪ.sɪŋ/", "kem phủ sô-cô-la", "n"],
+  sourdough: ["sourdough loaf", "/ˈsaʊr.doʊ loʊf/", "ổ bánh mì men tự nhiên", "n"],
   slicer: ["bread slicer", "/bred ˈslaɪ.sər/", "máy cắt lát bánh mì", "n"],
   batch: ["fresh batch", "/freʃ bætʃ/", "mẻ bánh mới ra lò", "n"],
   oven: ["bakery oven", "/ˈbeɪ.kər.i ˈʌv.ən/", "lò nướng bánh", "n"],
   muffin: ["blueberry muffin", "/ˈbluː.bər.i ˈmʌf.ɪn/", "bánh muffin việt quất", "n"],
-  tongs: ["metal tongs", "/ˈmet.əl tɒŋz/", "kẹp gắp bánh", "n"],
+  tongs: ["metal tongs", "/ˈmet.əl tɑŋz/", "kẹp gắp bánh", "n"],
   bagel: ["sesame bagel", "/ˈses.ə.mi ˈbeɪ.ɡəl/", "bánh mì vòng rắc mè", "n"],
   jam: ["strawberry jam", "/ˈstrɔː.bər.i dʒæm/", "mứt dâu tây", "n"],
   honey: ["wildflower honey", "/ˈwaɪld.flaʊ.ər ˈhʌn.i/", "mật ong hoa rừng", "n"],
@@ -92,22 +92,22 @@ Object.assign(MKV, {
   /* Dairy, Frozen & Drinks (Zone 3) */
   freezer: ["freezer", "/ˈfriː.zər/", "tủ đông", "n"],
   butter: ["unsalted butter", "/ʌnˈsɔːl.tɪd ˈbʌt.ər/", "bơ lạt (không muối)", "n"],
-  mozzarella: ["mozzarella cheese", "/ˌmɒt.səˈrel.ə tʃiːz/", "phô mai mozzarella kéo sợi", "n"],
-  oatmilk: ["oat milk", "/əʊt mɪlk/", "sữa yến mạch", "n"],
+  mozzarella: ["mozzarella cheese", "/ˌmɑt.səˈrel.ə tʃiːz/", "phô mai mozzarella kéo sợi", "n"],
+  oatmilk: ["oat milk", "/oʊt mɪlk/", "sữa yến mạch", "n"],
   carton: ["carton", "/ˈkɑː.tən/", "hộp giấy đựng sữa/nước", "n"],
   tub: ["tub of ice cream", "/tʌb əv ˌaɪs ˈkriːm/", "hộp kem lớn", "n"],
-  frozenpizza: ["frozen pizza", "/ˈfrəʊ.zən ˈpiːt.sə/", "bánh pizza đông lạnh", "n"],
+  frozenpizza: ["frozen pizza", "/ˈfroʊ.zən ˈpiːt.sə/", "bánh pizza đông lạnh", "n"],
   fries: ["French fries", "/frentʃ fraɪz/", "khoai tây chiên cọng", "n"],
-  sweetcorn: ["frozen sweet corn", "/ˈfrəʊ.zən swiːt kɔːn/", "bắp ngọt đông lạnh", "n"],
-  sparkling: ["sparkling soda", "/ˈspɑː.klɪŋ ˈsəʊ.də/", "nước ngọt có ga", "n"],
-  zerosugar: ["zero-sugar", "/ˈzɪə.rəʊ ˈʃʊɡ.ər/", "không đường (0 calo)", "adj"],
+  sweetcorn: ["frozen sweet corn", "/ˈfroʊ.zən swiːt kɔːn/", "bắp ngọt đông lạnh", "n"],
+  sparkling: ["sparkling soda", "/ˈspɑː.klɪŋ ˈsoʊ.də/", "nước ngọt có ga", "n"],
+  zerosugar: ["zero-sugar", "/ˈzɪr.roʊ ˈʃʊɡ.ər/", "không đường (0 calo)", "adj"],
   mineralwater: ["mineral water", "/ˈmɪn.ər.əl ˈwɔː.tər/", "nước khoáng thiên nhiên", "n"],
-  coldpressed: ["cold-pressed juice", "/kəʊld prest dʒuːs/", "nước ép lạnh nguyên chất", "n"],
-  icedlatte: ["bottled iced latte", "/ˈbɒt.əld aɪst ˈlæt.eɪ/", "cà phê sữa đá đóng chai", "n"],
+  coldpressed: ["cold-pressed juice", "/koʊld prest dʒuːs/", "nước ép lạnh nguyên chất", "n"],
+  icedlatte: ["bottled iced latte", "/ˈbɑt.əld aɪst ˈlæt.eɪ/", "cà phê sữa đá đóng chai", "n"],
   peachtea: ["peach iced tea", "/piːtʃ aɪst tiː/", "trà đào ướp lạnh", "n"],
-  lactosefree: ["lactose-free", "/ˈlæk.təʊs friː/", "không chứa đường lactose", "adj"],
+  lactosefree: ["lactose-free", "/ˈlæk.toʊs friː/", "không chứa đường lactose", "adj"],
   chilled: ["chilled", "/tʃɪld/", "ướp lạnh, mát lạnh", "adj"],
-  probiotic: ["probiotic drink", "/ˌprəʊ.baɪˈɒt.ɪk drɪŋk/", "sữa chua uống men sống", "n"],
+  probiotic: ["probiotic drink", "/ˌproʊ.baɪˈɑt.ɪk drɪŋk/", "sữa chua uống men sống", "n"],
   icecubes: ["ice cubes", "/aɪs kjuːbz/", "đá viên tinh khiết", "n"],
   pudding: ["caramel pudding", "/ˈkær.ə.mel ˈpʊd.ɪŋ/", "bánh pudding caramel", "n"],
   /* Meat, Fish & Household (Zone 4) */
@@ -120,18 +120,18 @@ Object.assign(MKV, {
   marinated: ["marinated beef", "/ˈmær.ɪ.neɪ.tɪd biːf/", "thịt bò tẩm ướp sẵn", "n"],
   noodles: ["egg noodles", "/eɡ ˈnuː.dəlz/", "mì trứng sợi vàng", "n"],
   spaghetti: ["spaghetti", "/spəˈɡet.i/", "mì Ý sợi dài", "n"],
-  oliveoil: ["olive oil", "/ˈɒl.ɪv ɔɪl/", "dầu ô-liu nguyên chất", "n"],
+  oliveoil: ["olive oil", "/ˈɑl.ɪv ɔɪl/", "dầu ô-liu nguyên chất", "n"],
   sunfloweroil: ["cooking oil", "/ˈkʊk.ɪŋ ɔɪl/", "dầu ăn", "n"],
   pepper: ["black pepper", "/blæk ˈpep.ər/", "hạt tiêu đen xay", "n"],
   seasoning: ["garlic seasoning", "/ˈɡɑː.lɪk ˈsiː.zən.ɪŋ/", "gia vị bột tỏi thảo mộc", "n"],
-  cereal: ["breakfast cereal", "/ˈbrek.fəst ˈsɪə.ri.əl/", "ngũ cốc ăn sáng", "n"],
-  handsoap: ["hand soap", "/hænd səʊp/", "xà phòng rửa tay", "n"],
+  cereal: ["breakfast cereal", "/ˈbrek.fəst ˈsɪr.ri.əl/", "ngũ cốc ăn sáng", "n"],
+  handsoap: ["hand soap", "/hænd soʊp/", "xà phòng rửa tay", "n"],
   scrubbrush: ["scrub brush", "/skrʌb brʌʃ/", "bàn chải cọ rửa", "n"],
   papertowel: ["paper towels", "/ˈpeɪ.pər ˈtaʊ.əlz/", "khăn giấy cuộn nhà bếp", "n"],
   toothbrush: ["toothbrush", "/ˈtuːθ.brʌʃ/", "bàn chải đánh răng", "n"],
   trashbags: ["trash bags", "/træʃ bæɡz/", "túi đựng rác", "n"],
-  softener: ["fabric softener", "/ˈfæb.rɪk ˈsɒf.ən.ər/", "nước xả vải", "n"],
-  bodywash: ["body wash", "/ˈbɒd.i wɒʃ/", "sữa tắm dưỡng ẩm", "n"],
+  softener: ["fabric softener", "/ˈfæb.rɪk ˈsɑf.ən.ər/", "nước xả vải", "n"],
+  bodywash: ["body wash", "/ˈbɑd.i wɑʃ/", "sữa tắm dưỡng ẩm", "n"],
 
   /* Zone 5: Checkout & Customer Service (Quầy thu ngân & dịch vụ) */
   applepay: ["Apple Pay", "/ˈæp.əl peɪ/", "thanh toán qua Apple Pay", "n"],
@@ -140,20 +140,20 @@ Object.assign(MKV, {
   divider: ["checkout divider", "/ˈtʃek.aʊt dɪˈvaɪ.dər/", "thanh ngăn phân cách trên băng chuyền", "n"],
   belt: ["conveyor belt", "/kənˈveɪ.ər belt/", "băng chuyền thu ngân", "n"],
   display: ["price display", "/praɪs dɪˈspleɪ/", "màn hình hiển thị giá POS", "n"],
-  qr: ["QR code", "/ˌkjuː ˈɑːr kəʊd/", "mã QR thanh toán", "n"],
+  qr: ["QR code", "/ˌkjuː ˈɑːr koʊd/", "mã QR thanh toán", "n"],
   printer: ["receipt printer", "/rɪˈsiːt ˈprɪn.tər/", "máy in hóa đơn nhiệt", "n"],
   gum: ["chewing gum", "/ˈtʃuː.ɪŋ ɡʌm/", "kẹo cao su bạc hà", "n"],
   mint: ["breath mints", "/breθ mɪnts/", "kẹo ngậm thơm miệng", "n"],
   magazine: ["cooking magazine", "/ˈkʊk.ɪŋ ˌmæɡ.əˈziːn/", "tạp chí ẩm thực", "n"],
   battery: ["AA batteries", "/ˌdʌb.əl ˈeɪ ˈbæt.ər.iz/", "vỉ pin tiểu AA", "n"],
-  policy: ["return policy", "/rɪˈtɜːn ˈpɒl.ə.si/", "chính sách đổi trả hàng", "n"],
-  lost: ["lost and found", "/lɒst ənd faʊnd/", "quầy đồ thất lạc", "n"],
+  policy: ["return policy", "/rɪˈtɜːn ˈpɑl.ə.si/", "chính sách đổi trả hàng", "n"],
+  lost: ["lost and found", "/lɑst ənd faʊnd/", "quầy đồ thất lạc", "n"],
   giftwrap: ["gift wrap", "/ɡɪft ræp/", "giấy gói quà tặng", "n"],
   ribbon: ["satin ribbon", "/ˈsæt.ɪn ˈrɪb.ən/", "dây ruy-băng lụa", "n"],
-  timeslot: ["delivery slot", "/dɪˈlɪv.ər.i slɒt/", "khung giờ giao hàng", "n"],
+  timeslot: ["delivery slot", "/dɪˈlɪv.ər.i slɑt/", "khung giờ giao hàng", "n"],
   packtable: ["packing table", "/ˈpæk.ɪŋ ˈteɪ.bəl/", "bàn đóng gói đồ mua sắm", "n"],
   cartbay: ["cart return bay", "/kɑːt rɪˈtɜːn beɪ/", "khu trả xe đẩy & giỏ hàng", "n"],
-  guard: ["security guard", "/sɪˈkjʊə.rə.ti ɡɑːd/", "nhân viên bảo vệ", "n"],
+  guard: ["security guard", "/sɪˈkjʊr.rə.ti ɡɑːd/", "nhân viên bảo vệ", "n"],
   exitdoor: ["sliding exit door", "/ˈslaɪ.dɪŋ ˈek.sɪt dɔːr/", "cửa trượt lối ra", "n"],
   paperbag: ["paper bag", "/ˈpeɪ.pər bæɡ/", "túi giấy tái chế", "n"]
 });
@@ -575,15 +575,15 @@ const entranceObjects = {
   welcomemat: { en: "welcome mat", vi: "thảm chào mừng", ipa: "/ˈwel.kəm mæt/", acts: ["wipe_shoes_on_mat"] },
   sanitizestand: { en: "sanitizer station", vi: "trạm rửa tay & khăn khử trùng", ipa: "/ˈsæn.ɪ.taɪ.zər ˈsteɪ.ʃən/", acts: ["sanitize_hands_at_door", "take_disinfectant_wipe"] },
   flyerrack: { en: "weekly flyer rack", vi: "kệ tờ rơi khuyến mãi", ipa: "/ˈflaɪ.ər ræk/", acts: ["pick_up_store_flyer", "check_weekend_specials"] },
-  couponboard: { en: "coupon kiosk", vi: "cây in phiếu giảm giá", ipa: "/ˈkuː.pɒn ˈkiː.ɒsk/", acts: ["print_member_coupons", "clip_two_dollar_voucher"] },
+  couponboard: { en: "coupon kiosk", vi: "cây in phiếu giảm giá", ipa: "/ˈkuː.pɑn ˈkiː.ɑsk/", acts: ["print_member_coupons", "clip_two_dollar_voucher"] },
   storemap: { en: "store directory map", vi: "sơ đồ các khu siêu thị", ipa: "/stɔːr dəˈrek.tər.i/", acts: ["check_store_directory", "find_bakery_on_map"] },
-  lockerbox: { en: "parcel lockers", vi: "tủ gửi đồ cá nhân", ipa: "/ˈpɑː.səl ˈlɒk.əz/", acts: ["store_backpack_in_locker", "take_locker_token"] },
+  lockerbox: { en: "parcel lockers", vi: "tủ gửi đồ cá nhân", ipa: "/ˈpɑː.səl ˈlɑk.əz/", acts: ["store_backpack_in_locker", "take_locker_token"] },
   umbrellastand: { en: "umbrella stand", vi: "kệ bọc và để ô dù", ipa: "/ʌmˈbrel.ə stænd/", acts: ["wrap_wet_umbrella"] },
   flowerbucket: { en: "fresh flower stand", vi: "quầy hoa tươi lối vào", ipa: "/ˈflaʊ.ər stænd/", acts: ["smell_fresh_tulips", "pick_sunflower_bouquet"] },
   greeterdesk: { en: "welcome greeter", vi: "nhân viên đón khách", ipa: "/ˈɡriː.tər desk/", acts: ["greet_welcome_staff", "ask_greeter_for_wheelchair"] },
   kiddiecart: { en: "mini kid cart", vi: "xe đẩy mini hình ô tô", ipa: "/ˈkɪd.i kɑːt/", acts: ["check_kiddie_car_cart"] },
   ecobagrack: { en: "reusable bag stand", vi: "kệ túi vải sinh thái", ipa: "/riːˈjuː.zə.bəl bæɡ stænd/", acts: ["pick_canvas_tote_bag"] },
-  specialarch: { en: "special offer banner", vi: "cổng chào khuyến mãi", ipa: "/ˈspeʃ.əl ˈɒf.ər/", acts: ["read_special_offer_arch"] },
+  specialarch: { en: "special offer banner", vi: "cổng chào khuyến mãi", ipa: "/ˈspeʃ.əl ˈɑf.ər/", acts: ["read_special_offer_arch"] },
   atmmachine: { en: "ATM machine", vi: "cây rút tiền ATM", ipa: "/ˌeɪ.tiːˈem məˈʃiːn/", acts: ["withdraw_cash_at_atm"] },
   watercooler: { en: "water station", vi: "bình nước uống miễn phí", ipa: "/ˈwɔː.tər ˈsteɪ.ʃən/", acts: ["drink_water_at_cooler"] },
   returnbin: { en: "recycling bin", vi: "thùng thu hồi vỏ chai", ipa: "/riːˈsaɪ.klɪŋ bɪn/", acts: ["drop_plastic_bottles_in_bin"] },
@@ -901,15 +901,15 @@ const market_entrance = {
     ["welcome mat", "/ˈwel.kəm mæt/", "thảm chào mừng", "equipment"],
     ["hand sanitizer", "/ˈhænd ˌsæn.ɪ.taɪ.zər/", "nước rửa tay khô", "other"],
     ["weekly flyer", "/ˈwiːk.li ˈflaɪ.ər/", "tờ rơi khuyến mãi tuần", "other"],
-    ["coupon kiosk", "/ˈkuː.pɒn ˈkiː.ɒsk/", "cây in phiếu giảm giá", "equipment"],
+    ["coupon kiosk", "/ˈkuː.pɑn ˈkiː.ɑsk/", "cây in phiếu giảm giá", "equipment"],
     ["store directory", "/stɔːr dəˈrek.tər.i/", "bảng sơ đồ siêu thị", "place"],
-    ["parcel locker", "/ˈpɑː.səl ˈlɒk.ər/", "tủ gửi đồ cá nhân", "equipment"],
+    ["parcel locker", "/ˈpɑː.səl ˈlɑk.ər/", "tủ gửi đồ cá nhân", "equipment"],
     ["umbrella stand", "/ʌmˈbrel.ə stænd/", "kệ để ô dù", "equipment"],
     ["bouquet", "/buˈkeɪ/", "bó hoa tươi", "other"],
     ["welcome greeter", "/ˈwel.kəm ˈɡriː.tər/", "nhân viên đón khách", "people"],
     ["kiddie cart", "/ˈkɪd.i kɑːt/", "xe đẩy trẻ em hình ô tô", "equipment"],
-    ["canvas tote bag", "/ˈkæn.vəs təʊt bæɡ/", "túi vải bố", "other"],
-    ["special offer", "/ˈspeʃ.əl ˈɒf.ər/", "ưu đãi đặc biệt", "money"]
+    ["canvas tote bag", "/ˈkæn.vəs toʊt bæɡ/", "túi vải bố", "other"],
+    ["special offer", "/ˈspeʃ.əl ˈɑf.ər/", "ưu đãi đặc biệt", "money"]
   ])
 };
 
@@ -1270,19 +1270,19 @@ const produceObjects = {
   leafygreens: { en: "leafy greens rack", vi: "kệ rau xanh phun sương", ipa: "/ˈliː.fi ɡriːnz/", acts: ["feel_cool_vegetable_mist", "pick_crispy_romaine"] },
   rootvegbin: { en: "root vegetable crate", vi: "thùng khoai tây, hành & cà rốt", ipa: "/ruːt ˈvedʒ.tə.bəlz/", acts: ["select_baking_potatoes", "bag_red_onions"] },
   organicstand: { en: "organic farm stand", vi: "quầy nông sản hữu cơ", ipa: "/ɔːˈɡæn.ɪk stænd/", acts: ["compare_organic_apples", "pick_organic_baby_spinach"] },
-  tropicaltable: { en: "tropical fruit island", vi: "bàn trái cây nhiệt đới", ipa: "/ˈtrɒp.ɪ.kəl fruːt/", acts: ["smell_ripe_pineapple", "pick_dragon_fruit"] },
+  tropicaltable: { en: "tropical fruit island", vi: "bàn trái cây nhiệt đới", ipa: "/ˈtrɑp.ɪ.kəl fruːt/", acts: ["smell_ripe_pineapple", "pick_dragon_fruit"] },
   cutfruitbar: { en: "fresh cut fruit bar", vi: "tủ trái cây cắt sẵn", ipa: "/kʌt fruːt bɑːr/", acts: ["grab_watermelon_slices", "pick_mixed_fruit_cup"] },
   herbpotstand: { en: "fresh herbs rack", vi: "kệ rau thơm trồng chậu", ipa: "/freʃ hɜːbz/", acts: ["smell_fresh_basil_pot", "grab_bunch_of_cilantro"] },
   mushroombox: { en: "mushroom & tomato bin", vi: "khay nấm tươi & cà chua", ipa: "/ˈmʌʃ.ruːm bɪn/", acts: ["pick_white_mushrooms"] },
-  producebag: { en: "produce bag roll", vi: "cuộn túi đựng rau quả", ipa: "/ˈprɒd.juːs bæɡ/", acts: ["pull_produce_plastic_bag"] },
+  producebag: { en: "produce bag roll", vi: "cuộn túi đựng rau quả", ipa: "/ˈprɑd.juːs bæɡ/", acts: ["pull_produce_plastic_bag"] },
   mkpastrycase: { en: "croissant & pastry case", vi: "tủ kính bánh sừng bò & bánh ngọt", ipa: "/ˈpeɪ.stri keɪs/", acts: ["pick_butter_croissants", "choose_cinnamon_roll"] },
   cakecounter: { en: "birthday cake counter", vi: "quầy bánh kem sinh nhật", ipa: "/keɪk ˈkaʊn.tər/", acts: ["ask_custom_cake_message"] },
   breadslicer: { en: "bread slicer", vi: "máy cắt lát bánh mì", ipa: "/bred ˈslaɪ.sər/", acts: ["slice_sourdough_loaf"] },
   bakeryoven: { en: "bakery oven & baker", vi: "lò nướng bánh & thợ làm bánh", ipa: "/ˈbeɪ.kər.i ˈʌv.ən/", acts: ["ask_baker_next_batch"] },
-  donuttray: { en: "donut & muffin tray", vi: "khay bánh vòng & muffin", ipa: "/ˈdəʊ.nʌt treɪ/", acts: ["pick_blueberry_muffins"] },
-  bageltongs: { en: "tongs & bakery bags", vi: "kẹp gắp & túi giấy đựng bánh", ipa: "/tɒŋz/", acts: ["use_tongs_for_bagels"] },
+  donuttray: { en: "donut & muffin tray", vi: "khay bánh vòng & muffin", ipa: "/ˈdoʊ.nʌt treɪ/", acts: ["pick_blueberry_muffins"] },
+  bageltongs: { en: "tongs & bakery bags", vi: "kẹp gắp & túi giấy đựng bánh", ipa: "/tɑŋz/", acts: ["use_tongs_for_bagels"] },
   jamhoneyrack: { en: "jam & honey shelf", vi: "kệ mứt trái cây & mật ong", ipa: "/dʒæm ən ˈhʌn.i/", acts: ["pick_strawberry_jam_jar"] },
-  produceclerk: { en: "produce specialist", vi: "nhân viên quầy rau quả", ipa: "/ˈprɒd.juːs ˈspeʃ.əl.ɪst/", acts: ["ask_clerk_for_sweet_watermelon"] }
+  produceclerk: { en: "produce specialist", vi: "nhân viên quầy rau quả", ipa: "/ˈprɑd.juːs ˈspeʃ.əl.ɪst/", acts: ["ask_clerk_for_sweet_watermelon"] }
 };
 
 const produceNewActions = [
@@ -1601,7 +1601,7 @@ const market_produce = {
     chunks: ["I'm heading", "to the produce section."],
     grammar: "<b>head to the … section</b> = đi sang khu … trong siêu thị.",
     patterns: ["I'm heading to <b>the bakery section</b>.", "I'm heading to <b>the dairy aisle</b>."],
-    vocab: [["head to", "/hed tuː/", "đi sang"], ["produce section", "/ˈprɒd.juːs ˌsek.ʃən/", "khu rau củ quả"]],
+    vocab: [["head to", "/hed tuː/", "đi sang"], ["produce section", "/ˈprɑd.juːs ˌsek.ʃən/", "khu rau củ quả"]],
     story: ["head to the produce section", "walk over to the produce section", "đi sang khu rau quả & tiệm bánh"]
   },
   shellSvg: produceShell,
@@ -1644,17 +1644,17 @@ const market_produce = {
     ["blueberries", "/ˈbluːˌber.iz/", "quả việt quất", "food"],
     ["cherries", "/ˈtʃer.iz/", "quả anh đào", "food"],
     ["spinach", "/ˈspɪn.ɪtʃ/", "rau chân vịt", "food"],
-    ["romaine lettuce", "/rəʊˈmeɪn ˈlet.ɪs/", "xà lách romaine", "food"],
-    ["potatoes", "/pəˈteɪ.təʊz/", "khoai tây", "food"],
+    ["romaine lettuce", "/roʊˈmeɪn ˈlet.ɪs/", "xà lách romaine", "food"],
+    ["potatoes", "/pəˈteɪ.toʊz/", "khoai tây", "food"],
     ["red onions", "/red ˈʌn.jənz/", "hành tím", "food"],
     ["pineapple", "/ˈpaɪnˌæp.əl/", "quả dứa", "food"],
     ["dragon fruit", "/ˈdræɡ.ən fruːt/", "quả thanh long", "food"],
     ["watermelon", "/ˈwɔː.təˌmel.ən/", "dưa hấu", "food"],
     ["fresh basil", "/freʃ ˈbæz.əl/", "rau húng quế tươi", "food"],
     ["mushrooms", "/ˈmʌʃ.ruːmz/", "nấm tươi", "food"],
-    ["butter croissant", "/ˈbʌt.ər ˈkwæs.ɒ̃/", "bánh sừng bò bơ", "food"],
-    ["cinnamon roll", "/ˈsɪn.ə.mən rəʊl/", "bánh cuộn quế", "food"],
-    ["sourdough loaf", "/ˈsaʊə.dəʊ ləʊf/", "ổ bánh mì men tự nhiên", "food"],
+    ["butter croissant", "/ˈbʌt.ər ˈkwæs.ɑ̃/", "bánh sừng bò bơ", "food"],
+    ["cinnamon roll", "/ˈsɪn.ə.mən roʊl/", "bánh cuộn quế", "food"],
+    ["sourdough loaf", "/ˈsaʊr.doʊ loʊf/", "ổ bánh mì men tự nhiên", "food"],
     ["blueberry muffin", "/ˈbluː.bər.i ˈmʌf.ɪn/", "bánh muffin việt quất", "food"],
     ["sesame bagel", "/ˈses.ə.mi ˈbeɪ.ɡəl/", "bánh mì vòng rắc mè", "food"],
     ["strawberry jam", "/ˈstrɔː.bər.i dʒæm/", "mứt dâu tây", "food"],
@@ -2080,7 +2080,7 @@ const dairyObjects = Object.assign(
   Object.fromEntries(Object.entries(S.allObjects).filter(([k]) => S.DAIRY_OBJS.has(k))),
   {
     yogurtcooler: {
-      en: "yogurt & butter cooler", vi: "tủ mát sữa chua & bơ", ipa: "/ˈjɒɡ.ət ən ˈbʌt.ər ˈkuː.lər/",
+      en: "yogurt & butter cooler", vi: "tủ mát sữa chua & bơ", ipa: "/ˈjɑɡ.ət ən ˈbʌt.ər ˈkuː.lər/",
       acts: ["pick_strawberry_yogurt_pack", "grab_unsalted_butter"]
     },
     cheesecase: {
@@ -2088,7 +2088,7 @@ const dairyObjects = Object.assign(
       acts: ["pick_a_block_of_cheese", "choose_sliced_mozzarella"]
     },
     plantmilkfridge: {
-      en: "oat & soy milk fridge", vi: "tủ sữa hạt & sữa yến mạch", ipa: "/əʊt ən sɔɪ mɪlk frɪdʒ/",
+      en: "oat & soy milk fridge", vi: "tủ sữa hạt & sữa yến mạch", ipa: "/oʊt ən sɔɪ mɪlk frɪdʒ/",
       acts: ["open_the_fridge_door", "take_a_carton_of_milk"]
     },
     icecreamfreezer: {
@@ -2096,15 +2096,15 @@ const dairyObjects = Object.assign(
       acts: ["open_the_freezer_door", "pick_a_tub_of_ice_cream"]
     },
     frozenpizzacase: {
-      en: "frozen pizza & fries freezer", vi: "tủ đông pizza & khoai tây", ipa: "/ˈfrəʊ.zən ˈpiːt.sə ˈfriː.zər/",
+      en: "frozen pizza & fries freezer", vi: "tủ đông pizza & khoai tây", ipa: "/ˈfroʊ.zən ˈpiːt.sə ˈfriː.zər/",
       acts: ["grab_frozen_cheese_pizza", "pick_crispy_french_fries"]
     },
     frozenvegcase: {
-      en: "frozen vegetables case", vi: "tủ rau củ đông lạnh", ipa: "/ˈfrəʊ.zən ˈvedʒ.tə.bəlz keɪs/",
+      en: "frozen vegetables case", vi: "tủ rau củ đông lạnh", ipa: "/ˈfroʊ.zən ˈvedʒ.tə.bəlz keɪs/",
       acts: ["pick_frozen_sweet_corn"]
     },
     sodarack: {
-      en: "sparkling soda shelf", vi: "quầy nước ngọt có ga", ipa: "/ˈspɑː.klɪŋ ˈsəʊ.də ʃelf/",
+      en: "sparkling soda shelf", vi: "quầy nước ngọt có ga", ipa: "/ˈspɑː.klɪŋ ˈsoʊ.də ʃelf/",
       acts: ["grab_sparkling_lemon_soda", "check_zero_sugar_cola"]
     },
     mineralwaterstack: {
@@ -2116,15 +2116,15 @@ const dairyObjects = Object.assign(
       acts: ["grab_orange_juice", "pick_cold_pressed_apple_juice"]
     },
     icedcoffeecase: {
-      en: "bottled coffee & tea cooler", vi: "tủ cà phê & trà đóng chai", ipa: "/ˈbɒt.əld ˈkɒf.i ˈkuː.lər/",
+      en: "bottled coffee & tea cooler", vi: "tủ cà phê & trà đóng chai", ipa: "/ˈbɑt.əld ˈkɑf.i ˈkuː.lər/",
       acts: ["grab_chilled_iced_latte", "pick_peach_iced_tea"]
     },
     dairysalesign: {
-      en: "dairy & drinks sale banner", vi: "biển giảm giá sữa & đồ uống", ipa: "/ˈdeə.ri seɪl ˈbæn.ər/",
+      en: "dairy & drinks sale banner", vi: "biển giảm giá sữa & đồ uống", ipa: "/ˈder.ri seɪl ˈbæn.ər/",
       acts: ["read_dairy_sale_sign", "check_buy_two_yogurt_deal"]
     },
     dairyclerk: {
-      en: "dairy & drinks clerk", vi: "nhân viên quầy sữa & đồ uống", ipa: "/ˈdeə.ri ən drɪŋks klɑːk/",
+      en: "dairy & drinks clerk", vi: "nhân viên quầy sữa & đồ uống", ipa: "/ˈder.ri ən drɪŋks klɑːk/",
       acts: ["ask_dairy_clerk_lactose_free"]
     },
     thermometerpanel: {
@@ -2136,7 +2136,7 @@ const dairyObjects = Object.assign(
       acts: ["take_insulated_freezer_bag"]
     },
     probioticstand: {
-      en: "probiotic yogurt drink stand", vi: "kệ sữa chua uống men sống", ipa: "/ˌprəʊ.baɪˈɒt.ɪk drɪŋk stænd/",
+      en: "probiotic yogurt drink stand", vi: "kệ sữa chua uống men sống", ipa: "/ˌproʊ.baɪˈɑt.ɪk drɪŋk stænd/",
       acts: ["grab_probiotic_yogurt_drink"]
     },
     icecubefreezer: {
@@ -2456,7 +2456,7 @@ const market_dairy = {
     chunks: ["I'm heading to the dairy and frozen aisle", "for milk and cold drinks."],
     grammar: "<b>the dairy and frozen aisle</b> = dãy kệ tủ mát sữa và đồ đông lạnh.",
     patterns: ["I'm heading to <b>the dairy section</b>.", "I'm heading to <b>the drinks cooler</b>."],
-    vocab: [["dairy", "/ˈdeə.ri/", "sản phẩm từ sữa"], ["frozen", "/ˈfrəʊ.zən/", "đông lạnh"]],
+    vocab: [["dairy", "/ˈder.ri/", "sản phẩm từ sữa"], ["frozen", "/ˈfroʊ.zən/", "đông lạnh"]],
     story: ["head to the dairy and frozen section", "walk to the chilled dairy and drinks aisle", "đi sang khu sữa, đông lạnh & đồ uống"]
   },
   shellSvg: dairyShell,
@@ -2495,18 +2495,18 @@ const market_dairy = {
   css: S.marketCss,
   catalog: cat("mkd_", [
     ["unsalted butter", "/ʌnˈsɔːl.tɪd ˈbʌt.ər/", "bơ lạt", "food"],
-    ["mozzarella cheese", "/ˌmɒt.səˈrel.ə tʃiːz/", "phô mai mozzarella", "food"],
-    ["oat milk", "/əʊt mɪlk/", "sữa yến mạch", "drink"],
+    ["mozzarella cheese", "/ˌmɑt.səˈrel.ə tʃiːz/", "phô mai mozzarella", "food"],
+    ["oat milk", "/oʊt mɪlk/", "sữa yến mạch", "drink"],
     ["tub of ice cream", "/tʌb əv ˌaɪs ˈkriːm/", "hộp kem lớn", "food"],
-    ["frozen pizza", "/ˈfrəʊ.zən ˈpiːt.sə/", "pizza đông lạnh", "food"],
+    ["frozen pizza", "/ˈfroʊ.zən ˈpiːt.sə/", "pizza đông lạnh", "food"],
     ["French fries", "/frentʃ fraɪz/", "khoai tây chiên cọng", "food"],
-    ["frozen sweet corn", "/ˈfrəʊ.zən swiːt kɔːn/", "bắp ngọt đông lạnh", "food"],
-    ["sparkling soda", "/ˈspɑː.klɪŋ ˈsəʊ.də/", "nước ngọt có ga", "drink"],
+    ["frozen sweet corn", "/ˈfroʊ.zən swiːt kɔːn/", "bắp ngọt đông lạnh", "food"],
+    ["sparkling soda", "/ˈspɑː.klɪŋ ˈsoʊ.də/", "nước ngọt có ga", "drink"],
     ["mineral water", "/ˈmɪn.ər.əl ˈwɔː.tər/", "nước khoáng thiên nhiên", "drink"],
-    ["cold-pressed juice", "/kəʊld prest dʒuːs/", "nước ép lạnh", "drink"],
-    ["bottled iced latte", "/ˈbɒt.əld aɪst ˈlæt.eɪ/", "cà phê sữa đá đóng chai", "drink"],
+    ["cold-pressed juice", "/koʊld prest dʒuːs/", "nước ép lạnh", "drink"],
+    ["bottled iced latte", "/ˈbɑt.əld aɪst ˈlæt.eɪ/", "cà phê sữa đá đóng chai", "drink"],
     ["peach iced tea", "/piːtʃ aɪst tiː/", "trà đào ướp lạnh", "drink"],
-    ["probiotic drink", "/ˌprəʊ.baɪˈɒt.ɪk drɪŋk/", "sữa chua uống men sống", "drink"],
+    ["probiotic drink", "/ˌproʊ.baɪˈɑt.ɪk drɪŋk/", "sữa chua uống men sống", "drink"],
     ["ice cubes", "/aɪs kjuːbz/", "đá viên tinh khiết", "other"],
     ["caramel pudding", "/ˈkær.ə.mel ˈpʊd.ɪŋ/", "bánh pudding caramel", "food"]
   ])
@@ -2858,7 +2858,7 @@ const meatObjects = Object.assign(
   Object.fromEntries(Object.entries(S.allObjects).filter(([k]) => S.MEAT_OBJS.has(k))),
   {
     seafoodicecase: {
-      en: "fresh seafood on ice", vi: "quầy hải sản ướp đá", ipa: "/freʃ ˈsiː.fuːd ɒn aɪs/",
+      en: "fresh seafood on ice", vi: "quầy hải sản ướp đá", ipa: "/freʃ ˈsiː.fuːd ɑn aɪs/",
       acts: ["order_fresh_salmon", "order_fresh_tiger_shrimp"]
     },
     butcherscale: {
@@ -2890,11 +2890,11 @@ const meatObjects = Object.assign(
       acts: ["pick_ground_black_pepper", "grab_garlic_herb_seasoning"]
     },
     cannedfoodrack: {
-      en: "cereal & dry pantry shelf", vi: "kệ ngũ cốc & đồ khô", ipa: "/ˈsɪə.ri.əl ən ˈpæn.tri ʃelf/",
+      en: "cereal & dry pantry shelf", vi: "kệ ngũ cốc & đồ khô", ipa: "/ˈsɪr.ri.əl ən ˈpæn.tri ʃelf/",
       acts: ["grab_a_box_of_cereal"]
     },
     soapbrushrack: {
-      en: "soap & scrub brush shelf", vi: "kệ xà phòng & bàn chải cọ", ipa: "/səʊp ən skrʌb brʌʃ ʃelf/",
+      en: "soap & scrub brush shelf", vi: "kệ xà phòng & bàn chải cọ", ipa: "/soʊp ən skrʌb brʌʃ ʃelf/",
       acts: ["pick_antibacterial_hand_soap", "grab_stiff_scrub_brush"]
     },
     papertowelstack: {
@@ -2910,15 +2910,15 @@ const meatObjects = Object.assign(
       acts: ["grab_scented_trash_bags"]
     },
     fabricsoftenershelf: {
-      en: "laundry & softener shelf", vi: "kệ nước giặt & nước xả vải", ipa: "/ˈlɔːn.dri ən ˈsɒf.ən.ər ʃelf/",
+      en: "laundry & softener shelf", vi: "kệ nước giặt & nước xả vải", ipa: "/ˈlɔːn.dri ən ˈsɑf.ən.ər ʃelf/",
       acts: ["pick_laundry_detergent"]
     },
     bodywashrack: {
-      en: "body wash & lotion shelf", vi: "kệ sữa tắm & dưỡng thể", ipa: "/ˈbɒd.i wɒʃ ʃelf/",
+      en: "body wash & lotion shelf", vi: "kệ sữa tắm & dưỡng thể", ipa: "/ˈbɑd.i wɑʃ ʃelf/",
       acts: ["pick_moisturizing_body_wash"]
     },
     householdstaff: {
-      en: "household aisle staff", vi: "nhân viên kệ gia dụng", ipa: "/ˈhaʊs.həʊld aɪl stɑːf/",
+      en: "household aisle staff", vi: "nhân viên kệ gia dụng", ipa: "/ˈhaʊs.hoʊld aɪl stɑːf/",
       acts: ["ask_staff_for_eco_cleaner"]
     },
     meatsalesign: {
@@ -3212,7 +3212,7 @@ const market_meat = {
     chunks: ["I'm heading to the butcher counter", "and household aisles."],
     grammar: "<b>butcher counter</b> = quầy thịt tươi; <b>household aisles</b> = dãy kệ hàng gia dụng.",
     patterns: ["I'm heading to <b>the meat and fish counter</b>.", "I'm heading to <b>the household section</b>."],
-    vocab: [["butcher", "/ˈbʊtʃ.ər/", "quầy thịt / người bán thịt"], ["household", "/ˈhaʊs.həʊld/", "đồ gia dụng"]],
+    vocab: [["butcher", "/ˈbʊtʃ.ər/", "quầy thịt / người bán thịt"], ["household", "/ˈhaʊs.hoʊld/", "đồ gia dụng"]],
     story: ["head to the meat and household section", "walk to the butcher counter and household aisles", "đi sang khu thịt cá & gia dụng"]
   },
   shellSvg: meatShell,
@@ -3257,17 +3257,17 @@ const market_meat = {
     ["marinated beef", "/ˈmær.ɪ.neɪ.tɪd biːf/", "thịt bò tẩm ướp sẵn", "food"],
     ["egg noodles", "/eɡ ˈnuː.dəlz/", "mì trứng sợi vàng", "food"],
     ["spaghetti", "/spəˈɡet.i/", "mì Ý sợi dài", "food"],
-    ["olive oil", "/ˈɒl.ɪv ɔɪl/", "dầu ô-liu nguyên chất", "food"],
+    ["olive oil", "/ˈɑl.ɪv ɔɪl/", "dầu ô-liu nguyên chất", "food"],
     ["black pepper", "/blæk ˈpep.ər/", "hạt tiêu đen xay", "food"],
     ["garlic seasoning", "/ˈɡɑː.lɪk ˈsiː.zən.ɪŋ/", "gia vị bột tỏi thảo mộc", "food"],
-    ["breakfast cereal", "/ˈbrek.fəst ˈsɪə.ri.əl/", "ngũ cốc ăn sáng", "food"],
-    ["hand soap", "/hænd səʊp/", "xà phòng rửa tay", "other"],
+    ["breakfast cereal", "/ˈbrek.fəst ˈsɪr.ri.əl/", "ngũ cốc ăn sáng", "food"],
+    ["hand soap", "/hænd soʊp/", "xà phòng rửa tay", "other"],
     ["scrub brush", "/skrʌb brʌʃ/", "bàn chải cọ rửa", "equipment"],
     ["paper towels", "/ˈpeɪ.pər ˈtaʊ.əlz/", "khăn giấy cuộn nhà bếp", "other"],
     ["toothbrush", "/ˈtuːθ.brʌʃ/", "bàn chải đánh răng", "other"],
     ["trash bags", "/træʃ bæɡz/", "túi đựng rác", "other"],
-    ["fabric softener", "/ˈfæb.rɪk ˈsɒf.ən.ər/", "nước xả vải", "other"],
-    ["body wash", "/ˈbɒd.i wɒʃ/", "sữa tắm dưỡng ẩm", "other"]
+    ["fabric softener", "/ˈfæb.rɪk ˈsɑf.ən.ər/", "nước xả vải", "other"],
+    ["body wash", "/ˈbɑd.i wɑʃ/", "sữa tắm dưỡng ẩm", "other"]
   ])
 };
 
@@ -3777,17 +3777,17 @@ const checkoutObjects = {
   conveyorbelt: { en: "conveyor belt", vi: "băng chuyền", ipa: "/kənˈveɪ.ər belt/", acts: ["place_checkout_divider_bar", "load_groceries_onto_belt"] },
   candyrack: { en: "candy & gum rack", vi: "kệ kẹo và kẹo cao su", ipa: "/ˈkæn.di ənd ɡʌm ræk/", acts: ["grab_mint_chewing_gum", "pick_tin_of_breath_mints"] },
   magazineholder: { en: "magazine & battery rack", vi: "kệ tạp chí & pin tiểu", ipa: "/ˌmæɡ.əˈziːn ræk/", acts: ["browse_cooking_magazine", "grab_aa_batteries_pack"] },
-  returnboard: { en: "return policy board", vi: "bảng đổi trả hàng", ipa: "/rɪˈtɜːn ˈpɒl.ə.si bɔːd/", acts: ["read_return_policy_board", "return_wrong_size_item"] },
+  returnboard: { en: "return policy board", vi: "bảng đổi trả hàng", ipa: "/rɪˈtɜːn ˈpɑl.ə.si bɔːd/", acts: ["read_return_policy_board", "return_wrong_size_item"] },
   loyaltyboard: { en: "member points board", vi: "bảng điểm thưởng thẻ thành viên", ipa: "/ˈmem.bər pɔɪnts bɔːd/", acts: ["ask_to_use_loyalty_points", "sign_up_for_member_card"] },
-  lostfoundbox: { en: "lost & found cabinet", vi: "tủ đồ thất lạc", ipa: "/lɒst ənd faʊnd/", acts: ["check_lost_and_found_cabinet"] },
+  lostfoundbox: { en: "lost & found cabinet", vi: "tủ đồ thất lạc", ipa: "/lɑst ənd faʊnd/", acts: ["check_lost_and_found_cabinet"] },
   giftwrapdesk: { en: "gift wrapping station", vi: "quầy gói quà", ipa: "/ɡɪft ˈræp.ɪŋ ˈsteɪ.ʃən/", acts: ["ask_for_free_gift_wrapping", "choose_pink_satin_ribbon"] },
-  deliverydesk: { en: "home delivery desk", vi: "khu giao hàng", ipa: "/həʊm dɪˈlɪv.ər.i desk/", acts: ["ask_home_delivery_apartment", "book_evening_delivery_slot"] },
+  deliverydesk: { en: "home delivery desk", vi: "khu giao hàng", ipa: "/hoʊm dɪˈlɪv.ər.i desk/", acts: ["ask_home_delivery_apartment", "book_evening_delivery_slot"] },
   posscreen: { en: "POS screen & price display", vi: "màn hình POS & bảng giá", ipa: "/praɪs dɪˈspleɪ/", acts: ["check_running_total_on_pos"] },
   receiptprinter: { en: "receipt printer", vi: "máy in hóa đơn", ipa: "/rɪˈsiːt ˈprɪn.tər/", acts: ["ask_for_vat_tax_invoice"] },
   coindispenser: { en: "coin dispenser", vi: "máy trả tiền thừa", ipa: "/kɔɪn dɪˈspen.sər/", acts: ["collect_coins_from_dispenser"] },
   packingtable: { en: "packing table", vi: "bàn đóng gói", ipa: "/ˈpæk.ɪŋ ˈteɪ.bəl/", acts: ["sort_groceries_on_packing_table"] },
   cartreturnbay: { en: "cart return bay", vi: "thùng xe đẩy trả lại", ipa: "/kɑːt rɪˈtɜːn beɪ/", acts: ["return_basket_to_cart_bay"] },
-  securityguard: { en: "security guard", vi: "nhân viên bảo vệ", ipa: "/sɪˈkjʊə.rə.ti ɡɑːd/", acts: ["show_receipt_to_security_guard"] },
+  securityguard: { en: "security guard", vi: "nhân viên bảo vệ", ipa: "/sɪˈkjʊr.rə.ti ɡɑːd/", acts: ["show_receipt_to_security_guard"] },
   checkoutexit: { en: "glass exit door", vi: "cửa ra", ipa: "/ɡlɑːs ˈek.sɪt dɔːr/", acts: ["walk_out_sliding_exit_door"] }
 };
 
@@ -4162,11 +4162,11 @@ const market_checkout = {
     ["coin dispenser", "/kɔɪn dɪˈspen.sər/", "máy trả tiền thừa", "equipment"],
     ["chewing gum", "/ˈtʃuː.ɪŋ ɡʌm/", "kẹo cao su bạc hà", "food"],
     ["breath mints", "/breθ mɪnts/", "kẹo ngậm thơm miệng", "food"],
-    ["return policy", "/rɪˈtɜːn ˈpɒl.ə.si/", "chính sách đổi trả hàng", "other"],
+    ["return policy", "/rɪˈtɜːn ˈpɑl.ə.si/", "chính sách đổi trả hàng", "other"],
     ["loyalty points", "/ˈlɔɪ.əl.ti pɔɪnts/", "điểm thưởng tích lũy", "money"],
     ["gift wrap", "/ɡɪft ræp/", "giấy gói quà tặng", "other"],
-    ["delivery slot", "/dɪˈlɪv.ər.i slɒt/", "khung giờ giao hàng", "other"],
-    ["security guard", "/sɪˈkjʊə.rə.ti ɡɑːd/", "nhân viên bảo vệ", "people"]
+    ["delivery slot", "/dɪˈlɪv.ər.i slɑt/", "khung giờ giao hàng", "other"],
+    ["security guard", "/sɪˈkjʊr.rə.ti ɡɑːd/", "nhân viên bảo vệ", "people"]
   ])
 };
 

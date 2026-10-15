@@ -8,9 +8,9 @@
 const root=typeof window!=="undefined"?window:globalThis;
 
 const RSV={
- restaurant:["/ˈres.trɒnt/","nhà hàng / quán ăn","n"],
+ restaurant:["/ˈres.trɑnt/","nhà hàng / quán ăn","n"],
  table:["/ˈteɪ.bəl/","bàn ăn","n"],
- window:["/ˈwɪn.dəʊ/","cửa sổ","n"],
+ window:["/ˈwɪn.doʊ/","cửa sổ","n"],
  seat:["/siːt/","chỗ ngồi","n"],
  napkin:["/ˈnæp.kɪn/","khăn ăn / khăn giấy","n"],
  lap:["/læp/","đùi (khi ngồi)","n"],
@@ -26,7 +26,7 @@ const RSV={
  iced_tea:["/ˌaɪst ˈtiː/","trà đá","n"],
  lemon:["/ˈlem.ən/","chanh vàng","n"],
  chef:["/ʃef/","đầu bếp","n"],
- broth:["/brɒθ/","nước dùng","n"],
+ broth:["/brɑθ/","nước dùng","n"],
  delicious:["/dɪˈlɪʃ.əs/","ngon miệng","adj"],
  lime:["/laɪm/","chanh xanh","n"],
  squeeze:["/skwiːz/","vắt (chanh)","v"],
@@ -40,11 +40,11 @@ const RSV={
  tip:["/tɪp/","tiền boa (tip)","n"],
  reservation:["/ˌrez.əˈveɪ.ʃən/","đặt bàn trước","n"],
  appetite:["/ˈæp.ə.taɪt/","cảm giác ngon miệng","n"],
- vegetarian:["/ˌvedʒ.ɪˈteə.ri.ən/","thuần chay / ăn chay","adj"],
+ vegetarian:["/ˌvedʒ.ɪˈter.ri.ən/","thuần chay / ăn chay","adj"],
  allergy:["/ˈæl.ə.dʒi/","dị ứng thực phẩm","n"],
  ingredient:["/ɪnˈɡriː.di.ənt/","nguyên liệu","n"],
  herb:["/hɜːb/","rau thơm / thảo mộc","n"],
- chopsticks:["/ˈtʃɒp.stɪks/","đôi đũa","n"],
+ chopsticks:["/ˈtʃɑp.stɪks/","đôi đũa","n"],
  appetizer:["/ˈæp.ə.taɪ.zər/","món khai vị","n"],
  salad:["/ˈsæl.əd/","món rau trộn (salad)","n"],
  dressing:["/ˈdres.ɪŋ/","nước sốt trộn salad","n"],
@@ -52,27 +52,27 @@ const RSV={
  nutritious:["/njuːˈtrɪʃ.əs/","bổ dưỡng","adj"],
  ginger:["/ˈdʒɪn.dʒər/","gừng tươi","n"],
 digest:["/daɪˈdʒest/","tiêu hoá","v"],
- aroma:["/əˈrəʊ.mə/","hương thơm","n"],
+ aroma:["/əˈroʊ.mə/","hương thơm","n"],
  simmer:["/ˈsɪm.ər/","ninh / hầm nhỏ lửa","v"],
  ladle:["/ˈleɪ.dəl/","muôi múc canh","n"],
  smoothie:["/ˈsmuː.ði/","sinh tố trái cây","n"],
  herbal_tea:["/ˌhɜː.bəl ˈtiː/","trà thảo mộc","n"],
  umbrella:["/ʌmˈbrel.ə/","chiếc ô / dù","n"],
  drizzle:["/ˈdrɪz.əl/","mưa phùn nhẹ","n"],
- soap:["/səʊp/","xà phòng rửa tay","n"],
+ soap:["/soʊp/","xà phòng rửa tay","n"],
  hygiene:["/ˈhaɪ.dʒiːn/","vệ sinh sạch sẽ","n"],
  melody:["/ˈmel.ə.di/","giai điệu êm dịu","n"],
  acoustic:["/əˈkuː.stɪk/","nhạc mộc (acoustic)","adj"],
- patio:["/ˈpæt.i.əʊ/","sân hiên ngoài trời","n"],
+ patio:["/ˈpæt.i.oʊ/","sân hiên ngoài trời","n"],
  breeze:["/briːz/","làn gió mát","n"],
  lantern:["/ˈlæn.tən/","đèn lồng trang trí","n"],
  chalkboard:["/ˈtʃɔːk.bɔːd/","bảng phấn","n"],
- combo:["/ˈkɒm.bəʊ/","suất ăn kết hợp","n"],
+ combo:["/ˈkɑm.boʊ/","suất ăn kết hợp","n"],
  takeaway:["/ˈteɪk.ə.weɪ/","đồ ăn mang về","n"],
  container:["/kənˈteɪ.nər/","hộp đựng thức ăn","n"],
  receipt:["/rɪˈsiːt/","biên lai thanh toán","n"],
  review:["/rɪˈvjuː/","đánh giá / nhận xét","n"],
- hospitality:["/ˌhɒs.pɪˈtæl.ə.ti/","sự hiếu khách, chu đáo","n"]
+ hospitality:["/ˌhɑs.pɪˈtæl.ə.ti/","sự hiếu khách, chu đáo","n"]
 };
 
 const V=(...ks)=>ks.map(k=>[k.replace(/_/g," "),...(RSV[k]?[RSV[k][0],RSV[k][1]]:["",""])]);
@@ -111,7 +111,7 @@ const RS_W0={
 };
 
 function A(id,obj,label,vi,sentence,viSent,words,also,note,chunks,disc,examples,pre,seq,vocab,{sitOk=false,story,done}={},requires=[]){
- const vList=vocab&&vocab.length?vocab:[["restaurant","/ˈres.trɒnt/","nhà hàng"]];
+ const vList=vocab&&vocab.length?vocab:[["restaurant","/ˈres.trɑnt/","nhà hàng"]];
  const wList=vList.map(v=>v.length===4?v:[v[0],v[1],"n",v[2]]);
  const probeW={...RS_W0,sitting:false};
  const initSteps=(typeof seq==="function"?seq(probeW):[])||[];
@@ -529,7 +529,7 @@ const RS_SPOTS={
 };
 
 const RS_OBJECTS={
- hoststand:{en:"host stand",vi:"quầy lễ tân đón khách",ipa:"/həʊst stænd/",room:"restaurant",
+ hoststand:{en:"host stand",vi:"quầy lễ tân đón khách",ipa:"/hoʊst stænd/",room:"restaurant",
   acts:["ask_for_a_table","check_table_reservation","ask_waiting_time","check_in_with_host","choose_indoor_or_patio"]},
  diningtable:{en:"dining table",vi:"bàn ăn",ipa:"/ˈdaɪ.nɪŋ ˌteɪ.bəl/",room:"restaurant",
   acts:["sit_at_dining_table","put_napkin_on_lap","pull_out_dining_chair","wipe_table_with_tissue","arrange_chopsticks_neatly"]},
@@ -539,29 +539,29 @@ const RS_OBJECTS={
   acts:["order_beef_noodles","ask_not_too_spicy","order_iced_tea","ask_for_napkins","ask_for_soup_spoon","order_fresh_side_herbs"]},
  kitchenpass:{en:"kitchen counter",vi:"quầy bếp mở",ipa:"/ˈkɪtʃ.ən ˈkaʊn.tər/",room:"restaurant",
   acts:["watch_the_chef","thank_the_chef","admire_fresh_garnish","ask_chef_about_broth","smell_simmering_spices"]},
- noodlebowl:{en:"bowl of noodles",vi:"tô mì/phở bò",ipa:"/bəʊl əv ˈnuː.dəlz/",room:"restaurant",
+ noodlebowl:{en:"bowl of noodles",vi:"tô mì/phở bò",ipa:"/boʊl əv ˈnuː.dəlz/",room:"restaurant",
   acts:["taste_the_broth","eat_main_course","blow_on_hot_noodles","praise_tender_beef","finish_warm_soup"]},
- condiments:{en:"condiment tray",vi:"khay gia vị",ipa:"/ˈkɒn.dɪ.mənt treɪ/",room:"restaurant",
+ condiments:{en:"condiment tray",vi:"khay gia vị",ipa:"/ˈkɑn.dɪ.mənt treɪ/",room:"restaurant",
   acts:["squeeze_some_lime","add_black_pepper","add_pickled_garlic","drizzle_mild_chili_sauce","pass_the_fish_sauce"]},
  waterpitcher:{en:"water pitcher",vi:"bình nước lọc",ipa:"/ˈwɔː.tər ˈpɪtʃ.ər/",room:"restaurant",
   acts:["pour_drinking_water","drink_iced_tea","refill_friend_water_glass","ask_for_warm_water_throat","ask_for_less_ice"]},
  dessertcart:{en:"dessert display",vi:"quầy tráng miệng",ipa:"/dɪˈzɜːt dɪˌspleɪ/",room:"restaurant",
   acts:["order_sweet_dessert","eat_the_dessert","choose_fresh_fruit_tart","ask_low_sugar_dessert","share_dessert_with_friend"]},
- billdesk:{en:"cashier & bill",vi:"quầy thu ngân & hoá đơn",ipa:"/kæˈʃɪər ənd bɪl/",room:"restaurant",
+ billdesk:{en:"cashier & bill",vi:"quầy thu ngân & hoá đơn",ipa:"/kæˈʃɪrr ənd bɪl/",room:"restaurant",
   acts:["ask_for_the_bill","split_the_bill","pay_restaurant_bill","check_itemized_receipt","ask_for_wifi_password"]},
  saladbar:{en:"fresh salad bar",vi:"quầy salad rau tươi",ipa:"/freʃ ˈsæl.əd bɑːr/",room:"restaurant",
   acts:["pick_up_salad_plate","toss_crispy_green_salad","add_cherry_tomatoes","drizzle_olive_oil_dressing","enjoy_nutritious_salad"]},
- soupkettle:{en:"hot soup station",vi:"nồi súp hầm nóng",ipa:"/hɒt suːp ˈsteɪ.ʃən/",room:"restaurant",
+ soupkettle:{en:"hot soup station",vi:"nồi súp hầm nóng",ipa:"/hɑt suːp ˈsteɪ.ʃən/",room:"restaurant",
   acts:["lift_soup_kettle_lid","smell_savory_herb_aroma","ladle_warm_pumpkin_soup","add_fresh_ginger_slices","check_soup_temperature"]},
  drinkbar:{en:"juice & tea bar",vi:"quầy nước ép & trà thảo mộc",ipa:"/dʒuːs ənd tiː bɑːr/",room:"restaurant",
   acts:["browse_healthy_drinks","order_fresh_orange_juice","choose_warm_ginger_tea","request_no_added_sugar","sip_tropical_mango_smoothie"]},
- coatstand:{en:"coat & umbrella stand",vi:"giá treo áo khoác & ô",ipa:"/kəʊt ənd ʌmˈbrel.ə stænd/",room:"restaurant",
+ coatstand:{en:"coat & umbrella stand",vi:"giá treo áo khoác & ô",ipa:"/koʊt ənd ʌmˈbrel.ə stænd/",room:"restaurant",
   acts:["shake_off_wet_umbrella","hang_up_light_raincoat","check_evening_drizzle","hang_warm_scarf","retrieve_umbrella_before_leaving"]},
- washbasin:{en:"handwashing sink",vi:"bồn rửa tay khử khuẩn",ipa:"/ˈhænd.wɒʃ.ɪŋ sɪŋk/",room:"restaurant",
+ washbasin:{en:"handwashing sink",vi:"bồn rửa tay khử khuẩn",ipa:"/ˈhænd.wɑʃ.ɪŋ sɪŋk/",room:"restaurant",
   acts:["turn_on_warm_faucet","wash_hands_with_soap","rinse_hands_thoroughly","dry_hands_with_clean_towel","use_herbal_hand_sanitizer"]},
  musiccorner:{en:"acoustic music stage",vi:"góc nhạc acoustic êm dịu",ipa:"/əˈkuː.stɪk ˈmjuː.zɪk steɪdʒ/",room:"restaurant",
   acts:["listen_to_acoustic_guitar","applaud_the_musician","request_a_relaxing_song","comment_on_pleasant_volume","take_photo_of_music_corner"]},
- patiotable:{en:"patio table",vi:"bàn sân hiên thoáng mát",ipa:"/ˈpæt.i.əʊ ˈteɪ.bəl/",room:"restaurant",
+ patiotable:{en:"patio table",vi:"bàn sân hiên thoáng mát",ipa:"/ˈpæt.i.oʊ ˈteɪ.bəl/",room:"restaurant",
   acts:["step_out_to_patio","enjoy_cool_evening_breeze","turn_on_table_lantern","admire_city_lights_view","check_pleasant_night_weather"]},
  specialsboard:{en:"specials board",vi:"bảng món ngon trong ngày",ipa:"/ˈspeʃ.əlz bɔːd/",room:"restaurant",
   acts:["read_daily_chalkboard","check_lunch_combo_price","ask_about_soup_of_the_day","pick_seasonal_weather_drink","read_farm_to_table_note"]},
@@ -711,7 +711,7 @@ const ACTIONS=[
  Q("check_vegetarian_options","menustand","rs_menu","read","rs_veg_menu","checked","Check vegetarian dishes","Xem các món chay thanh đạm",
   "There is a whole section of healthy vegetarian dishes on page two of the menu.",
   "Có hẳn một mục các món chay lành mạnh và tốt cho sức khoẻ ở trang hai của thực đơn.",
-  ["healthy","vegetarian","dishes","menu"],"Tính từ <b>vegetarian</b> (/ˌvedʒ.ɪˈteə.ri.ən/) = chay; <b>healthy</b> = tốt cho sức khoẻ.",
+  ["healthy","vegetarian","dishes","menu"],"Tính từ <b>vegetarian</b> (/ˌvedʒ.ɪˈter.ri.ən/) = chay; <b>healthy</b> = tốt cho sức khoẻ.",
   ["There is a section","of healthy vegetarian dishes","on page two."],["vegetarian","veterinarian","librarian"],
   ["Do you have any <b>vegetarian options</b>?","Tofu and mushroom soup is very <b>nutritious</b>."],["vegetarian","nutritious","menu"],undefined,true),
 
@@ -1391,7 +1391,7 @@ const ACTIONS=[
  Q("thank_staff_for_hospitality","feedbackbox","rs_feedback","point","rs_thank_host","thanked","Thank the team for their warm hospitality","Cảm ơn nhân viên vì sự phục vụ chu đáo",
   "Thank you for your wonderful hospitality tonight—we'll definitely come back with friends!",
   "Cảm ơn sự đón tiếp nồng hậu và chu đáo của nhà hàng tối nay—chắc chắn chúng tôi sẽ quay lại cùng bạn bè!",
-  ["wonderful","hospitality","definitely","friends"],"Danh từ <b>hospitality</b> (/ˌhɒs.pɪˈtæl.ə.ti/) = lòng hiếu khách, sự phục vụ tận tình.",
+  ["wonderful","hospitality","definitely","friends"],"Danh từ <b>hospitality</b> (/ˌhɑs.pɪˈtæl.ə.ti/) = lòng hiếu khách, sự phục vụ tận tình.",
   ["Thank you for","your wonderful hospitality—","we'll definitely come back!"],["hospitality","hospital","possibility"],
   ["Vietnamese restaurants are famous for their <b>warm hospitality</b>.","We'll <b>definitely recommend</b> this place!"],["hospitality","recommend","restaurant"]),
 

@@ -288,10 +288,10 @@
   ];
   var WORDS = [
     ["fridge", "/frɪdʒ/", "tủ lạnh"], ["milk", "/mɪlk/", "sữa"], ["cup", "/kʌp/", "cái cốc"], ["table", "/ˈteɪ.bəl/", "cái bàn"],
-    ["chair", "/tʃeər/", "cái ghế"], ["pour", "/pɔːr/", "rót"], ["sip", "/sɪp/", "ngụm, nhấp"], ["drink", "/drɪŋk/", "uống"],
-    ["cold", "/kəʊld/", "lạnh"], ["window", "/ˈwɪn.dəʊ/", "cửa sổ"], ["plant", "/plɑːnt/", "cái cây"], ["floor", "/flɔːr/", "sàn nhà"],
+    ["chair", "/tʃerr/", "cái ghế"], ["pour", "/pɔːr/", "rót"], ["sip", "/sɪp/", "ngụm, nhấp"], ["drink", "/drɪŋk/", "uống"],
+    ["cold", "/koʊld/", "lạnh"], ["window", "/ˈwɪn.doʊ/", "cửa sổ"], ["plant", "/plɑːnt/", "cái cây"], ["floor", "/flɔːr/", "sàn nhà"],
     ["sweep", "/swiːp/", "quét"], ["wipe", "/waɪp/", "lau"], ["book", "/bʊk/", "quyển sách"], ["screen", "/skriːn/", "màn hình"],
-    ["show", "/ʃəʊ/", "chương trình"], ["settle", "/ˈset.əl/", "ngồi yên vị"], ["comfortably", "/ˈkʌm.fə.tə.bli/", "thoải mái"],
+    ["show", "/ʃoʊ/", "chương trình"], ["settle", "/ˈset.əl/", "ngồi yên vị"], ["comfortably", "/ˈkʌm.fə.tə.bli/", "thoải mái"],
     ["occasionally", "/əˈkeɪ.ʒən.əl.i/", "thỉnh thoảng"], ["switch", "/swɪtʃ/", "bật/tắt (công tắc)"], ["brim", "/brɪm/", "miệng (cốc)"],
     ["nurse", "/nɜːs/", "nhâm nhi"], ["unwind", "/ʌnˈwaɪnd/", "thư giãn"], ["carton", "/ˈkɑː.tən/", "hộp (giấy)"],
     ["retrieve", "/rɪˈtriːv/", "lấy lại"], ["tuck", "/tʌk/", "nhét, đẩy gọn"], ["first", "/fɜːst/", "đầu tiên"],
