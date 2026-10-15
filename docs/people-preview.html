@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"/>
+<title>English Life World — Visual Asset Preview (People, Weather, Menu)</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #1e293b; color: #f8fafc; padding: 24px; }
+  h1 { font-size: 24px; margin-bottom: 8px; color: #f8fafc; }
+  p.subtitle { color: #94a3b8; margin-bottom: 24px; font-size: 14px; }
+  .section { background: #0f172a; border-radius: 12px; padding: 20px; margin-bottom: 24px; border: 1px solid #334155; }
+  h2 { font-size: 18px; margin-bottom: 16px; color: #e8743b; border-bottom: 1px solid #334155; padding-bottom: 8px; }
+  .grid { display: flex; flex-wrap: wrap; gap: 16px; }
+  .card { background: #1e293b; border-radius: 8px; padding: 12px; text-align: center; border: 1px solid #475569; width: 140px; }
+  .card img { width: 100%; height: auto; display: block; margin: 0 auto 8px; }
+  .card.people-card { width: 150px; }
+  .card.people-card .img-wrap { height: 210px; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, #334155 0%, #1e293b 100%); border-radius: 6px; }
+  .card.people-card img { max-height: 200px; width: auto; }
+  .card.icon-card { width: 110px; }
+  .card.icon-card .img-wrap { height: 80px; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, #334155 0%, #1e293b 100%); border-radius: 6px; }
+  .card.icon-card img { width: 64px; height: 64px; }
+  .name { font-size: 12px; font-weight: 600; color: #e2e8f0; word-break: break-word; }
+  .meta { font-size: 11px; color: #94a3b8; margin-top: 4px; }
+  .scene-preview { position: relative; width: 1000px; height: 640px; background: #3b2010 url("../assets/cafe/cafe-bg.png") no-repeat center / cover; border-radius: 8px; overflow: hidden; margin-top: 16px; border: 2px solid #e8743b; }
+  .scene-preview .overlay { position: absolute; top: 0; left: 0; width: 1000px; height: 640px; pointer-events: none; }
+  .scene-preview .npc-place { position: absolute; pointer-events: none; }
+</style>
+</head>
+<body>
+  <h1>🎨 English Life World — Bộ ảnh Nhân vật, Thời tiết & Menu (P5)</h1>
+  <p class="subtitle">Kiểm thử hiển thị toàn bộ 48 assets đồ họa mới: chuẩn phẳng 2.5D, trong suốt RGBA, mỗi file &le; 150KB.</p>
+
+  <!-- 1. People -->
+  <div class="section">
+    <h2>1. Nhân vật & Bạn đồng hành (assets/people/ - 12 sprites)</h2>
+    <div class="grid">
+
+      <div class="card people-card">
+        <div class="img-wrap"><img src="../assets/people/linh-standing.png" alt="linh-standing"/></div>
+        <div class="name">linh-standing</div>
+        <div class="meta">360x600 · 28.4 KB</div>
+      </div>
+
+      <div class="card people-card">
+        <div class="img-wrap"><img src="../assets/people/linh-talking.png" alt="linh-talking"/></div>
+        <div class="name">linh-talking</div>
+        <div class="meta">360x600 · 29.0 KB</div>
+      </div>
+
+      <div class="card people-card">
+        <div class="img-wrap"><img src="../assets/people/linh-smiling.png" alt="linh-smiling"/></div>
+        <div class="name">linh-smiling</div>
+        <div class="meta">360x600 · 28.4 KB</div>
+      </div>
+
+      <div class="card people-card">
+        <div class="img-wrap"><img src="../assets/people/linh-holding-cup.png" alt="linh-holding-cup"/></div>
+        <div class="name">linh-holding-cup</div>
+        <div class="meta">360x600 · 26.3 KB</div>
+      </div>
+
+      <div class="card people-card">
+        <div class="img-wrap"><img src="../assets/people/visitor-elderly-neighbor.png" alt="visitor-elderly-neighbor"/></div>
+        <div class="name">visitor-elderly-neighbor</div>
+        <div class="meta">360x600 · 27.0 KB</div>
+      </div>
+
+      <div class="card people-card">
+        <div class="img-wrap"><img src="../assets/people/visitor-old-friend.png" alt="visitor-old-friend"/></div>
+        <div class="name">visitor-old-friend</div>
+        <div class="meta">360x600 · 23.5 KB</div>
+      </div>
+
+      <div class="card people-card">
+        <div class="img-wrap"><img src="../assets/people/visitor-shipper.png" alt="visitor-shipper"/></div>
+        <div class="name">visitor-shipper</div>
+        <div class="meta">360x600 · 22.5 KB</div>
+      </div>
+
+      <div class="card people-card">
+        <div class="img-wrap"><img src="../assets/people/visitor-tourist.png" alt="visitor-tourist"/></div>
+        <div class="name">visitor-tourist</div>
+        <div class="meta">360x600 · 26.9 KB</div>
+      </div>
+
+      <div class="card people-card">
+        <div class="img-wrap"><img src="../assets/people/barista-brewing.png" alt="barista-brewing"/></div>
+        <div class="name">barista-brewing</div>
+        <div class="meta">360x600 · 27.1 KB</div>
+      </div>
+
+      <div class="card people-card">
+        <div class="img-wrap"><img src="../assets/people/barista-serving.png" alt="barista-serving"/></div>
+        <div class="name">barista-serving</div>
+        <div class="meta">360x600 · 24.9 KB</div>
+      </div>
+
+      <div class="card people-card">
+        <div class="img-wrap"><img src="../assets/people/cashier-greeting.png" alt="cashier-greeting"/></div>
+        <div class="name">cashier-greeting</div>
+        <div class="meta">360x600 · 21.2 KB</div>
+      </div>
+
+      <div class="card people-card">
+        <div class="img-wrap"><img src="../assets/people/cashier-pos.png" alt="cashier-pos"/></div>
+        <div class="name">cashier-pos</div>
+        <div class="meta">360x600 · 22.7 KB</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 2. Weather Overlays & Icons -->
+  <div class="section">
+    <h2>2. Lớp phủ & Icon Thời tiết (assets/weather/ - 4 overlays SVG + 5 icons)</h2>
+    <div style="margin-bottom: 12px; font-weight: 600; color: #94a3b8; font-size: 13px;">Icon thời tiết:</div>
+    <div class="grid" style="margin-bottom: 20px;">
+
+      <div class="card icon-card">
+        <div class="img-wrap"><img src="../assets/weather/weather-sunny.png" alt="weather-sunny-icon"/></div>
+        <div class="name">sunny</div>
+        <div class="meta">96x96 · 6.1 KB</div>
+      </div>
+
+      <div class="card icon-card">
+        <div class="img-wrap"><img src="../assets/weather/weather-rainy.png" alt="weather-rainy-icon"/></div>
+        <div class="name">rainy</div>
+        <div class="meta">96x96 · 4.2 KB</div>
+      </div>
+
+      <div class="card icon-card">
+        <div class="img-wrap"><img src="../assets/weather/weather-cold.png" alt="weather-cold-icon"/></div>
+        <div class="name">cold</div>
+        <div class="meta">96x96 · 5.8 KB</div>
+      </div>
+
+      <div class="card icon-card">
+        <div class="img-wrap"><img src="../assets/weather/weather-windy.png" alt="weather-windy-icon"/></div>
+        <div class="name">windy</div>
+        <div class="meta">96x96 · 5.0 KB</div>
+      </div>
+
+      <div class="card icon-card">
+        <div class="img-wrap"><img src="../assets/weather/weather-cloudy.png" alt="weather-cloudy-icon"/></div>
+        <div class="name">cloudy</div>
+        <div class="meta">96x96 · 3.9 KB</div>
+      </div>
+
+    </div>
+    <div style="margin-bottom: 12px; font-weight: 600; color: #94a3b8; font-size: 13px;">Mẫu ghép thử: Nền Quán Cafe + Lớp phủ Mưa (rain.svg) + Bạn Linh cầm ly + Barista phục vụ:</div>
+    <div class="scene-preview">
+      <!-- NPC Barista -->
+      <img class="npc-place" src="../assets/people/barista-serving.png" style="bottom: 140px; left: 420px; width: 150px; z-index: 10;"/>
+      <!-- NPC Linh -->
+      <img class="npc-place" src="../assets/people/linh-holding-cup.png" style="bottom: 40px; left: 660px; width: 170px; z-index: 20;"/>
+      <!-- NPC Tourist -->
+      <img class="npc-place" src="../assets/people/visitor-tourist.png" style="bottom: 80px; left: 180px; width: 160px; z-index: 15;"/>
+      <!-- Weather Overlay: Rain -->
+      <img class="overlay" src="../assets/weather/rain.svg" style="z-index: 50;"/>
+    </div>
+  </div>
+
+  <!-- 3. Cafe Menu -->
+  <div class="section">
+    <h2>3. Đồ uống & Bánh ngọt Quán Cà Phê (assets/menu/ - {len(menu_cafe)} món)</h2>
+    <div class="grid">
+
+      <div class="card icon-card">
+        <div class="img-wrap"><img src="../assets/menu/espresso.png" alt="menu-espresso"/></div>
+        <div class="name">espresso</div>
+        <div class="meta">128x128 · 7.4 KB</div>
+      </div>
+
+      <div class="card icon-card">
+        <div class="img-wrap"><img src="../assets/menu/americano.png" alt="menu-americano"/></div>
+        <div class="name">americano</div>
+        <div class="meta">128x128 · 5.4 KB</div>
+      </div>
+
+      <div class="card icon-card">
+        <div class="img-wrap"><img src="../assets/menu/cappuccino.png" alt="menu-cappuccino"/></div>
+        <div class="name">cappuccino</div>
+        <div class="meta">128x128 · 7.0 KB</div>
+      </div>
+
+      <div class="card icon-card">
+        <div class="img-wrap"><img src="../assets/menu/latte.png" alt="menu-latte"/></div>
+        <div class="name">latte</div>
+        <div class="meta">128x128 · 6.7 KB</div>
+      </div>
+
+      <div class="card icon-card">
+        <div class="img-wrap"><img src="../assets/menu/mocha.png" alt="menu-mocha"/></div>
+        <div class="name">mocha</div>
+        <div class="meta">128x128 · 4.0 KB</div>
+      </div>
+
+      <div class="card icon-card">
+        <div class="img-wrap"><img src="../assets/menu/matcha-latte.png" alt="menu-matcha-latte"/></div>
+        <div class="name">matcha-latte</div>
+        <div class="meta">128x128 · 3.5 KB</div>
+      </div>
+
+      <div class="card icon-card">
+        <div class="img-wrap"><img src="../assets/menu/hot-chocolate.png" alt="menu-hot-chocolate"/></div>
+        <div class="name">hot-chocolate</div>
+        <div class="meta">128x128 · 6.9 KB</div>
+      </div>
+
+      <div class="card icon-card">
+        <div class="img-wrap"><img src="../assets/menu/iced-tea.png" alt="menu-iced-tea"/></div>
+        <div class="name">iced-tea</div>
+        <div class="meta">128x128 · 5.7 KB</div>
+      </div>
+
+      <div class="card icon-card">
+        <div class="img-wrap"><img src="../assets/menu/lemonade.png" alt="menu-lemonade"/></div>
+        <div class="name">lemonade</div>
+        <div class="meta">128x128 · 4.3 KB</div>
+      </div>
+
+      <div class="card icon-card">
+        <div class="img-wrap"><img src="../assets/menu/smoothie.png" alt="menu-smoothie"/></div>
+        <div class="name">smoothie</div>
+        <div class="meta">128x128 · 4.3 KB</div>
+      </div>
+
+      <div class="card icon-card">
+        <div class="img-wrap"><img src="../assets/menu/croissant.png" alt="menu-croissant"/></div>
+        <div class="name">croissant</div>
+        <div class="meta">128x128 · 3.8 KB</div>
+      </div>
+
+      <div class="card icon-card">
+        <div class="img-wrap"><img src="../assets/menu/muffin.png" alt="menu-muffin"/></div>
+        <div class="name">muffin</div>
+        <div class="meta">128x128 · 4.6 KB</div>
+      </div>
+
+      <div class="card icon-card">
+        <div class="img-wrap"><img src="../assets/menu/cheesecake.png" alt="menu-cheesecake"/></div>
+        <div class="name">cheesecake</div>
+        <div class="meta">128x128 · 2.7 KB</div>
+      </div>
+
+      <div class="card icon-card">
+        <div class="img-wrap"><img src="../assets/menu/banana-bread.png" alt="menu-banana-bread"/></div>
+        <div class="name">banana-bread</div>
+        <div class="meta">128x128 · 3.2 KB</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 4. Supermarket -->
+  <div class="section">
+    <h2>4. Hàng hóa Siêu thị (assets/menu/ - 13 mặt hàng)</h2>
+    <div class="grid">
+
+      <div class="card icon-card">
+        <div class="img-wrap"><img src="../assets/menu/apple.png" alt="market-apple"/></div>
+        <div class="name">apple</div>
+        <div class="meta">128x128 · 5.5 KB</div>
+      </div>
+
+      <div class="card icon-card">
+        <div class="img-wrap"><img src="../assets/menu/banana.png" alt="market-banana"/></div>
+        <div class="name">banana</div>
+        <div class="meta">128x128 · 5.3 KB</div>
+      </div>
+
+      <div class="card icon-card">
+        <div class="img-wrap"><img src="../assets/menu/mango.png" alt="market-mango"/></div>
+        <div class="name">mango</div>
+        <div class="meta">128x128 · 5.0 KB</div>
+      </div>
+
+      <div class="card icon-card">
+        <div class="img-wrap"><img src="../assets/menu/orange.png" alt="market-orange"/></div>
+        <div class="name">orange</div>
+        <div class="meta">128x128 · 6.6 KB</div>
+      </div>
+
+      <div class="card icon-card">
+        <div class="img-wrap"><img src="../assets/menu/rice.png" alt="market-rice"/></div>
+        <div class="name">rice</div>
+        <div class="meta">128x128 · 4.8 KB</div>
+      </div>
+
+      <div class="card icon-card">
+        <div class="img-wrap"><img src="../assets/menu/egg.png" alt="market-egg"/></div>
+        <div class="name">egg</div>
+        <div class="meta">128x128 · 4.1 KB</div>
+      </div>
+
+      <div class="card icon-card">
+        <div class="img-wrap"><img src="../assets/menu/milk.png" alt="market-milk"/></div>
+        <div class="name">milk</div>
+        <div class="meta">128x128 · 2.7 KB</div>
+      </div>
+
+      <div class="card icon-card">
+        <div class="img-wrap"><img src="../assets/menu/bread.png" alt="market-bread"/></div>
+        <div class="name">bread</div>
+        <div class="meta">128x128 · 5.4 KB</div>
+      </div>
+
+      <div class="card icon-card">
+        <div class="img-wrap"><img src="../assets/menu/snack.png" alt="market-snack"/></div>
+        <div class="name">snack</div>
+        <div class="meta">128x128 · 4.8 KB</div>
+      </div>
+
+      <div class="card icon-card">
+        <div class="img-wrap"><img src="../assets/menu/laundry-detergent.png" alt="market-laundry-detergent"/></div>
+        <div class="name">laundry-detergent</div>
+        <div class="meta">128x128 · 3.7 KB</div>
+      </div>
+
+      <div class="card icon-card">
+        <div class="img-wrap"><img src="../assets/menu/tissue-paper.png" alt="market-tissue-paper"/></div>
+        <div class="name">tissue-paper</div>
+        <div class="meta">128x128 · 5.1 KB</div>
+      </div>
+
+      <div class="card icon-card">
+        <div class="img-wrap"><img src="../assets/menu/meat.png" alt="market-meat"/></div>
+        <div class="name">meat</div>
+        <div class="meta">128x128 · 5.1 KB</div>
+      </div>
+
+      <div class="card icon-card">
+        <div class="img-wrap"><img src="../assets/menu/fish.png" alt="market-fish"/></div>
+        <div class="name">fish</div>
+        <div class="meta">128x128 · 5.1 KB</div>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

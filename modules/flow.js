@@ -4,8 +4,17 @@
 (function () {
 "use strict";
 
-// n(id, why, weight, when) — compact entry builder
-const n = (id, why_vi, weight, when) => (when ? { id, why_vi, weight: weight || 1, when } : { id, why_vi, weight: weight || 1 });
+// n(id, why, weight, when) — compact entry builder; every reason starts with "Vì ..."
+const ensureViReason = why => {
+  const s = String(why || "").trim();
+  if (!s) return "Vì hành động này phù hợp lúc này.";
+  if (/^Vì(\s|…)/i.test(s)) return s;
+  return "Vì " + s.charAt(0).toLowerCase() + s.slice(1);
+};
+const n = (id, why_vi, weight, when) => {
+  const w = ensureViReason(why_vi);
+  return when ? { id, why_vi: w, weight: weight || 1, when } : { id, why_vi: w, weight: weight || 1 };
+};
 const cupFull = W => (W.cupLevel || 0) > 0;
 const catAwake = W => W.cat && W.cat !== "sleeping";
 const lightsLow = W => W.floorLamp !== "on";
@@ -57,7 +66,8 @@ const NEXT = {
   open_cabinet: [n("put_plates_away", "Cất đĩa vào tủ.", 3, W => W.k_dishes === "dry"), n("set_the_table", "Lấy bát đĩa bày bàn.", 2, W => W.k_table !== "set"), n("close_cabinet", "Đóng tủ lại nhé.", 1)],
   put_plates_away: [n("close_cabinet", "Cất xong rồi, đóng tủ nhé.", 3), n("take_out_trash", "Đổ rác cho bếp sạch.", 1, W => W.k_trash === "full")],
   close_cabinet: [n("take_out_trash", "Đổ rác nốt nhé.", 2, W => W.k_trash === "full"), n("make_coffee", "Xong việc, pha cà phê thưởng.", 2, W => W.k_coffee === "none"), n("go_living", "Ra phòng khách nghỉ ngơi.", 1)],
-  set_the_table: [n("eat_breakfast", "Bàn bày xong, ăn sáng thôi!", 3), n("toast_bread", "Nướng thêm bánh mì.", 1, W => W.k_toaster === "empty"), n("pour_coffee", "Rót cà phê ra cốc.", 1, W => W.k_coffee === "ready")],
+  set_the_table: [n("sit_at_the_table", "Bàn bày xong rồi, ngồi vào bàn ăn nhé!", 3, W => !W.sitting), n("eat_breakfast", "Bàn bày xong, ăn sáng thôi!", 3), n("toast_bread", "Nướng thêm bánh mì.", 1, W => W.k_toaster === "empty"), n("pour_coffee", "Rót cà phê ra cốc.", 1, W => W.k_coffee === "ready")],
+  sit_at_the_table: [n("eat_breakfast", "Ngồi vào bàn rồi, ăn sáng thôi!", 3, W => W.k_table === "set"), n("set_the_table", "Bày bàn ăn trước nhé.", 2, W => W.k_table !== "set"), n("drink_coffee", "Nhâm nhi tách cà phê nóng.", 2, W => W.k_mug === "coffee"), n("get_up_from_table", "Ngồi nghỉ đủ rồi, đứng dậy nhé.", 1)],
   eat_breakfast: [n("drink_coffee", "Ăn xong nhâm nhi cà phê.", 2, W => W.k_mug === "coffee"), n("get_up_from_table", "No rồi, đứng dậy nhé.", 3), n("clear_the_table", "Dọn bàn sau khi ăn.", 1, W => !W.sitting)],
   get_up_from_table: [n("clear_the_table", "Dọn bàn cho gọn.", 3), n("wash_dishes", "Rửa bát luôn nhé.", 2, W => W.k_dishes === "dirty" && W.k_faucet === "on"), n("turn_on_faucet", "Mở vòi để rửa bát.", 2, W => W.k_faucet !== "on")],
   clear_the_table: [n("turn_on_faucet", "Mở vòi để rửa bát.", 3, W => W.k_faucet !== "on"), n("wash_dishes", "Rửa bát thôi.", 3, W => W.k_faucet === "on" && W.k_dishes === "dirty"), n("take_out_trash", "Đổ rác luôn nhé.", 1, W => W.k_trash === "full")],
@@ -129,7 +139,7 @@ const ROUTINES = [
   { id: "morning", title: "Morning routine", titleVi: "Buổi sáng thức dậy", icon: "🌅", time: "morning",
     ids: ["turn_off_alarm", "sit_on_bed", "put_on_slippers", "get_out_of_bed", "open_curtains", "look_out_window", "pick_up_pillow", "make_bed", "brush_hair", "go_kitchen", "fill_kettle", "boil_water"] },
   { id: "breakfast", title: "Breakfast", titleVi: "Ăn sáng", icon: "🍳", time: "morning",
-    ids: ["go_kitchen", "turn_on_stove", "fry_egg", "turn_off_stove", "toast_bread", "take_out_toast", "set_the_table", "eat_breakfast", "get_up_from_table", "clear_the_table"] },
+    ids: ["go_kitchen", "turn_on_stove", "fry_egg", "turn_off_stove", "toast_bread", "take_out_toast", "set_the_table", "sit_at_the_table", "eat_breakfast", "get_up_from_table", "clear_the_table"] },
   { id: "coffee", title: "Coffee break", titleVi: "Nghỉ uống cà phê", icon: "☕", time: "noon",
     ids: ["go_kitchen", "make_coffee", "pour_coffee", "set_the_table", "drink_coffee", "go_living", "sit_on_sofa", "listen_to_music"] },
   { id: "tidy_living", title: "Tidy the living room", titleVi: "Dọn phòng khách", icon: "🧹", time: "noon",
@@ -160,7 +170,12 @@ const TIME_IDS = {
   evening: ["turn_on_tv", "sit_on_sofa", "call_cat", "play_with_cat", "turn_on_floor_lamp", "listen_to_music", "close_living_curtains", "feed_cat"],
   night: ["close_curtains", "turn_on_lamp", "read_in_bed", "set_alarm", "charge_phone", "turn_off_lamp", "lie_down", "go_bedroom"]
 };
-const TIME_WHY = { morning: "Buổi sáng rồi, bắt đầu ngày mới nhé.", noon: "Giữa ngày, làm chút việc nhà nào.", evening: "Buổi tối thư giãn một chút.", night: "Khuya rồi, chuẩn bị đi ngủ nhé." };
+const TIME_WHY = {
+  morning: "Vì buổi sáng rồi, bắt đầu ngày mới nhé.",
+  noon: "Vì đang giữa ngày, làm chút việc nhà nào.",
+  evening: "Vì đã buổi tối, thư giãn một chút nhé.",
+  night: "Vì khuya rồi, chuẩn bị đi ngủ nhé."
+};
 
 function suggest(lastActionId, W, opts) {
   W = W || {}; opts = opts || {};
@@ -171,7 +186,7 @@ function suggest(lastActionId, W, opts) {
   const push = (id, why_vi) => {
     if (out.length >= max || seen.has(id) || !NEXT[id]) return;
     let ok = false; try { ok = !!can(id); } catch (e) { ok = false; }
-    if (!ok) return; seen.add(id); out.push({ id, why_vi });
+    if (!ok) return; seen.add(id); out.push({ id, why_vi: ensureViReason(why_vi) });
   };
   const cands = (NEXT[lastActionId] || []).filter(e => { try { return !e.when || e.when(W); } catch (x) { return false; } })
     .sort((a, b) => (b.weight || 1) - (a.weight || 1));
@@ -179,7 +194,7 @@ function suggest(lastActionId, W, opts) {
   // unguarded entries whose guard failed are skipped; fall back to time-of-day + routines
   const tod = timeOfDay(hour);
   if (out.length < max) TIME_IDS[tod].forEach(id => push(id, TIME_WHY[tod]));
-  if (out.length < max) ROUTINES.filter(r => r.time === tod).concat(ROUTINES).forEach(r => r.ids.forEach(id => push(id, "Một bước trong “" + r.titleVi + "”.")));
+  if (out.length < max) ROUTINES.filter(r => r.time === tod).concat(ROUTINES).forEach(r => r.ids.forEach(id => push(id, "Vì đây là một bước trong “" + r.titleVi + "”.")));
   return out;
 }
 
@@ -260,7 +275,345 @@ function renderRoutines(container, routines, onRun, hour) {
   container.appendChild(grid);
 }
 
-const ELW_FLOW = { NEXT, ROUTINES, TIME_IDS, suggest, timeOfDay, greet_vi, renderChips, renderRoutines };
+/* =====================================================================
+ * RULE ENGINE FOR CÔ MAI: guideByRules(ctx)
+ * Strict deterministic priority order (NO random):
+ *   1. safety    (an toàn)
+ *   2. mission   (nhiệm vụ đang làm)
+ *   3. needs     (nhu cầu: đói, khát, mệt)
+ *   4. weather   (thời tiết: nóng, lạnh, mưa, gió)
+ *   5. situation (tình huống: đang vội, săn sale, buổi sáng, tối muộn, mệt)
+ *   6. explore   (khám phá khu vực hiện tại)
+ * ===================================================================== */
+const PRIORITY_ORDER = ["safety", "mission", "needs", "weather", "situation", "explore"];
+const PRIORITY_RANK = { safety: 1, mission: 2, needs: 3, weather: 4, situation: 5, explore: 6 };
+
+function normPlace(ctx) {
+  const r = String((ctx && (ctx.zone || ctx.room || ctx.place)) || "living").toLowerCase().trim();
+  if (["living", "kitchen", "bedroom", "bathroom", "garden", "garage", "home"].indexOf(r) >= 0) {
+    return { place: "home", zone: r === "home" ? "living" : r };
+  }
+  if (r === "market" || r.indexOf("market_") === 0) return { place: "market", zone: r };
+  if (r.indexOf("cafe") === 0) return { place: "cafe", zone: r };
+  if (r.indexOf("park") === 0) return { place: "park", zone: r };
+  if (r.indexOf("restaurant") === 0) return { place: "restaurant", zone: r };
+  if (r.indexOf("school") === 0) return { place: "school", zone: r };
+  if (r.indexOf("camping") === 0) return { place: "camping", zone: r };
+  return { place: r, zone: r };
+}
+
+function guideByRules(ctx) {
+  ctx = ctx || {};
+  const pz = normPlace(ctx);
+  const place = pz.place;
+  const zone = pz.zone;
+  const wx = String(ctx.weather || "sunny").toLowerCase().trim();
+  const sit = String(ctx.situation || ctx.sit || "normal").toLowerCase().trim();
+  const tod = ctx.timeOfDay || timeOfDay(ctx.hour != null ? ctx.hour : 9);
+  const lastId = ctx.lastActionId || ctx.lastId || null;
+  const recentSet = new Set(Array.isArray(ctx.recentActs) ? ctx.recentActs : []);
+  if (lastId) recentSet.add(lastId);
+  const isPossible = typeof ctx.isPossible === "function" ? ctx.isPossible : () => true;
+  const max = ctx.max || 3;
+
+  const rawCandidates = [];
+  function pushRule(id, category, why_vi) {
+    if (!id) return;
+    const why = ensureViReason(why_vi);
+    rawCandidates.push({
+      id: id,
+      category: category,
+      priority: PRIORITY_RANK[category] || 6,
+      why_vi: why
+    });
+  }
+
+  /* ---- 1. SAFETY (An toàn) ---- */
+  const safety = ctx.safety || {};
+  if (safety.stoveOn || ctx.stoveOn) {
+    pushRule("turn_off_stove", "safety", "Vì bếp đang bật rất nguy hiểm, em hãy tắt bếp ngay nhé!");
+  }
+  if (safety.kettleBoiling || ctx.kettleBoiling) {
+    pushRule("unplug_kettle", "safety", "Vì ấm nước đang sôi, em hãy rút phích cắm điện cho an toàn nhé!");
+  }
+  if (safety.waterRunning || ctx.waterRunning) {
+    pushRule("turn_off_faucet", "safety", "Vì vòi nước đang chảy tràn, em hãy khóa vòi lại ngay nhé!");
+    pushRule("turn_off_bath_tap", "safety", "Vì vòi nước phòng tắm đang mở, em hãy khóa lại kẻo tràn nước nhé!");
+  }
+  if (safety.fridgeOpen || ctx.fridgeOpen) {
+    pushRule("close_fridge", "safety", "Vì cửa tủ lạnh đang mở lâu, em hãy đóng lại để tiết kiệm điện nhé!");
+  }
+  if (ctx.urgentActionId) {
+    pushRule(ctx.urgentActionId, "safety", "Vì đang có sự cố khẩn cấp trong nhà, em cần xử lý ngay lập tức!");
+  }
+
+  /* ---- 2. MISSION (Nhiệm vụ đang làm) ---- */
+  const missionList = Array.isArray(ctx.missionNext) ? ctx.missionNext : (ctx.missionNext ? [ctx.missionNext] : []);
+  missionList.forEach(mId => {
+    pushRule(mId, "mission", "Vì đây là bước tiếp theo trong nhiệm vụ em đang thực hiện!");
+  });
+  if (ctx.followChain && lastId && NEXT[lastId] && NEXT[lastId].length) {
+    NEXT[lastId].forEach(n => {
+      pushRule(n.id, "mission", n.why_vi);
+    });
+  }
+
+  /* ---- 3. NEEDS (Nhu cầu: đói, khát, mệt) ---- */
+  const needs = ctx.needs || {};
+  const isHungry = !!(ctx.hungry || (needs.hunger != null && needs.hunger < 45));
+  const isThirsty = !!(ctx.thirsty || (needs.thirst != null && needs.thirst < 45));
+  const isTired = !!(ctx.tired || (needs.energy != null && needs.energy < 35));
+
+  if (isHungry) {
+    if (place === "home") {
+      pushRule("cook_eggs", "needs", "Vì bụng đang đói, em hãy chiên trứng làm bữa ăn nhé!");
+      pushRule("eat_at_counter", "needs", "Vì đang đói bụng, em hãy ngồi ăn tại quầy bếp để nạp năng lượng nhé!");
+      pushRule("slice_bread", "needs", "Vì đang đói bụng, em hãy cắt bánh mì để ăn lót dạ nhé!");
+      pushRule("open_fridge", "needs", "Vì đang đói bụng, em hãy mở tủ lạnh lấy đồ ăn nhé!");
+    } else if (place === "cafe") {
+      pushRule("order_a_croissant", "needs", "Vì đang đói bụng, em hãy gọi một chiếc bánh sừng bò tại quầy nhé!");
+      pushRule("eat_a_pastry", "needs", "Vì bụng đang đói, em hãy thưởng thức bánh ngọt để nạp năng lượng nhé!");
+    } else if (place === "park") {
+      pushRule("open_the_picnic_basket", "needs", "Vì đang đói bụng ở công viên, em hãy mở giỏ đồ ăn picnic nhé!");
+      pushRule("eat_a_sandwich", "needs", "Vì đang đói bụng, em hãy ăn bánh sandwich trên thảm picnic nhé!");
+    } else if (place === "market") {
+      pushRule("pick_a_baguette", "needs", "Vì đang đói bụng, em hãy chọn một ổ bánh mì Pháp mới ra lò nhé!");
+      pushRule("pick_some_apples", "needs", "Vì đang đói bụng, em hãy chọn vài quả táo tươi ngon nhé!");
+      pushRule("pick_some_bananas", "needs", "Vì đang đói bụng, em hãy lấy một nải chuối chín nhé!");
+    } else if (place === "restaurant") {
+      pushRule("order_pasta", "needs", "Vì bụng đang đói, em hãy gọi món mì Ý nóng hổi nhé!");
+      pushRule("eat_the_main_course", "needs", "Vì đang đói bụng, em hãy thưởng thức món chính ngay nhé!");
+    } else if (place === "school") {
+      pushRule("line_up_at_the_cafeteria", "needs", "Vì đang đói bụng, em hãy xếp hàng ở căng tin trường để lấy suất ăn nhé!");
+    } else if (place === "camping") {
+      pushRule("roast_marshmallows", "needs", "Vì đang đói bụng ở khu cắm trại, em hãy nướng kẹo dẻo trên lửa trại nhé!");
+    }
+  }
+
+  if (isThirsty) {
+    if (place === "home") {
+      pushRule("pick_up_cup", "needs", "Vì đang khát nước, em hãy cầm cốc lên để rót nước uống nhé!");
+      pushRule("pour_water_k", "needs", "Vì đang khát nước, em hãy rót một cốc nước mát nhé!");
+      pushRule("drink_from_cup", "needs", "Vì đang khát nước, em hãy uống nước từ cốc ngay nhé!");
+    } else if (place === "cafe") {
+      pushRule("order_a_coffee", "needs", "Vì đang khát nước, em hãy gọi đồ uống tại quầy cà phê nhé!");
+      pushRule("sip_my_coffee", "needs", "Vì đang khát, em hãy nhấp một ngụm đồ uống thơm ngon nhé!");
+    } else if (place === "park") {
+      pushRule("drink_from_the_fountain", "needs", "Vì đang khát nước ở công viên, em hãy uống nước tại vòi nước công cộng nhé!");
+      pushRule("buy_an_ice_cream_cone", "needs", "Vì đang khát, em hãy mua một cây kem mát lạnh nhé!");
+    } else if (place === "market") {
+      pushRule("grab_orange_juice", "needs", "Vì đang khát nước, em hãy lấy một chai nước cam ép tươi mát nhé!");
+      pushRule("take_a_carton_of_milk", "needs", "Vì đang khát, em hãy lấy một hộp sữa tươi trong tủ mát nhé!");
+    }
+  }
+
+  if (isTired) {
+    if (place === "home") {
+      pushRule("sit_on_sofa", "needs", "Vì cơ thể đang mệt, em hãy ngồi nghỉ trên ghế sofa nhé!");
+      pushRule("lie_on_bed", "needs", "Vì đang mệt mỏi, em hãy nằm nghỉ trên giường để lấy lại sức nhé!");
+    } else if (place === "park") {
+      pushRule("sit_on_the_bench", "needs", "Vì đi dạo đã mỏi chân, em hãy ngồi nghỉ trên ghế dài công viên nhé!");
+    } else if (place === "cafe") {
+      pushRule("sit_at_a_corner_table", "needs", "Vì đang mệt, em hãy ngồi nghỉ ở bàn góc yên tĩnh nhé!");
+    }
+  }
+
+  /* ---- 4. WEATHER (Thời tiết) ---- */
+  if (wx === "hot") {
+    if (place === "park") {
+      pushRule("buy_an_ice_cream_cone", "weather", "Vì trời đang nóng ở công viên, em hãy mua một cây kem ốc quế giải nhiệt nhé!");
+      pushRule("drink_from_the_fountain", "weather", "Vì trời đang nóng bức, em hãy uống nước mát ở vòi phun nhé!");
+      pushRule("sit_on_the_bench", "weather", "Vì trời đang nắng nóng, em hãy ngồi nghỉ dưới bóng râm tán cây nhé!");
+    } else if (place === "cafe") {
+      pushRule("drink_iced_latte", "weather", "Vì trời đang nóng bức, em hãy gọi một ly latte đá mát lạnh nhé!");
+      pushRule("order_a_coffee", "weather", "Vì trời đang nóng, em hãy gọi một món đồ uống giải nhiệt ở quầy nhé!");
+    } else if (place === "market") {
+      pushRule("grab_orange_juice", "weather", "Vì trời đang nóng, em hãy lấy một chai nước cam ướp lạnh nhé!");
+      pushRule("open_the_freezer_door", "weather", "Vì trời đang nóng bức, em hãy mở tủ đông chọn kem mát lạnh nhé!");
+      pushRule("pick_a_tub_of_ice_cream", "weather", "Vì trời đang nóng, mua một hộp kem mát lạnh là hợp nhất!");
+    } else if (place === "home") {
+      pushRule("open_window", "weather", "Vì trời đang nóng, em hãy mở cửa sổ đón gió mát vào phòng nhé!");
+      pushRule("pour_water_k", "weather", "Vì trời đang nóng bức, em hãy rót một cốc nước mát để giải nhiệt nhé!");
+    }
+  } else if (wx === "cold") {
+    if (place === "cafe") {
+      pushRule("order_a_coffee", "weather", "Vì trời đang lạnh, em hãy gọi một tách cà phê nóng ấm nhé!");
+      pushRule("sip_my_coffee", "weather", "Vì trời đang lạnh, nhâm nhi tách cà phê nóng sẽ giúp ấm người hơn!");
+      pushRule("order_a_croissant", "weather", "Vì trời đang lạnh, ăn kèm một chiếc bánh nướng nóng giòn rất tuyệt!");
+    } else if (place === "market") {
+      pushRule("pick_a_baguette", "weather", "Vì trời đang lạnh, em hãy chọn một ổ bánh mì mới ra lò còn ấm nóng nhé!");
+      pushRule("take_a_carton_of_milk", "weather", "Vì trời đang lạnh, em hãy mua sữa về hâm nóng uống nhé!");
+    } else if (place === "home") {
+      pushRule("close_window", "weather", "Vì ngoài trời đang lạnh, em hãy đóng cửa sổ lại cho ấm nhà nhé!");
+      pushRule("boil_water", "weather", "Vì trời đang lạnh, em hãy đun nước sôi để pha trà nóng nhé!");
+      pushRule("brew_tea", "weather", "Vì trời đang lạnh, một ấm trà nóng sẽ giúp cả nhà ấm áp hơn!");
+    } else if (place === "camping") {
+      pushRule("light_the_campfire", "weather", "Vì trời đang lạnh ở khu cắm trại, em hãy nhóm lửa trại để sưởi ấm nhé!");
+    }
+  } else if (wx === "rainy" || wx === "rain") {
+    if (place === "home") {
+      pushRule("close_window", "weather", "Vì ngoài trời đang mưa, em hãy đóng cửa sổ kẻo mưa hắt vào phòng nhé!");
+      pushRule("read_book", "weather", "Vì ngoài trời đang mưa, ngồi trong nhà đọc sách là hợp nhất!");
+    } else if (place === "cafe") {
+      pushRule("sit_at_a_corner_table", "weather", "Vì ngoài trời đang mưa, em hãy chọn bàn trong nhà ngồi trú mưa ấm cúng nhé!");
+      pushRule("order_a_coffee", "weather", "Vì trời đang mưa, gọi một cốc đồ uống ấm nóng ngồi ngắm mưa rất tuyệt!");
+    } else if (place === "market") {
+      pushRule("wipe_wet_cart_handle", "weather", "Vì trời đang mưa ẩm, em hãy lau khô tay cầm xe đẩy trước khi mua sắm nhé!");
+      pushRule("grab_a_cart", "weather", "Vì ngoài trời đang mưa, em hãy thong thả đẩy xe mua sắm trong siêu thị khô ráo nhé!");
+    }
+  } else if (wx === "windy") {
+    if (place === "home") {
+      pushRule("close_window", "weather", "Vì ngoài trời đang có gió mạnh, em hãy đóng cửa sổ lại nhé!");
+    } else if (place === "park") {
+      pushRule("fly_a_kite", "weather", "Vì trời đang có gió mát ở công viên, thả diều lúc này là lý tưởng nhất!");
+    }
+  }
+
+  /* ---- 5. SITUATION (Tình huống) ---- */
+  if (sit === "rush" || sit === "hurry") {
+    if (place === "market") {
+      pushRule("use_the_self_checkout", "situation", "Vì đang vội ở siêu thị, em hãy đi quầy tự thanh toán để không phải xếp hàng nhé!");
+      pushRule("tap_my_card", "situation", "Vì đang vội, em hãy chạm thẻ thanh toán một chạm thật nhanh nhé!");
+      pushRule("take_the_receipt", "situation", "Vì đang vội, em hãy lấy hóa đơn nhanh để kịp giờ nhé!");
+      pushRule("grab_a_hand_basket", "situation", "Vì đang vội mua ít đồ, xách giỏ tay sẽ nhanh hơn đẩy xe lớn!");
+    } else if (place === "cafe") {
+      pushRule("order_a_coffee", "situation", "Vì đang vội, em hãy gọi nhanh cà phê mang đi tại quầy nhé!");
+      pushRule("pay_by_card", "situation", "Vì đang vội, thanh toán bằng thẻ chạm là nhanh nhất!");
+    } else if (place === "home") {
+      pushRule("grab_keys_g", "situation", "Vì đang vội ra ngoài, em nhớ cầm theo chìa khóa kẻo quên nhé!");
+      pushRule("put_on_shoes_g", "situation", "Vì đang vội, em hãy xỏ giày nhanh để kịp giờ xuất phát nhé!");
+    }
+  } else if (sit === "bargain" || sit === "sale") {
+    if (place === "market") {
+      pushRule("read_the_sale_flyer", "situation", "Vì đang săn giảm giá, em hãy đọc tờ rơi khuyến mãi ngay lối vào nhé!");
+      pushRule("check_the_price_tag", "situation", "Vì đang săn sale, em hãy kiểm tra kỹ bảng giá ưu đãi trên kệ nhé!");
+      pushRule("scan_a_discount_coupon", "situation", "Vì đang săn giảm giá, em đừng quên quét mã coupon để được trừ tiền nhé!");
+    }
+  } else if (sit === "sick" || sit === "tired") {
+    if (place === "home") {
+      pushRule("lie_on_bed", "situation", "Vì đang cảm thấy hơi mệt, em hãy nằm nghỉ trên giường nhé!");
+      pushRule("drink_from_cup", "situation", "Vì đang mệt trong người, em hãy uống chút nước ấm cho dễ chịu nhé!");
+    } else if (place === "school") {
+      pushRule("visit_the_school_nurse", "situation", "Vì đang thấy không khỏe ở trường, em hãy xuống phòng y tế gặp cô y tá nhé!");
+    }
+  } else if (sit === "weekend") {
+    if (place === "market") {
+      pushRule("taste_free_cheese_sample", "situation", "Vì đang đi chơi cuối tuần, em hãy thử mẫu phô mai miễn phí ở quầy nhé!");
+      pushRule("pick_a_tub_of_ice_cream", "situation", "Vì là cuối tuần, tự thưởng một hộp kem ngon lành là tuyệt nhất!");
+    } else if (place === "park") {
+      pushRule("spread_the_picnic_mat", "situation", "Vì đang là cuối tuần đẹp trời, em hãy trải thảm picnic thư giãn nhé!");
+    }
+  }
+
+  /* Time-of-day situation at home */
+  if (place === "home" && tod === "morning") {
+    pushRule("wake_up", "situation", "Vì đã đến buổi sáng, em hãy thức dậy đón ngày mới nhé!");
+    pushRule("get_out_of_bed", "situation", "Vì trời đã sáng, em hãy bước ra khỏi giường và khởi động ngày mới nhé!");
+    pushRule("make_bed", "situation", "Vì mới ngủ dậy buổi sáng, em hãy gấp chăn màn gọn gàng nhé!");
+    pushRule("brush_teeth", "situation", "Vì đang là buổi sáng, em hãy đánh răng sạch sẽ trước khi ăn sáng nhé!");
+    pushRule("cook_eggs", "situation", "Vì buổi sáng cần nhiều năng lượng, em hãy chiên trứng làm bữa sáng nhé!");
+    pushRule("eat_at_counter", "situation", "Vì đang là giờ ăn sáng, em hãy thưởng thức bữa sáng ngon miệng nhé!");
+  } else if (place === "home" && tod === "night") {
+    pushRule("turn_off_tv", "situation", "Vì đã khuya rồi, em hãy tắt TV để chuẩn bị đi ngủ nhé!");
+    pushRule("brush_teeth", "situation", "Vì đã đến giờ đi ngủ, em hãy đánh răng sạch sẽ buổi tối nhé!");
+    pushRule("get_under_covers", "situation", "Vì đã muộn, em hãy đắp chăn ấm và nghỉ ngơi nhé!");
+    pushRule("go_to_sleep", "situation", "Vì đã đến đêm khuya, em hãy đi ngủ sớm để mai dậy khỏe khoắn nhé!");
+  }
+
+  /* ---- 6. EXPLORE (Khám phá theo khu vực) ---- */
+  const EXPLORE_BY_ZONE = {
+    market: [
+      ["grab_a_cart", "Vì mới bước vào lối vào siêu thị, em hãy lấy một chiếc xe đẩy trước nhé!"],
+      ["grab_a_hand_basket", "Vì đang ở khu lối vào, em có thể lấy một chiếc giỏ xách tay gọn nhẹ nhé!"],
+      ["read_the_sale_flyer", "Vì đang ở cổng siêu thị, em hãy xem tờ rơi ưu đãi tuần này nhé!"],
+      ["check_the_shopping_list", "Vì chuẩn bị mua sắm, em hãy kiểm tra lại danh sách đồ cần mua nhé!"]
+    ],
+    market_produce: [
+      ["pick_some_apples", "Vì đang ở khu Rau quả & Tiệm bánh, em hãy chọn vài quả táo tươi giòn nhé!"],
+      ["pick_some_bananas", "Vì đang ở quầy trái cây, em hãy chọn một nải chuối chín vàng nhé!"],
+      ["weigh_the_fruit", "Vì đã chọn trái cây, em hãy đặt lên cân điện tử để xem trọng lượng nhé!"],
+      ["pick_a_baguette", "Vì đang đứng cạnh quầy bánh mì, em hãy lấy một ổ bánh mì Pháp thơm phức nhé!"]
+    ],
+    market_dairy: [
+      ["open_the_fridge_door", "Vì đang ở khu Sữa & Đông lạnh, em hãy mở cửa tủ mát để chọn sữa nhé!"],
+      ["take_a_carton_of_milk", "Vì đang ở quầy sữa, em hãy lấy một hộp sữa tươi nguyên kem nhé!"],
+      ["pick_a_block_of_cheese", "Vì đang ở tủ bơ sữa, em hãy chọn thêm một miếng phô mai cheddar nhé!"],
+      ["grab_orange_juice", "Vì đang ở dãy đồ uống mát, em hãy lấy một chai nước cam tươi nhé!"]
+    ],
+    market_meat: [
+      ["order_fresh_salmon", "Vì đang ở quầy Thịt cá tươi sống, em hãy nhờ đầu bếp cắt phi-lê cá hồi nhé!"],
+      ["pick_a_pack_of_beef", "Vì đang ở quầy thịt, em hãy chọn một khay thịt bò tươi ngon nhé!"],
+      ["grab_a_box_of_cereal", "Vì đang ở dãy kệ khô & gia dụng, em hãy lấy một hộp ngũ cốc ăn sáng nhé!"],
+      ["pick_laundry_detergent", "Vì đang ở kệ hàng gia dụng, em hãy lấy thêm một chai nước giặt nhé!"]
+    ],
+    market_checkout: [
+      ["place_items_on_the_belt", "Vì đang ở khu Thu ngân, em hãy đặt hàng hóa lên băng chuyền thanh toán nhé!"],
+      ["use_the_self_checkout", "Vì đang ở khu thanh toán, em có thể quét mã tại máy tự thanh toán nhé!"],
+      ["tap_my_card", "Vì đã quét xong hàng, em hãy chạm thẻ để thanh toán hóa đơn nhé!"],
+      ["take_the_receipt", "Vì đã thanh toán xong, em hãy nhận lại hóa đơn từ thu ngân nhé!"]
+    ],
+    cafe: [
+      ["read_the_menu_board", "Vì mới vào quán cà phê, em hãy nhìn lên bảng thực đơn để chọn món nhé!"],
+      ["order_a_coffee", "Vì đang ở quầy order, em hãy gọi một tách cà phê thơm lừng nhé!"],
+      ["order_a_croissant", "Vì đang ở tủ bánh, em hãy gọi thêm một chiếc bánh sừng bò giòn rụm nhé!"],
+      ["sit_at_a_corner_table", "Vì đã gọi đồ xong, em hãy chọn một chiếc bàn ấm cúng để ngồi nhé!"]
+    ],
+    park: [
+      ["walk_through_the_park_gate", "Vì mới tới công viên, em hãy đi bộ qua cổng chính ngập tràn cây xanh nhé!"],
+      ["feed_the_ducks", "Vì đang đứng cạnh hồ nước, em hãy cho đàn vịt bơi dưới hồ ăn nhé!"],
+      ["sit_on_the_bench", "Vì khung cảnh công viên rất đẹp, em hãy ngồi trên ghế dài ngắm cảnh nhé!"],
+      ["buy_an_ice_cream_cone", "Vì xe kem đang mở bán, em hãy ghé mua một cây kem ốc quế nhé!"]
+    ],
+    restaurant: [
+      ["ask_for_a_table", "Vì mới vào nhà hàng, em hãy nhờ lễ tân sắp xếp bàn ngồi nhé!"],
+      ["read_the_menu", "Vì đã ngồi vào bàn, em hãy mở thực đơn xem các món ngon hôm nay nhé!"],
+      ["order_pasta", "Vì đang chọn món, em hãy gọi thử món mì Ý đặc biệt của bếp trưởng nhé!"]
+    ],
+    school: [
+      ["sit_at_the_student_desk", "Vì đã vào lớp học, em hãy ngồi ngay ngắn vào bàn học của mình nhé!"],
+      ["open_the_textbook", "Vì tiết học bắt đầu rồi, em hãy mở sách giáo khoa tiếng Anh ra nhé!"],
+      ["raise_my_hand", "Vì cô giáo đang đặt câu hỏi, em hãy giơ tay phát biểu xây dựng bài nhé!"]
+    ],
+    camping: [
+      ["pitch_the_tent", "Vì mới đến bãi cắm trại, em hãy dựng lều trước khi trời tối nhé!"],
+      ["gather_firewood", "Vì chuẩn bị đốt lửa trại, em hãy đi nhặt củi khô quanh bãi nhé!"],
+      ["light_the_campfire", "Vì đã có đủ củi, em hãy nhóm bếp lửa trại ấm áp nhé!"]
+    ]
+  };
+
+  if (EXPLORE_BY_ZONE[zone]) {
+    EXPLORE_BY_ZONE[zone].forEach(pair => pushRule(pair[0], "explore", pair[1]));
+  } else if (EXPLORE_BY_ZONE[place]) {
+    EXPLORE_BY_ZONE[place].forEach(pair => pushRule(pair[0], "explore", pair[1]));
+  } else {
+    const todList = TIME_IDS[tod] || TIME_IDS.morning;
+    todList.forEach(item => {
+      if (typeof item === "string") pushRule(item, "explore", TIME_WHY[tod] || "Vì hành động này phù hợp lúc này.");
+      else if (item && item.id) pushRule(item.id, "explore", item.why_vi || TIME_WHY[tod]);
+    });
+  }
+
+  /* Sort strictly by priority rank (1..6), preserving deterministic declaration order within each tier */
+  const indexed = rawCandidates.map((c, idx) => ({ c, idx }));
+  indexed.sort((a, b) => (a.c.priority - b.c.priority) || (a.idx - b.idx));
+
+  /* Filter out impossible actions, recently executed actions, and duplicates */
+  const seen = new Set();
+  const out = [];
+  for (let i = 0; i < indexed.length; i++) {
+    const item = indexed[i].c;
+    if (seen.has(item.id)) continue;
+    if (recentSet.has(item.id)) continue;
+    if (!isPossible(item.id)) continue;
+    seen.add(item.id);
+    out.push(item);
+    if (out.length >= max) break;
+  }
+
+  return out;
+}
+
+const ELW_FLOW = { NEXT, ROUTINES, TIME_IDS, PRIORITY_ORDER, suggest, guideByRules, timeOfDay, greet_vi, renderChips, renderRoutines };
 if (typeof window !== "undefined") window.ELW_FLOW = ELW_FLOW;
 if (typeof module !== "undefined" && module.exports) module.exports = ELW_FLOW;
 })();

@@ -1,0 +1,205 @@
+{
+  "architecture": {
+    "present": {
+      "ELW": true,
+      "ELW_LEVELS": true,
+      "ELW_ROOMS": true,
+      "ELW_CAFE": true,
+      "ELW_MARKET": true,
+      "ELW_PARK": true,
+      "ELW_RESTAURANT": true,
+      "ELW_OUTDOOR": true,
+      "ELW_SCHOOL": true,
+      "ELW_LIFE": true,
+      "ELW_FOOD": true,
+      "ELW_VOICES": true,
+      "ELW_DIALOGUE": true,
+      "ELW_INVENTORY": true,
+      "ELW_FLOW": true,
+      "ELW_READING": true,
+      "ELW_SPEAKING": true,
+      "ELW_GRAMMAR": true,
+      "ELW_ROLEPLAY": true,
+      "ELW_DAY": true,
+      "ELW_NEEDS": true,
+      "ELW_EVENTS": true,
+      "ELW_CHALLENGE": true,
+      "ELW_NPCS": true,
+      "ELW_MISSION": true,
+      "ELW_UI_SCENE": true,
+      "ELW_UI_MISSION": true,
+      "ELW_MISSIONS_PACK": true,
+      "ELW_UI_MOBILE": true,
+      "ELW_UI_COMPANION": true,
+      "ELW_PREMIUM": true,
+      "ELW_WORLD3D": true,
+      "ELW_CONTEXT": true,
+      "ELW_PET": true,
+      "ELW_VOCAB3000": true
+    },
+    "actionsCount": 509,
+    "objectsCount": 186,
+    "missionsCount": 42,
+    "challengesCount": 21
+  },
+  "panel_layout_desktop": {
+    "panelParentClass": "leftcol",
+    "isInsideLeftCol": true,
+    "isInsideSide": false,
+    "roomRect": {
+      "x": 109,
+      "y": 346,
+      "w": 738,
+      "h": 469,
+      "bottom": 815
+    },
+    "panelRect": {
+      "x": 96,
+      "y": 853,
+      "w": 758,
+      "h": 186
+    },
+    "isBelowSceneHorizontallyAligned": true
+  },
+  "panel_visible_when_clicking_obj_in_other_tab": true,
+  "vocab_3000_audit": {
+    "rawVocabEntriesAcrossApp": 1830,
+    "uniqueWordsInActionsAndCatalogs": 829,
+    "domainsCount": 12,
+    "framesCount": 5,
+    "hasSearchInput": true,
+    "displayedChipsPerView": 24
+  },
+  "fridge_audit": {
+    "opensOnClick": true,
+    "closesOnEscape": true
+  },
+  "weather_audit": {
+    "sunny": {
+      "ltWxCount": 1,
+      "dayFxCount": 1,
+      "hasDarkMultiplyRain": false,
+      "currentWx": "sunny"
+    },
+    "rainy": {
+      "ltWxCount": 1,
+      "dayFxCount": 1,
+      "hasDarkMultiplyRain": false,
+      "currentWx": "rainy"
+    },
+    "cold": {
+      "ltWxCount": 1,
+      "dayFxCount": 1,
+      "hasDarkMultiplyRain": false,
+      "currentWx": "cold"
+    },
+    "windy": {
+      "ltWxCount": 1,
+      "dayFxCount": 1,
+      "hasDarkMultiplyRain": false,
+      "currentWx": "windy"
+    },
+    "hot": {
+      "ltWxCount": 1,
+      "dayFxCount": 1,
+      "hasDarkMultiplyRain": false,
+      "currentWx": "hot"
+    }
+  },
+  "pet_audit": {
+    "beforePtsText": "⭐ 30",
+    "afterPenaltyPtsText": "⭐ 15",
+    "beforeHunger": 78,
+    "afterPenaltyHunger": 58,
+    "pointsDeductedCorrectly": true
+  },
+  "section5_manual_run_a": {
+    "outOfOrderGuard": {
+      "guardMsg": "Bước 3 đang khóa. Hãy hoàn thành bước 1 (Lấy trứng trong tủ lạnh) trước.",
+      "preMsg": "exists"
+    },
+    "finalState": {
+      "complete": true,
+      "steps": [
+        {
+          "n": 1,
+          "status": "done"
+        },
+        {
+          "n": 2,
+          "status": "done"
+        },
+        {
+          "n": 3,
+          "status": "done"
+        },
+        {
+          "n": 4,
+          "status": "done"
+        }
+      ],
+      "room": "kitchen",
+      "eggsInFridge": 5,
+      "eggsOnCounter": 0,
+      "k_stove": "off",
+      "k_pan": "egg",
+      "k_table": "set",
+      "pts": "⭐ 20",
+      "petStreakAfterComplete": 2,
+      "petMissionsWonAfterComplete": 1,
+      "timerBannerStillPresent": false
+    }
+  },
+  "section5_auto_run_b": {
+    "complete": true,
+    "steps": [
+      {
+        "n": 1,
+        "status": "done"
+      },
+      {
+        "n": 2,
+        "status": "done"
+      },
+      {
+        "n": 3,
+        "status": "done"
+      },
+      {
+        "n": 4,
+        "status": "done"
+      }
+    ],
+    "room": "kitchen",
+    "eggsInFridge": 5,
+    "eggsOnCounter": 0,
+    "k_stove": "off",
+    "k_pan": "egg",
+    "k_table": "set",
+    "pts": "⭐ 20",
+    "petStreakAfterComplete": 2,
+    "petMissionsWonAfterComplete": 1,
+    "timerBannerStillPresent": false
+  },
+  "mobile_audit": {
+    "winWidth": 390,
+    "docScrollWidth": 390,
+    "hasHorizontalOverflow": false,
+    "roomRect": {
+      "top": 502,
+      "bottom": 735,
+      "height": 233
+    },
+    "ctxBarHeight": 82,
+    "panelRect": {
+      "top": 768,
+      "bottom": 1237,
+      "height": 469
+    },
+    "distanceFromRoomBottomToPanelTop": 33,
+    "panelClasses": "panel"
+  },
+  "console_errors": [],
+  "page_errors": [],
+  "failed_requests": []
+}

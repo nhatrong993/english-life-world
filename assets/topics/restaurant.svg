@@ -1,0 +1,159 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 240" width="360" height="240">
+  <defs>
+    <linearGradient id="rBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#4a251a"/>
+      <stop offset="50%" stop-color="#341810"/>
+      <stop offset="100%" stop-color="#241009"/>
+    </linearGradient>
+    <linearGradient id="rWall" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f5e4d3"/>
+      <stop offset="100%" stop-color="#ebd1bc"/>
+    </linearGradient>
+    <linearGradient id="rFloor" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#734729"/>
+      <stop offset="100%" stop-color="#4d2c16"/>
+    </linearGradient>
+    <radialGradient id="rLight" cx="0.5" cy="0.2" r="0.7">
+      <stop offset="0%" stop-color="#fff8db" stop-opacity="0.9"/>
+      <stop offset="40%" stop-color="#fbd67a" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#fbd67a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="rCloth" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#f1e6da"/>
+    </linearGradient>
+    <linearGradient id="rCloche" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f8fafc"/>
+      <stop offset="35%" stop-color="#e2e8f0"/>
+      <stop offset="70%" stop-color="#cbd5e1"/>
+      <stop offset="100%" stop-color="#94a3b8"/>
+    </linearGradient>
+    <linearGradient id="rGold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffe394"/>
+      <stop offset="100%" stop-color="#df9a24"/>
+    </linearGradient>
+    <filter id="rShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-opacity="0.3" flood-color="#1e0c05"/>
+    </filter>
+  </defs>
+
+  <!-- Wall & Ambient -->
+  <rect width="360" height="150" fill="url(#rWall)"/>
+  <!-- Wall Wainscot paneling -->
+  <rect y="110" width="360" height="40" fill="#6d3d20"/>
+  <line x1="0" y1="110" x2="360" y2="110" stroke="#8d522c" stroke-width="3"/>
+  <!-- Floor -->
+  <rect y="150" width="360" height="90" fill="url(#rFloor)"/>
+  <!-- Wooden floor slats -->
+  <line x1="0" y1="180" x2="360" y2="180" stroke="#3d2211" stroke-width="1.2" opacity="0.6"/>
+  <line x1="0" y1="210" x2="360" y2="210" stroke="#3d2211" stroke-width="1.2" opacity="0.6"/>
+
+  <!-- Warm Hanging Bistro Lamp -->
+  <line x1="180" y1="0" x2="180" y2="35" stroke="#4a3020" stroke-width="2"/>
+  <path d="M162 48 L198 48 L188 35 L172 35 Z" fill="#b0652e"/>
+  <circle cx="180" cy="50" r="5" fill="#fcd972"/>
+  <!-- Warm Light Cone -->
+  <polygon points="172,50 188,50 300,240 60,240" fill="url(#rLight)"/>
+
+  <!-- Wall Picture Frame -->
+  <g transform="translate(48, 30)">
+    <rect width="54" height="42" rx="3" fill="#6d3d20" stroke="#4a2612" stroke-width="2"/>
+    <rect x="5" y="5" width="44" height="32" fill="#fffaf2"/>
+    <circle cx="27" cy="21" r="10" fill="#eedcc9"/>
+    <path d="M12 32 Q27 18 42 32 Z" fill="#c08149"/>
+  </g>
+
+  <!-- Dining Table & Chairs -->
+  <!-- Chair Left -->
+  <g transform="translate(68, 118)" filter="url(#rShadow)">
+    <path d="M10 0 Q20 -8 30 0 L30 50 L10 50 Z" fill="#804724"/>
+    <rect x="6" y="46" width="28" height="6" rx="3" fill="#a45f31"/>
+    <rect x="8" y="52" width="4" height="38" fill="#5c3218"/>
+    <rect x="28" y="52" width="4" height="38" fill="#5c3218"/>
+  </g>
+  <!-- Chair Right -->
+  <g transform="translate(252, 118)" filter="url(#rShadow)">
+    <path d="M10 0 Q20 -8 30 0 L30 50 L10 50 Z" fill="#804724"/>
+    <rect x="6" y="46" width="28" height="6" rx="3" fill="#a45f31"/>
+    <rect x="8" y="52" width="4" height="38" fill="#5c3218"/>
+    <rect x="28" y="52" width="4" height="38" fill="#5c3218"/>
+  </g>
+
+  <!-- Table Cast Shadow -->
+  <ellipse cx="180" cy="214" rx="90" ry="18" fill="#241009" opacity="0.45"/>
+
+  <!-- Round Table Structure -->
+  <g filter="url(#rShadow)">
+    <!-- Base Pedestal -->
+    <rect x="174" y="160" width="12" height="44" rx="4" fill="#5c3218"/>
+    <ellipse cx="180" cy="204" rx="36" ry="10" fill="#6d3d20"/>
+    <!-- Tabletop -->
+    <ellipse cx="180" cy="154" rx="84" ry="24" fill="#a45f31"/>
+    <!-- Tablecloth draping -->
+    <ellipse cx="180" cy="152" rx="78" ry="21" fill="url(#rCloth)"/>
+    <path d="M102 152 Q180 182 258 152 L254 172 Q180 200 106 172 Z" fill="#ede1d2"/>
+    <path d="M106 172 Q180 200 254 172" stroke="#e8743b" stroke-width="2.5" fill="none"/>
+  </g>
+
+  <!-- Items On Table -->
+  <!-- 1. The Cloche / Serving Platter -->
+  <g transform="translate(180, 142)" filter="url(#rShadow)">
+    <!-- Platter Base -->
+    <ellipse cx="0" cy="6" rx="42" ry="14" fill="#cbd5e1" stroke="#94a3b8" stroke-width="1.5"/>
+    <ellipse cx="0" cy="5" rx="36" ry="10" fill="#f1f5f9"/>
+
+    <!-- Delicious Steaming Dish Under Cloche -->
+    <ellipse cx="-4" cy="4" rx="22" ry="7" fill="#c26330"/>
+    <ellipse cx="-4" cy="3" rx="16" ry="5" fill="#e8894e"/>
+    <circle cx="-10" cy="2" r="3" fill="#4ea45a"/>
+    <circle cx="2" cy="3" r="2.5" fill="#fcdb77"/>
+
+    <!-- Aromatic Steam Curles -->
+    <path d="M-8 -2 Q-14 -16 -6 -26 T-4 -40" fill="none" stroke="#fcd68a" stroke-width="2" stroke-linecap="round" opacity="0.85"/>
+    <path d="M4 -2 Q12 -16 6 -26 T10 -40" fill="none" stroke="#fcd68a" stroke-width="1.8" stroke-linecap="round" opacity="0.85"/>
+
+    <!-- Silver Cloche Dome - Tilted Lifted slightly -->
+    <g transform="translate(4, -8) rotate(-16)">
+      <path d="M-28 0 C-28 -28 28 -28 28 0 Z" fill="url(#rCloche)"/>
+      <ellipse cx="0" cy="0" rx="28" ry="7" fill="#94a3b8"/>
+      <ellipse cx="0" cy="-1" rx="27" ry="6" fill="#cbd5e1"/>
+      <!-- Cloche Handle / Finial -->
+      <circle cx="0" cy="-28" r="5" fill="url(#rGold)"/>
+      <!-- Metallic Highlights -->
+      <path d="M-18 -8 Q-12 -22 -2 -24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" opacity="0.75"/>
+    </g>
+  </g>
+
+  <!-- 2. Wine Glass on Right -->
+  <g transform="translate(232, 138)">
+    <ellipse cx="0" cy="14" rx="7" ry="2.5" fill="#cbd5e1"/>
+    <line x1="0" y1="14" x2="0" y2="4" stroke="#cbd5e1" stroke-width="1.8"/>
+    <!-- Bowl -->
+    <path d="M-6 -8 Q0 4 6 -8 L-6 -8 Z" fill="#e2e8f0" opacity="0.6"/>
+    <path d="M-5 -6 Q0 3 5 -6 Z" fill="#9d202f"/>
+    <!-- Highlight -->
+    <line x1="-4" y1="-7" x2="-2" y2="0" stroke="#fff" stroke-width="1" opacity="0.8"/>
+  </g>
+
+  <!-- 3. Table Candle in Glass Holder on Left -->
+  <g transform="translate(130, 136)">
+    <!-- Small Glass cup -->
+    <rect x="-6" y="-2" width="12" height="14" rx="2" fill="#e2e8f0" opacity="0.5"/>
+    <rect x="-4" y="2" width="8" height="9" fill="#fdf2d6"/>
+    <!-- Wick & Flame -->
+    <line x1="0" y1="2" x2="0" y2="-1" stroke="#5a3d1f" stroke-width="1"/>
+    <ellipse cx="0" cy="-5" rx="3.5" ry="5.5" fill="#fcdb77"/>
+    <ellipse cx="0" cy="-4" rx="1.8" ry="3" fill="#e8743b"/>
+    <!-- Glow -->
+    <circle cx="0" cy="-5" r="10" fill="#fcdb77" opacity="0.3"/>
+  </g>
+
+  <!-- 4. Menu Card booklet -->
+  <g transform="translate(142, 150) rotate(-12)">
+    <rect x="-8" y="-12" width="16" height="24" rx="2" fill="#5a2211" stroke="#df9a24" stroke-width="1"/>
+    <rect x="-5" y="-9" width="10" height="18" fill="#fffcf7"/>
+    <line x1="-3" y1="-5" x2="3" y2="-5" stroke="#df9a24" stroke-width="1"/>
+    <line x1="-3" y1="-1" x2="3" y2="-1" stroke="#948476" stroke-width="0.8"/>
+    <line x1="-3" y1="2" x2="1" y2="2" stroke="#948476" stroke-width="0.8"/>
+  </g>
+</svg>

@@ -795,7 +795,17 @@
 
   /* ---------------- triggering ---------------- */
   var rand = Math.random;
+  var players = [];
+  function isSurpriseEnabled(who) {
+    try {
+      if (root.ELW_CONTEXT && typeof root.ELW_CONTEXT.isSideCharacterEnabled === "function") {
+        return !!root.ELW_CONTEXT.isSideCharacterEnabled(who || "surprise");
+      }
+    } catch (e) {}
+    return true;
+  }
   function shouldTrigger(actionId, W, history, opts) {
+    if (!isSurpriseEnabled("surprise")) return null;
     opts = opts || {};
     history = history || [];
     var list = TRIGGERS[actionId];
@@ -812,7 +822,7 @@
       if (s) { recentScenes[s] = 1; if (i >= recent.length - 2) anySceneRecently = 1; }
     });
     if (anySceneRecently) return null;
-    var cands = list.filter(function (s) { return !recentScenes[s]; });
+    var cands = list.filter(function (s) { return !recentScenes[s] && SCENES[s] && isSurpriseEnabled(SCENES[s].who); });
     if (W && W.room) {
       var rc = cands.filter(function (s) { return SCENES[s].room === W.room; });
       if (rc.length) cands = rc;
@@ -906,6 +916,7 @@
       step();
     }
     function step() {
+      if (!running || !scene || !isSurpriseEnabled(scene.who)) { stop(true); return; }
       var my = token, line = scene.lines[idx];
       turn.innerHTML = "";
       if (line.who !== "me") {
@@ -980,32 +991,53 @@
     function finish() {
       var id = sceneId; running = false; token++;
       turn.innerHTML = '<div class="rp-end">🎉 Hết đoạn hội thoại!</div><button type="button" class="rp-btn rp-close2">Đóng</button>';
-      turn.querySelector(".rp-close2").onclick = function () { container.innerHTML = ""; };
+      turn.querySelector(".rp-close2").onclick = function () { container.innerHTML = ""; container.hidden = true; };
       var s = stats;
       if (o.onEnd) try { o.onEnd(id, s); } catch (e) {}
     }
     function start(id) {
-      if (!SCENES[id]) return false;
+      if (!SCENES[id] || !isSurpriseEnabled(SCENES[id].who)) {
+        if (container) { container.innerHTML = ""; container.hidden = true; }
+        return false;
+      }
       if (running) stop(true);
       token++; running = true; sceneId = id; scene = SCENES[id]; idx = 0;
       stats = { turns: 0, correct: 0, wrong: 0, free: 0, hints: 0, actions: [], done: [] };
       build(); step(); return true;
     }
     function stop(silent) {
-      if (!running && silent) return;
+      if (!running && silent) {
+        if (container) { container.innerHTML = ""; container.hidden = true; }
+        return;
+      }
       var was = running, id = sceneId; running = false; token++;
-      if (container) container.innerHTML = "";
+      if (container) { container.innerHTML = ""; container.hidden = true; }
       if (was && !silent && o.onEnd) try { o.onEnd(id, Object.assign({ stopped: true }, stats)); } catch (e) {}
     }
-    return {
-      start: start, stop: function () { stop(false); },
+    var inst = {
+      start: start, stop: function (silent) { stop(!!silent); },
       isRunning: function () { return running; },
       current: function () { return running ? sceneId : null; },
+      currentWho: function () { return running && scene ? scene.who : null; },
       actionDone: function (actionId, ok) { if (stats) stats.done.push({ id: actionId, ok: ok !== false }); }
     };
+    players.push(inst);
+    return inst;
   }
 
-  var api = { CHARACTERS: CHARACTERS, TRIGGERS: TRIGGERS, SCENES: SCENES, shouldTrigger: shouldTrigger, matchFree: matchFree, createPlayer: createPlayer, css: css, escape: esc };
+  function teardown(target) {
+    var k = String(target || "all").toLowerCase();
+    if (k === "linh" || k === "friend" || k === "companion") return;
+    players.forEach(function (p) {
+      try { p.stop(true); } catch (e) {}
+    });
+    if (root.document) {
+      var c = root.document.getElementById("rpCard");
+      if (c) { c.innerHTML = ""; c.hidden = true; }
+    }
+  }
+
+  var api = { CHARACTERS: CHARACTERS, TRIGGERS: TRIGGERS, SCENES: SCENES, shouldTrigger: shouldTrigger, matchFree: matchFree, createPlayer: createPlayer, teardown: teardown, css: css, escape: esc };
   root.ELW_ROLEPLAY = api;
   if (typeof module !== "undefined" && module.exports) module.exports = api;
 })(typeof window !== "undefined" ? window : globalThis);

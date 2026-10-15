@@ -1,0 +1,132 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 240" width="360" height="240">
+  <defs>
+    <linearGradient id="hWall" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fff5e8"/>
+      <stop offset="100%" stop-color="#f6e5cf"/>
+    </linearGradient>
+    <linearGradient id="hFloor" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#deb887"/>
+      <stop offset="100%" stop-color="#c69c6e"/>
+    </linearGradient>
+    <linearGradient id="hOrange" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fa8c55"/>
+      <stop offset="100%" stop-color="#e8743b"/>
+    </linearGradient>
+    <radialGradient id="hLampGlow" cx="0.5" cy="0.4" r="0.6">
+      <stop offset="0%" stop-color="#fff8db" stop-opacity="0.9"/>
+      <stop offset="40%" stop-color="#fcdb77" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#fcdb77" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="hShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-opacity="0.2" flood-color="#3d2211"/>
+    </filter>
+  </defs>
+
+  <!-- Wall & Floor -->
+  <rect width="360" height="155" fill="url(#hWall)"/>
+  <!-- Baseboard molding -->
+  <rect y="148" width="360" height="7" fill="#dfc09f"/>
+  <rect y="155" width="360" height="85" fill="url(#hFloor)"/>
+  <!-- Floorboard lines -->
+  <line x1="0" y1="185" x2="360" y2="185" stroke="#b08658" stroke-width="1.2" opacity="0.6"/>
+  <line x1="0" y1="215" x2="360" y2="215" stroke="#b08658" stroke-width="1.2" opacity="0.6"/>
+
+  <!-- Round Cozy Rug in Center -->
+  <ellipse cx="180" cy="200" rx="100" ry="26" fill="#fce4d6" stroke="#f0c9ad" stroke-width="3" filter="url(#hShadow)"/>
+  <ellipse cx="180" cy="200" rx="86" ry="21" fill="#fff7f0"/>
+
+  <!-- Wall Window (Left) -->
+  <g transform="translate(30, 25)" filter="url(#hShadow)">
+    <rect width="64" height="85" rx="4" fill="#a46d42" stroke="#6e4623" stroke-width="2"/>
+    <rect x="5" y="5" width="54" height="75" fill="#bae6fd"/>
+    <!-- Window sill -->
+    <rect x="-4" y="85" width="72" height="6" rx="2" fill="#8c5830"/>
+    <!-- Distant hills through window -->
+    <path d="M5 60 Q25 45 40 55 T60 50 L60 80 L5 80 Z" fill="#86efac"/>
+    <!-- Panes cross -->
+    <line x1="32" y1="5" x2="32" y2="80" stroke="#fff" stroke-width="2.5"/>
+    <line x1="5" y1="42" x2="60" y2="42" stroke="#fff" stroke-width="2.5"/>
+  </g>
+
+  <!-- Framed Art on Wall (Right) -->
+  <g transform="translate(260, 30)" filter="url(#hShadow)">
+    <rect width="60" height="48" rx="3" fill="#6e4623" stroke="#4a2c11" stroke-width="2"/>
+    <rect x="5" y="5" width="50" height="38" fill="#fffdfa"/>
+    <circle cx="28" cy="20" r="10" fill="#fcdb77"/>
+    <polygon points="10,38 25,25 40,38" fill="#e8743b"/>
+    <polygon points="28,38 40,28 52,38" fill="#3b8de8"/>
+  </g>
+
+  <!-- Floor Lamp (Behind Armchair) -->
+  <g transform="translate(110, 50)" filter="url(#hShadow)">
+    <!-- Base -->
+    <ellipse cx="10" cy="145" rx="16" ry="5" fill="#4a2c11"/>
+    <!-- Pole -->
+    <line x1="10" y1="145" x2="10" y2="25" stroke="#713f12" stroke-width="3"/>
+    <!-- Shade -->
+    <polygon points="-6,25 26,25 20,-5 0,-5" fill="#fde047" stroke="#eab308" stroke-width="1.5"/>
+    <!-- Finial -->
+    <circle cx="10" cy="-7" r="2.5" fill="#ca8a04"/>
+    <!-- Light Glow -->
+    <polygon points="0,-5 20,-5 70,160 -50,160" fill="url(#hLampGlow)"/>
+  </g>
+
+  <!-- Cozy Armchair (Center) -->
+  <g transform="translate(142, 108)" filter="url(#hShadow)">
+    <!-- Chair Legs -->
+    <line x1="15" y1="75" x2="10" y2="95" stroke="#5a3d1f" stroke-width="4" stroke-linecap="round"/>
+    <line x1="65" y1="75" x2="70" y2="95" stroke="#5a3d1f" stroke-width="4" stroke-linecap="round"/>
+    <line x1="28" y1="70" x2="26" y2="88" stroke="#3d2211" stroke-width="3" stroke-linecap="round"/>
+    <line x1="52" y1="70" x2="54" y2="88" stroke="#3d2211" stroke-width="3" stroke-linecap="round"/>
+
+    <!-- Chair Backrest -->
+    <rect x="8" y="0" width="64" height="52" rx="14" fill="url(#hOrange)"/>
+    <rect x="14" y="6" width="52" height="40" rx="10" fill="#fa8c55"/>
+
+    <!-- Armrests -->
+    <rect x="-2" y="28" width="16" height="42" rx="8" fill="#d35c24"/>
+    <rect x="0" y="26" width="14" height="40" rx="7" fill="url(#hOrange)"/>
+    <rect x="66" y="28" width="16" height="42" rx="8" fill="#d35c24"/>
+    <rect x="66" y="26" width="14" height="40" rx="7" fill="url(#hOrange)"/>
+
+    <!-- Seat Cushion -->
+    <rect x="8" y="44" width="64" height="32" rx="10" fill="#d35c24"/>
+    <rect x="10" y="42" width="60" height="30" rx="9" fill="url(#hOrange)"/>
+
+    <!-- Throw Pillow -->
+    <g transform="translate(42, 40) rotate(-15)">
+      <rect x="-10" y="-10" width="20" height="20" rx="4" fill="#fcdb77"/>
+      <circle cx="0" cy="0" r="3" fill="#e8743b"/>
+    </g>
+  </g>
+
+  <!-- Coffee Table with Steaming Mug (Right) -->
+  <g transform="translate(230, 160)" filter="url(#hShadow)">
+    <!-- Legs -->
+    <line x1="8" y1="20" x2="4" y2="40" stroke="#5a3d1f" stroke-width="3.5" stroke-linecap="round"/>
+    <line x1="42" y1="20" x2="46" y2="40" stroke="#5a3d1f" stroke-width="3.5" stroke-linecap="round"/>
+    <!-- Tabletop -->
+    <ellipse cx="25" cy="18" rx="28" ry="10" fill="#8c5830"/>
+    <ellipse cx="25" cy="16" rx="26" ry="9" fill="#a46d42"/>
+
+    <!-- Steaming Coffee Mug -->
+    <g transform="translate(24, 6)">
+      <rect x="-4" y="0" width="8" height="10" rx="2" fill="#ffffff" stroke="#e2e8f0" stroke-width="0.8"/>
+      <path d="M4 2 Q7 4 4 7" stroke="#ffffff" stroke-width="1.2" fill="none"/>
+      <!-- Steam -->
+      <path d="M-1 -2 Q-3 -6 0 -9 T-1 -14" stroke="#eedcc9" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+      <path d="M2 -2 Q4 -6 1 -9 T3 -14" stroke="#eedcc9" stroke-width="1" fill="none" stroke-linecap="round"/>
+    </g>
+  </g>
+
+  <!-- Potted Monstera Houseplant (Left Foreground) -->
+  <g transform="translate(45, 155)" filter="url(#hShadow)">
+    <!-- Terracotta Pot -->
+    <polygon points="8,40 28,40 32,18 4,18" fill="#c25e2e"/>
+    <rect x="2" y="14" width="32" height="6" rx="2" fill="#d97443"/>
+    <!-- Leaves -->
+    <path d="M18 16 Q8 -2 0 4 Q-4 12 18 16 Z" fill="#2d6a4f"/>
+    <path d="M18 16 Q26 -8 36 -2 Q40 8 18 16 Z" fill="#40916c"/>
+    <path d="M18 16 Q18 -12 24 -15 Q30 -6 18 16 Z" fill="#52b788"/>
+  </g>
+</svg>

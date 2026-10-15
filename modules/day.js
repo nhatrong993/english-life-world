@@ -221,12 +221,12 @@ function saveDiary(entry) { const st = api.state; entry = Object.assign({}, entr
 
 /* ---------- lighting ---------- */
 const LIGHT = { // overlay color, overlay opacity, blend, sky color, sky opacity
-  dawn: ["#ffb98a", .22, "soft-light", "#ffc7a1", .75],
-  morning: ["#fff4d6", .06, "soft-light", "#bfe3ff", 0],
-  noon: ["#fffbe8", .05, "soft-light", "#a6dbff", .25],
-  afternoon: ["#ffd99a", .14, "multiply", "#ffe0a8", .45],
-  evening: ["#e0794a", .28, "multiply", "#f08a5a", .8],
-  night: ["#1d2a5c", .5, "multiply", "#16204a", .95]
+  dawn: ["#ffb98a", .12, "soft-light", "#ffc7a1", .65],
+  morning: ["#fff8e6", .04, "soft-light", "#bfe3ff", 0],
+  noon: ["#fffbe8", .03, "soft-light", "#a6dbff", .2],
+  afternoon: ["#ffe4b5", .07, "soft-light", "#ffe0a8", .35],
+  evening: ["#ff9e6d", .14, "soft-light", "#f08a5a", .65],
+  night: ["#283b7a", .24, "multiply", "#16204a", .88]
 };
 function el(tag, attrs, parent) { const e = (parent && parent.ownerDocument || root.document).createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; }
 function findWindows(svg) {
@@ -253,8 +253,8 @@ function applyLighting(svg, ph, opts) {
   wins.forEach((w, i) => {
     const cid = "dayClip" + i; const cp = el("clipPath", { id: cid }, g); el("rect", { x: w.x, y: w.y, width: w.w, height: w.h, rx: 6 }, cp);
     const wg = el("g", { "clip-path": "url(#" + cid + ")" }, g);
-    const sky = wx === "rainy" ? (ph === "night" ? "#141a33" : "#7d8fa3") : wx === "cloudy" && ph !== "night" ? "#b9c4cf" : L[3];
-    const skyOp = wx === "sunny" ? L[4] : Math.max(L[4], .7);
+    const sky = wx === "rainy" ? (ph === "night" ? "#24355c" : "#8fb8de") : wx === "cloudy" && ph !== "night" ? "#c8d8e8" : L[3];
+    const skyOp = wx === "sunny" ? L[4] : Math.max(L[4], .65);
     const s = el("rect", { x: w.x, y: w.y, width: w.w, height: w.h, fill: sky, "fill-opacity": skyOp }, wg); s.style.transition = tr;
     const cx = w.x + w.w * .72, cy = w.y + w.h * .25;
     if (ph === "night") {
@@ -264,25 +264,34 @@ function applyLighting(svg, ph, opts) {
       const sunY = ph === "dawn" || ph === "evening" ? w.y + w.h * .62 : cy;
       el("circle", { cx, cy: sunY, r: 15, fill: ph === "evening" ? "#ff9a4d" : ph === "dawn" ? "#ffcf7a" : "#fff3b0", opacity: wx === "sunny" ? 1 : .5 }, wg);
     }
-    if (wx === "cloudy" || wx === "rainy") { [[.25, .2], [.6, .32]].forEach(([fx, fy]) => { const c = el("g", { fill: wx === "rainy" ? "#8a96a6" : "#eef2f6", opacity: .9 }, wg); el("ellipse", { cx: w.x + w.w * fx, cy: w.y + w.h * fy, rx: 26, ry: 9 }, c); el("ellipse", { cx: w.x + w.w * fx + 10, cy: w.y + w.h * fy - 6, rx: 15, ry: 9 }, c); }); }
+    if (wx === "cloudy" || wx === "rainy") { [[.25, .2], [.6, .32]].forEach(([fx, fy]) => { const c = el("g", { fill: wx === "rainy" ? "#d6e6f5" : "#eef2f6", opacity: .92 }, wg); el("ellipse", { cx: w.x + w.w * fx, cy: w.y + w.h * fy, rx: 26, ry: 9 }, c); el("ellipse", { cx: w.x + w.w * fx + 10, cy: w.y + w.h * fy - 6, rx: 15, ry: 9 }, c); }); }
     if (wx === "rainy") {
-      const r = rngFor(i + 11); const rg = el("g", { class: "day-rain", stroke: "#dbe9f7", "stroke-width": 1.6, "stroke-linecap": "round", opacity: .85 }, wg);
+      const r = rngFor(i + 11); const rg = el("g", { class: "day-rain", stroke: "#ffffff", "stroke-width": 1.8, "stroke-linecap": "round", opacity: .9 }, wg);
       for (let k = 0; k < 22; k++) { const x = w.x + r() * w.w, y = w.y + r() * w.h; el("line", { x1: x, y1: y, x2: x - 3, y2: y + 10 }, rg); }
-      for (let k = 0; k < 8; k++) el("ellipse", { cx: w.x + r() * w.w, cy: w.y + r() * w.h, rx: 2, ry: 3, fill: "#e8f3ff", opacity: .8, class: "day-drop" }, wg);
+      for (let k = 0; k < 8; k++) el("ellipse", { cx: w.x + r() * w.w, cy: w.y + r() * w.h, rx: 2, ry: 3, fill: "#ffffff", opacity: .85, class: "day-drop" }, wg);
     }
   });
-  // room tint overlay
+  // room tint overlay (kept bright and vivid; no murky multiply on rainy days)
   const ov = el("rect", { x: 0, y: 0, width: 1000, height: 640, fill: L[0], opacity: L[1], class: "day-ov" }, g);
   ov.style.mixBlendMode = L[2]; ov.style.transition = tr;
-  if (wx === "rainy" && ph !== "night") { const r2 = el("rect", { x: 0, y: 0, width: 1000, height: 640, fill: "#5a6f8a", opacity: .12 }, g); r2.style.mixBlendMode = "multiply"; }
+  if (wx === "rainy" && ph !== "night") {
+    // Cozy warm indoor glow during rain instead of darkening the scene
+    const rg = el("radialGradient", { id: "dayRainWarm", cx: "50%", cy: "45%", r: "60%" }, g);
+    el("stop", { offset: "0%", "stop-color": "#fff8e7", "stop-opacity": "0.14" }, rg);
+    el("stop", { offset: "100%", "stop-color": "#dbeeff", "stop-opacity": "0.04" }, rg);
+    el("rect", { x: 0, y: 0, width: 1000, height: 640, fill: "url(#dayRainWarm)" }, g);
+  }
   if (ph === "night") { // warm lamp-ish vignette so the room stays readable
-    el("rect", { x: 0, y: 0, width: 1000, height: 640, fill: "url(#gLight)", opacity: .35 }, g);
+    el("rect", { x: 0, y: 0, width: 1000, height: 640, fill: "url(#gLight)", opacity: .42 }, g);
   }
   if (!reduce && !svg.querySelector("#dayFxStyle")) {
     const st = el("style", { id: "dayFxStyle" }, svg);
     st.textContent = "#dayFx .day-rain{animation:dayRain .6s linear infinite}@keyframes dayRain{from{transform:translateY(-6px)}to{transform:translateY(6px)}}#dayFx .day-star{animation:dayTw 2.4s ease-in-out infinite alternate}@keyframes dayTw{from{opacity:.4}to{opacity:1}}";
   }
   g.setAttribute("data-phase", ph); g.setAttribute("data-weather", wx);
+  // Keep #uis-overlay and #cbG above #dayFx so speech bubbles are never dimmed
+  const uis = svg.querySelector("#uis-overlay"); if (uis) svg.appendChild(uis);
+  const cbg = svg.querySelector(".cbub"); if (cbg) svg.appendChild(cbg);
   return g;
 }
 

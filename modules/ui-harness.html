@@ -1,0 +1,694 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>English Life World — UI Harness (Contract A, B &amp; Mobile Layout)</title>
+<style>
+:root {
+  --bg: #f6efe4;
+  --card: #fffdf9;
+  --ink: #2d2a26;
+  --muted: #7a7166;
+  --accent: #e8743b;
+  --ok: #3a9d5d;
+  --amber: #e0a03a;
+  --red: #c0392b;
+  --line: #e3d6c3;
+  --shadow: 0 6px 24px rgba(90,61,31,.1);
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Top Harness Toolbar (Fixed test controls) */
+#harnessToolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: #2d2a26;
+  color: #fff;
+  padding: 8px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  font-size: 13px;
+}
+#harnessToolbar .tb-title {
+  font-weight: 700;
+  color: #ffb46a;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+#harnessToolbar .tb-group {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.tb-btn {
+  border: 1px solid #5a5349;
+  background: #3e3a34;
+  color: #fff;
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.15s ease;
+}
+.tb-btn:hover {
+  background: #524d45;
+  border-color: #ffb46a;
+}
+.tb-btn.active {
+  background: #e8743b;
+  border-color: #e8743b;
+  color: #fff;
+}
+.tb-btn-run {
+  background: #3a9d5d;
+  border-color: #3a9d5d;
+  font-weight: 700;
+}
+.tb-btn-run:hover {
+  background: #2f854e;
+}
+
+/* App Simulator Container */
+#appFrame {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  transition: max-width 0.3s ease, box-shadow 0.3s ease;
+  min-height: 100vh;
+  position: relative;
+  background: var(--bg);
+}
+#appFrame.mode-390 {
+  max-width: 390px !important;
+  box-shadow: 0 0 0 6px #2d2a26, 0 16px 40px rgba(0,0,0,0.35);
+  margin: 16px auto 100px;
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+/* Test report overlay / drawer */
+#testReportDrawer {
+  position: fixed;
+  bottom: 60px;
+  right: 14px;
+  width: 380px;
+  max-width: calc(100vw - 28px);
+  max-height: 380px;
+  background: #fff;
+  border: 2px solid var(--accent);
+  border-radius: 14px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+  z-index: 1050;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+}
+#testReportDrawer.open {
+  display: flex;
+}
+.tr-head {
+  background: #2d2a26;
+  color: #fff;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.tr-body {
+  padding: 10px 12px;
+  overflow-y: auto;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #2d2a26;
+}
+.tr-pass { color: #246d3e; font-weight: 700; }
+.tr-fail { color: #c0392b; font-weight: 700; }
+.tr-info { color: #5a4b3d; }
+
+/* Desktop base styles mimicking index.html */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  max-width: 1280px;
+  margin: auto;
+  flex-wrap: wrap;
+}
+h1 { font-size: 20px; margin: 0; }
+h1 span { color: var(--accent); }
+.hud { display: flex; gap: 8px; align-items: center; }
+.stat {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-weight: 700;
+  font-size: 14px;
+}
+.iconbtn {
+  border: 1px solid var(--line);
+  background: #fff;
+  border-radius: 10px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--ink);
+}
+
+#dayHud {
+  max-width: 1280px;
+  margin: 0 auto 10px;
+  padding: 0 16px;
+}
+.day-hud-box {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 8px 12px;
+  font-size: 13px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+main {
+  display: grid;
+  grid-template-columns: minmax(0,1.6fr) minmax(320px,1fr);
+  gap: 16px;
+  max-width: 1280px;
+  margin: auto;
+  padding: 0 16px 16px;
+}
+@media (max-width: 900px) {
+  main { grid-template-columns: 1fr; }
+}
+
+.scene {
+  background: var(--card);
+  border-radius: 20px;
+  padding: 8px;
+  box-shadow: var(--shadow);
+  position: relative;
+  align-self: start;
+}
+.scene-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 4px 8px 6px;
+  font-size: 14px;
+  color: var(--muted);
+  gap: 8px;
+}
+#room {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 14px;
+  background: #fbf7f0;
+}
+.leftcol { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.side { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.card2, .panel {
+  background: var(--card);
+  border-radius: 20px;
+  padding: 14px 16px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--line);
+}
+.card-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0 0 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.card-desc {
+  font-size: 13px;
+  color: var(--muted);
+}
+.guide {
+  position: sticky;
+  bottom: 12px;
+  max-width: 1280px;
+  margin: 0 auto 12px;
+  padding: 0 16px;
+  z-index: 5;
+}
+.guide button {
+  width: 100%;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  text-align: left;
+  border: 2px solid var(--line);
+  background: #fff;
+  border-radius: 16px;
+  padding: 10px 14px;
+  cursor: pointer;
+  box-shadow: 0 3px 0 var(--line);
+  font-size: 15px;
+  color: var(--ink);
+}
+.guide .face { font-size: 34px; }
+.guide b { display: block; }
+.guide span { color: var(--muted); }
+
+/* In-scene dummy objects */
+.obj { cursor: pointer; }
+.tag {
+  pointer-events: none;
+  font: 700 13px system-ui;
+  fill: #5a3d1f;
+  paint-order: stroke;
+  stroke: #fffdf9;
+  stroke-width: 4px;
+}
+</style>
+</head>
+<body>
+
+<!-- HARNESS TOOLBAR: Switch widths, Run automated tests, Trigger tabs -->
+<div id="harnessToolbar">
+  <div class="tb-title">🧪 ELW Harness</div>
+  <div class="tb-group">
+    <button class="tb-btn tb-btn-run" id="btnRunAutoQA">▶ Chạy tự động tất cả kiểm thử</button>
+    <button class="tb-btn" id="btnSet390">📱 390px (Phone)</button>
+    <button class="tb-btn active" id="btnSet1280">💻 1280px (Desktop)</button>
+  </div>
+  <div class="tb-group">
+    <button class="tb-btn" id="btnTabPlay">🎮 Chơi</button>
+    <button class="tb-btn" id="btnTabLearn">📖 Học</button>
+    <button class="tb-btn" id="btnTabHome">🏠 Nhà</button>
+    <button class="tb-btn" id="btnTabMore">⋯ Thêm</button>
+  </div>
+  <div class="tb-group">
+    <button class="tb-btn" id="btnBadgeTest">🔴 Thêm Badge (3)</button>
+    <button class="tb-btn" id="btnBubbleEN">💬 Bong bóng (EN only)</button>
+    <button class="tb-btn" id="btnBubbleVI">🇻🇳 Bong bóng (+VI)</button>
+    <button class="tb-btn" id="btnToggleReport">📋 Kết quả</button>
+  </div>
+</div>
+
+<!-- TEST REPORT DRAWER -->
+<div id="testReportDrawer">
+  <div class="tr-head">
+    <span>📋 Kết quả kiểm thử tự động</span>
+    <button type="button" class="tb-btn" style="padding:2px 6px" id="btnCloseReport">×</button>
+  </div>
+  <div class="tr-body" id="testReportContent">
+    Chưa chạy kiểm thử. Bấm <b>"Chạy tự động tất cả kiểm thử"</b> để bắt đầu.
+  </div>
+</div>
+
+<!-- APP SIMULATOR CONTAINER: Exactly matches index.html structure -->
+<div id="appFrame">
+  <header>
+    <h1>English <span>Life</span> World</h1>
+    <div class="hud">
+      <span class="stat" id="pts" title="Điểm">⭐ 150</span>
+      <span class="stat" id="prog">Cấp độ 1</span>
+      <select class="iconbtn" id="langSel" aria-label="Ngôn ngữ dịch">
+        <option value="vi">Tiếng Việt</option>
+        <option value="en">English</option>
+      </select>
+      <button class="iconbtn" id="btnBook">📒 Sổ từ</button>
+    </div>
+  </header>
+
+  <div id="dayHud">
+    <div class="day-hud-box">
+      <span>🌅 Buổi sáng · 07:30</span>
+      <span>Năng lượng: 80% · Vui vẻ: 90%</span>
+    </div>
+  </div>
+
+  <main>
+    <!-- Left Column (.leftcol) -->
+    <div class="leftcol">
+      <section class="scene">
+        <div class="scene-bar">
+          <span>📍 Phòng bếp (Kitchen)</span>
+          <span><button class="iconbtn" id="btnTags">🏷 Tên đồ vật</button></span>
+        </div>
+        <svg id="room" viewBox="0 0 1000 640" role="application" aria-label="Căn phòng tương tác">
+          <defs>
+            <linearGradient id="gWall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7e8d6"/><stop offset="1" stop-color="#edd2b4"/></linearGradient>
+            <linearGradient id="gFloor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d9ac80"/><stop offset="1" stop-color="#c18e5e"/></linearGradient>
+          </defs>
+          <rect x="0" y="0" width="1000" height="340" fill="url(#gWall)"/>
+          <polygon points="0,340 1000,340 1000,640 0,640" fill="url(#gFloor)"/>
+          <line x1="0" y1="340" x2="1000" y2="340" stroke="#b88354" stroke-width="4"/>
+
+          <!-- Fridge -->
+          <g class="obj" id="o-fridge" data-obj="fridge" data-state="closed" tabindex="0" aria-label="fridge, tủ lạnh">
+            <rect x="830" y="110" width="120" height="340" rx="14" fill="#cfdde7" stroke="#b2c6d4" stroke-width="3"/>
+            <text class="tag" x="890" y="98" text-anchor="middle">fridge · tủ lạnh</text>
+          </g>
+
+          <!-- Stove -->
+          <g class="obj" id="o-stove" data-obj="stove" tabindex="0" aria-label="stove, bếp nấu">
+            <rect x="600" y="270" width="120" height="200" rx="10" fill="#e6dfd3" stroke="#baa894" stroke-width="3"/>
+            <text class="tag" x="660" y="254" text-anchor="middle">stove · bếp nấu</text>
+          </g>
+
+          <!-- Counter -->
+          <g class="obj" id="o-counter" data-obj="counter" tabindex="0" aria-label="counter, bàn bếp">
+            <rect x="360" y="300" width="160" height="180" rx="8" fill="#eadecf" stroke="#beac97" stroke-width="3"/>
+            <text class="tag" x="440" y="285" text-anchor="middle">counter · bàn bếp</text>
+          </g>
+
+          <!-- Mom NPC -->
+          <g class="npc" data-npc="mom" transform="translate(240,430)" tabindex="0" aria-label="Mom, Mẹ">
+            <ellipse cx="0" cy="0" rx="24" ry="7" fill="#000" opacity=".2"/>
+            <path d="M-18 -10 L18 -10 L14 -70 L-14 -70 Z" fill="#e57373"/>
+            <circle cx="0" cy="-86" r="18" fill="#f8cfab"/>
+            <text class="tag" x="0" y="-110" text-anchor="middle">Mom · Mẹ</text>
+          </g>
+
+          <!-- Player Character -->
+          <g id="char" transform="translate(520,440)" tabindex="0" aria-label="Player, Bạn">
+            <ellipse cx="0" cy="0" rx="26" ry="7" fill="#000" opacity=".2"/>
+            <rect x="-8" y="-56" width="16" height="54" rx="4" fill="#3d5a80"/>
+            <rect x="-16" y="-52" width="32" height="50" rx="10" fill="#f0a63c"/>
+            <circle cx="0" cy="-76" r="20" fill="#f2c9a0"/>
+          </g>
+        </svg>
+      </section>
+
+      <!-- Cards in leftcol as per index.html: missionCard, evTray, panel, quickCard, rpCard, storyCard -->
+      <section class="card2" id="missionCard"></section>
+      <section class="card2" id="evTray"><div class="card-title">⚡ Sự kiện bất ngờ (#evTray)</div><div class="card-desc">Sự kiện diễn ra trong ngày</div></section>
+      <section class="panel" id="panel"><div class="card-title">🛠️ Bảng điều khiển (#panel)</div><div class="card-desc">Hành động tương tác với đồ vật</div></section>
+      <section class="card2" id="quickCard"><div class="card-title">💡 Thói quen &amp; gợi ý (#quickCard)</div><div class="card-desc">Lời khuyên của Cô Mai</div></section>
+      <section class="card2" id="rpCard"><div class="card-title">🎭 Nhập vai (#rpCard)</div><div class="card-desc">Đoạn hội thoại tình huống</div></section>
+      <section class="card2" id="storyCard"><div class="card-title">📖 Đoạn văn câu chuyện (#storyCard)</div><div class="card-desc">Ghép các hành động thành câu chuyện hoàn chỉnh</div></section>
+    </div>
+
+    <!-- Right Column (.side): chCard, peopleCard, fridgeCard, needsCard, speakingCard, mistakeCard, seqCard, dlgCard, invWrap -->
+    <div class="side">
+      <section class="card2" id="chCard"><div class="card-title">🏆 Thử thách (#chCard)</div><div class="card-desc">Thử thách hàng ngày</div></section>
+      <section class="card2" id="peopleCard"><div class="card-title">👥 Mọi người (#peopleCard)</div><div class="card-desc">Danh sách thành viên trong nhà</div></section>
+      <section class="card2" id="fridgeCard"><div class="card-title">🧊 Tủ lạnh (#fridgeCard)</div><div class="card-desc">Thực phẩm dự trữ</div></section>
+      <section class="card2" id="needsCard"><div class="card-title">🏠 Tình trạng ngôi nhà (#needsCard)</div><div class="card-desc">Độ sạch sẽ, đồ ăn, không khí</div></section>
+      <section class="card2" id="speakingCard"><div class="card-title">🎙️ Luyện nói &amp; hội thoại (#speakingCard)</div><div class="card-desc">Luyện phát âm qua mic</div></section>
+      <section class="card2" id="mistakeCard"><div class="card-title">📝 Sổ lỗi (#mistakeCard)</div><div class="card-desc">Các từ vựng phát âm sai cần ôn lại</div></section>
+      <section class="card2" id="seqCard"><div class="card-title">🔗 Chuỗi hành động (#seqCard)</div><div class="card-desc">Các bước vừa thực hiện</div></section>
+      <section class="card2" id="dlgCard"><div class="card-title">💬 Hội thoại gia đình (#dlgCard)</div><div class="card-desc">Hội thoại tương tác</div></section>
+      <div id="invWrap">
+        <section class="card2 inv-card"><div class="card-title">🎒 Túi đồ (#invWrap .inv-card)</div><div class="card-desc">Vật dụng đang mang theo</div></section>
+      </div>
+    </div>
+  </main>
+
+  <!-- Sticky Cô Mai guide bar -->
+  <div class="guide">
+    <button id="guide">
+      <span class="face">🧑‍🏫</span>
+      <span style="flex:1"><b>Cô Mai</b><span id="guideText">Chào mừng bạn đến với căn nhà tiếng Anh!</span></span>
+      <span style="font-size:22px;color:var(--accent)">›</span>
+    </button>
+  </div>
+</div>
+
+<!-- SCRIPTS: Modules under test -->
+<script src="ui-scene.js"></script>
+<script src="ui-mission.js"></script>
+<script src="ui-mobile.js"></script>
+
+<script>
+(function () {
+  "use strict";
+
+  const roomSvg = document.getElementById("room");
+  const missionContainer = document.getElementById("missionCard");
+  const appFrame = document.getElementById("appFrame");
+  const reportDrawer = document.getElementById("testReportDrawer");
+  const reportContent = document.getElementById("testReportContent");
+
+  // Initialize ELW_UI_SCENE
+  ELW_UI_SCENE.init(roomSvg);
+
+  // Initialize ELW_UI_MOBILE
+  ELW_UI_MOBILE.init();
+
+  // Sample mission view
+  const sampleSteps = [
+    { n: 1, icon: "🧊", title_en: "Get the ingredients", title_vi: "Lấy nguyên liệu trong tủ lạnh", say_en: "Get the milk and eggs.", say_vi: "Lấy sữa và trứng.", status: "active", reason_vi: "" },
+    { n: 2, icon: "🔪", title_en: "Prepare the food", title_vi: "Đặt nguyên liệu lên bàn bếp", say_en: "Put them on the counter.", say_vi: "Đặt chúng lên bàn bếp.", status: "locked", reason_vi: "Cần lấy sữa và trứng trước" },
+    { n: 3, icon: "🍳", title_en: "Cook breakfast", title_vi: "Nấu món trứng trên bếp", say_en: "Cook the eggs.", say_vi: "Nấu món trứng.", status: "locked", reason_vi: "Cần chuẩn bị đồ ăn trên bàn" },
+    { n: 4, icon: "🍽️", title_en: "Serve breakfast", title_vi: "Dọn bữa sáng thơm ngon", say_en: "Breakfast is ready!", say_vi: "Bữa sáng đã sẵn sàng!", status: "locked", reason_vi: "Cần nấu chín thức ăn" }
+  ];
+
+  let currentMission = {
+    id: "breakfast",
+    title_en: "Prepare breakfast",
+    title_vi: "Chuẩn bị bữa sáng",
+    desc_vi: "Giúp Mẹ chuẩn bị món trứng và sữa thơm ngon.",
+    giver: { id: "mom", name: "Mom (Mẹ)", avatar: "👩" },
+    room: "kitchen",
+    urgency: "medium",
+    remainingSec: 75,
+    totalSec: 90,
+    steps: JSON.parse(JSON.stringify(sampleSteps)),
+    hintsOn: false,
+    hint: { en: "Open the fridge to grab eggs and milk.", vi: "Mở tủ lạnh để lấy trứng và sữa." },
+    canAuto: true,
+    running: false,
+    complete: false,
+    result: { en: "Awesome! Breakfast is served.", vi: "Tuyệt vời! Bữa sáng đã sẵn sàng." }
+  };
+
+  const missionCallbacks = {
+    onHintToggle: function (on) {
+      currentMission.hintsOn = on;
+      renderMission();
+    },
+    onAuto: function () {
+      let stepIdx = currentMission.steps.findIndex(s => s.status === "active");
+      if (stepIdx === -1) stepIdx = 0;
+      currentMission.steps[stepIdx].status = "done";
+      if (stepIdx + 1 < currentMission.steps.length) {
+        currentMission.steps[stepIdx + 1].status = "active";
+      } else {
+        currentMission.complete = true;
+      }
+      renderMission();
+    },
+    onStep: function (n) {
+      currentMission.steps.forEach(s => {
+        if (s.n === n) s.status = "active";
+        else if (s.n < n) s.status = "done";
+        else s.status = "locked";
+      });
+      renderMission();
+    },
+    onSpeak: function (text) {
+      console.log("Speak:", text);
+    },
+    onClose: function () {
+      console.log("Close mission");
+    }
+  };
+
+  function renderMission() {
+    ELW_UI_MISSION.render(missionContainer, currentMission, missionCallbacks);
+  }
+  renderMission();
+
+  // Toolbar Actions
+  document.getElementById("btnSet390").addEventListener("click", function () {
+    appFrame.classList.add("mode-390");
+    this.classList.add("active");
+    document.getElementById("btnSet1280").classList.remove("active");
+    // Trigger mobile resize check
+    window.dispatchEvent(new Event("resize"));
+  });
+
+  document.getElementById("btnSet1280").addEventListener("click", function () {
+    appFrame.classList.remove("mode-390");
+    this.classList.add("active");
+    document.getElementById("btnSet390").classList.remove("active");
+    window.dispatchEvent(new Event("resize"));
+  });
+
+  document.getElementById("btnTabPlay").addEventListener("click", () => ELW_UI_MOBILE.select("play"));
+  document.getElementById("btnTabLearn").addEventListener("click", () => ELW_UI_MOBILE.select("learn"));
+  document.getElementById("btnTabHome").addEventListener("click", () => ELW_UI_MOBILE.select("home"));
+  document.getElementById("btnTabMore").addEventListener("click", () => ELW_UI_MOBILE.select("more"));
+
+  let badgeCount = 0;
+  document.getElementById("btnBadgeTest").addEventListener("click", function () {
+    badgeCount = badgeCount === 0 ? 3 : 0;
+    ELW_UI_MOBILE.badge("learn", badgeCount);
+    this.textContent = badgeCount > 0 ? "⚪ Xoá Badge" : "🔴 Thêm Badge (3)";
+  });
+
+  document.getElementById("btnBubbleEN").addEventListener("click", function () {
+    ELW_UI_SCENE.clearAll();
+    ELW_UI_SCENE.setShowVi(false);
+    ELW_UI_SCENE.bubble("npc:mom", {
+      who: "Mom",
+      avatar: "👩",
+      en: "Good morning sweetie! Can you get the milk?",
+      vi: "Chào con yêu! Con lấy sữa giúp mẹ nhé?",
+      kind: "request"
+    });
+  });
+
+  document.getElementById("btnBubbleVI").addEventListener("click", function () {
+    ELW_UI_SCENE.clearAll();
+    ELW_UI_SCENE.setShowVi(true);
+    ELW_UI_SCENE.bubble("npc:mom", {
+      who: "Mom",
+      avatar: "👩",
+      en: "Good morning sweetie! Can you get the milk?",
+      vi: "Chào con yêu! Con lấy sữa giúp mẹ nhé?",
+      kind: "request",
+      showVi: true
+    });
+  });
+
+  document.getElementById("btnToggleReport").addEventListener("click", function () {
+    reportDrawer.classList.toggle("open");
+  });
+  document.getElementById("btnCloseReport").addEventListener("click", function () {
+    reportDrawer.classList.remove("open");
+  });
+
+  // Automated QA Suite
+  function runAutomatedQA() {
+    reportDrawer.classList.add("open");
+    const results = [];
+    function assert(name, condition, details = "") {
+      if (condition) {
+        results.push(`<div class="tr-pass">✓ PASS: ${name}</div>`);
+      } else {
+        results.push(`<div class="tr-fail">✗ FAIL: ${name} ${details ? `(${details})` : ""}</div>`);
+      }
+    }
+
+    // 1. Check ELW_UI_MOBILE API
+    assert("ELW_UI_MOBILE exposed on window", typeof window.ELW_UI_MOBILE === "object" && window.ELW_UI_MOBILE !== null);
+    assert("ELW_UI_MOBILE has init()", typeof ELW_UI_MOBILE.init === "function");
+    assert("ELW_UI_MOBILE has select()", typeof ELW_UI_MOBILE.select === "function");
+    assert("ELW_UI_MOBILE has current()", typeof ELW_UI_MOBILE.current === "function");
+    assert("ELW_UI_MOBILE has badge()", typeof ELW_UI_MOBILE.badge === "function");
+    assert("ELW_UI_MOBILE has css string", typeof ELW_UI_MOBILE.css === "string" && ELW_UI_MOBILE.css.includes(".uimb-"));
+
+    // 2. Check Tab Structure
+    const tabs = ELW_UI_MOBILE.getTabs();
+    assert("4 default tabs configured", Array.isArray(tabs) && tabs.length === 4);
+    const tabIds = tabs.map(t => t.id);
+    assert("Tabs have exact IDs ['play', 'learn', 'home', 'more']",
+      JSON.stringify(tabIds) === JSON.stringify(["play", "learn", "home", "more"]));
+
+    const playTab = tabs.find(t => t.id === "play");
+    assert("Play tab has all 5 cards",
+      playTab && JSON.stringify(playTab.cards) === JSON.stringify(["missionCard", "evTray", "panel", "quickCard", "rpCard"]));
+
+    const learnTab = tabs.find(t => t.id === "learn");
+    assert("Learn tab has cards ['storyCard', 'speakingCard', 'mistakeCard']",
+      learnTab && JSON.stringify(learnTab.cards) === JSON.stringify(["storyCard", "speakingCard", "mistakeCard"]));
+
+    const homeTab = tabs.find(t => t.id === "home");
+    assert("Home tab has cards ['needsCard', 'fridgeCard', 'peopleCard', 'chCard']",
+      homeTab && JSON.stringify(homeTab.cards) === JSON.stringify(["needsCard", "fridgeCard", "peopleCard", "chCard"]));
+
+    const moreTab = tabs.find(t => t.id === "more");
+    assert("More tab has cards ['seqCard', 'invWrap', 'dayHud']",
+      moreTab && JSON.stringify(moreTab.cards) === JSON.stringify(["seqCard", "invWrap", "dayHud"]));
+
+    // 3. Tab switching & DOM card visibility
+    ELW_UI_MOBILE.select("learn");
+    assert("current() returns 'learn' after select('learn')", ELW_UI_MOBILE.current() === "learn");
+
+    ELW_UI_MOBILE.select("play");
+    assert("current() returns 'play' after select('play')", ELW_UI_MOBILE.current() === "play");
+
+    // 4. Badges
+    ELW_UI_MOBILE.badge("learn", 5);
+    const learnBadgeEl = document.getElementById("uimb-badge-learn");
+    assert("Badge rendered with text '5'", learnBadgeEl && learnBadgeEl.textContent.trim() === "5");
+    ELW_UI_MOBILE.badge("learn", 0);
+    assert("Badge hidden when count = 0", learnBadgeEl && learnBadgeEl.hasAttribute("hidden"));
+
+    // 5. Check Scene Speech Bubbles English-only by default
+    ELW_UI_SCENE.clearAll();
+    ELW_UI_SCENE.setShowVi(false);
+    const bId = ELW_UI_SCENE.bubble("npc:mom", {
+      who: "Mom",
+      avatar: "👩",
+      en: "Can you get the milk?",
+      vi: "Con lấy sữa giúp mẹ nhé?",
+      kind: "request"
+    });
+    const bubbleEl = document.getElementById(bId);
+    assert("Bubble element rendered in DOM", !!bubbleEl);
+    const viInBubble = bubbleEl ? bubbleEl.querySelector(".uis-text-vi") : null;
+    assert("Speech bubble shows ENGLISH ONLY by default (no .uis-text-vi)", viInBubble === null);
+    const enInBubble = bubbleEl ? bubbleEl.querySelector(".uis-text-en") : null;
+    assert("English text rendered in bubble", enInBubble && enInBubble.textContent.includes("Can you get the milk?"));
+
+    // 6. Test with showVi enabled
+    ELW_UI_SCENE.clearAll();
+    ELW_UI_SCENE.setShowVi(true);
+    const bIdVi = ELW_UI_SCENE.bubble("npc:mom", {
+      who: "Mom",
+      avatar: "👩",
+      en: "Can you get the milk?",
+      vi: "Con lấy sữa giúp mẹ nhé?",
+      kind: "request"
+    });
+    const bubbleViEl = document.getElementById(bIdVi);
+    const viRendered = bubbleViEl ? bubbleViEl.querySelector(".uis-text-vi") : null;
+    assert("Speech bubble shows VI when setShowVi(true)", viRendered && viRendered.textContent.includes("Con lấy sữa"));
+    ELW_UI_SCENE.setShowVi(false); // Reset to default
+
+    // 7. Check Mission Card phone optimization (step chips + sticky actions)
+    const missionCardEl = document.getElementById("missionCard");
+    const chipsEl = missionCardEl ? missionCardEl.querySelector(".uim-step-chips") : null;
+    assert("Mission card has .uim-step-chips row", !!chipsEl);
+    const chipBtns = chipsEl ? chipsEl.querySelectorAll(".uim-chip-item") : [];
+    assert("4 step chips rendered in .uim-step-chips", chipBtns.length === 4);
+    const actionsFooter = missionCardEl ? missionCardEl.querySelector(".uim-actions") : null;
+    assert("Mission card has action footer .uim-actions", !!actionsFooter);
+
+    // 8. No horizontal overflow check
+    assert("Document body has no horizontal overflow", document.body.scrollWidth <= window.innerWidth + 2);
+
+    reportContent.innerHTML = results.join("");
+  }
+
+  document.getElementById("btnRunAutoQA").addEventListener("click", runAutomatedQA);
+  window.runAutomatedQA = runAutomatedQA;
+})();
+</script>
+</body>
+</html>

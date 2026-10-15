@@ -1,629 +1,341 @@
-/* English Life World — challenge.js
-   Agent 2: Chế độ thử thách (Challenge Engine)
-   10 rich challenges (~10 tasks each), live metric bars, and strict completion
-   condition: challenge completes only when ALL required bars are green. */
+/* Daily Life Challenge mode — window.ELW_CHALLENGE
+   Separate from free mode. Only reads action ids; never touches vocab/SRS/progress data.
+   Storage: localStorage "elw_challenge_v1" {v:1, unlocked, best, current}. */
 (function (root) {
   "use strict";
+  const KEY = "elw_challenge_v1";
+  const T = (id, en, vi, anyOf, len, lvi, o) => Object.assign({ id, title_en: en, title_vi: vi, anyOf, learn_en: len, learn_vi: lvi }, o || {});
 
   const CHALLENGES = [
-    {
-      id: "pet_care",
-      title: "Caring for Mimi the Cat",
-      titleVi: "Chăm sóc mèo cưng Mimi",
-      desc: "Complete 10 pet care tasks and get all pet welfare bars to green!",
-      descVi: "Thực hiện 10 nhiệm vụ chăm mèo và đưa tất cả các thanh chỉ số lên màu xanh!",
-      tasks: [
-        { id: "call_cat", en: "Call the cat", vi: "Gọi mèo lại gần", action: "call_cat" },
-        { id: "pet_cat", en: "Pet the cat gently", vi: "Vuốt ve mèo", action: "pet_cat" },
-        { id: "feed_cat", en: "Feed the cat", vi: "Cho mèo ăn", action: "feed_cat" },
-        { id: "give_cat_water", en: "Give the cat fresh water", vi: "Cho mèo uống nước", action: "give_cat_water" },
-        { id: "play_with_cat", en: "Play with feather wand", vi: "Chơi cần câu mèo", action: "play_with_cat" },
-        { id: "brush_cat", en: "Brush the cat's fur", vi: "Chải lông cho mèo", action: "brush_cat" },
-        { id: "fluff_cushion", en: "Fluff the sofa cushion for Mimi", vi: "Làm phồng đệm sofa cho mèo nằm", action: "fluff_cushion" },
-        { id: "sweep_floor", en: "Sweep the cat hair from the floor", vi: "Quét sạch lông mèo trên sàn", action: "sweep_floor" },
-        { id: "wipe_table", en: "Wipe down the dining table", vi: "Lau sạch bàn ăn", action: "wipe_table" },
-        { id: "put_cup_on_table", en: "Put the warm milk cup on the table", vi: "Đặt cốc sữa lên bàn", action: "put_cup_on_table" }
-      ],
-      bars: [
-        { id: "petHappiness", label: "Cat Happiness", labelVi: "Độ vui của mèo", start: 20, target: 80, step: 20, required: true },
-        { id: "petHunger", label: "Cat Satiety", labelVi: "Độ no của mèo", start: 15, target: 80, step: 25, required: true },
-        { id: "petCleanliness", label: "Home Hygiene", labelVi: "Vệ sinh xung quanh", start: 25, target: 80, step: 20, required: true }
-      ],
-      actionBars: {
-        call_cat: { petHappiness: 15 },
-        pet_cat: { petHappiness: 25 },
-        feed_cat: { petHunger: 40, petHappiness: 10 },
-        give_cat_water: { petHunger: 25, petHappiness: 10 },
-        play_with_cat: { petHappiness: 30 },
-        brush_cat: { petHappiness: 20, petCleanliness: 15 },
-        fluff_cushion: { petHappiness: 15 },
-        sweep_floor: { petCleanliness: 35 },
-        wipe_table: { petCleanliness: 30 },
-        put_cup_on_table: { petCleanliness: 10 }
-      }
-    },
-    {
-      id: "morning_routine",
-      title: "Energizing Morning Routine",
-      titleVi: "Thói quen buổi sáng tràn đầy năng lượng",
-      desc: "Wake up, prepare healthy food, and greet the new morning.",
-      descVi: "Thức dậy, chuẩn bị đồ ăn dinh dưỡng và đón chào ngày mới.",
-      tasks: [
-        { id: "b_turn_off_alarm", en: "Turn off the morning alarm", vi: "Tắt chuông báo thức", action: "b_turn_off_alarm" },
-        { id: "get_up", en: "Get up from bed", vi: "Rời khỏi giường", action: "get_up" },
-        { id: "open_living_curtains", en: "Open the curtains for sunshine", vi: "Mở rèm đón ánh nắng", action: "open_living_curtains" },
-        { id: "open_window", en: "Open window for fresh morning breeze", vi: "Mở cửa sổ đón gió lành", action: "open_window" },
-        { id: "wash_hands", en: "Wash hands cleanly", vi: "Rửa tay sạch sẽ", action: "wash_hands" },
-        { id: "brush_teeth", en: "Brush teeth thoroughly", vi: "Đánh răng thơm tho", action: "brush_teeth" },
-        { id: "k_boil_kettle", en: "Boil water in the kettle", vi: "Đun nước sôi trong ấm", action: "k_boil_kettle" },
-        { id: "k_fry_egg", en: "Fry a sunny-side egg", vi: "Rán một quả trứng", action: "k_fry_egg" },
-        { id: "k_make_toast", en: "Toast crispy bread slices", vi: "Nướng bánh mì giòn", action: "k_make_toast" },
-        { id: "pour_milk", en: "Pour fresh cold milk into a cup", vi: "Rót sữa tươi mát vào cốc", action: "pour_milk" }
-      ],
-      bars: [
-        { id: "freshness", label: "Freshness", labelVi: "Độ sảng khoái", start: 20, target: 80, step: 20, required: true },
-        { id: "energy", label: "Morning Energy", labelVi: "Năng lượng sáng", start: 10, target: 80, step: 25, required: true },
-        { id: "routineReadiness", label: "Readiness", labelVi: "Sẵn sàng làm việc", start: 20, target: 80, step: 20, required: true }
-      ],
-      actionBars: {
-        b_turn_off_alarm: { freshness: 15 },
-        get_up: { energy: 15 },
-        open_living_curtains: { freshness: 25 },
-        open_window: { freshness: 25 },
-        wash_hands: { freshness: 20, routineReadiness: 15 },
-        brush_teeth: { freshness: 25, routineReadiness: 20 },
-        k_boil_kettle: { energy: 20 },
-        k_fry_egg: { energy: 30 },
-        k_make_toast: { energy: 20 },
-        pour_milk: { energy: 15, routineReadiness: 25 }
-      }
-    },
-    {
-      id: "chef_breakfast",
-      title: "Master Chef Breakfast",
-      titleVi: "Bữa sáng siêu đầu bếp",
-      desc: "Cook a delicious hot breakfast and set up the dining table.",
-      descVi: "Nấu một bữa sáng nóng hổi thơm ngon và chuẩn bị bàn ăn tươm tất.",
-      tasks: [
-        { id: "open_fridge", en: "Open fridge to inspect ingredients", vi: "Mở tủ lạnh xem nguyên liệu", action: "open_fridge" },
-        { id: "take_milk", en: "Take fresh milk out", vi: "Lấy sữa tươi ra", action: "take_milk" },
-        { id: "k_turn_on_stove", en: "Turn on the gas stove", vi: "Bật bếp gas", action: "k_turn_on_stove" },
-        { id: "k_fry_egg", en: "Fry an egg in the hot pan", vi: "Rán trứng trên chảo nóng", action: "k_fry_egg" },
-        { id: "k_cook_rice", en: "Cook fragrant white rice", vi: "Nấu nồi cơm trắng thơm", action: "k_cook_rice" },
-        { id: "k_make_toast", en: "Toast golden bread", vi: "Nướng bánh mì vàng ruộm", action: "k_make_toast" },
-        { id: "k_make_coffee", en: "Brew rich morning coffee", vi: "Pha cà phê đậm đà", action: "k_make_coffee" },
-        { id: "k_set_table", en: "Set plates, cups and utensils", vi: "Bày đĩa, cốc và thìa dĩa", action: "k_set_table" },
-        { id: "k_have_breakfast", en: "Enjoy the hot breakfast", vi: "Thưởng thức bữa sáng", action: "k_have_breakfast" },
-        { id: "k_clear_table", en: "Clear and clean the dining table", vi: "Dọn dẹp bàn ăn sau bữa", action: "k_clear_table" }
-      ],
-      bars: [
-        { id: "cookingSkill", label: "Culinary Quality", labelVi: "Chất lượng món ăn", start: 10, target: 80, step: 20, required: true },
-        { id: "tableElegance", label: "Table Elegance", labelVi: "Bày biện bàn ăn", start: 15, target: 80, step: 25, required: true },
-        { id: "kitchenTidy", label: "Kitchen Cleanliness", labelVi: "Bếp núc gọn gàng", start: 20, target: 80, step: 20, required: true }
-      ],
-      actionBars: {
-        open_fridge: { cookingSkill: 10 },
-        take_milk: { cookingSkill: 15 },
-        k_turn_on_stove: { cookingSkill: 15 },
-        k_fry_egg: { cookingSkill: 30 },
-        k_cook_rice: { cookingSkill: 25 },
-        k_make_toast: { cookingSkill: 20 },
-        k_make_coffee: { cookingSkill: 20, tableElegance: 15 },
-        k_set_table: { tableElegance: 40 },
-        k_have_breakfast: { tableElegance: 25 },
-        k_clear_table: { kitchenTidy: 50, tableElegance: 20 }
-      }
-    },
-    {
-      id: "house_cleaning",
-      title: "Spring House Cleaning",
-      titleVi: "Tổng vệ sinh nhà cửa",
-      desc: "Clean floors, wipe surfaces, and take out the trash.",
-      descVi: "Quét sạch sàn, lau bụi bàn ghế và đổ rác thải sinh hoạt.",
-      tasks: [
-        { id: "sweep_floor", en: "Sweep the living room floor", vi: "Quét sàn phòng khách", action: "sweep_floor" },
-        { id: "sweep_under_table", en: "Sweep dust under the dining table", vi: "Quét dưới gầm bàn", action: "sweep_under_table" },
-        { id: "wipe_table", en: "Wipe dust off table top", vi: "Lau sạch mặt bàn", action: "wipe_table" },
-        { id: "k_wash_dishes", en: "Wash dirty dishes in the sink", vi: "Rửa bát đĩa bẩn trong bồn", action: "k_wash_dishes" },
-        { id: "k_dry_dishes", en: "Dry dishes with clean towel", vi: "Lau khô bát đĩa bằng khăn", action: "k_dry_dishes" },
-        { id: "k_put_dishes_away", en: "Put dry dishes in the cabinet", vi: "Cất bát đĩa vào tủ bếp", action: "k_put_dishes_away" },
-        { id: "empty_trash", en: "Empty and take out the trash", vi: "Đổ thùng rác", action: "empty_trash" },
-        { id: "k_wipe_counter", en: "Wipe down the kitchen counter", vi: "Lau sạch mặt bếp", action: "k_wipe_counter" },
-        { id: "fluff_cushion", en: "Fluff up the sofa cushions", vi: "Vỗ phồng gối sofa", action: "fluff_cushion" },
-        { id: "fold_throw", en: "Fold the throw blanket neatly", vi: "Gấp gọn chăn trên ghế", action: "fold_throw" }
-      ],
-      bars: [
-        { id: "floorClean", label: "Floor Cleanliness", labelVi: "Độ sạch của sàn", start: 20, target: 80, step: 25, required: true },
-        { id: "dishHygiene", label: "Dishes & Kitchen", labelVi: "Bát đĩa & Bếp", start: 10, target: 80, step: 25, required: true },
-        { id: "tidyOrder", label: "Room Order", labelVi: "Gọn gàng ngăn nắp", start: 15, target: 80, step: 20, required: true }
-      ],
-      actionBars: {
-        sweep_floor: { floorClean: 35 },
-        sweep_under_table: { floorClean: 35 },
-        wipe_table: { tidyOrder: 25 },
-        k_wash_dishes: { dishHygiene: 35 },
-        k_dry_dishes: { dishHygiene: 25 },
-        k_put_dishes_away: { dishHygiene: 30, tidyOrder: 20 },
-        empty_trash: { dishHygiene: 25, floorClean: 20 },
-        k_wipe_counter: { dishHygiene: 25 },
-        fluff_cushion: { tidyOrder: 25 },
-        fold_throw: { tidyOrder: 30 }
-      }
-    },
-    {
-      id: "relax_evening",
-      title: "Cozy Evening Relaxation",
-      titleVi: "Buổi tối thư giãn ấm cúng",
-      desc: "Unwind on the soft sofa with a good book, music and gentle lighting.",
-      descVi: "Nghỉ ngơi trên ghế sofa êm ái cùng cuốn sách hay, bản nhạc và ánh đèn dịu mát.",
-      tasks: [
-        { id: "turn_on_floor_lamp", en: "Turn on the warm floor lamp", vi: "Bật đèn cây ấm cúng", action: "turn_on_floor_lamp" },
-        { id: "pick_up_book", en: "Pick up the interesting book", vi: "Cầm quyển sách hay lên", action: "pick_up_book" },
-        { id: "sit_on_sofa", en: "Sit comfortably on the sofa", vi: "Ngồi thư thái trên ghế sofa", action: "sit_on_sofa" },
-        { id: "read_on_sofa", en: "Read exciting pages on the sofa", vi: "Đọc sách trên ghế sofa", action: "read_on_sofa" },
-        { id: "pick_up_remote", en: "Pick up the TV remote", vi: "Cầm điều khiển tivi", action: "pick_up_remote" },
-        { id: "turn_on_tv", en: "Turn on the living room TV", vi: "Bật tivi phòng khách", action: "turn_on_tv" },
-        { id: "watch_tv", en: "Watch an entertaining TV show", vi: "Xem chương trình tivi", action: "watch_tv" },
-        { id: "listen_to_music", en: "Listen to relaxing stereo music", vi: "Nghe nhạc thư giãn", action: "listen_to_music" },
-        { id: "turn_off_tv", en: "Turn off the TV when done", vi: "Tắt tivi khi xem xong", action: "turn_off_tv" },
-        { id: "turn_off_floor_lamp", en: "Turn off the lamp before bed", vi: "Tắt đèn trước khi ngủ", action: "turn_off_floor_lamp" }
-      ],
-      bars: [
-        { id: "relaxationLevel", label: "Mind Relaxation", labelVi: "Độ thư giãn tâm trí", start: 15, target: 80, step: 20, required: true },
-        { id: "comfortLevel", label: "Body Comfort", labelVi: "Độ thoải mái cơ thể", start: 20, target: 80, step: 20, required: true },
-        { id: "eveningPeace", label: "Evening Peace", labelVi: "Yên bình buổi tối", start: 10, target: 80, step: 25, required: true }
-      ],
-      actionBars: {
-        turn_on_floor_lamp: { eveningPeace: 25 },
-        pick_up_book: { relaxationLevel: 20 },
-        sit_on_sofa: { comfortLevel: 30 },
-        read_on_sofa: { relaxationLevel: 35, comfortLevel: 20 },
-        pick_up_remote: { relaxationLevel: 10 },
-        turn_on_tv: { relaxationLevel: 20 },
-        watch_tv: { relaxationLevel: 25, comfortLevel: 25 },
-        listen_to_music: { eveningPeace: 35, relaxationLevel: 20 },
-        turn_off_tv: { eveningPeace: 20 },
-        turn_off_floor_lamp: { eveningPeace: 30 }
-      }
-    },
-    {
-      id: "garden_tender",
-      title: "Green Garden Caretaker",
-      titleVi: "Người chăm sóc vườn xanh",
-      desc: "Water plants, pick fresh fruit and nurture the garden ecosystem.",
-      descVi: "Tưới cây hoa, hái quả chín và chăm sóc khu vườn xanh tươi.",
-      tasks: [
-        { id: "water_plant", en: "Water the living room potted plant", vi: "Tưới chậu cây phòng khách", action: "water_plant" },
-        { id: "water_flowers", en: "Water colorful garden flowerbeds", vi: "Tưới luống hoa rực rỡ", action: "water_flowers" },
-        { id: "pick_apple", en: "Pick sweet ripe apple from tree", vi: "Hái táo chín trên cành", action: "pick_apple" },
-        { id: "feed_birds", en: "Put seeds into bird feeder", vi: "Cho chim ăn hạt", action: "feed_birds" },
-        { id: "harvest_vegetables", en: "Harvest fresh leafy greens", vi: "Thu hoạch rau tươi", action: "harvest_vegetables" },
-        { id: "smell_rose", en: "Smell fragrant blooming roses", vi: "Ngửi hương hoa hồng thơm", action: "smell_rose" },
-        { id: "weed_garden", en: "Weed out wild grass from soil", vi: "Nhổ sạch cỏ dại", action: "weed_garden" },
-        { id: "prune_branches", en: "Prune dead tree branches", vi: "Tỉa cành cây khô", action: "prune_branches" },
-        { id: "turn_on_fountain", en: "Turn on the bubbling fountain", vi: "Bật đài phun nước róc rách", action: "turn_on_fountain" },
-        { id: "sit_on_garden_bench", en: "Sit peacefully on wooden garden bench", vi: "Ngồi nghỉ trên ghế đá vườn", action: "sit_on_garden_bench" }
-      ],
-      bars: [
-        { id: "plantVigor", label: "Plant Vigor", labelVi: "Sức sống cây cối", start: 20, target: 80, step: 25, required: true },
-        { id: "harvestYield", label: "Garden Harvest", labelVi: "Thu hoạch nông sản", start: 10, target: 80, step: 30, required: true },
-        { id: "natureZen", label: "Garden Beauty", labelVi: "Cảnh sắc thiên nhiên", start: 15, target: 80, step: 20, required: true }
-      ],
-      actionBars: {
-        water_plant: { plantVigor: 20 },
-        water_flowers: { plantVigor: 30, natureZen: 20 },
-        pick_apple: { harvestYield: 40 },
-        feed_birds: { natureZen: 25 },
-        harvest_vegetables: { harvestYield: 45 },
-        smell_rose: { natureZen: 25 },
-        weed_garden: { plantVigor: 25 },
-        prune_branches: { plantVigor: 25 },
-        turn_on_fountain: { natureZen: 35 },
-        sit_on_garden_bench: { natureZen: 20 }
-      }
-    },
-    {
-      id: "garage_diy",
-      title: "Garage Workshop & Bicycle Tune-Up",
-      titleVi: "Bảo dưỡng garage & xe đạp",
-      desc: "Organize tools, inspect the family car and pump bicycle tires.",
-      descVi: "Sắp xếp đồ nghề, kiểm tra xe hơi và bơm căng lốp xe đạp.",
-      tasks: [
-        { id: "inspect_car", en: "Inspect car body and lights", vi: "Kiểm tra thân xe và đèn xe", action: "inspect_car" },
-        { id: "open_car_hood", en: "Open car engine hood", vi: "Mở nắp ca-pô ô tô", action: "open_car_hood" },
-        { id: "check_engine_oil", en: "Check engine oil dipstick", vi: "Kiểm tra mức dầu máy", action: "check_engine_oil" },
-        { id: "pump_bicycle_tire", en: "Pump up bicycle tires with floor pump", vi: "Bơm căng lốp xe đạp", action: "pump_bicycle_tire" },
-        { id: "grab_wrench", en: "Pick up wrench from toolbox", vi: "Lấy cờ lê từ hộp đồ nghề", action: "grab_wrench" },
-        { id: "store_tools", en: "Return tools to metal shelves", vi: "Cất dụng cụ lên giá kim loại", action: "store_tools" },
-        { id: "sweep_garage", en: "Sweep garage concrete floor", vi: "Quét sạch sàn garage bê tông", action: "sweep_garage" },
-        { id: "wash_car", en: "Wash dirt off car windshield", vi: "Lau sạch kính chắn gió xe", action: "wash_car" },
-        { id: "charge_battery", en: "Plug in vehicle battery charger", vi: "Cắm sạc bình ắc quy", action: "charge_battery" },
-        { id: "ride_bicycle", en: "Test ride bicycle smoothly", vi: "Đi thử xe đạp vòng quanh", action: "ride_bicycle" }
-      ],
-      bars: [
-        { id: "vehicleHealth", label: "Vehicles Status", labelVi: "Tình trạng xe cộ", start: 20, target: 80, step: 25, required: true },
-        { id: "toolOrganization", label: "Tool Order", labelVi: "Ngăn nắp đồ nghề", start: 15, target: 80, step: 25, required: true },
-        { id: "garageSafety", label: "Safety & Cleanliness", labelVi: "An toàn & Vệ sinh", start: 10, target: 80, step: 25, required: true }
-      ],
-      actionBars: {
-        inspect_car: { vehicleHealth: 20 },
-        open_car_hood: { vehicleHealth: 15 },
-        check_engine_oil: { vehicleHealth: 30 },
-        pump_bicycle_tire: { vehicleHealth: 30 },
-        grab_wrench: { toolOrganization: 20 },
-        store_tools: { toolOrganization: 45, garageSafety: 20 },
-        sweep_garage: { garageSafety: 35 },
-        wash_car: { vehicleHealth: 25, garageSafety: 20 },
-        charge_battery: { vehicleHealth: 25, garageSafety: 20 },
-        ride_bicycle: { vehicleHealth: 20 }
-      }
-    },
-    {
-      id: "bathroom_hygiene",
-      title: "Daily Hygiene & Self-Care",
-      titleVi: "Chăm sóc vệ sinh cá nhân",
-      desc: "Wash face, brush teeth, shower and keep the bathroom sparkling clean.",
-      descVi: "Rửa mặt, đánh răng, tắm gội và giữ phòng tắm luôn sáng bóng.",
-      tasks: [
-        { id: "wash_hands", en: "Wash hands with foaming soap", vi: "Rửa tay bằng xà phòng", action: "wash_hands" },
-        { id: "brush_teeth", en: "Brush teeth for two minutes", vi: "Đánh răng đủ hai phút", action: "brush_teeth" },
-        { id: "wash_face", en: "Splash cold water to wash face", vi: "Vỗ nước mát rửa sạch mặt", action: "wash_face" },
-        { id: "look_in_mirror", en: "Check smile in bathroom mirror", vi: "Soi gương và cười tươi", action: "look_in_mirror" },
-        { id: "comb_hair", en: "Comb and neaten messy hair", vi: "Chải tóc gọn gàng", action: "comb_hair" },
-        { id: "take_shower", en: "Enjoy warm refreshing shower", vi: "Tắm dưới vòi sen ấm áp", action: "take_shower" },
-        { id: "dry_with_towel", en: "Dry off with soft cotton towel", vi: "Lau khô người bằng khăn bông", action: "dry_with_towel" },
-        { id: "weigh_self", en: "Step on bathroom health scale", vi: "Bước lên cân kiểm tra sức khỏe", action: "weigh_self" },
-        { id: "take_bath", en: "Soak in pleasant bathtub", vi: "Ngâm mình trong bồn tắm", action: "take_bath" },
-        { id: "flush_toilet", en: "Flush toilet and sanitize", vi: "Xả nước bồn cầu sạch sẽ", action: "flush_toilet" }
-      ],
-      bars: [
-        { id: "personalGlow", label: "Cleanliness Glow", labelVi: "Độ sạch cá nhân", start: 10, target: 80, step: 25, required: true },
-        { id: "freshFragrance", label: "Fragrance", labelVi: "Mùi hương dễ chịu", start: 15, target: 80, step: 25, required: true },
-        { id: "bathroomSanitary", label: "Sanitary State", labelVi: "Vệ sinh phòng tắm", start: 20, target: 80, step: 20, required: true }
-      ],
-      actionBars: {
-        wash_hands: { personalGlow: 25, bathroomSanitary: 15 },
-        brush_teeth: { personalGlow: 30, freshFragrance: 25 },
-        wash_face: { personalGlow: 25 },
-        look_in_mirror: { personalGlow: 15 },
-        comb_hair: { personalGlow: 20 },
-        take_shower: { personalGlow: 40, freshFragrance: 35 },
-        dry_with_towel: { personalGlow: 20 },
-        weigh_self: { personalGlow: 15 },
-        take_bath: { personalGlow: 35, freshFragrance: 30 },
-        flush_toilet: { bathroomSanitary: 50 }
-      }
-    },
-    {
-      id: "energy_saver",
-      title: "Eco Guardian: Save Energy & Water",
-      titleVi: "Hiệp sĩ bảo vệ môi trường: Tiết kiệm điện nước",
-      desc: "Turn off idle lights, appliances, taps and conserve home resources.",
-      descVi: "Tắt thiết bị không dùng, khóa vòi nước và tiết kiệm tài nguyên gia đình.",
-      tasks: [
-        { id: "turn_off_tv", en: "Turn off idle television screen", vi: "Tắt màn hình tivi khi không xem", action: "turn_off_tv" },
-        { id: "turn_off_floor_lamp", en: "Switch off bright floor lamp", vi: "Tắt đèn cây chiếu sáng", action: "turn_off_floor_lamp" },
-        { id: "turn_off_fan", en: "Turn off electric standing fan", vi: "Tắt quạt đứng", action: "turn_off_fan" },
-        { id: "close_living_curtains", en: "Close curtains to keep heat inside", vi: "Kéo rèm che giữ nhiệt", action: "close_living_curtains" },
-        { id: "close_window", en: "Shut open window tight", vi: "Đóng kín cửa sổ", action: "close_window" },
-        { id: "k_turn_off_stove", en: "Turn off kitchen gas burner", vi: "Khóa bếp gas nhà bếp", action: "k_turn_off_stove" },
-        { id: "turn_off_faucet", en: "Shut kitchen faucet dripping water", vi: "Khóa chặt vòi nước nhỏ giọt", action: "turn_off_faucet" },
-        { id: "turn_off_bath_tap", en: "Shut bathroom tub tap", vi: "Khóa vòi xả bồn tắm", action: "turn_off_bath_tap" },
-        { id: "turn_off_garden_hose", en: "Close garden watering valve", vi: "Khóa van tưới cây ngoài vườn", action: "turn_off_garden_hose" },
-        { id: "close_fridge", en: "Ensure fridge door is sealed tight", vi: "Đóng chặt cánh cửa tủ lạnh", action: "close_fridge" }
-      ],
-      bars: [
-        { id: "electricitySaved", label: "Electricity Saved", labelVi: "Điện năng tiết kiệm", start: 10, target: 80, step: 25, required: true },
-        { id: "waterPreserved", label: "Water Preserved", labelVi: "Nước sạch bảo tồn", start: 15, target: 80, step: 25, required: true },
-        { id: "greenFootprint", label: "Eco Rating", labelVi: "Chỉ số sống xanh", start: 20, target: 80, step: 20, required: true }
-      ],
-      actionBars: {
-        turn_off_tv: { electricitySaved: 25, greenFootprint: 20 },
-        turn_off_floor_lamp: { electricitySaved: 25, greenFootprint: 15 },
-        turn_off_fan: { electricitySaved: 25, greenFootprint: 15 },
-        close_living_curtains: { greenFootprint: 25 },
-        close_window: { greenFootprint: 25 },
-        k_turn_off_stove: { electricitySaved: 30, greenFootprint: 20 },
-        turn_off_faucet: { waterPreserved: 35, greenFootprint: 20 },
-        turn_off_bath_tap: { waterPreserved: 35, greenFootprint: 20 },
-        turn_off_garden_hose: { waterPreserved: 40, greenFootprint: 25 },
-        close_fridge: { electricitySaved: 25, greenFootprint: 15 }
-      }
-    },
-    {
-      id: "family_helper",
-      title: "Helpful Family Member",
-      titleVi: "Thành viên gương mẫu trong gia đình",
-      desc: "Share chores, help parents, take care of siblings and pet.",
-      descVi: "Chia sẻ việc nhà, giúp đỡ bố mẹ, chăm sóc thú cưng và em nhỏ.",
-      tasks: [
-        { id: "k_set_table", en: "Set plates and cups for dinner", vi: "Dọn bát đĩa cho bữa tối", action: "k_set_table" },
-        { id: "k_clear_table", en: "Clear bowls after everyone finishes", vi: "Dọn dẹp bát sau khi ăn xong", action: "k_clear_table" },
-        { id: "empty_trash", en: "Take garbage bag out to roadside bin", vi: "Đem túi rác ra thùng rác lớn", action: "empty_trash" },
-        { id: "sweep_floor", en: "Sweep dust bunnies from living room", vi: "Quét sạch bụi sàn nhà", action: "sweep_floor" },
-        { id: "wipe_table", en: "Wipe dining table sparkling clean", vi: "Lau bàn ăn sạch bóng", action: "wipe_table" },
-        { id: "water_plant", en: "Water mother's favorite indoor plant", vi: "Tưới chậu cây mẹ thích nhất", action: "water_plant" },
-        { id: "feed_cat", en: "Pour crunchy cat food into bowl", vi: "Đổ hạt thức ăn cho mèo", action: "feed_cat" },
-        { id: "k_put_dishes_away", en: "Stack dry plates back into cabinet", vi: "Cất đĩa khô ráo vào chạn", action: "k_put_dishes_away" },
-        { id: "fold_throw", en: "Fold the living room sofa blanket", vi: "Gấp gọn chăn trên ghế sofa", action: "fold_throw" },
-        { id: "k_have_breakfast", en: "Eat breakfast together happily", vi: "Cùng cả nhà ăn sáng vui vẻ", action: "k_have_breakfast" }
-      ],
-      bars: [
-        { id: "helpfulness", label: "Helpfulness", labelVi: "Chỉ số giúp ích", start: 10, target: 80, step: 25, required: true },
-        { id: "responsibility", label: "Responsibility", labelVi: "Tính tự giác", start: 15, target: 80, step: 25, required: true },
-        { id: "familyWarmth", label: "Family Warmth", labelVi: "Ấm áp gia đình", start: 20, target: 80, step: 20, required: true }
-      ],
-      actionBars: {
-        k_set_table: { helpfulness: 30, familyWarmth: 20 },
-        k_clear_table: { helpfulness: 30, responsibility: 25 },
-        empty_trash: { responsibility: 35 },
-        sweep_floor: { helpfulness: 25, responsibility: 20 },
-        wipe_table: { helpfulness: 25 },
-        water_plant: { helpfulness: 20, familyWarmth: 25 },
-        feed_cat: { responsibility: 30, familyWarmth: 25 },
-        k_put_dishes_away: { responsibility: 30, helpfulness: 25 },
-        fold_throw: { responsibility: 20, helpfulness: 20 },
-        k_have_breakfast: { familyWarmth: 40 }
-      }
-    }
+    { id: "busy_morning", icon: "🌅", title_en: "A Busy Morning", title_vi: "Buổi sáng bận rộn", goal_vi: "Dậy, dọn giường, ăn sáng và chuẩn bị cho ngày mới.", minutes: 8, tasks: [
+      T("alarm", "Turn off the alarm", "Tắt báo thức", ["turn_off_alarm"], "alarm clock", "đồng hồ báo thức"),
+      T("pillow", "Pick up the pillow", "Nhặt gối lên", ["pick_up_pillow"], "pillow", "cái gối"),
+      T("bed", "Make the bed", "Dọn giường", ["make_bed", "fold_blanket"], "make the bed", "dọn giường"),
+      T("curt", "Open the curtains", "Mở rèm", ["open_curtains"], "curtains", "rèm cửa", { free: true }),
+      T("hair", "Brush your hair", "Chải tóc", ["brush_hair", "look_in_mirror"], "brush", "chải"),
+      T("coffee", "Make coffee", "Pha cà phê", ["make_coffee"], "coffee", "cà phê"),
+      T("toast", "Make toast", "Nướng bánh mì", ["toast_bread"], "toast", "bánh mì nướng"),
+      T("table", "Set the table", "Bày bàn ăn", ["set_the_table"], "set the table", "bày bàn"),
+      T("eat", "Eat breakfast", "Ăn sáng", ["eat_breakfast"], "breakfast", "bữa sáng"),
+      T("phone", "Charge your phone", "Sạc điện thoại", ["charge_phone"], "charge", "sạc", { free: true })] },
+    { id: "cleaning_day", icon: "🧹", title_en: "Cleaning Day", title_vi: "Ngày dọn dẹp", goal_vi: "Làm sạch phòng khách, bếp và phòng ngủ.", minutes: 10, tasks: [
+      T("win", "Open the window", "Mở cửa sổ", ["open_window"], "fresh air", "không khí trong lành"),
+      T("sweep", "Sweep the floor", "Quét nhà", ["sweep_floor"], "sweep", "quét"),
+      T("under", "Sweep under the table", "Quét gầm bàn", ["sweep_under_table"], "under", "bên dưới"),
+      T("wipe", "Wipe the table", "Lau bàn", ["wipe_table"], "wipe", "lau"),
+      T("cush", "Fluff the cushions", "Vỗ gối tựa", ["fluff_cushion", "fold_throw"], "cushion", "gối tựa", { free: true }),
+      T("tap", "Turn on the faucet", "Mở vòi nước", ["turn_on_faucet"], "faucet / tap", "vòi nước"),
+      T("dish", "Wash the dishes", "Rửa bát", ["wash_dishes"], "dishes", "bát đĩa"),
+      T("rack", "Put dishes in the rack", "Úp bát lên giá", ["put_dishes_in_rack", "dry_plates"], "rack", "giá úp bát"),
+      T("trash", "Take out the trash", "Đổ rác", ["take_out_trash"], "trash", "rác"),
+      T("bag", "Put in a new bag", "Thay túi rác mới", ["put_in_new_bag"], "bag", "túi"),
+      T("bedp", "Pick up the pillow", "Nhặt gối", ["pick_up_pillow"], "pick up", "nhặt lên"),
+      T("bedr", "Make the bed", "Dọn giường", ["make_bed"], "tidy", "gọn gàng")] },
+    { id: "cooking_dinner", icon: "🍳", title_en: "Cooking Dinner", title_vi: "Nấu bữa tối", goal_vi: "Nấu cơm, rán trứng và dọn bữa tối.", minutes: 10, tasks: [
+      T("tap", "Turn on the faucet", "Mở vòi nước", ["turn_on_faucet"], "faucet / tap", "vòi nước"),
+      T("hands", "Wash your hands", "Rửa tay", ["wash_hands"], "wash your hands", "rửa tay"),
+      T("rice", "Wash the rice", "Vo gạo", ["wash_rice"], "rice", "gạo"),
+      T("cook", "Cook the rice", "Nấu cơm", ["cook_rice"], "cook", "nấu"),
+      T("kettle", "Fill the kettle", "Đổ nước vào ấm", ["fill_kettle"], "kettle", "ấm đun nước", { free: true }),
+      T("stove", "Turn on the stove", "Bật bếp", ["turn_on_stove"], "stove", "bếp"),
+      T("egg", "Fry an egg", "Rán trứng", ["fry_egg"], "fry", "rán"),
+      T("off", "Turn off the stove", "Tắt bếp", ["turn_off_stove"], "turn off", "tắt"),
+      T("set", "Set the table", "Bày bàn", ["set_the_table"], "plate", "đĩa"),
+      T("serve", "Serve the rice", "Xới cơm", ["serve_rice"], "serve", "dọn ra / xới"),
+      T("clear", "Clear the table", "Dọn bàn", ["clear_the_table"], "clear", "dọn sạch")] },
+    { id: "family", icon: "👨‍👩‍👧", title_en: "Taking Care of the Family", title_vi: "Chăm sóc gia đình", goal_vi: "Giúp đỡ mọi người trong nhà.", minutes: 10,
+      requires: ["talk_to_mom", "help_dad", "read_to_child"], tasks: [
+      T("mom", "Talk to Mom", "Nói chuyện với mẹ", ["talk_to_mom"], "mom", "mẹ"),
+      T("dad", "Help Dad", "Giúp bố", ["help_dad"], "help", "giúp"),
+      T("kid", "Read to your little sister", "Đọc truyện cho em", ["read_to_child"], "story", "câu chuyện"),
+      T("tea", "Boil water for tea", "Đun nước pha trà", ["boil_water"], "boil", "đun sôi"),
+      T("pour", "Pour hot water", "Rót nước nóng", ["pour_hot_water"], "pour", "rót"),
+      T("eat", "Eat together", "Ăn cùng nhau", ["eat_breakfast"], "together", "cùng nhau"),
+      T("clear", "Clear the table", "Dọn bàn", ["clear_the_table"], "clear", "dọn"),
+      T("dish", "Wash the dishes", "Rửa bát", ["wash_dishes"], "dishes", "bát đĩa"),
+      T("tv", "Watch TV together", "Xem TV cùng nhau", ["watch_tv"], "watch", "xem"),
+      T("lamp", "Turn off the lamp", "Tắt đèn", ["turn_off_floor_lamp", "turn_off_lamp"], "lamp", "đèn")] },
+    { id: "pets", icon: "🐱", title_en: "Looking After the Pets", title_vi: "Chăm sóc thú cưng", goal_vi: "Cho mèo ăn, uống, chơi và chải lông.", minutes: 6, tasks: [
+      T("call", "Call the cat", "Gọi mèo", ["call_cat"], "call", "gọi"),
+      T("feed", "Feed the cat", "Cho mèo ăn", ["feed_cat"], "feed", "cho ăn"),
+      T("water", "Give the cat water", "Cho mèo uống nước", ["give_cat_water"], "water", "nước"),
+      T("pet", "Pet the cat", "Vuốt ve mèo", ["pet_cat"], "pet", "vuốt ve"),
+      T("play", "Play with the cat", "Chơi với mèo", ["play_with_cat"], "play with", "chơi với"),
+      T("brush", "Brush the cat", "Chải lông mèo", ["brush_cat"], "fur / brush", "lông / chải"),
+      T("plant", "Water the plant", "Tưới cây", ["water_plant"], "plant", "cây", { free: true }),
+      T("sweep", "Sweep up the fur", "Quét lông mèo", ["sweep_floor", "sweep_under_table"], "sweep up", "quét dọn"),
+      T("tap", "Turn on the faucet", "Mở vòi nước", ["turn_on_faucet"], "faucet / tap", "vòi nước"),
+      T("dish", "Wash the cat bowl", "Rửa bát mèo", ["wash_dishes"], "bowl", "bát"),
+      T("sofa", "Relax on the sofa", "Thư giãn trên sofa", ["sit_on_sofa", "lie_on_sofa"], "relax", "thư giãn")] },
+    { id: "laundry", icon: "🧺", title_en: "Laundry Day", title_vi: "Ngày giặt đồ", goal_vi: "Gom quần áo, cất đồ sạch và gấp chăn.", minutes: 8, tasks: [
+      T("pick", "Pick up the clothes", "Nhặt quần áo", ["pick_up_clothes"], "clothes", "quần áo"),
+      T("empty", "Empty the basket", "Đổ giỏ đồ", ["empty_basket"], "basket", "giỏ"),
+      T("open", "Open the wardrobe", "Mở tủ quần áo", ["open_wardrobe"], "wardrobe", "tủ quần áo"),
+      T("take", "Take out a shirt", "Lấy áo sơ mi", ["take_out_shirt"], "shirt", "áo sơ mi"),
+      T("hang", "Hang up the shirt", "Treo áo lên", ["hang_up_shirt"], "hang up", "treo lên"),
+      T("close", "Close the wardrobe", "Đóng tủ", ["close_wardrobe"], "close", "đóng"),
+      T("fold", "Fold the blanket", "Gấp chăn", ["fold_blanket"], "fold", "gấp"),
+      T("spread", "Spread the blanket", "Trải chăn", ["spread_blanket"], "spread", "trải"),
+      T("pillow", "Fluff the pillow", "Vỗ gối", ["pick_up_pillow", "fluff_pillow"], "pillow", "gối"),
+      T("throw", "Fold the throw", "Gấp chăn sofa", ["fold_throw"], "throw blanket", "chăn phủ sofa", { free: true })] },
+    { id: "go_out", icon: "👟", title_en: "Getting Ready to Go Out", title_vi: "Chuẩn bị ra ngoài", goal_vi: "Đánh răng, rửa mặt, thay đồ và ra cửa.", minutes: 8,
+      requires: ["brush_teeth", "wash_face", "put_on_shoes"], tasks: [
+      T("teeth", "Brush your teeth", "Đánh răng", ["brush_teeth"], "teeth", "răng"),
+      T("face", "Wash your face", "Rửa mặt", ["wash_face"], "face", "mặt"),
+      T("hair", "Brush your hair", "Chải tóc", ["brush_hair"], "hair", "tóc"),
+      T("ward", "Open the wardrobe", "Mở tủ", ["open_wardrobe"], "wardrobe", "tủ"),
+      T("shirt", "Take out a shirt", "Lấy áo", ["take_out_shirt"], "shirt", "áo"),
+      T("mirror", "Look in the mirror", "Soi gương", ["look_in_mirror"], "mirror", "gương"),
+      T("slip", "Take off your slippers", "Cởi dép", ["take_off_slippers"], "slippers", "dép"),
+      T("shoes", "Put on your shoes", "Đi giày", ["put_on_shoes"], "shoes", "giày"),
+      T("phone", "Unplug the charger", "Rút sạc", ["unplug_charger"], "charger", "sạc"),
+      T("lamp", "Turn off the lamp", "Tắt đèn", ["turn_off_lamp"], "turn off", "tắt")] },
+    { id: "rainy", icon: "🌧️", title_en: "A Rainy Day at Home", title_vi: "Ngày mưa ở nhà", goal_vi: "Đóng cửa, pha đồ uống ấm và đọc sách.", minutes: 8, tasks: [
+      T("look", "Open the window and look at the rain", "Mở cửa sổ xem mưa", ["open_window"], "rain", "mưa"),
+      T("win", "Close the window", "Đóng cửa sổ", ["close_window"], "close", "đóng"),
+      T("curt", "Close the curtains", "Kéo rèm", ["close_living_curtains", "close_curtains"], "close the curtains", "kéo rèm"),
+      T("lamp", "Turn on the lamp", "Bật đèn", ["turn_on_floor_lamp", "turn_on_lamp"], "lamp", "đèn"),
+      T("kettle", "Fill the kettle", "Đổ nước vào ấm", ["fill_kettle"], "kettle", "ấm"),
+      T("boil", "Boil water", "Đun nước", ["boil_water"], "boil", "đun sôi"),
+      T("pour", "Pour hot water", "Rót nước nóng", ["pour_hot_water"], "hot", "nóng"),
+      T("book", "Pick up a book", "Cầm sách", ["pick_up_book"], "book", "sách"),
+      T("read", "Read on the sofa", "Đọc sách trên sofa", ["read_on_sofa"], "read", "đọc"),
+      T("cat", "Pet the cat", "Vuốt ve mèo", ["pet_cat"], "pet", "vuốt ve", { free: true }),
+      T("music", "Listen to music", "Nghe nhạc", ["listen_to_music"], "music", "âm nhạc")] },
+    { id: "car", icon: "🚗", title_en: "Weekend Car Care", title_vi: "Chăm xe cuối tuần", goal_vi: "Rửa xe và kiểm tra lốp trong ga-ra.", minutes: 10,
+      requires: ["go_garage", "wash_car", "check_tires"], tasks: [
+      T("go", "Go to the garage", "Ra ga-ra", ["go_garage"], "garage", "ga-ra"),
+      T("tires", "Check the tires", "Kiểm tra lốp", ["check_tires"], "tire", "lốp xe"),
+      T("bucket", "Fill a bucket", "Đổ nước vào xô", ["fill_bucket"], "bucket", "xô"),
+      T("wash", "Wash the car", "Rửa xe", ["wash_car"], "wash", "rửa"),
+      T("rinse", "Rinse the car", "Xả nước", ["rinse_car"], "rinse", "xả"),
+      T("dry", "Dry the car", "Lau khô xe", ["dry_car"], "dry", "lau khô"),
+      T("vac", "Vacuum the seats", "Hút bụi ghế", ["vacuum_car"], "vacuum", "hút bụi"),
+      T("oil", "Check the oil", "Kiểm tra dầu", ["check_oil"], "oil", "dầu"),
+      T("hands", "Wash your hands", "Rửa tay", ["wash_hands"], "hands", "tay"),
+      T("drink", "Drink some coffee", "Uống cà phê", ["drink_coffee"], "drink", "uống")] },
+    { id: "relax", icon: "🛋️", title_en: "Relaxing After Work", title_vi: "Thư giãn sau giờ làm", goal_vi: "Nghỉ ngơi, xem TV và chuẩn bị đi ngủ.", minutes: 8, tasks: [
+      T("slip", "Put on your slippers", "Đi dép", ["put_on_slippers"], "slippers", "dép"),
+      T("lamp", "Turn on the floor lamp", "Bật đèn cây", ["turn_on_floor_lamp"], "floor lamp", "đèn cây"),
+      T("sofa", "Sit on the sofa", "Ngồi sofa", ["sit_on_sofa"], "sofa", "ghế sofa"),
+      T("tv", "Turn on the TV", "Bật TV", ["turn_on_tv"], "TV", "ti vi"),
+      T("watch", "Watch TV", "Xem TV", ["watch_tv"], "watch", "xem"),
+      T("cat", "Pet the cat", "Vuốt ve mèo", ["pet_cat"], "pet", "vuốt ve", { free: true }),
+      T("off", "Turn off the TV", "Tắt TV", ["turn_off_tv"], "turn off", "tắt"),
+      T("music", "Listen to music", "Nghe nhạc", ["listen_to_music"], "music", "nhạc"),
+      T("aoff", "Turn off the alarm", "Tắt báo thức", ["turn_off_alarm"], "alarm", "báo thức"),
+      T("alarm", "Set the alarm", "Đặt báo thức", ["set_alarm"], "set an alarm", "đặt báo thức"),
+      T("pil", "Pick up the pillow", "Nhặt gối", ["pick_up_pillow"], "pillow", "gối"),
+      T("sleep", "Lie down", "Nằm xuống", ["lie_down"], "lie down", "nằm xuống")] },
+    { id: "guests", icon: "🎉", optional: true, title_en: "Preparing for Guests", title_vi: "Chuẩn bị đón khách", goal_vi: "Dọn nhà và chuẩn bị đồ uống cho khách.", minutes: 10, tasks: [
+      T("sweep", "Sweep the floor", "Quét nhà", ["sweep_floor"], "guest", "khách"),
+      T("wipe", "Wipe the table", "Lau bàn", ["wipe_table"], "wipe", "lau"),
+      T("cush", "Fluff the cushions", "Vỗ gối tựa", ["fluff_cushion"], "cushion", "gối"),
+      T("plant", "Water the plant", "Tưới cây", ["water_plant"], "plant", "cây", { free: true }),
+      T("win", "Open the window", "Mở cửa sổ", ["open_window"], "air", "không khí"),
+      T("coffee", "Make coffee", "Pha cà phê", ["make_coffee"], "coffee", "cà phê"),
+      T("pour", "Pour the coffee", "Rót cà phê", ["pour_coffee"], "pour", "rót"),
+      T("set", "Set the table", "Bày bàn", ["set_the_table"], "set", "bày"),
+      T("music", "Play some music", "Mở nhạc", ["listen_to_music"], "music", "nhạc"),
+      T("lamp", "Turn on the lamp", "Bật đèn", ["turn_on_floor_lamp"], "lamp", "đèn")] }
   ];
+  const byId = id => CHALLENGES.find(c => c.id === id);
 
-  const css = `
-.ch-card{background:#fffdfa;border:2px solid #2e7d32;border-radius:12px;padding:12px 14px;box-shadow:0 3px 12px rgba(46,125,50,.15);box-sizing:border-box}
-.ch-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;border-bottom:1px solid #e0e0e0;padding-bottom:6px}
-.ch-badge{display:inline-flex;align-items:center;gap:4px;font-weight:700;font-size:12px;color:#2e7d32;background:#e8f5e9;padding:3px 8px;border-radius:999px;border:1px solid #c8e6c9}
-.ch-mode{font-size:12px;color:#616161;font-weight:600}
-.ch-title{font-size:16px;font-weight:700;color:#1b5e20;margin:0 0 4px}
-.ch-desc{font-size:13px;color:#424242;margin-bottom:10px}
-.ch-desc .vi{color:#616161;font-size:12px;margin-top:2px}
-.ch-bars{display:flex;flex-direction:column;gap:8px;margin-bottom:12px;background:#f9fbe7;padding:8px 10px;border-radius:8px;border:1px solid #dce775}
-.ch-bar-row{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px}
-.ch-bar-name{font-weight:700;color:#2e7d32;flex:1 1 120px;display:flex;align-items:center;gap:4px}
-.ch-bar-track{flex:2 1 160px;background:#e0e0e0;height:12px;border-radius:6px;overflow:hidden;position:relative}
-.ch-bar-fill{height:100%;background:#e57373;transition:width .4s ease, background-color .4s ease}
-.ch-bar-fill.green{background:#2e7d32 !important}
-.ch-bar-val{font-variant-numeric:tabular-nums;font-weight:700;font-size:12px;min-width:40px;text-align:right;color:#212121}
-.ch-tasks{display:flex;flex-direction:column;gap:6px;max-height:220px;overflow-y:auto;padding-right:4px}
-.ch-task-item{display:flex;align-items:center;gap:8px;background:#fff;padding:6px 10px;border-radius:8px;border:1px solid #eeeeee;font-size:13px}
-.ch-task-item.done{background:#f1f8e9;border-color:#a5d6a7;color:#2e7d32}
-.ch-task-check{font-size:14px}
-.ch-task-txt{flex:1}
-.ch-task-txt .vi{font-size:11px;color:#757575}
-.ch-task-act button{border:0;background:#2e7d32;color:#fff;border-radius:6px;padding:3px 8px;font-size:11px;cursor:pointer}
-.ch-congrats{background:#e8f5e9;border:2px solid #43a047;border-radius:10px;padding:10px;text-align:center;font-weight:700;color:#1b5e20;margin-top:8px}
-`;
-
-  let currentChallenge = null;
-  let activeMode = "practice"; // "practice" | "ranked"
-  let currentBarState = {}; // { barId: number }
-  let completedTasks = new Set();
-  let listeners = [];
-
-  function subscribe(fn) {
-    listeners.push(fn);
-    return () => { listeners = listeners.filter(l => l !== fn); };
+  /* ---------- host / storage ---------- */
+  let host = {};
+  let store = null;
+  try { store = root.localStorage || null; } catch (e) { store = null; }
+  const fresh = () => ({ v: 1, unlocked: [CHALLENGES[0].id], best: {}, current: null });
+  let S = load();
+  function load() {
+    try { const j = store && JSON.parse(store.getItem(KEY) || "null"); if (j && j.v === 1) return Object.assign(fresh(), j); } catch (e) { /* ignore */ }
+    return fresh();
   }
-  function notify() {
-    for (const l of listeners) {
-      try { l(currentChallenge); } catch (e) { console.error(e); }
+  function save() { try { store && store.setItem(KEY, JSON.stringify(S)); } catch (e) { /* ignore */ } }
+  const now = () => (host.now ? host.now() : Date.now());
+
+  function actionExists(id) {
+    if (host.actionExists) return !!host.actionExists(id);
+    const A = root.ELW && root.ELW.ACTIONS; return A ? A.some(a => a.id === id) : true;
+  }
+  const missing = c => (c.requires || []).filter(id => !actionExists(id));
+  const isLocked = c => missing(c).length > 0;
+  const isUnlocked = c => !isLocked(c);   // progression is advisory (★); availability = room exists
+
+  /* ---------- bars (only real data) ---------- */
+  function cTopicOf(c) {
+    if (!c) return "home";
+    if (c.topic) return c.topic;
+    const id = String(c.id || "");
+    for (const t of ["cafe", "market", "park", "restaurant", "outdoor", "school"]) {
+      if (id.startsWith(t + "_") || id === t) return t;
     }
+    return "home";
   }
+  function curTopic() {
+    try { if (host && typeof host.getTopic === "function") return host.getTopic() || "home"; } catch (e) {}
+    return "home";
+  }
+  function homePct() {
+    const N = root.ELW_NEEDS; if (!N || !N.state) return null;
+    const s = N.state(), D = N.NEEDS || {}; const ks = Object.keys(s); if (!ks.length) return null;
+    return Math.round(ks.reduce((t, k) => t + ((D[k] && D[k].bad === "low") ? s[k] : 100 - s[k]), 0) / ks.length);
+  }
+  function bars(ctx) {
+    ctx = ctx || S.current; if (!ctx) return [];
+    const c = byId(ctx.id), easy = ctx.mode === "easy", n = c.tasks.length;
+    const isHome = cTopicOf(c) === "home";
+    const out = [
+      { id: "tasks", icon: "📋", label_vi: isHome ? "Việc nhà" : "Nhiệm vụ tại chỗ", required: true, target: easy ? Math.ceil(n * 0.7) : n, value: x => x.done.length },
+      { id: "english", icon: "🗣", label_vi: "Luyện tiếng Anh (nói/nghe/hội thoại)", required: true, target: easy ? 1 : 3, value: x => x.speak + x.listen + x.roleplay },
+      { id: "story", icon: "📖", label_vi: "Nghe câu chuyện tổng kết", required: true, target: 1, value: x => (x.storyHeard ? 1 : 0) }
+    ];
+    if (root.ELW_EVENTS && isHome) out.splice(1, 0, { id: "events", icon: "🚨", label_vi: "Sự cố khẩn cấp đã xử lý", required: false, target: 1, value: x => x.events });
+    if (isHome && homePct() != null) out.splice(out.length - 1, 0, { id: "home", icon: "🏠", label_vi: "Nhà cửa gọn gàng", required: false, target: easy ? 50 : 65, unit: "%", value: () => homePct() });
+    return out.map(b => { const v = b.value(ctx) || 0; return Object.assign(b, { cur: v, ok: v >= b.target }); });
+  }
+  const requiredGreen = ctx => bars(ctx).filter(b => b.required).every(b => b.ok);
+  const tasksReady = ctx => { const b = bars(ctx).find(x => x.id === "tasks"); return b && b.ok; };
 
-  function start(challengeId, options = {}) {
-    const def = CHALLENGES.find(c => c.id === challengeId);
-    if (!def) return null;
-    activeMode = options.mode || "practice";
-    completedTasks.clear();
-    currentBarState = {};
-    for (const b of def.bars) {
-      currentBarState[b.id] = b.start || 0;
+  /* ---------- engine ---------- */
+  function start(id, opt) {
+    const c = byId(id); if (!c) throw new Error("no challenge " + id);
+    if (isLocked(c)) return null;
+    if (root.ELW_MISSION && typeof root.ELW_MISSION.active === "function" && root.ELW_MISSION.active()) {
+      try { if (typeof root.ELW_MISSION.stop === "function") root.ELW_MISSION.stop(); } catch (e) { /* ignore */ }
     }
-
-    currentChallenge = {
-      id: def.id,
-      def: { ...def },
-      mode: activeMode,
-      startedAt: Date.now(),
-      done: false,
-      completed: false,
-      tasks: def.tasks.map(t => ({ ...t, done: false }))
-    };
-
-    updateStatus();
-    notify();
-    return current();
+    const mode = (opt && opt.mode) || "normal";
+    S.current = { id, mode, done: [], log: [], speak: 0, listen: 0, roleplay: 0, events: 0, storyHeard: false,
+      startedAt: now(), elapsed: 0, paused: false, resumedAt: now(), completed: null };
+    save(); emit(); return S.current;
+  }
+  const current = () => S.current;
+  const challenge = () => S.current && byId(S.current.id);
+  function nextTask(ctx) {
+    ctx = ctx || S.current; if (!ctx) return null;
+    const c = byId(ctx.id);
+    return c.tasks.find(t => !t.free && !ctx.done.includes(t.id)) || c.tasks.find(t => !ctx.done.includes(t.id)) || null;
+  }
+  const active = () => S.current && !S.current.completed && !S.current.paused;
+  function onAction(actionId, W) {
+    const x = S.current; if (!active()) return { advanced: false };
+    x.log.push(actionId);
+    const c = byId(x.id), nt = nextTask(x);
+    const ok = t => t && !x.done.includes(t.id) && t.anyOf.includes(actionId) && (!t.check || safe(() => t.check(W)));
+    let hit = ok(nt) ? nt : c.tasks.find(t => t.free && ok(t));
+    if (hit) x.done.push(hit.id);
+    save(); checkComplete(); emit();
+    return { advanced: !!hit, task: hit ? hit.id : null };
+  }
+  function safe(f) { try { return !!f(); } catch (e) { return false; } }
+  function bump(k) { if (!active()) return; S.current[k]++; save(); checkComplete(); emit(); }
+  const onSpeak = () => bump("speak"), onListen = () => bump("listen"), onRoleplay = () => bump("roleplay");
+  function onEvent(r) { if (active() && (!r || r.solved || r.ok || r === true)) bump("events"); }
+  function markStoryHeard() { if (!active()) return; S.current.storyHeard = true; save(); checkComplete(); emit(); }
+  function elapsedMs(x) { x = x || S.current; if (!x) return 0; return x.elapsed + ((x.paused || x.completed) ? 0 : now() - x.resumedAt); }
+  function pause() { const x = S.current; if (!x || x.paused || x.completed) return; x.elapsed = elapsedMs(x); x.paused = true; save(); emit(); }
+  function resume() { const x = S.current; if (!x || !x.paused) return; x.paused = false; x.resumedAt = now(); save(); emit(); }
+  function setMode(m) { if (S.current && !S.current.completed) { S.current.mode = m; save(); checkComplete(); emit(); } }
+  function checkComplete() {
+    const x = S.current; if (!x || x.completed || !requiredGreen(x)) return false;
+    const c = byId(x.id), ms = elapsedMs(x); x.elapsed = ms;
+    const bonus = bars(x).filter(b => !b.required);
+    const timeOk = x.mode === "normal" && ms <= c.minutes * 60000;
+    const stars = 1 + (timeOk ? 1 : 0) + (bonus.length && bonus.every(b => b.ok) ? 1 : 0);
+    const xp = 20 + x.done.length * 3 + stars * 5;
+    x.completed = { at: now(), ms, stars, xp };
+    S.best[x.id] = Math.max(S.best[x.id] || 0, stars);
+    const i = CHALLENGES.indexOf(c), nx = CHALLENGES[i + 1];
+    if (nx && !S.unlocked.includes(nx.id)) S.unlocked.push(nx.id);
+    try { host.addXp && host.addXp(xp, "challenge:" + x.id); } catch (e) { /* ignore */ }
+    save(); return true;
+  }
+  function replay() { const x = S.current; if (!x) return null; return start(x.id, { mode: x.mode }); }
+  function quit() { S.current = null; save(); emit(); }
+  function nextChallenge() { const x = S.current; if (!x) return null; const i = CHALLENGES.findIndex(c => c.id === x.id);
+    for (let j = i + 1; j < CHALLENGES.length; j++) if (!isLocked(CHALLENGES[j])) return CHALLENGES[j]; return null; }
+  function vocab(ctx) { ctx = ctx || S.current; if (!ctx) return []; const c = byId(ctx.id);
+    return c.tasks.filter(t => ctx.done.includes(t.id)).map(t => ({ en: t.learn_en, vi: t.learn_vi })); }
+  function storyText() {
+    const x = S.current; if (!x || !host.buildStory) return "";
+    try { const r = host.buildStory(x.log.map((id, i) => ({ uid: i, id, ctx: {} }))); return Array.isArray(r) ? r.map(s => s.en || s).join(" ") : String(r || ""); } catch (e) { return ""; }
   }
 
-  function bars() {
-    if (!currentChallenge) return [];
-    return currentChallenge.def.bars.map(b => {
-      const cur = Math.min(100, Math.max(0, currentBarState[b.id] || 0));
-      const target = b.target || 80;
-      const ok = cur >= target;
-      return {
-        id: b.id,
-        label: b.label,
-        labelVi: b.labelVi,
-        value: cur,
-        cur: cur,
-        target: target,
-        required: b.required !== false,
-        ok: ok,
-        green: ok
-      };
-    });
+  /* ---------- UI ---------- */
+  const css = `.ch-card{--accent:#e8743b;--line:#e3d6c3;--ok:#3a9d5d;--warn:#e0a03a;--bad:#c0392b;--off:#bbb;border:1px solid var(--line);border-radius:12px;background:#fffaf2;padding:10px;font:14px/1.4 system-ui,sans-serif;color:#3b2f25;max-width:100%;box-sizing:border-box}
+.ch-card *{box-sizing:border-box}.ch-hd{display:flex;align-items:center;gap:6px;justify-content:space-between}.ch-hd h2{margin:0;font-size:16px}
+.ch-btn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 10px;font:inherit;cursor:pointer;min-height:34px}.ch-btn.pri{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+.ch-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-top:8px}
+.ch-tile{border:1px solid var(--line);border-radius:10px;padding:8px;background:#fff;text-align:left;font:inherit;cursor:pointer}.ch-tile b{display:block;font-size:13px}.ch-tile small{color:#7a6a5a}
+.ch-tile.lock{opacity:.55;cursor:not-allowed}.ch-star{color:var(--warn)}
+.ch-goal{margin:6px 0;color:#5a4a3a}.ch-now{border:2px solid var(--accent);border-radius:10px;padding:8px;background:#fff;display:flex;gap:8px;align-items:center;justify-content:space-between;margin:6px 0}
+.ch-list{list-style:none;margin:6px 0;padding:0}.ch-list li{padding:3px 0;border-bottom:1px dashed var(--line);display:flex;gap:6px}.ch-list li.d{color:#7a6a5a;text-decoration:line-through}.ch-list li.c{font-weight:700;color:var(--accent)}
+.ch-bar{margin:5px 0}.ch-bar .l{display:flex;justify-content:space-between;font-size:12.5px;gap:6px}.ch-track{height:9px;border-radius:5px;background:#eee;overflow:hidden;border:1px solid var(--line)}
+.ch-fill{height:100%;background:var(--warn)}.ch-bar.ok .ch-fill{background:var(--ok)}.ch-bar.no .ch-fill{background:var(--bad)}.ch-bar.bonus .l::after{content:""}
+.ch-tag{font-size:11px;border-radius:6px;padding:0 5px;background:#f3e6d3}.ch-tag.b{background:#fde9c9}
+.ch-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;align-items:center}.ch-win{text-align:center}.ch-win .big{font-size:22px;color:var(--ok);font-weight:700}
+.ch-story{background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px;text-align:left;margin:6px 0}.ch-voc{display:flex;flex-wrap:wrap;gap:4px;justify-content:center}.ch-voc span{background:#fff;border:1px solid var(--line);border-radius:6px;padding:1px 6px;font-size:12.5px}
+.ch-body[hidden]{display:none}`;
+  let ui = null; const listeners = [];
+  function emit() { listeners.forEach(f => { try { f(S.current); } catch (e) { /* ignore */ } }); if (ui) draw(); }
+  const esc = t => String(t == null ? "" : t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+  const mmss = ms => { const s = Math.round(ms / 1000); return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0"); };
+
+  function renderPanel(container, h) {
+    host = Object.assign({}, host, h || {});
+    if (typeof document !== "undefined" && !document.getElementById("ch-css")) { const st = document.createElement("style"); st.id = "ch-css"; st.textContent = css; document.head.appendChild(st); }
+    ui = { el: container, open: true }; container.classList.add("ch-card"); draw(); return container;
   }
-
-  function checkAllRequiredBarsGreen() {
-    const barList = bars();
-    if (!barList.length) return false;
-    return barList.filter(b => b.required).every(b => b.green);
+  function barHtml(b) {
+    const pct = Math.min(100, Math.round((b.cur / b.target) * 100));
+    const st = b.ok ? "ok" : (b.required && S.current && S.current.completed === null && b.cur === 0 ? "no" : "");
+    const ic = b.ok ? "✅" : b.cur === 0 && b.required ? "⛔" : "⏳";
+    return `<div class="ch-bar ${st} ${b.required ? "" : "bonus"}" data-bar="${b.id}"><div class="l"><span>${b.icon} ${esc(b.label_vi)} <span class="ch-tag ${b.required ? "" : "b"}">${b.required ? "Bắt buộc" : "Thưởng"}</span></span><span>${ic} ${b.cur}${b.unit || ""}/${b.target}${b.unit || ""}</span></div><div class="ch-track"><div class="ch-fill" style="width:${pct}%"></div></div></div>`;
   }
-
-  function updateStatus() {
-    if (!currentChallenge) return;
-    const allGreen = checkAllRequiredBarsGreen();
-    const allTasksDone = currentChallenge.tasks.every(t => t.done);
-    // CRITICAL: challenge completes ONLY when EVERY required bar is green!
-    const isFinished = allGreen && allTasksDone;
-    currentChallenge.done = isFinished;
-    currentChallenge.completed = isFinished;
-  }
-
-  function onAction(actionId, worldState) {
-    if (!currentChallenge || currentChallenge.done) return false;
-    let progressed = false;
-
-    // 1. Check if action completes any task in the challenge
-    for (const t of currentChallenge.tasks) {
-      if (t.action === actionId && !t.done) {
-        t.done = true;
-        completedTasks.add(t.id);
-        progressed = true;
-      }
-    }
-
-    // 2. Update bars corresponding to this action
-    const actionBars = currentChallenge.def.actionBars && currentChallenge.def.actionBars[actionId];
-    if (actionBars) {
-      for (const [barId, delta] of Object.entries(actionBars)) {
-        if (currentBarState[barId] !== undefined) {
-          currentBarState[barId] = Math.min(100, Math.max(0, currentBarState[barId] + delta));
-          progressed = true;
-        }
-      }
+  function draw() {
+    const el = ui.el, tp = curTopic(), x0 = S.current, c = x0 && byId(x0.id), x = (x0 && c && cTopicOf(c) === tp) ? x0 : null;
+    const head = `<div class="ch-hd"><h2>🏆 Thử thách đời sống</h2><span>${x ? `<button class="ch-btn" data-a="menu">☰ Danh sách</button>` : ""}<button class="ch-btn" data-a="fold" aria-expanded="${ui.open}">${ui.open ? "▾" : "▸"}</button></span></div>`;
+    let body = "";
+    if (!x) {
+      const list = CHALLENGES.filter(ch => cTopicOf(ch) === tp);
+      const shown = list.length ? list : CHALLENGES;
+      body = `<div class="ch-grid">${shown.map(ch => { const lk = isLocked(ch), b = S.best[ch.id] || 0;
+        return `<button class="ch-tile ${lk ? "lock" : ""}" data-start="${ch.id}" ${lk ? "disabled" : ""}>${ch.icon} <b>${esc(ch.title_en)}</b><small>${esc(ch.title_vi)}${ch.optional ? " · thêm" : ""}</small><br>${lk ? "🔒 <small>sắp có</small>" : `<span class="ch-star">${"★".repeat(b)}${"☆".repeat(3 - b)}</span>`}</button>`; }).join("")}</div>`;
+    } else if (x.completed) {
+      const nx = nextChallenge(), story = storyText();
+      body = `<div class="ch-win"><div class="big">🎉 Hoàn thành!</div><div>${esc(c.title_en)} — <span class="ch-star">${"★".repeat(x.completed.stars)}${"☆".repeat(3 - x.completed.stars)}</span></div>
+<div class="ch-row" style="justify-content:center">📋 ${x.done.length}/${c.tasks.length} việc · ⏱ ${mmss(x.completed.ms)} · ⭐ +${x.completed.xp} XP</div>
+<div class="ch-voc">${vocab(x).map(v => `<span>${esc(v.en)} – ${esc(v.vi)}</span>`).join("")}</div>
+${story ? `<div class="ch-story">${esc(story)}</div>` : ""}
+<div class="ch-row" style="justify-content:center"><button class="ch-btn" data-a="replay">↺ Chơi lại</button>${nx ? `<button class="ch-btn pri" data-start="${nx.id}">Thử thách tiếp ▶</button>` : ""}</div></div>`;
     } else {
-      // General boost on valid actions
-      for (const b of currentChallenge.def.bars) {
-        if (currentBarState[b.id] !== undefined && currentBarState[b.id] < 100) {
-          currentBarState[b.id] = Math.min(100, currentBarState[b.id] + (b.step || 10));
-          progressed = true;
-        }
-      }
+      const nt = nextTask(x), bs = bars(x), ready = tasksReady(x);
+      const goal = x.mode === "normal" ? ` · ⏱ ${mmss(elapsedMs(x))} / mục tiêu ${c.minutes}:00 (không bị thua)` : x.mode === "easy" ? " · 🌱 Dễ" : " · 🧘 Luyện tập (không tính giờ)";
+      body = `<div class="ch-goal"><b>${c.icon} ${esc(c.title_en)}</b> — ${esc(c.goal_vi)}<small>${goal}</small></div>
+${x.paused ? `<div class="ch-now">⏸ Đang tạm dừng<button class="ch-btn pri" data-a="resume">▶ Tiếp tục</button></div>` : nt ? `<div class="ch-now" data-cur="${nt.id}"><div><b>${esc(nt.title_en)}</b><br><small>${esc(nt.title_vi)} · 💡 ${esc(nt.learn_en)} = ${esc(nt.learn_vi)}</small></div><button class="ch-btn pri" data-a="do">▶ Làm</button></div>`
+        : ready || !nt ? `<div class="ch-now"><div>📖 Nghe câu chuyện hôm nay để kết thúc</div><button class="ch-btn pri" data-a="story">🔊 Nghe</button></div>` : ""}
+${ready && nt && !x.storyHeard ? `<div class="ch-row"><button class="ch-btn" data-a="story">📖 Nghe câu chuyện tổng kết</button></div>` : ""}
+<div>${bs.map(barHtml).join("")}</div>
+<ul class="ch-list">${c.tasks.map(t => { const d = x.done.includes(t.id); return `<li class="${d ? "d" : nt && nt.id === t.id ? "c" : ""}">${d ? "✅" : nt && nt.id === t.id ? "▶" : "⬜"} ${esc(t.title_en)} <small>· ${esc(t.title_vi)}${t.free ? " · tự do" : ""}</small></li>`; }).join("")}</ul>
+<div class="ch-row">${x.paused ? "" : `<button class="ch-btn" data-a="pause">⏸ Tạm dừng</button>`}<label><input type="checkbox" data-a="practice" ${x.mode === "practice" ? "checked" : ""}> Luyện tập</label><label><input type="checkbox" data-a="easy" ${x.mode === "easy" ? "checked" : ""}> Dễ</label><button class="ch-btn" data-a="replay">↺ Làm lại</button></div>`;
     }
-
-    if (progressed) {
-      updateStatus();
-      notify();
-    }
-
-    return progressed;
+    el.innerHTML = head + `<div class="ch-body" ${ui.open ? "" : "hidden"}>${body}</div>`;
+    el.querySelectorAll("[data-start]").forEach(b => b.onclick = () => API.start(b.dataset.start, { mode: (S.current && S.current.mode) || "normal" }));
+    const on = (a, f) => el.querySelectorAll(`[data-a="${a}"]`).forEach(b => (b.type === "checkbox" ? (b.onchange = () => f(b.checked)) : (b.onclick = f)));
+    on("fold", () => { ui.open = !ui.open; draw(); });
+    on("menu", quit);
+    on("pause", pause); on("resume", resume); on("replay", replay);
+    on("practice", v => setMode(v ? "practice" : "normal")); on("easy", v => setMode(v ? "easy" : "normal"));
+    on("do", () => { const t = nextTask(); if (!t || !host.enqueue) return; const id = t.anyOf.find(actionExists); if (id) host.enqueue(id); });
+    on("story", () => { let done = false; try { done = !!(host.reenact && host.reenact()); } catch (e) { done = false; } if (!done) { const s = storyText() || vocab().map(v => v.en).join(", "); try { host.speak && host.speak(s); } catch (e) { /* ignore */ } } markStoryHeard(); });
   }
 
-  function current() {
-    if (!currentChallenge) return null;
-    const barList = bars();
-    const allGreen = barList.filter(b => b.required).every(b => b.green);
-    return {
-      id: currentChallenge.id,
-      title: currentChallenge.def.title,
-      titleVi: currentChallenge.def.titleVi,
-      mode: currentChallenge.mode,
-      tasks: currentChallenge.tasks,
-      done: currentChallenge.done,
-      completed: currentChallenge.completed,
-      bars: barList,
-      allBarsGreen: allGreen,
-      progress: {
-        tasksDone: currentChallenge.tasks.filter(t => t.done).length,
-        tasksTotal: currentChallenge.tasks.length,
-        barsGreen: barList.filter(b => b.green).length,
-        barsTotal: barList.length
-      }
-    };
-  }
-
-  function mountHud(container, callbacks = {}) {
-    if (!container || typeof document === "undefined") return;
-    if (!document.getElementById("ch-css")) {
-      const st = document.createElement("style");
-      st.id = "ch-css";
-      st.textContent = css;
-      document.head.appendChild(st);
-    }
-
-    function render() {
-      const cur = current();
-      if (!cur) {
-        container.innerHTML = `
-<div class="ch-card">
-  <div class="ch-head">
-    <span class="ch-badge">🏆 CHẾ ĐỘ THỬ THÁCH</span>
-  </div>
-  <div style="font-size:13px;color:#616161">Chọn một thử thách để bắt đầu rèn luyện!</div>
-  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
-    ${CHALLENGES.map(c => `<button class="btn" style="padding:4px 8px;font-size:12px" data-ch="${c.id}">${c.titleVi}</button>`).join("")}
-  </div>
-</div>`;
-        container.querySelectorAll("[data-ch]").forEach(b => {
-          b.onclick = () => { start(b.dataset.ch, { mode: "practice" }); };
-        });
-        return;
-      }
-
-      const barList = cur.bars;
-      container.innerHTML = `
-<div class="ch-card">
-  <div class="ch-head">
-    <span class="ch-badge">🏆 ${cur.titleVi}</span>
-    <span class="ch-mode">Chế độ: ${cur.mode === "practice" ? "Luyện tập" : "Thi đấu"}</span>
-  </div>
-  <div class="ch-desc">
-    <div class="en">${cur.def ? cur.def.desc : ""}</div>
-    <div class="vi">${cur.def ? cur.def.descVi : ""}</div>
-  </div>
-  <div class="ch-bars">
-    ${barList.map(b => `
-      <div class="ch-bar-row">
-        <span class="ch-bar-name">${b.green ? "🟢" : "🔴"} ${b.labelVi}:</span>
-        <div class="ch-bar-track">
-          <div class="ch-bar-fill ${b.green ? "green" : ""}" style="width:${b.cur}%"></div>
-        </div>
-        <span class="ch-bar-val" style="color:${b.green ? "#2e7d32" : "#c62828"}">${b.cur}%</span>
-      </div>`).join("")}
-  </div>
-  <div class="ch-tasks">
-    ${cur.tasks.map(t => `
-      <div class="ch-task-item ${t.done ? "done" : ""}">
-        <span class="ch-task-check">${t.done ? "✅" : "⬜"}</span>
-        <div class="ch-task-txt">
-          <div class="en">${t.en}</div>
-          <div class="vi">${t.vi}</div>
-        </div>
-        ${!t.done ? `<div class="ch-task-act"><button data-act="${t.action}">Làm</button></div>` : ""}
-      </div>`).join("")}
-  </div>
-  ${cur.done ? `<div class="ch-congrats">🎉 CHÚC MỪNG! BẠN ĐÃ HOÀN THÀNH THỬ THÁCH VỚI 100% THANH XANH!</div>` : ""}
-</div>`;
-
-      container.querySelectorAll("[data-act]").forEach(b => {
-        b.onclick = () => {
-          if (callbacks.enqueue) callbacks.enqueue(b.dataset.act);
-        };
-      });
-    }
-
-    render();
-    return subscribe(render);
-  }
-
-  const API = {
-    CHALLENGES,
-    css,
-    start,
-    current,
-    bars,
-    onAction,
-    subscribe,
-    mountHud,
-    reset: () => {
-      currentChallenge = null;
-      completedTasks.clear();
-      currentBarState = {};
-      notify();
-    }
-  };
-
+  const nextTaskIds = () => { const x = S.current; if (!active()) return []; const c = byId(x.id); if (c && cTopicOf(c) !== curTopic()) return []; return c.tasks.filter(t => !x.done.includes(t.id)).flatMap(t => t.anyOf); };
+  const API = { KEY, CHALLENGES, css, start, current, challenge, nextTask, nextTaskIds, active, onAction, onEvent, onSpeak, onListen, onRoleplay, markStoryHeard,
+    pause, resume, setMode, replay, quit, nextChallenge, bars, requiredGreen, isLocked, missing, isUnlocked, vocab, storyText, elapsedMs, renderPanel,
+    refresh: () => { if (ui) draw(); },
+    state: () => S, subscribe: f => listeners.push(f), setHost: h => { host = Object.assign({}, host, h); },
+    _setStorage: st => { store = st; S = load(); } };
   root.ELW_CHALLENGE = API;
   if (typeof module !== "undefined" && module.exports) module.exports = API;
 })(typeof window !== "undefined" ? window : globalThis);

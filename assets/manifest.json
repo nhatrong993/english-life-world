@@ -1,0 +1,749 @@
+[
+  {
+    "id": "table",
+    "file": "assets/objects/table.png",
+    "kind": "object",
+    "room": "living",
+    "objectId": "o-table",
+    "w": 512,
+    "h": 315
+  },
+  {
+    "id": "window",
+    "file": "assets/objects/window.png",
+    "kind": "object",
+    "room": "living",
+    "objectId": "o-window",
+    "w": 460,
+    "h": 512
+  },
+  {
+    "id": "plant",
+    "file": "assets/objects/plant.png",
+    "kind": "object",
+    "room": "living",
+    "objectId": "o-plant",
+    "w": 512,
+    "h": 510
+  },
+  {
+    "id": "cup",
+    "file": "assets/objects/cup.png",
+    "kind": "object",
+    "room": "living",
+    "objectId": "o-cup",
+    "w": 500,
+    "h": 512
+  },
+  {
+    "id": "milk",
+    "file": "assets/objects/milk.png",
+    "kind": "food",
+    "room": "living",
+    "objectId": "o-fridge",
+    "w": 386,
+    "h": 512
+  },
+  {
+    "id": "book",
+    "file": "assets/objects/book.png",
+    "kind": "object",
+    "room": "living",
+    "objectId": "o-book",
+    "w": 512,
+    "h": 408
+  },
+  {
+    "id": "broom",
+    "file": "assets/objects/broom.png",
+    "kind": "object",
+    "room": "living",
+    "objectId": "o-broom",
+    "w": 231,
+    "h": 512
+  },
+  {
+    "id": "fridge-closed",
+    "file": "assets/objects/fridge-closed.png",
+    "kind": "object",
+    "room": "living",
+    "objectId": "o-fridge",
+    "w": 282,
+    "h": 512
+  },
+  {
+    "id": "fridge-open",
+    "file": "assets/objects/fridge-open.png",
+    "kind": "object",
+    "room": "living",
+    "objectId": "o-fridge",
+    "w": 394,
+    "h": 512
+  },
+  {
+    "id": "chair",
+    "file": "assets/objects/chair.png",
+    "kind": "object",
+    "room": "living",
+    "objectId": "o-chair",
+    "w": 338,
+    "h": 512
+  },
+  {
+    "id": "stove-off",
+    "file": "assets/objects/stove-off.png",
+    "kind": "object",
+    "room": "kitchen",
+    "objectId": "o-stove",
+    "w": 512,
+    "h": 371
+  },
+  {
+    "id": "stove-on",
+    "file": "assets/objects/stove-on.png",
+    "kind": "object",
+    "room": "kitchen",
+    "objectId": "o-stove",
+    "w": 512,
+    "h": 395
+  },
+  {
+    "id": "pan",
+    "file": "assets/objects/pan.png",
+    "kind": "object",
+    "room": "kitchen",
+    "objectId": "o-stove",
+    "w": 512,
+    "h": 314
+  },
+  {
+    "id": "egg",
+    "file": "assets/food/egg.png",
+    "kind": "food",
+    "room": "kitchen",
+    "objectId": "o-fridge",
+    "w": 208,
+    "h": 256
+  },
+  {
+    "id": "fried-egg",
+    "file": "assets/food/fried-egg.png",
+    "kind": "food",
+    "room": "kitchen",
+    "objectId": "o-stove",
+    "w": 512,
+    "h": 423
+  },
+  {
+    "id": "kettle",
+    "file": "assets/objects/kettle.png",
+    "kind": "object",
+    "room": "kitchen",
+    "objectId": "o-kettle",
+    "w": 466,
+    "h": 512
+  },
+  {
+    "id": "coffee-cup",
+    "file": "assets/objects/coffee-cup.png",
+    "kind": "object",
+    "room": "kitchen",
+    "objectId": "o-diningtable",
+    "w": 512,
+    "h": 422
+  },
+  {
+    "id": "plate",
+    "file": "assets/objects/plate.png",
+    "kind": "object",
+    "room": "kitchen",
+    "objectId": "o-diningtable",
+    "w": 512,
+    "h": 332
+  },
+  {
+    "id": "cat-bowl",
+    "file": "assets/objects/cat-bowl.png",
+    "kind": "object",
+    "room": "living",
+    "objectId": "o-cat",
+    "w": 512,
+    "h": 471
+  },
+  {
+    "id": "watering-can",
+    "file": "assets/objects/watering-can.png",
+    "kind": "object",
+    "room": "garden",
+    "objectId": "o-wateringcan",
+    "w": 512,
+    "h": 434
+  },
+  {
+    "id": "laundry-basket",
+    "file": "assets/objects/laundry-basket.png",
+    "kind": "object",
+    "room": "bathroom",
+    "objectId": "o-laundrybasket",
+    "w": 512,
+    "h": 443
+  },
+  {
+    "id": "dish-sponge",
+    "file": "assets/objects/dish-sponge.png",
+    "kind": "object",
+    "room": "kitchen",
+    "objectId": "o-sink",
+    "w": 512,
+    "h": 377
+  },
+  {
+    "id": "cafe-bg",
+    "file": "assets/cafe/cafe-bg.png",
+    "kind": "scene",
+    "room": "cafe",
+    "objectId": "shell-cafe",
+    "w": 2000,
+    "h": 1280
+  },
+  {
+    "id": "menuboard",
+    "file": "assets/cafe/menuboard.png",
+    "kind": "object",
+    "room": "cafe",
+    "objectId": "o-menuboard",
+    "w": 520,
+    "h": 440
+  },
+  {
+    "id": "barista",
+    "file": "assets/cafe/barista.png",
+    "kind": "object",
+    "room": "cafe",
+    "objectId": "o-barista",
+    "w": 360,
+    "h": 600
+  },
+  {
+    "id": "cafecounter",
+    "file": "assets/cafe/cafecounter.png",
+    "kind": "object",
+    "room": "cafe",
+    "objectId": "o-cafecounter",
+    "w": 760,
+    "h": 420
+  },
+  {
+    "id": "cashregister",
+    "file": "assets/cafe/cashregister.png",
+    "kind": "object",
+    "room": "cafe",
+    "objectId": "o-cashregister",
+    "w": 380,
+    "h": 420
+  },
+  {
+    "id": "espressomachine",
+    "file": "assets/cafe/espressomachine.png",
+    "kind": "object",
+    "room": "cafe",
+    "objectId": "o-espressomachine",
+    "w": 512,
+    "h": 440
+  },
+  {
+    "id": "pastrycase",
+    "file": "assets/cafe/pastrycase.png",
+    "kind": "object",
+    "room": "cafe",
+    "objectId": "o-pastrycase",
+    "w": 520,
+    "h": 440
+  },
+  {
+    "id": "cupstack",
+    "file": "assets/cafe/cupstack.png",
+    "kind": "object",
+    "room": "cafe",
+    "objectId": "o-cupstack",
+    "w": 360,
+    "h": 480
+  },
+  {
+    "id": "condiments",
+    "file": "assets/cafe/condiments.png",
+    "kind": "object",
+    "room": "cafe",
+    "objectId": "o-condiments",
+    "w": 460,
+    "h": 380
+  },
+  {
+    "id": "cafetable",
+    "file": "assets/cafe/cafetable.png",
+    "kind": "object",
+    "room": "cafe",
+    "objectId": "o-cafetable",
+    "w": 560,
+    "h": 500
+  },
+  {
+    "id": "windowseat",
+    "file": "assets/cafe/windowseat.png",
+    "kind": "object",
+    "room": "cafe",
+    "objectId": "o-windowseat",
+    "w": 640,
+    "h": 480
+  },
+  {
+    "id": "wifisign",
+    "file": "assets/cafe/wifisign.png",
+    "kind": "object",
+    "room": "cafe",
+    "objectId": "o-wifisign",
+    "w": 360,
+    "h": 420
+  },
+  {
+    "id": "recyclingbin",
+    "file": "assets/cafe/recyclingbin.png",
+    "kind": "object",
+    "room": "cafe",
+    "objectId": "o-recyclingbin",
+    "w": 460,
+    "h": 520
+  },
+  {
+    "id": "linh-standing",
+    "file": "assets/people/linh-standing.png",
+    "kind": "npc",
+    "room": "all",
+    "objectId": "npc-linh-standing",
+    "w": 360,
+    "h": 600
+  },
+  {
+    "id": "linh-talking",
+    "file": "assets/people/linh-talking.png",
+    "kind": "npc",
+    "room": "all",
+    "objectId": "npc-linh-talking",
+    "w": 360,
+    "h": 600
+  },
+  {
+    "id": "linh-smiling",
+    "file": "assets/people/linh-smiling.png",
+    "kind": "npc",
+    "room": "all",
+    "objectId": "npc-linh-smiling",
+    "w": 360,
+    "h": 600
+  },
+  {
+    "id": "linh-holding-cup",
+    "file": "assets/people/linh-holding-cup.png",
+    "kind": "npc",
+    "room": "cafe",
+    "objectId": "npc-linh-holding-cup",
+    "w": 360,
+    "h": 600
+  },
+  {
+    "id": "visitor-elderly-neighbor",
+    "file": "assets/people/visitor-elderly-neighbor.png",
+    "kind": "npc",
+    "room": "living",
+    "objectId": "npc-neighbor",
+    "w": 360,
+    "h": 600
+  },
+  {
+    "id": "visitor-old-friend",
+    "file": "assets/people/visitor-old-friend.png",
+    "kind": "npc",
+    "room": "all",
+    "objectId": "npc-old-friend",
+    "w": 360,
+    "h": 600
+  },
+  {
+    "id": "visitor-shipper",
+    "file": "assets/people/visitor-shipper.png",
+    "kind": "npc",
+    "room": "living",
+    "objectId": "npc-shipper",
+    "w": 360,
+    "h": 600
+  },
+  {
+    "id": "visitor-tourist",
+    "file": "assets/people/visitor-tourist.png",
+    "kind": "npc",
+    "room": "cafe",
+    "objectId": "npc-tourist",
+    "w": 360,
+    "h": 600
+  },
+  {
+    "id": "barista-brewing",
+    "file": "assets/people/barista-brewing.png",
+    "kind": "npc",
+    "room": "cafe",
+    "objectId": "npc-barista-brewing",
+    "w": 360,
+    "h": 600
+  },
+  {
+    "id": "barista-serving",
+    "file": "assets/people/barista-serving.png",
+    "kind": "npc",
+    "room": "cafe",
+    "objectId": "npc-barista-serving",
+    "w": 360,
+    "h": 600
+  },
+  {
+    "id": "cashier-greeting",
+    "file": "assets/people/cashier-greeting.png",
+    "kind": "npc",
+    "room": "cafe",
+    "objectId": "npc-cashier-greeting",
+    "w": 360,
+    "h": 600
+  },
+  {
+    "id": "cashier-pos",
+    "file": "assets/people/cashier-pos.png",
+    "kind": "npc",
+    "room": "cafe",
+    "objectId": "npc-cashier-pos",
+    "w": 360,
+    "h": 600
+  },
+  {
+    "id": "weather-rain",
+    "file": "assets/weather/rain.svg",
+    "kind": "scene",
+    "room": "all",
+    "objectId": "weather-overlay-rain",
+    "w": 1000,
+    "h": 640
+  },
+  {
+    "id": "weather-cold",
+    "file": "assets/weather/cold.svg",
+    "kind": "scene",
+    "room": "all",
+    "objectId": "weather-overlay-cold",
+    "w": 1000,
+    "h": 640
+  },
+  {
+    "id": "weather-sunny",
+    "file": "assets/weather/sunny.svg",
+    "kind": "scene",
+    "room": "all",
+    "objectId": "weather-overlay-sunny",
+    "w": 1000,
+    "h": 640
+  },
+  {
+    "id": "weather-windy",
+    "file": "assets/weather/windy.svg",
+    "kind": "scene",
+    "room": "all",
+    "objectId": "weather-overlay-windy",
+    "w": 1000,
+    "h": 640
+  },
+  {
+    "id": "weather-sunny-icon",
+    "file": "assets/weather/weather-sunny.png",
+    "kind": "icon",
+    "room": "all",
+    "objectId": "icon-weather-sunny",
+    "w": 96,
+    "h": 96
+  },
+  {
+    "id": "weather-rainy-icon",
+    "file": "assets/weather/weather-rainy.png",
+    "kind": "icon",
+    "room": "all",
+    "objectId": "icon-weather-rainy",
+    "w": 96,
+    "h": 96
+  },
+  {
+    "id": "weather-cold-icon",
+    "file": "assets/weather/weather-cold.png",
+    "kind": "icon",
+    "room": "all",
+    "objectId": "icon-weather-cold",
+    "w": 96,
+    "h": 96
+  },
+  {
+    "id": "weather-windy-icon",
+    "file": "assets/weather/weather-windy.png",
+    "kind": "icon",
+    "room": "all",
+    "objectId": "icon-weather-windy",
+    "w": 96,
+    "h": 96
+  },
+  {
+    "id": "weather-cloudy-icon",
+    "file": "assets/weather/weather-cloudy.png",
+    "kind": "icon",
+    "room": "all",
+    "objectId": "icon-weather-cloudy",
+    "w": 96,
+    "h": 96
+  },
+  {
+    "id": "menu-espresso",
+    "file": "assets/menu/espresso.png",
+    "kind": "icon",
+    "room": "cafe",
+    "objectId": "icon-espresso",
+    "w": 128,
+    "h": 128
+  },
+  {
+    "id": "menu-americano",
+    "file": "assets/menu/americano.png",
+    "kind": "icon",
+    "room": "cafe",
+    "objectId": "icon-americano",
+    "w": 128,
+    "h": 128
+  },
+  {
+    "id": "menu-cappuccino",
+    "file": "assets/menu/cappuccino.png",
+    "kind": "icon",
+    "room": "cafe",
+    "objectId": "icon-cappuccino",
+    "w": 128,
+    "h": 128
+  },
+  {
+    "id": "menu-latte",
+    "file": "assets/menu/latte.png",
+    "kind": "icon",
+    "room": "cafe",
+    "objectId": "icon-latte",
+    "w": 128,
+    "h": 128
+  },
+  {
+    "id": "menu-mocha",
+    "file": "assets/menu/mocha.png",
+    "kind": "icon",
+    "room": "cafe",
+    "objectId": "icon-mocha",
+    "w": 128,
+    "h": 128
+  },
+  {
+    "id": "menu-matcha-latte",
+    "file": "assets/menu/matcha-latte.png",
+    "kind": "icon",
+    "room": "cafe",
+    "objectId": "icon-matcha-latte",
+    "w": 128,
+    "h": 128
+  },
+  {
+    "id": "menu-hot-chocolate",
+    "file": "assets/menu/hot-chocolate.png",
+    "kind": "icon",
+    "room": "cafe",
+    "objectId": "icon-hot-chocolate",
+    "w": 128,
+    "h": 128
+  },
+  {
+    "id": "menu-iced-tea",
+    "file": "assets/menu/iced-tea.png",
+    "kind": "icon",
+    "room": "cafe",
+    "objectId": "icon-iced-tea",
+    "w": 128,
+    "h": 128
+  },
+  {
+    "id": "menu-lemonade",
+    "file": "assets/menu/lemonade.png",
+    "kind": "icon",
+    "room": "cafe",
+    "objectId": "icon-lemonade",
+    "w": 128,
+    "h": 128
+  },
+  {
+    "id": "menu-smoothie",
+    "file": "assets/menu/smoothie.png",
+    "kind": "icon",
+    "room": "cafe",
+    "objectId": "icon-smoothie",
+    "w": 128,
+    "h": 128
+  },
+  {
+    "id": "menu-croissant",
+    "file": "assets/menu/croissant.png",
+    "kind": "icon",
+    "room": "cafe",
+    "objectId": "icon-croissant",
+    "w": 128,
+    "h": 128
+  },
+  {
+    "id": "menu-muffin",
+    "file": "assets/menu/muffin.png",
+    "kind": "icon",
+    "room": "cafe",
+    "objectId": "icon-muffin",
+    "w": 128,
+    "h": 128
+  },
+  {
+    "id": "menu-cheesecake",
+    "file": "assets/menu/cheesecake.png",
+    "kind": "icon",
+    "room": "cafe",
+    "objectId": "icon-cheesecake",
+    "w": 128,
+    "h": 128
+  },
+  {
+    "id": "menu-banana-bread",
+    "file": "assets/menu/banana-bread.png",
+    "kind": "icon",
+    "room": "cafe",
+    "objectId": "icon-banana-bread",
+    "w": 128,
+    "h": 128
+  },
+  {
+    "id": "market-apple",
+    "file": "assets/menu/apple.png",
+    "kind": "icon",
+    "room": "market",
+    "objectId": "icon-apple",
+    "w": 128,
+    "h": 128
+  },
+  {
+    "id": "market-banana",
+    "file": "assets/menu/banana.png",
+    "kind": "icon",
+    "room": "market",
+    "objectId": "icon-banana",
+    "w": 128,
+    "h": 128
+  },
+  {
+    "id": "market-mango",
+    "file": "assets/menu/mango.png",
+    "kind": "icon",
+    "room": "market",
+    "objectId": "icon-mango",
+    "w": 128,
+    "h": 128
+  },
+  {
+    "id": "market-orange",
+    "file": "assets/menu/orange.png",
+    "kind": "icon",
+    "room": "market",
+    "objectId": "icon-orange",
+    "w": 128,
+    "h": 128
+  },
+  {
+    "id": "market-rice",
+    "file": "assets/menu/rice.png",
+    "kind": "icon",
+    "room": "market",
+    "objectId": "icon-rice",
+    "w": 128,
+    "h": 128
+  },
+  {
+    "id": "market-egg",
+    "file": "assets/menu/egg.png",
+    "kind": "icon",
+    "room": "market",
+    "objectId": "icon-egg",
+    "w": 128,
+    "h": 128
+  },
+  {
+    "id": "market-milk",
+    "file": "assets/menu/milk.png",
+    "kind": "icon",
+    "room": "market",
+    "objectId": "icon-milk",
+    "w": 128,
+    "h": 128
+  },
+  {
+    "id": "market-bread",
+    "file": "assets/menu/bread.png",
+    "kind": "icon",
+    "room": "market",
+    "objectId": "icon-bread",
+    "w": 128,
+    "h": 128
+  },
+  {
+    "id": "market-snack",
+    "file": "assets/menu/snack.png",
+    "kind": "icon",
+    "room": "market",
+    "objectId": "icon-snack",
+    "w": 128,
+    "h": 128
+  },
+  {
+    "id": "market-laundry-detergent",
+    "file": "assets/menu/laundry-detergent.png",
+    "kind": "icon",
+    "room": "market",
+    "objectId": "icon-laundry-detergent",
+    "w": 128,
+    "h": 128
+  },
+  {
+    "id": "market-tissue-paper",
+    "file": "assets/menu/tissue-paper.png",
+    "kind": "icon",
+    "room": "market",
+    "objectId": "icon-tissue-paper",
+    "w": 128,
+    "h": 128
+  },
+  {
+    "id": "market-meat",
+    "file": "assets/menu/meat.png",
+    "kind": "icon",
+    "room": "market",
+    "objectId": "icon-meat",
+    "w": 128,
+    "h": 128
+  },
+  {
+    "id": "market-fish",
+    "file": "assets/menu/fish.png",
+    "kind": "icon",
+    "room": "market",
+    "objectId": "icon-fish",
+    "w": 128,
+    "h": 128
+  }
+]

@@ -1,0 +1,162 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 240" width="360" height="240">
+  <defs>
+    <linearGradient id="cWall" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#edf5f4"/>
+      <stop offset="100%" stop-color="#d4e6e3"/>
+    </linearGradient>
+    <linearGradient id="cWood" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#8c532b"/>
+      <stop offset="100%" stop-color="#5a3418"/>
+    </linearGradient>
+    <linearGradient id="cBarTop" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#c98a58"/>
+      <stop offset="100%" stop-color="#9a5f33"/>
+    </linearGradient>
+    <linearGradient id="cMetal" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#e2e8f0"/>
+      <stop offset="50%" stop-color="#94a3b8"/>
+      <stop offset="100%" stop-color="#64748b"/>
+    </linearGradient>
+    <linearGradient id="cEspresso" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#c86d38"/>
+      <stop offset="100%" stop-color="#e8743b"/>
+    </linearGradient>
+    <radialGradient id="cCoffee" cx="0.5" cy="0.4" r="0.6">
+      <stop offset="0%" stop-color="#613b1e"/>
+      <stop offset="70%" stop-color="#4a2c16"/>
+      <stop offset="100%" stop-color="#341e0d"/>
+    </radialGradient>
+    <filter id="cShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-opacity="0.25" flood-color="#241009"/>
+    </filter>
+  </defs>
+
+  <!-- Wall Background: Subway tiles -->
+  <rect width="360" height="140" fill="url(#cWall)"/>
+  <!-- Tile pattern lines -->
+  <g stroke="#b8cfcc" stroke-width="1.2" opacity="0.65">
+    <line x1="0" y1="28" x2="360" y2="28"/>
+    <line x1="0" y1="56" x2="360" y2="56"/>
+    <line x1="0" y1="84" x2="360" y2="84"/>
+    <line x1="0" y1="112" x2="360" y2="112"/>
+    <!-- vertical lines alternating -->
+    <line x1="30" y1="0" x2="30" y2="28"/><line x1="90" y1="0" x2="90" y2="28"/><line x1="150" y1="0" x2="150" y2="28"/><line x1="210" y1="0" x2="210" y2="28"/><line x1="270" y1="0" x2="270" y2="28"/><line x1="330" y1="0" x2="330" y2="28"/>
+    <line x1="60" y1="28" x2="60" y2="56"/><line x1="120" y1="28" x2="120" y2="56"/><line x1="180" y1="28" x2="180" y2="56"/><line x1="240" y1="28" x2="240" y2="56"/><line x1="300" y1="28" x2="300" y2="56"/>
+    <line x1="30" y1="56" x2="30" y2="84"/><line x1="90" y1="56" x2="90" y2="84"/><line x1="150" y1="56" x2="150" y2="84"/><line x1="210" y1="56" x2="210" y2="84"/><line x1="270" y1="56" x2="270" y2="84"/><line x1="330" y1="56" x2="330" y2="84"/>
+    <line x1="60" y1="84" x2="60" y2="112"/><line x1="120" y1="84" x2="120" y2="112"/><line x1="180" y1="84" x2="180" y2="112"/><line x1="240" y1="84" x2="240" y2="112"/><line x1="300" y1="84" x2="300" y2="112"/>
+  </g>
+
+  <!-- Wall Blackboard Menu (Right) -->
+  <g transform="translate(230, 20)">
+    <rect width="95" height="70" rx="4" fill="#303b38" stroke="#8c532b" stroke-width="3"/>
+    <text x="47" y="20" fill="#fcdb77" font-size="9" font-weight="700" text-anchor="middle" font-family="system-ui">☕ SPECIALTY</text>
+    <line x1="12" y1="26" x2="83" y2="26" stroke="#4d615c" stroke-width="1"/>
+    <text x="14" y="38" fill="#fff" font-size="8" font-family="monospace">Espresso  $3.0</text>
+    <text x="14" y="50" fill="#fff" font-size="8" font-family="monospace">Latte     $4.5</text>
+    <text x="14" y="62" fill="#fff" font-size="8" font-family="monospace">Cold Brew $4.0</text>
+  </g>
+
+  <!-- Cafe Counter (Wood) -->
+  <rect y="132" width="360" height="24" fill="url(#cBarTop)" filter="url(#cShadow)"/>
+  <line x1="0" y1="132" x2="360" y2="132" stroke="#e0a370" stroke-width="2"/>
+  <rect y="156" width="360" height="84" fill="url(#cWood)"/>
+  <!-- Counter Paneling -->
+  <line x1="60" y1="156" x2="60" y2="240" stroke="#4a2810" stroke-width="2"/>
+  <line x1="120" y1="156" x2="120" y2="240" stroke="#4a2810" stroke-width="2"/>
+  <line x1="180" y1="156" x2="180" y2="240" stroke="#4a2810" stroke-width="2"/>
+  <line x1="240" y1="156" x2="240" y2="240" stroke="#4a2810" stroke-width="2"/>
+  <line x1="300" y1="156" x2="300" y2="240" stroke="#4a2810" stroke-width="2"/>
+
+  <!-- Left: Espresso Machine -->
+  <g transform="translate(35, 62)" filter="url(#cShadow)">
+    <!-- Main Body -->
+    <rect width="82" height="74" rx="7" fill="url(#cMetal)"/>
+    <!-- Top Warmer Tray with Cups -->
+    <rect x="4" y="-5" width="74" height="6" rx="2" fill="#cbd5e1"/>
+    <rect x="8" y="-12" width="12" height="8" rx="2" fill="#e8743b"/>
+    <rect x="24" y="-12" width="12" height="8" rx="2" fill="#3b8de8"/>
+    <rect x="40" y="-12" width="12" height="8" rx="2" fill="#e8743b"/>
+    <!-- Front Panel -->
+    <rect x="8" y="10" width="66" height="34" rx="4" fill="#334155"/>
+    <!-- Pressure Gauge -->
+    <circle cx="24" cy="24" r="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+    <line x1="24" y1="24" x2="28" y2="20" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/>
+    <circle cx="24" cy="24" r="2" fill="#334155"/>
+    <!-- Toggle Switches / Buttons -->
+    <circle cx="46" cy="20" r="3.5" fill="#38bdf8"/>
+    <circle cx="58" cy="20" r="3.5" fill="#22c55e"/>
+    <circle cx="46" cy="30" r="3" fill="#cbd5e1"/>
+    <circle cx="58" cy="30" r="3" fill="#cbd5e1"/>
+    <!-- Grouphead & Portafilter -->
+    <rect x="22" y="44" width="22" height="8" rx="2" fill="#64748b"/>
+    <rect x="26" y="52" width="14" height="12" rx="3" fill="#475569"/>
+    <!-- Portafilter Handle extending right -->
+    <rect x="36" y="50" width="26" height="5" rx="2.5" fill="#0f172a"/>
+    <!-- Spout & Drip Tray -->
+    <rect x="31" y="64" width="4" height="4" fill="#94a3b8"/>
+    <rect x="6" y="68" width="70" height="6" rx="2" fill="#1e293b"/>
+  </g>
+
+  <!-- Centerpiece: Ceramic Latte Cup with Leaf Latte Art -->
+  <g transform="translate(175, 142)" filter="url(#cShadow)">
+    <!-- Saucer -->
+    <ellipse cx="0" cy="22" rx="48" ry="15" fill="#d95e26"/>
+    <ellipse cx="0" cy="20" rx="44" ry="12" fill="#e8743b"/>
+    <ellipse cx="0" cy="18" rx="32" ry="8" fill="#f79868"/>
+
+    <!-- Cup Body -->
+    <path d="M-30 0 C-30 24 30 24 30 0 Z" fill="#d95e26"/>
+    <path d="M-28 -2 C-28 20 28 20 28 -2 Z" fill="#e8743b"/>
+
+    <!-- Handle on Right -->
+    <path d="M26 2 C38 2 38 16 24 16" fill="none" stroke="#e8743b" stroke-width="6" stroke-linecap="round"/>
+    <path d="M26 2 C36 2 36 16 24 16" fill="none" stroke="#f79868" stroke-width="2.5" stroke-linecap="round"/>
+
+    <!-- Cup Rim & Coffee Surface -->
+    <ellipse cx="0" cy="-2" rx="28" ry="13" fill="#f79868"/>
+    <ellipse cx="0" cy="-2" rx="26" ry="11" fill="url(#cCoffee)"/>
+    <!-- Crema ring -->
+    <ellipse cx="0" cy="-2" rx="23" ry="9.5" fill="#9a582a" opacity="0.8"/>
+
+    <!-- Rosetta / Leaf Latte Art -->
+    <g fill="#fffdfa" stroke="#fffdfa">
+      <!-- Main stem -->
+      <line x1="0" y1="4" x2="0" y2="-8" stroke-width="1.8" stroke-linecap="round"/>
+      <!-- Heart tip -->
+      <path d="M-4 -9 C-4 -12 0 -10 0 -8 C0 -10 4 -12 4 -9 C4 -6 0 -5 0 -5 C0 -5 -4 -6 -4 -9 Z"/>
+      <!-- Paired leaves -->
+      <path d="M0 -6 Q-7 -7 -5 -4 Q-2 -5 0 -6 Z"/>
+      <path d="M0 -6 Q7 -7 5 -4 Q2 -5 0 -6 Z"/>
+      <path d="M0 -3 Q-8 -4 -6 -1 Q-2 -2 0 -3 Z"/>
+      <path d="M0 -3 Q8 -4 6 -1 Q2 -2 0 -3 Z"/>
+      <path d="M0 0 Q-7 0 -5 2 Q-2 1 0 0 Z"/>
+      <path d="M0 0 Q7 0 5 2 Q2 1 0 0 Z"/>
+    </g>
+
+    <!-- Rising Steam Curves -->
+    <path d="M-8 -18 Q-16 -32 -6 -44 T-8 -60" fill="none" stroke="#eedcc9" stroke-width="2.2" stroke-linecap="round" opacity="0.75"/>
+    <path d="M6 -18 Q16 -32 6 -44 T8 -60" fill="none" stroke="#eedcc9" stroke-width="2" stroke-linecap="round" opacity="0.75"/>
+  </g>
+
+  <!-- Right: Takeaway Coffee Cup -->
+  <g transform="translate(262, 134)" filter="url(#cShadow)">
+    <!-- Cup Body -->
+    <polygon points="-16,28 16,28 20,-16 -20,-16" fill="#f8fafc"/>
+    <!-- Kraft Sleeve -->
+    <polygon points="-17,14 17,14 19,-4 -19,-4" fill="#c08149"/>
+    <!-- Coffee Bean Logo on sleeve -->
+    <ellipse cx="0" cy="5" rx="5" ry="3.5" fill="#5a3418"/>
+    <path d="M-2 5 Q0 2 2 5" stroke="#c08149" stroke-width="1" fill="none"/>
+    <!-- Sip Lid -->
+    <rect x="-21" y="-22" width="42" height="6" rx="2" fill="#334155"/>
+    <rect x="-14" y="-26" width="28" height="5" rx="2" fill="#475569"/>
+    <rect x="7" y="-27" width="5" height="2" fill="#1e293b"/>
+  </g>
+
+  <!-- Coffee Beans Scattered on Counter -->
+  <g transform="translate(112, 150)">
+    <ellipse cx="0" cy="0" rx="4" ry="2.8" fill="#4a2810" transform="rotate(25)"/>
+    <ellipse cx="8" cy="2" rx="3.8" ry="2.6" fill="#5a3215" transform="rotate(-15)"/>
+    <ellipse cx="-7" cy="3" rx="3.5" ry="2.5" fill="#3a1e0b" transform="rotate(45)"/>
+  </g>
+</svg>

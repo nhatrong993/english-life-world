@@ -8,16 +8,16 @@
 :root{--bg:#f6efe4;--card:#fffdf9;--ink:#2d2a26;--muted:#7a7166;--accent:#e8743b;--ok:#3a9d5d;--line:#e3d6c3;--shadow:0 6px 24px #5a3d1f1a}
 *{box-sizing:border-box}[hidden]{display:none!important}
 body{margin:0;font-family:system-ui,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink)}
-header{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 16px;max-width:1280px;margin:auto;flex-wrap:wrap}
-h1{font-size:20px;margin:0}h1 span{color:var(--accent)}
-.hud{display:flex;gap:8px;align-items:center}
-.stat{background:#fff;border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-weight:700;font-size:14px}
+header{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 16px;max-width:1280px;margin:auto;flex-wrap:wrap}
+h1{font-size:20px;margin:0;white-space:nowrap}h1 span{color:var(--accent)}
+.hud{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.stat{background:#fff;border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-weight:700;font-size:13px;white-space:nowrap;flex-shrink:0}
 .stat.bump{animation:bump .5s}@keyframes bump{40%{transform:scale(1.2)}}
-.iconbtn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:6px 10px;cursor:pointer;font-size:14px;color:var(--ink)}
+.iconbtn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:6px 10px;cursor:pointer;font-size:13.5px;color:var(--ink);white-space:nowrap}
 main{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(320px,1fr);gap:16px;max-width:1280px;margin:auto;padding:0 16px 16px}
 @media(max-width:900px){main{grid-template-columns:1fr}}
 .scene{background:var(--card);border-radius:20px;padding:8px;box-shadow:var(--shadow);position:relative;align-self:start}
-.scene-bar{display:flex;justify-content:space-between;align-items:center;margin:4px 8px 6px;font-size:14px;color:var(--muted);gap:8px}
+.scene-bar{display:flex;justify-content:space-between;align-items:center;margin:2px 4px 6px;font-size:14px;color:var(--muted);gap:6px;flex-wrap:wrap}
 #room{width:100%;height:auto;display:block;border-radius:14px;touch-action:manipulation}
 .obj{cursor:pointer}
 .hit{fill:transparent}
@@ -88,7 +88,7 @@ main{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(320px,1fr);gap:16
 .opts button{display:block;width:100%;text-align:left;margin:6px 0}
 .hint{font-size:13px;color:var(--muted)}
 .back{background:none;border:0;color:var(--accent);cursor:pointer;font-size:14px;padding:0;margin-bottom:6px}
-.guide{position:sticky;bottom:12px;max-width:1280px;margin:0 auto 12px;padding:0 16px;z-index:5}
+.guide{position:relative;max-width:1280px;margin:12px auto 20px;padding:0 16px;z-index:5}
 .guide button{width:100%;display:flex;gap:12px;align-items:center;text-align:left;border:2px solid var(--line);background:#fff;border-radius:16px;padding:10px 14px;cursor:pointer;box-shadow:0 3px 0 var(--line);font-size:15px;color:var(--ink)}
 .guide .face{font-size:34px}.guide b{display:block}.guide span{color:var(--muted)}
 .modal{position:fixed;inset:0;background:#0006;display:flex;align-items:center;justify-content:center;padding:16px;z-index:50}
@@ -143,6 +143,9 @@ main{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(320px,1fr);gap:16
 .xlist{display:flex;flex-direction:column;gap:4px;font-size:14px}
 .xlist div{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}.xlist small{color:var(--muted)}
 .dlg-list{display:flex;flex-wrap:wrap;gap:6px}
+.act.act-done{background:#f3fbf4;border-color:#bfe3c8}.act.act-pending{background:#fff6ef}
+.act .replay{display:block;font-size:12px;color:var(--ok)}.act.act-pending .replay{color:var(--accent)}
+.act.replaying{animation:replayPulse .6s}@keyframes replayPulse{50%{box-shadow:0 0 0 4px #ffd7bf}}
 #rpCard>*{max-width:none!important;width:100%!important;box-sizing:border-box}
 /* ===== living room redesign ===== */
 #char.lie #bob{animation:none;transform:translate(0,-34px) rotate(-90deg) scale(.82)}
@@ -168,7 +171,8 @@ main{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(320px,1fr);gap:16
 #catBowlG .kibble{display:none}.bowl-full #catBowlG .kibble{display:inline}
 #catWaterG .water{display:none}.water-full #catWaterG .water{display:inline}
 #catPos{transition:transform 1.1s ease-in-out}
-#catScale,#catFlip{transition:transform .25s}
+#o-cat.pet-follow-active #catPos{transition:none!important}
+#catScale,#catFlip{transition:transform .12s ease-out}
 #catCurl{display:none;transform-origin:0 0;animation:catbreath 3s ease-in-out infinite}
 .cat-sleeping #catCurl{display:inline}.cat-sleeping #catBody{display:none}
 @keyframes catbreath{50%{transform:scale(1.03,1.06)}}
@@ -189,6 +193,62 @@ main{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(320px,1fr);gap:16
 .lamp-on .ceilglow{opacity:.5}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
+<style id="elwTopicCss">
+.topicbtn{border:0;background:#e8743b;color:#fff;font-weight:700;border-radius:999px;padding:6px 14px;font-size:14px;white-space:nowrap;min-height:36px;cursor:pointer;order:1;flex:0 1 auto}
+.scene-bar{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:6px!important;flex-wrap:wrap!important;margin:2px 4px 6px!important}
+.stools{display:flex!important;align-items:center!important;gap:5px!important;flex:0 0 auto!important;order:2!important;margin-left:auto!important;flex-wrap:nowrap!important}
+#roomTabs{order:3!important;flex:0 0 100%!important;width:100%!important;min-width:0!important;display:grid!important;grid-template-columns:repeat(var(--zone-cols,6),minmax(0,1fr))!important;gap:6px!important;overflow:visible!important;margin-top:2px!important}
+#roomTabs[data-topic-mode="outdoor"]{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto!important;scrollbar-width:none!important;gap:6px!important;padding-bottom:2px!important}
+#roomTabs::-webkit-scrollbar{display:none}
+#roomTabs button{width:100%;min-width:0;overflow:hidden;display:flex;align-items:center;justify-content:center;gap:4px;white-space:nowrap;font-weight:700;padding:6px 6px;border-radius:11px;font-size:13px}
+#roomTabs button .rn{overflow:hidden;text-overflow:ellipsis;max-width:100%}
+#roomTabs[data-topic-mode="outdoor"] button{width:auto;flex:0 0 auto;padding:5px 11px;border-radius:999px}
+#roomTabs button.area-chip{background:#f8fafc;border:1px dashed #cbd5e1;color:#334155;font-size:12px;font-weight:600}
+#roomTabs button.area-chip:hover{border-color:#e8743b;background:#fff7ed;color:#9a3412}
+.mchips{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 8px;scroll-snap-type:x mandatory;scrollbar-width:thin}
+.mchip{flex:0 0 132px;scroll-snap-align:start;display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;border:1.5px solid #f0c9ad;background:#fff7f0;border-radius:14px;padding:8px 10px;cursor:pointer;font:inherit;color:#5a3d1f}
+.mchip b{font-size:20px;line-height:1}.mchip span{font-weight:700;font-size:13px;line-height:1.2}.mchip small{font-size:11px;opacity:.75;line-height:1.2}
+.mchip:active{background:#ffe7d6}
+.mhead{margin:0 0 6px;font-size:16px}
+#topicSheet{position:fixed;inset:0;z-index:300;background:rgba(40,25,10,.45);display:flex;align-items:center;justify-content:center;padding:16px}
+#topicSheet[hidden]{display:none}
+#topicSheet .ts{background:#fffdf9;width:100%;max-width:680px;border-radius:22px;padding:16px 18px 20px;max-height:88vh;overflow:auto;box-shadow:0 12px 36px rgba(0,0,0,.25)}
+#topicSheet h3{margin:0 0 4px;font-size:18px}#topicSheet .sub{margin:0 0 10px;font-size:13px;opacity:.75}
+.tgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tcard{position:relative;border:2px solid #eedcc9;border-radius:16px;padding:10px;background:#fff;text-align:left;font:inherit;color:#5a3d1f;cursor:pointer;min-height:96px}
+.tcard .ti{font-size:28px}.tcard .tn{font-weight:700;display:block}.tcard .te{font-size:12px;opacity:.75;display:block}
+.tcard .tb{position:absolute;top:8px;right:8px;font-size:11px;border-radius:999px;padding:2px 7px;background:#eee}
+.tcard.live{border-color:#e8743b;background:#fff4ec}.tcard.live .tb{background:#e8743b;color:#fff}
+.tcard.picked{border-color:#3b8de8;background:#eef6ff}.tcard.picked .tb{background:#3b8de8;color:#fff}
+.tcard .tw{font-size:11px;margin-top:4px;display:block;opacity:.8}
+.tcard .tareas{display:flex;flex-wrap:wrap;gap:3px;margin-top:6px}
+.tcard .tareas i{font-style:normal;font-size:10px;font-weight:600;background:#f8f2e9;border:1px solid #e6d5c3;color:#5a3d1f;padding:1px 6px;border-radius:6px;white-space:nowrap}
+.tslock{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:0 0 10px}.tslock input{width:120px;min-height:44px;font-size:20px;letter-spacing:6px;text-align:center;border:2px solid #eedcc9;border-radius:12px}.tslock button{min-height:44px;border:0;border-radius:12px;background:#5a3d1f;color:#fff;font-weight:700;padding:0 14px}#tsMsg{font-size:13px;color:#c0392b;flex-basis:100%}
+.tsfriend{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:12px 0 0;font-weight:600;min-height:44px}.tsfriend input{width:22px;height:22px}.tsfriend small{font-weight:400;opacity:.7;flex-basis:100%;padding-left:30px}
+.tsfoot{display:flex;gap:8px;margin-top:12px}.tsfoot button{flex:1;min-height:44px;border-radius:12px;border:0;font-weight:700;font:inherit;cursor:pointer}
+@media (max-width:760px){
+ html body section.scene,html body .leftcol section.scene{max-height:none!important;overflow:visible!important;position:relative!important;top:auto!important;padding:4px 4px 6px!important}
+ html body #room{max-height:none!important;width:100%!important;height:auto!important;aspect-ratio:1000/640}
+ html body .scene-bar{margin:2px 2px 4px!important;flex-wrap:wrap!important;gap:4px!important}
+ .stools .lbl,.topicbtn .lbl{display:none}
+ .stools .iconbtn,.stools .w3d-cam-btn{min-width:34px!important;padding:3px 7px!important;min-height:32px!important;font-size:11.5px!important}
+ .topicbtn{padding:4px 10px!important;font-size:13px!important;min-height:32px!important;flex:0 1 auto!important}
+ #roomTabs{order:3!important;flex:0 0 100%!important;width:100%!important;display:grid!important;grid-template-columns:repeat(var(--zone-cols,6),minmax(0,1fr))!important;gap:3px!important;overflow:visible!important;margin-top:2px!important}
+ #roomTabs[data-topic-mode="outdoor"]{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto!important;gap:4px!important}
+ #roomTabs button{flex-direction:column!important;justify-content:center!important;align-items:center!important;gap:0!important;padding:2px 3px!important;font-size:10.5px!important;min-height:34px!important;border-radius:9px!important;min-width:0!important;overflow:hidden!important}
+ #roomTabs[data-topic-mode="outdoor"] button{flex-direction:row!important;gap:3px!important;padding:3px 8px!important;min-height:30px!important;width:auto!important}
+ #roomTabs button .rn{font-size:10.5px;line-height:1.1;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+ header{padding:4px 8px!important;gap:4px!important}
+ header h1{font-size:15px!important;line-height:1.2}
+ header .hud{gap:4px!important;flex-wrap:wrap!important;width:100%!important;justify-content:flex-start!important}
+ header .stat,header .iconbtn,header #petMiniHud,header #btnProBadge{min-height:26px!important;height:26px!important;padding:2px 6px!important;font-size:11px!important;white-space:nowrap!important;flex-shrink:0!important;display:inline-flex!important;align-items:center!important}
+ header select#langSel{width:auto!important;max-width:none!important;padding:1px 5px!important}
+ #dayHud{margin:0 auto 2px!important;padding:0 8px!important}
+ #missionCard{padding:8px 10px!important}
+ #topicSheet{align-items:flex-end;padding:0}
+ #topicSheet .ts{max-width:100%;border-radius:20px 20px 0 0;padding:12px 12px 18px}
+}
+</style>
 </head>
 <body>
 <header><h1>English <span>Life</span> World</h1>
@@ -197,8 +257,8 @@ main{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(320px,1fr);gap:16
 <div id="dayHud" style="max-width:1280px;margin:0 auto 10px;padding:0 16px"></div>
 <main>
 <div class="leftcol"><section class="scene">
- <div class="scene-bar"><span class="rtabs" id="roomTabs" role="tablist" aria-label="Chọn phòng"></span>
-  <span><button class="iconbtn" id="btnTags">🏷 Tên đồ vật</button> <button class="iconbtn" id="btnReset" title="Đưa mọi đồ vật về chỗ cũ">↺ Dọn phòng</button></span></div>
+ <div class="scene-bar"><button class="topicbtn" id="btnTopic" aria-haspopup="dialog">🏠 Nhà ở ▾</button><span class="rtabs" id="roomTabs" role="tablist" aria-label="Chọn phòng"></span>
+  <span class="stools"><button class="iconbtn" id="btnFriend" hidden style="display:none" title="Bạn đồng hành" aria-pressed="false">🧑‍🦱<span class="lbl"> Linh</span></button><button class="iconbtn" id="btnTags" title="Tên đồ vật" aria-label="Tên đồ vật">🏷<span class="lbl"> Tên đồ vật</span></button><button class="iconbtn" id="btnReset" title="Dọn phòng: đưa mọi đồ vật về chỗ cũ" aria-label="Dọn phòng">↺<span class="lbl"> Dọn phòng</span></button></span></div>
  <svg id="room" viewBox="0 0 1000 640" role="application" aria-label="Căn phòng tương tác">
   <defs>
    <linearGradient id="gWall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7e6cf"/><stop offset="1" stop-color="#efd6b6"/></linearGradient>
@@ -468,7 +528,8 @@ main{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(320px,1fr);gap:16
       <g id="catScale">
        <ellipse cx="0" cy="0" rx="24" ry="4.5" fill="#000" opacity=".16"/>
        <g id="catHop"><g id="catFlip">
-        <g id="catBody">
+        <image id="roomPetImg" class="pet-room-sprite pet-sprite-img" href="assets/pets/milu/idle_happy.png" src="assets/pets/milu/idle_happy.png" x="-38" y="-68" width="76" height="76" preserveAspectRatio="xMidYMid meet"/>
+        <g id="catBody" style="display:none">
          <path class="ctail" d="M-20 -14 Q-38 -18 -34 -42" stroke="#e59b4a" stroke-width="6.5" fill="none" stroke-linecap="round"/>
          <g class="clegB"><rect x="-17" y="-13" width="6" height="13" rx="3" fill="#d8873e"/><rect x="9" y="-13" width="6" height="13" rx="3" fill="#d8873e"/></g>
          <ellipse cx="-2" cy="-17" rx="22" ry="11" fill="#f0a95a"/>
@@ -486,7 +547,7 @@ main{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(320px,1fr);gap:16
           <ellipse cx="-4" cy="4" rx="2.5" ry="1.5" fill="#f7a8a0" opacity=".6"/>
          </g>
         </g>
-        <g id="catCurl">
+        <g id="catCurl" style="display:none">
          <ellipse cx="-2" cy="-11" rx="24" ry="12" fill="#f0a95a"/>
          <path d="M-12 -21 q2 5 0 10 M-3 -23 q2 5 0 10" stroke="#d8873e" stroke-width="2.5" fill="none"/>
          <path d="M-24 -6 Q-10 4 18 -2" stroke="#e59b4a" stroke-width="6.5" fill="none" stroke-linecap="round"/>
@@ -537,10 +598,9 @@ main{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(320px,1fr);gap:16
 <section class="card2" id="seqCard" aria-label="Chuỗi hành động"></section>
 <section class="card2" id="storyCard" aria-label="Đoạn văn"></section>
 <section class="card2" id="dlgCard" aria-label="Hội thoại gia đình"></section>
-<section class="card2" id="eventCard" aria-label="Sự kiện khẩn cấp" hidden></section>
-<section class="card2" id="challengeCard" aria-label="Chế độ thử thách"></section>
-<section class="card2" id="fridgeCard" aria-label="Tủ lạnh thực phẩm" hidden></section>
-<section class="card2" id="familyCard" aria-label="Nhân vật trong nhà"></section>
+<section class="card2" id="chCard" aria-label="Thử thách"></section>
+<section class="card2" id="peopleCard" aria-label="Mọi người"></section>
+<section class="card2" id="fridgeCard" aria-label="Tủ lạnh"></section>
 <section class="card2" id="needsCard" aria-label="Tình trạng ngôi nhà"></section>
 <section class="card2" id="speakingCard" aria-label="Luyện nói và hội thoại"></section>
 <section class="card2" id="mistakeCard" aria-label="Sổ lỗi"></section>
@@ -552,11 +612,18 @@ main{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(320px,1fr);gap:16
 
 <script src="modules/levels.js"></script>
 <script src="modules/rooms.js"></script>
-<script src="modules/rooms-expansion.js"></script>
-<script src="modules/event-director.js"></script>
-<script src="modules/challenge.js"></script>
-<script src="modules/fridge-cooking.js"></script>
-<script src="modules/family-npc.js"></script>
+<script src="modules/rooms2.js"></script>
+<script src="modules/details.js"></script>
+<script src="modules/topic-cafe.js"></script>
+<script src="modules/topic-cafe-zones.js"></script>
+<script src="modules/topic-market.js"></script>
+<script src="modules/topic-market-zones.js"></script>
+<script src="modules/topic-park.js"></script>
+<script src="modules/topic-restaurant.js"></script>
+<script src="modules/topic-outdoor.js"></script>
+<script src="modules/topic-school.js"></script>
+<script src="modules/life-talk.js"></script>
+<script src="modules/food.js"></script>
 <script src="modules/voices-dialogue.js"></script>
 <script src="modules/inventory.js"></script>
 <script src="modules/i18n-a.js"></script>
@@ -568,6 +635,29 @@ main{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(320px,1fr);gap:16
 <script src="modules/roleplay.js"></script>
 <script src="modules/day.js"></script>
 <script src="modules/needs.js"></script>
+<script src="modules/events.js"></script>
+<script src="modules/challenge.js"></script>
+<script src="modules/npcs.js"></script>
+<script src="modules/mission.js"></script>
+<script src="modules/ui-scene.js"></script>
+<script src="modules/ui-mission.js"></script>
+<script src="modules/missions-pack.js"></script>
+<script src="modules/ui-mobile.js"></script>
+<script src="modules/ui-companion.js"></script>
+<script src="modules/premium.js"></script>
+<script src="modules/world-3d.js"></script>
+<script src="modules/context-engine.js"></script>
+<!-- PET LIFE & ADVENTURE QUEST MODULES -->
+<script src="modules/pet-rewards.js"></script>
+<script src="modules/pet-needs.js"></script>
+<script src="modules/pet-interaction.js"></script>
+<script src="modules/pet-adventure.js"></script>
+<script src="modules/pet-ui.js"></script>
+<script src="modules/pet-personality.js"></script>
+<script src="modules/pet-follow.js"></script>
+<script src="modules/pet-anim.js"></script>
+<script src="modules/pet-survival.js"></script>
+<script src="modules/vocab-3000.js"></script>
 <script>
 "use strict";
 const SVGNS="http://www.w3.org/2000/svg";
@@ -627,7 +717,7 @@ const OBJECTS={
  tv:{en:"TV",vi:"ti vi",ipa:"/ˌtiːˈviː/",acts:["turn_on_tv","watch_tv","turn_off_tv"]},
  fridge:{en:"fridge",vi:"tủ lạnh",ipa:"/frɪdʒ/",acts:["open_fridge","take_milk","put_milk_back","close_fridge"]},
  cup:{en:"cup",vi:"cái cốc",ipa:"/kʌp/",acts:["pick_up_cup","put_cup_on_table","pour_milk","drink_from_cup"]},
- table:{en:"table",vi:"cái bàn",ipa:"/ˈteɪ.bəl/",acts:["wipe_table","put_cup_on_table","put_book_on_table","sweep_under_table","sit_on_chair"]},
+ table:{en:"table",vi:"cái bàn",ipa:"/ˈteɪ.bəl/",acts:["sit_at_the_table","wipe_table","put_cup_on_table","put_book_on_table","sweep_under_table","sit_on_chair"]},
  chair:{en:"chair",vi:"cái ghế",ipa:"/tʃeər/",acts:["pull_out_chair","sit_on_chair","get_up","push_chair_in"]},
  broom:{en:"broom",vi:"cây chổi",ipa:"/bruːm/",acts:["sweep_floor","sweep_under_table"]},
  window:{en:"window",vi:"cửa sổ",ipa:"/ˈwɪn.dəʊ/",acts:["open_window","close_window"]},
@@ -946,23 +1036,52 @@ const STORY={
 // ===== Ghép các phòng từ module rooms.js =====
 const ROOMS=window.ELW_ROOMS||{};
 const ROOM_NAMES={living:["Living room","Phòng khách"]};
-ACTIONS.forEach(a=>{a.room=a.id==="get_up"?"*":"living"});
-Object.values(OBJECTS).forEach(o=>o.room="living");
-for(const r of Object.values(ROOMS)){ROOM_NAMES[r.id]=[r.name,r.nameVi];
- for(const [k,o] of Object.entries(r.objects)){if(OBJECTS[k])console.warn("trùng đồ vật",k);OBJECTS[k]={...o,room:r.id}}
- for(const ra of r.actions){ACTIONS.push({...ra,also:[],room:r.id,pre:()=>ra.pre(W),seq:()=>ra.seq(W)});if(ra.sitOk)SIT_OK.add(ra.id);if(ra.story)STORY[ra.id]=ra.story}
+const roomTopic=id=>(ROOMS[id]&&ROOMS[id].topic)||"home";
+let curTopic=(()=>{try{return (JSON.parse(localStorage.getItem("elw_topics_v1"))||{}).current||"home"}catch(e){return "home"}})();
+const ROOM_OBJECTS={living:{}},ROOM_ACTIONS={living:{}};
+ACTIONS.forEach(a=>{a.room=a.id==="get_up"?"*":"living";ROOM_ACTIONS.living[a.id]=a});
+for(const [k,o] of Object.entries(OBJECTS)){o.room="living";o.acts=[...(o.acts||[])];ROOM_OBJECTS.living[k]=o}
+for(const r of Object.values(ROOMS)){ROOM_NAMES[r.id]=[r.name,r.nameVi];ROOM_OBJECTS[r.id]=ROOM_OBJECTS[r.id]||{};ROOM_ACTIONS[r.id]=ROOM_ACTIONS[r.id]||{};
+ for(const [k,o] of Object.entries(r.objects)){const ro={...o,acts:[...(o.acts||[])],room:r.id};ROOM_OBJECTS[r.id][k]=ro;if(!Object.prototype.hasOwnProperty.call(OBJECTS,k))OBJECTS[k]=ro}
+ for(const ra of r.actions){const actObj={...ra,also:[],room:r.id,pre:()=>ra.pre(W),seq:()=>ra.seq(W)};ACTIONS.push(actObj);ROOM_ACTIONS[r.id][ra.id]=actObj;if(ra.sitOk)SIT_OK.add(ra.id);if(ra.story)STORY[ra.id]=ra.story}
  Object.assign(PROP_SVG,r.props||{});
 }
 OBJECTS.door={en:"door",vi:"cửa",ipa:"/dɔːr/",acts:[],room:"*"};
-const GO_TXT={living:["the living room","phòng khách","vào phòng khách"],kitchen:["the kitchen","phòng bếp","vào bếp"],bedroom:["the bedroom","phòng ngủ","vào phòng ngủ"],bathroom:["the bathroom","phòng tắm","vào phòng tắm"],garage:["the garage","nhà để xe","vào nhà để xe"],garden:["the garden","khu vườn","ra vườn"]};
-for(const t of Object.keys(ROOM_NAMES)){const [en,vi,viGo]=GO_TXT[t]||[ROOM_NAMES[t][0],ROOM_NAMES[t][1],ROOM_NAMES[t][1]];
- const a=A("go_"+t,"door","Go to "+en,"Đi "+viGo,`I'm going to ${en}.`,`Tôi đang đi ${viGo}.`,["going",en.split(" ").pop().replace(".","")],[],
-  "go → going. Nói <b>go to the kitchen</b>; riêng <b>go home</b> thì không có “to”.",["I'm going",`to ${en}.`],{ans:"go",opts:["go","goal","grow"]},
-  [`I'm going to <b>the bathroom</b>.`,`I'm going <b>home</b>.`],()=>W.room===t?`Bạn đang ở ${vi} rồi.`:null,()=>[["walk",DOOR_SPOT[W.room]||"door_living"],["room",t]]);
- a.vocab=[["go to","/ɡəʊ tuː/","đi đến"],[en.replace("the ",""),"",vi]];a.room="*";ACTIONS.push(a);STORY["go_"+t]=["go to "+en,"walk into "+en,"đi "+viGo];}
-const DOOR_SPOT={living:"door_living",kitchen:"k_door",bedroom:"b_door",bathroom:"bt_door",garage:"g_door",garden:"gd_door"};
+// ===== Thực phẩm thật trong tủ lạnh (food.js) — gắn đúng vào phòng bếp (kitchen), không ghi đè bàn nhà hàng =====
+if(window.ELW_FOOD){const F=ELW_FOOD;ROOM_OBJECTS.kitchen=ROOM_OBJECTS.kitchen||{};ROOM_ACTIONS.kitchen=ROOM_ACTIONS.kitchen||{};
+ for(const fa of F.ACTIONS){if(ACTIONS.some(x=>x.id===fa.id))continue;const rId=fa.room||"kitchen";const actObj={...fa,also:[],room:rId,pre:()=>fa.pre(W),seq:()=>fa.seq(W)};ACTIONS.push(actObj);ROOM_ACTIONS[rId]=ROOM_ACTIONS[rId]||{};ROOM_ACTIONS[rId][fa.id]=actObj;if(fa.story)STORY[fa.id]=fa.story;if(fa.sitOk)SIT_OK.add(fa.id)}
+ Object.assign(PROP_SVG,F.props||{});
+ for(const [obj,ids] of Object.entries(F.OBJ_ACTS||{})){
+  let ko=ROOM_OBJECTS.kitchen[obj]||(ROOM_OBJECTS.living&&ROOM_OBJECTS.living[obj]);
+  if(!ko){ko={en:obj.replace(/_/g," "),vi:obj==="cuttingboard"?"thớt":obj,ipa:"",acts:[],room:"kitchen"};ROOM_OBJECTS.kitchen[obj]=ko;if(!Object.prototype.hasOwnProperty.call(OBJECTS,obj))OBJECTS[obj]=ko}
+  ko.acts=[...new Set([...(ko.acts||[]),...ids])]}}
+// Gắn getter theo phòng/chủ đề cho các đồ vật trùng tên giữa các phòng (vd: diningtable, washbasin, bookshelf...)
+{const allObjKeys=new Set(Object.keys(OBJECTS));for(const ro of Object.values(ROOM_OBJECTS))for(const k of Object.keys(ro))allObjKeys.add(k);
+ for(const k of allObjKeys){const byRoom={};for(const [rId,ro] of Object.entries(ROOM_OBJECTS))if(ro[k])byRoom[rId]=ro[k];const rIds=Object.keys(byRoom);
+  if(rIds.length>1||(rIds.length===1&&OBJECTS[k]!==byRoom[rIds[0]])){let fb=byRoom.living||byRoom.kitchen||byRoom[rIds[0]]||OBJECTS[k];
+   Object.defineProperty(OBJECTS,k,{enumerable:true,configurable:true,get(){const r=(typeof W==="object"&&W&&W.room)||"living";if(byRoom[r])return byRoom[r];const tp=roomTopic(r);for(const rid of rIds)if(roomTopic(rid)===tp)return byRoom[rid];return fb},set(v){fb=v}})}}
+ if(OBJECTS.cat){const homeCatActs=[...(OBJECTS.cat.acts||[])];Object.defineProperty(OBJECTS.cat,"acts",{enumerable:true,configurable:true,get(){const r=(typeof W==="object"&&W&&W.room)||"living";return roomTopic(r)==="home"?homeCatActs:[]}})}}
+const GO_TXT={school:["the classroom","lớp học","đến lớp học"],outdoor:["the campground","khu dã ngoại","đến khu dã ngoại"],restaurant:["the restaurant","nhà hàng","đến nhà hàng"],park:["the park","công viên","ra công viên"],market:["the supermarket","siêu thị","đi siêu thị"],cafe:["the coffee shop","quán cà phê","tới quán cà phê"],bathroom:["the bathroom","phòng tắm","vào phòng tắm"],garage:["the garage","nhà xe","ra nhà xe"],garden:["the garden","khu vườn","ra vườn"],living:["the living room","phòng khách","vào phòng khách"],kitchen:["the kitchen","phòng bếp","vào bếp"],bedroom:["the bedroom","phòng ngủ","vào phòng ngủ"]};
+for(const t of Object.keys(ROOM_NAMES)){const [en,vi,viGo]=GO_TXT[t]||[ROOM_NAMES[t][0],ROOM_NAMES[t][1],ROOM_NAMES[t][1]];const g=ROOMS[t]&&ROOMS[t].go;
+ const a=A("go_"+t,"door",(g&&g.label)||("Go to "+en),(g&&g.labelVi)||("Đi "+viGo),(g&&g.sentence)||`I'm going to ${en}.`,(g&&g.vi)||`Tôi đang đi ${viGo}.`,(g&&g.key)||["going",en.split(" ").pop().replace(".","")],[],
+  (g&&g.grammar)||"go → going. Nói <b>go to the kitchen</b>; riêng <b>go home</b> thì không có “to”.",(g&&g.chunks)||["I'm going",`to ${en}.`],{ans:"go",opts:["go","goal","grow"]},
+  (g&&g.patterns)||[`I'm going to <b>the bathroom</b>.`,`I'm going <b>home</b>.`],()=>W.room===t?`Bạn đang ở ${vi} rồi.`:null,()=>[["walk",DOOR_SPOT[W.room]],["room",t]]);
+ a.vocab=(g&&g.vocab)||[["go to","/ɡəʊ tuː/","đi đến"],[en.replace("the ",""),"",vi]];a.room="*";ACTIONS.push(a);STORY["go_"+t]=(g&&g.story)||["go to "+en,"walk into "+en,"đi "+viGo];}
+{const a=A("go_home","door","Go home","Về nhà","I'm going home.","Tôi về nhà.",["going","home"],[],
+ "go → going. Nói <b>go home</b> (về nhà) — không có “to” trước home.",["I'm going","home."],{ans:"go",opts:["go","goal","grow"]},
+ [`I'm going <b>home</b>.`,`Let's <b>go home</b>.`],()=>roomTopic(W.room)==="home"?"Bạn đang ở nhà rồi.":null,dest=>[["walk",DOOR_SPOT[W.room]],["room",dest||"living"]]);
+ a.vocab=[["go home","/ɡəʊ həʊm/","về nhà"]];a.room="*";ACTIONS.push(a);STORY.go_home=["go home","go home","về nhà"];}
+const DOOR_SPOT={living:"door_living"};
+for(const r of Object.values(ROOMS)){const k=Object.keys(r.spots||{}).find(x=>/_door$/.test(x));if(k)DOOR_SPOT[r.id]=k}
 const ACT=Object.fromEntries(ACTIONS.map(a=>[a.id,a]));
-ACTIONS.forEach(a=>{a.object=OBJECTS[a.obj]});
+// Gắn getter theo phòng/chủ đề cho các hành động trùng ID giữa các phòng (vd: wash_hands_with_soap, read_park_rules...)
+{const actById={};for(const a of ACTIONS){actById[a.id]=actById[a.id]||[];actById[a.id].push(a)}
+ for(const [id,list] of Object.entries(actById))if(list.length>1){let fb=list[0];
+  Object.defineProperty(ACT,id,{enumerable:true,configurable:true,get(){const r=(typeof W==="object"&&W&&W.room)||"living";const m1=list.find(a=>a.room===r);if(m1)return m1;const tp=roomTopic(r);const m2=list.find(a=>roomTopic(a.room)===tp);return m2||fb},set(v){fb=v}})}}
+if(window.ELW_FOOD&&ELW_FOOD.applyRequires)try{ELW_FOOD.applyRequires(ACT)}catch(e){console.error(e)}
+// Không lấy được thực phẩm khi tủ lạnh đang đóng (QA B3) — chuỗi tự động (pour_milk…) vẫn tự mở tủ như trước
+for(const a of ACTIONS){if(/^take_out_/.test(a.id)&&a.room==="living"||a.id==="take_milk"){const p0=a.pre;a.pre=()=>W.fridge!=="open"?"Tủ lạnh đang đóng. Hãy mở tủ lạnh trước (Open the fridge).":p0()}}
+ACTIONS.forEach(a=>{a.object=(ROOM_OBJECTS[a.room]&&ROOM_OBJECTS[a.room][a.obj])||OBJECTS[a.obj]});
 
 /* =====================================================================
    4. WORLD STATE — trạng thái phòng (lưu riêng, không đụng tiến độ học)
@@ -970,7 +1089,7 @@ ACTIONS.forEach(a=>{a.object=OBJECTS[a.obj]});
 const WKEY="elw_world_v1";
 const W0={fridge:"closed",window:"closed",chair:"in",milk:"fridge",cup:"counter",book:"floor",broom:"wall",hand:null,sitting:false,cupLevel:0,tv:"off",activity:null,x:770,y:440,dir:-1,
  sofa:null,cat:"sleeping",catAt:"bed",catNear:null,catPet:false,catBowl:"empty",catWater:"empty",floorLamp:"off",livCurtains:"open",fan:"off",music:"off",remote:"table",throw:"messy",cushion:"fluffy"};
-for(const r of Object.values(window.ELW_ROOMS||{}))Object.assign(W0,r.W0);W0.room="living";
+for(const r of Object.values(window.ELW_ROOMS||{}))Object.assign(W0,r.W0);W0.room="living";if(window.ELW_FOOD)Object.assign(W0,JSON.parse(JSON.stringify(ELW_FOOD.W0)));
 let W={...W0};try{Object.assign(W,JSON.parse(localStorage.getItem(WKEY))||{})}catch(e){}
 if(W.room===undefined){} // trạng thái phòng mới sẽ lấy mặc định
 if(W.cupFull!==undefined){W.cupLevel=W.cupFull?2:0;delete W.cupFull}
@@ -984,12 +1103,21 @@ const SPOTS={fridge:{x:800,y:400,d:1},counter:{x:705,y:398,d:1},tableL:{x:335,y:
 SPOTS.window={x:470,y:412,d:1}; // sofa nằm dưới cửa sổ → đứng trước sofa để với tới cửa sổ
 // vị trí con mèo theo trạng thái (gốc = chân mèo)
 const CAT_POS={bed:{x:590,y:598,d:1},bowl:{x:666,y:603,d:1},water:{x:770,y:607,d:-1},rug:{x:500,y:594,d:-1}};
-function catPosNow(){const a=W.catAt;
+const CAT_ACT_IDS=new Set(["call_cat","pet_cat","feed_cat","give_cat_water","play_with_cat","brush_cat"]);
+function isCatInteractionActive(){
+ try{return queue.some(q=>q&&q.status==="running"&&CAT_ACT_IDS.has(q.id))}catch(e){return false}
+}
+function catPosNow(){
+ if(window.ELW_PET_FOLLOW&&typeof ELW_PET_FOLLOW.isControlling==="function"&&ELW_PET_FOLLOW.isControlling()&&!isCatInteractionActive()){
+  const fp=ELW_PET_FOLLOW.getPosition&&ELW_PET_FOLLOW.getPosition();
+  if(fp&&Number.isFinite(fp.x)&&Number.isFinite(fp.y))return{x:fp.x,y:fp.y,d:fp.dir||1,b:Math.round(fp.y+2)};
+ }
+ const a=W.catAt;
  if(a==="sofa")return W.sofa==="lying"?{x:556,y:334,d:-1,b:393,s:.92}:{x:590,y:368,d:-1,b:393,s:.92};
  if(a==="near"&&W.catNear)return W.catNear;return CAT_POS[a]||CAT_POS.bed}
 Object.defineProperty(SPOTS,"catPos",{get:catPosNow,enumerable:false});
 Object.defineProperty(SPOTS,"catSpot",{enumerable:false,get(){const p=catPosNow();
- if(W.catAt==="sofa")return{x:Math.max(560,p.x-20),y:411,d:1};
+ if(W.catAt==="sofa"&&isCatInteractionActive())return{x:Math.max(560,p.x-20),y:411,d:1};
  const x=p.x-54<60?p.x+54:p.x-54;return{x,y:Math.max(345,p.y-14),d:x<p.x?1:-1}}});
 for(const r of Object.values(window.ELW_ROOMS||{}))Object.assign(SPOTS,r.spots);
 const itemSpot={sofa:"sofaFront",counter:"counter",table:"tableL",tableR:"tableR",fridge:"fridge",floor:"bookFloor",wall:"broom"};
@@ -1033,6 +1161,7 @@ function applyState(){
  if(W.room!=="living"&&ROOMS[W.room]&&ROOMS[W.room].applyState){try{ROOMS[W.room].applyState(W,world)}catch(e){console.error(e)}}
  if(W.room!=="bedroom")room.classList.remove("b-lying");
  renderTabs();
+ if(window.ELW_FOOD&&W.room==="living"){try{ELW_FOOD.renderFridge($id("fridgeInside"),W)}catch(e){}}
  placeChar();saveW();
 }
 
@@ -1050,27 +1179,32 @@ function applyLiving(){
  const c=$id("o-cat"),p=catPosNow();
  ["sleeping","awake","eating","drinking","playing"].forEach(k=>c.classList.toggle("cat-"+k,W.cat===k));
  c.classList.toggle("cat-hearts",!!W.catPet);
- const key=p.x+","+p.y;
- if(catShown&&catShown.key!==key){const d=Math.hypot(p.x-catShown.x,p.y-catShown.y),ms=reduceMotion?1:Math.min(1600,Math.max(500,d*4));
-  $id("catPos").style.transitionDuration=ms+"ms";c.classList.add("cat-walk");
-  const up=W.catAt==="sofa"&&catShown.y>380;c.classList.toggle("cat-jump",up);
-  clearTimeout(catWalkT);catWalkT=setTimeout(()=>c.classList.remove("cat-walk","cat-jump"),ms);
-  const dx=p.x-catShown.x;if(Math.abs(dx)>4)$id("catFlip").style.transform=`scaleX(${dx>0?1:-1})`;
-  setTimeout(()=>{if(catPosNow()===p||catPosNow().x===p.x)$id("catFlip").style.transform=`scaleX(${p.d||1})`},ms)}
- else if(!catShown)$id("catFlip").style.transform=`scaleX(${p.d||1})`;
- catShown={key,x:p.x,y:p.y};
- $id("catPos").style.transform=`translate(${p.x}px,${p.y}px)`;
- $id("catScale").style.transform=`scale(${(p.s||(0.8+(p.y-330)/310*0.4)).toFixed(3)})`;
- c.dataset.base=p.b||p.y+2;
+ const followActive=!!(window.ELW_PET_FOLLOW&&typeof ELW_PET_FOLLOW.isControlling==="function"&&ELW_PET_FOLLOW.isControlling()&&!isCatInteractionActive());
+ c.classList.toggle("pet-follow-active",followActive);
+ if(!followActive){
+  const key=p.x+","+p.y;
+  if(catShown&&catShown.key!==key){const d=Math.hypot(p.x-catShown.x,p.y-catShown.y),ms=reduceMotion?1:Math.min(1600,Math.max(500,d*4));
+   $id("catPos").style.transitionDuration=ms+"ms";c.classList.add("cat-walk");
+   const up=W.catAt==="sofa"&&catShown.y>380;c.classList.toggle("cat-jump",up);
+   clearTimeout(catWalkT);catWalkT=setTimeout(()=>c.classList.remove("cat-walk","cat-jump"),ms);
+   const dx=p.x-catShown.x;if(Math.abs(dx)>4)$id("catFlip").style.transform=`scaleX(${dx>0?1:-1})`;
+   setTimeout(()=>{if(catPosNow()===p||catPosNow().x===p.x)$id("catFlip").style.transform=`scaleX(${p.d||1})`},ms)}
+  else if(!catShown)$id("catFlip").style.transform=`scaleX(${p.d||1})`;
+  catShown={key,x:p.x,y:p.y};
+  $id("catPos").style.transform=`translate(${p.x}px,${p.y}px)`;
+  $id("catScale").style.transform=`scale(${(p.s||(0.8+(p.y-330)/310*0.4)).toFixed(3)})`;
+  c.dataset.base=p.b||p.y+2;
+ }
  charG.classList.toggle("onsofa",!!W.sofa&&W.sitting);
  syncSitOk();
+ try{window.ELW_PET_INTERACTION&&ELW_PET_INTERACTION.syncScenePet&&ELW_PET_INTERACTION.syncScenePet()}catch(e){}
 }
 /* ---------- di chuyển nhân vật ---------- */
 const TABLE_BOX={x1:350,x2:670,y1:420,y2:528};
 const SOFA_BOX={x1:434,x2:646,y1:330,y2:400};
 const OBST={living:[TABLE_BOX,SOFA_BOX]};for(const r of Object.values(window.ELW_ROOMS||{}))OBST[r.id]=r.obstacles||[];
-const inBox=(p,B)=>p.x>B.x1&&p.x<B.x2&&p.y>B.y1&&p.y<B.y2;
-function crossesBox(a,b,B){for(let t=0;t<=1;t+=.04){if(inBox({x:a.x+(b.x-a.x)*t,y:a.y+(b.y-a.y)*t},B))return true}return false}
+const inBox=(p,B,pad=0)=>p.x>B.x1-pad&&p.x<B.x2+pad&&p.y>B.y1-pad&&p.y<B.y2+pad;
+function crossesBox(a,b,B,pad=0){for(let t=0;t<=1;t+=.04){if(inBox({x:a.x+(b.x-a.x)*t,y:a.y+(b.y-a.y)*t},B,pad))return true}return false}
 // phòng khách có nhiều vật cản (bàn + sofa): tìm đường vòng qua các góc (đồ thị nhỏ, Dijkstra)
 function routeLiving(a,b){const all=OBST.living,boxes=all.filter(B=>!inBox(a,B)&&!inBox(b,B));
  const free=(p,q)=>!boxes.some(B=>crossesBox(p,q,B));if(free(a,b))return[b];
@@ -1079,8 +1213,8 @@ function routeLiving(a,b){const all=OBST.living,boxes=all.filter(B=>!inBox(a,B)&
  for(let k=0;k<n;k++){let u=-1;for(let i=0;i<n;i++)if(!done[i]&&(u<0||dist[i]<dist[u]))u=i;if(u<0||dist[u]===Infinity)break;done[u]=true;if(u===1)break;
   for(let v=0;v<n;v++){if(done[v]||!free(nodes[u],nodes[v]))continue;const d=dist[u]+Math.hypot(nodes[u].x-nodes[v].x,nodes[u].y-nodes[v].y);if(d<dist[v]){dist[v]=d;prev[v]=u}}}
  if(dist[1]===Infinity)return null;const out=[];for(let v=1;v>0;v=prev[v])out.unshift(nodes[v]);return out}
-function route(a,b){if(W.room==="living"){const r=routeLiving(a,b);if(r)return r}
- const boxes=(OBST[W.room]||[]).filter(B=>!inBox(a,B)&&!inBox(b,B));const B=boxes.find(B=>crossesBox(a,b,B));if(!B)return[b];
+function route(a,b,rm){const rId=rm||W.room;if(rId==="living"){const r=routeLiving(a,b);if(r)return r}
+ const boxes=(OBST[rId]||[]).filter(B=>!inBox(a,B)&&!inBox(b,B));const B=boxes.find(B=>crossesBox(a,b,B));if(!B)return[b];
  const lane=Math.max(345,Math.min(630,(a.y+b.y)/2<(B.y1+B.y2)/2?B.y1-14:B.y2+14));return[{x:a.x,y:lane},{x:b.x,y:lane},b]}
 class Abort extends Error{}
 let token=0;const alive=tk=>{if(tk!==token)throw new Abort()};
@@ -1088,15 +1222,27 @@ async function moveTo(spot,tk){
  const tgt={...spot};if(spot===SPOTS.seat)tgt.x=CHAIR_X[W.chair]-4;
  const pts=route({x:W.x,y:W.y},tgt);
  if(pts.some(p=>Math.hypot(p.x-W.x,p.y-W.y)>8))W.activity=null; // rời chỗ thì thôi xem TV
- charG.classList.remove("idle");charG.classList.add("walk");
+ charG.classList.remove("idle");charG.classList.add("walk");W.walk=true;
  try{for(const p of pts){const sx=W.x,sy=W.y,dist=Math.hypot(p.x-sx,p.y-sy);if(dist<2)continue;
   if(Math.abs(p.x-sx)>4)W.dir=p.x>sx?1:-1;
   const dur=reduceMotion?1:dist/0.45;const t0=performance.now();
   await new Promise(res=>{function f(now){if(tk!==token)return res();const k=Math.min(1,(now-t0)/dur),e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;
    W.x=sx+(p.x-sx)*e;W.y=sy+(p.y-sy)*e;placeChar();k<1?requestAnimationFrame(f):res()}requestAnimationFrame(f)});alive(tk)}}
- finally{charG.classList.remove("walk")}
+ finally{charG.classList.remove("walk");W.walk=false}
  W.dir=spot.d||W.dir;placeChar();
 }
+window.ELW_SCENE={
+ getW:()=>W,
+ getCharState:()=>({room:W.room||"living",x:Number(W.x)||520,y:Number(W.y)||495,dir:W.dir===-1?-1:1,walk:!!(W.walk||charG.classList.contains("walk")),pose:W.pose||"stand",catAt:W.catAt||"rug",catFollow:!!W.catFollow}),
+ route:(a,b,rm)=>route(a,b,rm),
+ getObstacles:rm=>OBST[rm||W.room]||[],
+ inBox,
+ crossesBox,
+ charScale,
+ sortDepth,
+ isCatInteractionActive,
+ getWeather:()=>String((window.ELW_DAY&&ELW_DAY.state&&ELW_DAY.state.weather)||(window.ELW_LIFE&&ELW_LIFE.weather&&ELW_LIFE.weather())||W.weather||"sunny")
+};
 const POSES=["reach","bend","drink","pour","sweep","wipe","water","point","read","pet"];
 // Tư thế tay/thân là một lớp riêng: không xoá trạng thái ngồi, cầm cốc hay xem TV
 async function pose(name,ms){POSES.forEach(p=>charG.classList.remove(p));charG.classList.remove("idle");
@@ -1133,39 +1279,114 @@ function makeTemp(name){const g=document.createElementNS(SVGNS,"g");g.classList.
 let queue=[],paused=false,pumping=false,uidN=1,hlUid=null;
 let running=false; // đang chạy một hành động
 const mkItem=id=>({uid:uidN++,id,status:"pending",why:"",ctx:null,auto:false});
-function enqueue(id){if(paused&&!queue.some(q=>q.status==="pending"))paused=false;queue.push(mkItem(id));renderSeq();if(!paused)pump()}
+function enqueue(id){if(paused&&!queue.some(q=>q.status==="pending"))paused=false;queue.push(mkItem(id));renderSeq();if(/^go_/.test(id)){try{renderTabs()}catch(e){}try{window.ELW_CONTEXT&&ELW_CONTEXT.refresh&&ELW_CONTEXT.refresh()}catch(e){}}if(!paused)pump()}
 async function pump(){
  if(pumping)return;pumping=true;const tk=token;
  try{while(!paused&&tk===token){const it=queue.find(q=>q.status==="pending");if(!it)break;await execItem(it,tk)}}
  catch(e){if(!(e instanceof Abort))console.error(e)}
  finally{pumping=false;running=false;document.body.classList.remove("running");renderSeq();renderStory();if(selObj&&!cur)renderObject();
   if(tk===token&&!queue.some(q=>q.status==="pending")&&narr.mode==="after"&&queue.some(q=>q.status==="done"))speakStory();
-  if(tk===token&&!queue.some(q=>q.status==="pending"))try{afterQueueIdle()}catch(e){console.error(e)}}
+  if(tk===token&&!queue.some(q=>q.status==="pending")){try{afterQueueIdle()}catch(e){console.error(e)}try{window.ELW_MISSION&&ELW_MISSION.onIdle()}catch(e){}}}
 }
+
+/* Tìm hành động giúp thoả điều kiện: bảng "đã xong rồi → làm ngược lại" + đọc nhãn EN trong lời nhắc "(Open the fridge)" — CHỈ tìm trong cùng chủ đề (topic) */
+const ALREADY_FIX={set_the_table:W=>W.k_table==="set"?"clear_the_table":null};
+const HAND_DROP={cup:"put_cup_on_table",book:"put_book_on_table",milk:"put_milk_back"};
+function findFixer(id,why){
+ const curTp=roomTopic(W.room);
+ if(/Tay đang cầm/.test(why||"")&&W.hand){const d=HAND_DROP[W.hand]||(ACTIONS.find(b=>b.obj===W.hand&&/^(put|hang|return)_/.test(b.id)&&(b.room==="*"||roomTopic(b.room)===curTp)&&!b.pre())||{}).id;if(d&&d!==id&&ACT[d]&&(ACT[d].room==="*"||roomTopic(ACT[d].room)===curTp)&&!ACT[d].pre())return d}
+ try{const f=ALREADY_FIX[id]&&ALREADY_FIX[id](W);if(f&&ACT[f]&&(ACT[f].room==="*"||roomTopic(ACT[f].room)===curTp)&&!ACT[f].pre())return f}catch(e){}
+ const m=/\(([A-Za-z][^()]*)\)\s*\.?\s*$/.exec(why||"");if(!m)return null;const lbl=m[1].trim().toLowerCase();
+ const c=ACTIONS.filter(b=>b.id!==id&&b.label&&b.label.toLowerCase()===lbl&&(b.room==="*"||roomTopic(b.room)===curTp));
+ return (c.find(b=>b.room===W.room||b.room==="*")||c[0]||{}).id||null}
+
+/* Bong bóng nói gọn, bám theo nhân vật */
+let cbG=null,cbT=0,cbRaf=0;
+function charSay(text){try{
+ if(!cbG){cbG=document.createElementNS(SVGNS,"g");cbG.setAttribute("pointer-events","none");cbG.setAttribute("class","cbub");room.appendChild(cbG)}
+ room.appendChild(cbG);const fs=26,maxW=330;
+ cbG.innerHTML=`<rect rx="16" fill="#fff" stroke="#e8743b" stroke-width="3"/><path fill="#fff" stroke="#e8743b" stroke-width="3" stroke-linejoin="round"/><text font-size="${fs}" font-weight="700" fill="#3b2a1a" font-family="inherit"></text>`;
+ const t=cbG.querySelector("text"),words=("💬 "+text).split(" "),lines=[];let cur="";
+ const meas=document.createElementNS(SVGNS,"text");meas.setAttribute("font-size",fs);meas.setAttribute("font-weight","700");room.appendChild(meas);
+ for(const w of words){const tr=cur?cur+" "+w:w;meas.textContent=tr;if(meas.getComputedTextLength()>maxW&&cur){lines.push(cur);cur=w}else cur=tr}lines.push(cur);
+ let bw=0;lines.forEach(l=>{meas.textContent=l;bw=Math.max(bw,meas.getComputedTextLength())});meas.remove();
+ const pad=12,lh=fs*1.2,W2=bw+pad*2,H=lines.length*lh+pad*1.4;
+ t.innerHTML=lines.map((l,i)=>`<tspan x="${pad}" y="${pad+fs*.9+i*lh}">${l.replace(/&/g,"&amp;").replace(/</g,"&lt;")}</tspan>`).join("");
+ const r=cbG.querySelector("rect");r.setAttribute("width",W2);r.setAttribute("height",H);
+ cbG.querySelector("path").setAttribute("d",`M${W2/2-10},${H-1.5} L${W2/2},${H+14} L${W2/2+10},${H-1.5} Z`);
+ cbG.style.opacity=1;cbG.style.transition="opacity .3s";
+ const place=()=>{try{const b=charG.getBoundingClientRect(),m=room.getScreenCTM().inverse(),p=room.createSVGPoint();p.x=b.left+b.width/2;p.y=b.top;const q=p.matrixTransform(m);
+  let x=Math.max(6,Math.min(1000-W2-6,q.x-W2/2)),y=Math.max(4,q.y-H-20);cbG.setAttribute("transform",`translate(${x},${y})`)}catch(e){}};
+ cancelAnimationFrame(cbRaf);const until=Date.now()+Math.max(2600,text.length*90);
+ const loop=()=>{place();if(Date.now()<until)cbRaf=requestAnimationFrame(loop);else cbG.style.opacity=0};loop();
+}catch(e){console.error(e)}}
+
+/* Nhân viên (barista, thu ngân…) hoặc người nhà trả lời: chờ người chơi nói xong rồi mới đáp */
+const HOME_NPC_REPLIES={sit_at_the_table:{who:"Mom",avatar:"👩",voice:"mom",anchor:"obj:diningtable",en:"Dinner is almost ready! Sit comfortably at the table, dear.",vi:"Bữa ăn sắp xong rồi! Con ngồi vào bàn cho thoải mái nhé."}};
+const NPC_TOPIC={cafe:()=>[window.ELW_CAFE,"obj:barista","🧑‍🍳","young_male"],market:()=>[window.ELW_MARKET,"obj:checkout","🧑‍💼","adult_female"],park:()=>[window.ELW_PARK,"obj:icecreamcart","🍦","young_male"],restaurant:()=>[window.ELW_RESTAURANT,"obj:waiter","🤵","young_male"],outdoor:()=>[window.ELW_OUTDOOR,"obj:rangerpost","🤠","adult_male"],school:()=>[window.ELW_SCHOOL,"obj:teacherdesk","👩‍🏫","adult_female"]};
+function npcReplyOf(a){if(a&&HOME_NPC_REPLIES[a.id])return{...HOME_NPC_REPLIES[a.id]};const f=NPC_TOPIC[a.room]||NPC_TOPIC[roomTopic(a.room)];if(!f)return null;const [m,anc,av,vc]=f();const r=m&&m.reply&&m.reply(a.id);if(!r)return null;if(a.room==="restaurant"&&r.who==="Chef")return{...r,anchor:"obj:kitchenpass",avatar:r.avatar||"👨‍🍳",voice:"adult_male"};if(a.room==="outdoor"&&r.who==="Kayak Guide")return{...r,anchor:"obj:lakedock",avatar:r.avatar||"🚣",voice:"young_male"};if(a.room==="school"&&r.who==="School Librarian")return{...r,anchor:"obj:bookshelf",avatar:r.avatar||"📚",voice:"young_male"};return{...r,anchor:r.anchor||anc,avatar:r.avatar||av,voice:r.voice||vc}}
+function waitTalk(p){if(!p)return Promise.resolve();return Promise.race([Promise.resolve(p).catch(()=>{}),new Promise(r=>setTimeout(r,7500))]).then(()=>new Promise(r=>setTimeout(r,180)))}
+async function showNpc(rp){await speechQuiet();sceneBubble(rp.anchor,{who:rp.who,avatar:rp.avatar,en:rp.en,vi:rp.vi,kind:"say",ttlMs:Math.max(4000,String(rp.en||"").length*110)});const sp=rp.voice&&window.ELW_VOICES?ELW_VOICES.speak(rp.en,rp.voice,{rate:.95}):say(rp.en,.92);await Promise.race([Promise.resolve(sp).catch(()=>{}),new Promise(r=>setTimeout(r,7500))]);await sleep(180)}
+
+function syncFriendBtn(){const b=$id("btnFriend");if(!b||!window.ELW_LIFE)return;b.hidden=true;b.style.display="none";const on=ELW_LIFE.companionOn();b.setAttribute("aria-pressed",on);try{window.ELW_UI_COMPANION&&ELW_UI_COMPANION.syncButton&&ELW_UI_COMPANION.syncButton()}catch(e){}try{window.ELW_CONTEXT&&ELW_CONTEXT.refresh&&ELW_CONTEXT.refresh()}catch(e){}}
+function syncResetBtn(){const b=$id("btnReset");if(!b)return;const out=roomTopic(W.room)!=="home";const lbl=b.querySelector(".lbl");if(lbl)lbl.textContent=out?" Reset đoạn hội thoại":" Dọn phòng";else b.textContent=out?"↺ Reset đoạn hội thoại":"↺ Dọn phòng";b.title=out?"Reset lại đoạn hội thoại tại chủ đề này (giữ nguyên vị trí tại chủ đề)":"Dọn phòng: đưa mọi đồ vật về chỗ cũ";b.setAttribute("aria-label",out?"Reset đoạn hội thoại":"Dọn phòng")}
+const recentActs=[];
+const isAlready=w=>!!w&&/rồi\.?\s*$/.test(w)&&!/\(/.test(w);
+function sayBubble(a){charSay(a.sentence);return say(a.sentence,.92)}
 async function execItem(it,tk){
+ if(/^go_/.test(it.id)&&roomTopic(W.room)!=="home"){const dest=it.id==="go_home"?(it.targetRoom||"living"):it.id.slice(3);if(dest==="home"||roomTopic(dest)==="home"){it.targetRoom=dest==="home"?"living":dest;it.id="go_home"}}
  const a=ACT[it.id];
+ if(!a){it.status="blocked";it.why="Không tìm thấy hành động.";renderSeq();return}
+ // Quy tắc chung: hành động gợi ý KHÔNG BAO GIỜ tự teleport sang chủ đề (topic) khác
+ if(!/^go_/.test(a.id)&&a.room&&a.room!=="*"&&roomTopic(a.room)!==roomTopic(W.room)){
+  it.status="blocked";it.why="Hành động này thuộc chủ đề khác, không tự chuyển cảnh.";
+  renderSeq();renderStory();toastG(`💡 “${a.label}” thuộc chủ đề khác. Hãy chọn hành động trong chủ đề hiện tại nhé!`);return}
  // cần đứng mà đang ngồi → chèn "Get up" thật vào chuỗi (để đoạn văn đúng sự thật)
  const needTravel=a.room&&a.room!=="*"&&a.room!==W.room;
  if(W.sitting&&(needTravel||(!SIT_OK.has(a.id)&&!a.pre()))){const g=mkItem("get_up");g.auto=true;queue.splice(queue.indexOf(it),0,g);await execItem(g,tk);alive(tk)}
  if(a.room&&a.room!=="*"&&a.room!==W.room){const g=mkItem("go_"+a.room);g.auto=true;queue.splice(queue.indexOf(it),0,g);await execItem(g,tk);alive(tk)}
- const why=a.pre();
- if(why){it.status="blocked";it.why=why;renderSeq();renderStory();toastG(`Không làm được “${a.label}”: ${why}`);if(dlgPlayer&&!it.auto)dlgPlayer.actionDone(it.id,false);if(rpPlayer&&!it.auto)rpPlayer.actionDone(it.id,false);return}
+ const mg=(window.ELW_MISSION&&!it.auto)?ELW_MISSION.guard(a.id,W):null;
+ let why=mg||a.pre();
+ // Đã ở trạng thái đó rồi (vd. cửa sổ đang mở): coi như hoàn thành, chỉ đọc lại câu
+ const chTask=!!(window.ELW_CHALLENGE&&ELW_CHALLENGE.active&&ELW_CHALLENGE.active()&&ELW_CHALLENGE.nextTaskIds&&ELW_CHALLENGE.nextTaskIds().includes(a.id));
+ if(why&&!mg&&!it.auto&&isAlready(why)&&(chTask||!ALREADY_FIX[a.id])){it.status="done";it.already=true;renderSeq();
+  const sb=sayBubble(a);toastG(`✓ “${a.label}”: ${why} Tính là đã hoàn thành.`);
+  try{window.ELW_CHALLENGE&&ELW_CHALLENGE.onAction(a.id,W)}catch(e){}try{window.ELW_MISSION&&ELW_MISSION.onAction(a.id,"done",W)}catch(e){}
+  lastDone=a.id;recentActs.push(a.id);if(recentActs.length>6)recentActs.shift();renderStory();await waitTalk(sb);return}
+ // Tự hiểu bước cần làm trước: chèn hành động sửa điều kiện (tối đa 3 bước liền nhau)
+ if(why&&!mg&&(it.fixDepth||0)<3){const fx=findFixer(a.id,why);
+  if(fx){const g=mkItem(fx);g.fixDepth=(it.fixDepth||0)+1;g.helper=true;queue.splice(queue.indexOf(it),0,g);toastG(`Cần “${ACT[fx].label}” trước, mình làm giúp bước này.`);
+   await execItem(g,tk);alive(tk);if(a.room&&a.room!=="*"&&a.room!==W.room){const gr=mkItem("go_"+a.room);gr.auto=true;queue.splice(queue.indexOf(it),0,gr);await execItem(gr,tk);alive(tk)}if(g.status==="done")why=(window.ELW_MISSION&&!it.auto?ELW_MISSION.guard(a.id,W):null)||a.pre()}}
+ if(why){it.status="blocked";try{window.ELW_MISSION&&!it.auto&&ELW_MISSION.onAction(a.id,"blocked",W,why)}catch(e){}it.why=why;renderSeq();renderStory();toastG(`Không làm được “${a.label}”: ${why}`);if(dlgPlayer&&!it.auto)dlgPlayer.actionDone(it.id,false);if(rpPlayer&&!it.auto)rpPlayer.actionDone(it.id,false);return}
  it.status="running";running=true;document.body.classList.add("running");
  it.ctx={watching:W.activity==="watching",sitting:W.sitting,cupLevel:W.cupLevel,milkFromFridge:W.milk==="fridge"};
  renderSeq();if(selObj&&!cur)renderObject();
- narrate(a); // giọng đọc bắt đầu cùng lúc với chuyển động, không chờ
- try{await runSeq(a.seq(),tk);it.status="done";if(!it.auto&&!a.id.startsWith("go_"))lastDone=a.id;try{onWorldAction(it,a)}catch(e){console.error(e)}
+ try{charSay(a.sentence)}catch(e){}
+ it.talk=narrate(a); // giọng đọc bắt đầu cùng lúc với chuyển động, không chờ
+ try{await runSeq(a.seq(it.targetRoom),tk);it.status="done";if(!it.auto&&!a.id.startsWith("go_")){lastDone=a.id;recentActs.push(a.id);if(recentActs.length>6)recentActs.shift()}try{onWorldAction(it,a)}catch(e){console.error(e)}
+  await waitTalk(it.talk);alive(tk);
+  try{const rp=npcReplyOf(a);if(rp){it.reply=rp;await showNpc(rp);alive(tk)}}catch(e){if(e instanceof Abort)throw e}
+  try{if(window.ELW_LIFE&&ELW_LIFE.onAction&&!it.auto){await ELW_LIFE.onAction(a.id,W);alive(tk)}}catch(e){if(e instanceof Abort)throw e}
+  try{window.ELW_MISSION&&!it.auto&&ELW_MISSION.onAction(a.id,"done",W)}catch(e){console.error(e)}
   if(W.activity!=="watching"&&!W.sitting)await pose("idle");else if(!charG.classList.contains("idle"))pose("idle");
  }catch(e){if(e instanceof Abort){it.status="cancelled"}throw e}
  finally{renderSeq();renderStory();if(dlgPlayer&&!it.auto&&(it.status==="done"||it.status==="blocked"))dlgPlayer.actionDone(it.id,it.status==="done");if(rpPlayer&&!it.auto&&(it.status==="done"||it.status==="blocked"))rpPlayer.actionDone(it.id,it.status==="done")}
 }
-function resetScene(){
+function resetScene(clearConv){
  token++;speechStop();
  queue.forEach(q=>{if(q.status==="running")q.status="cancelled"});paused=true;running=false;
- const keep={x:W.x,y:W.y,dir:W.dir};W={...W0,...keep};
+ const curR=W.room||"living",isOut=roomTopic(curR)!=="home";
+ const ent=(curR!=="living"&&ROOMS[curR]&&ROOMS[curR].entry)?ROOMS[curR].entry:null;
+ const keep=(W.sitting&&ent)?{x:ent.x,y:ent.y,dir:ent.d||1}:{x:W.x,y:W.y,dir:W.dir};
+ W={...W0,...keep,room:curR};
+ if(clearConv!==false&&isOut){queue=[];paused=false;hlUid=null;lastDone=null;recentActs.length=0}
+ try{if(cbG){cancelAnimationFrame(cbRaf);cbG.style.opacity=0}}catch(e){}
+ try{window.ELW_UI_SCENE&&ELW_UI_SCENE.clearAll&&ELW_UI_SCENE.clearAll()}catch(e){}
+ try{window.ELW_LIFE&&ELW_LIFE.resetChat&&ELW_LIFE.resetChat(roomTopic(curR))}catch(e){}
  handG.querySelectorAll(".temp").forEach(e=>e.remove());room.classList.add("dusty");POSES.forEach(p=>charG.classList.remove(p));
  if(typeof renderRoom==="function")renderRoom();
  applyState();pose("idle");if(selObj&&!cur)renderObject();renderSeq();renderStory();
+ try{if(typeof renderMission==="function")renderMission()}catch(e){}
 }
 /* =====================================================================
    5. TIẾN ĐỘ + SRS (giữ nguyên dữ liệu & thuật toán bản trước)
@@ -1200,10 +1421,13 @@ function refresh(){
 
 /* ---------- Cô Mai ---------- */
 let guideAct=null,gTimer;
-function updateGuide(){const t=$id("guideText"),due=dueList(),fresh=ACTIONS.find(a=>a.room===W.room&&!stage(a.id)&&!a.pre());if(pumping){t.textContent="Đang chạy chuỗi hành động… bạn có thể chọn thêm hành động.";return}
+function missionGuide(){if(!(window.ELW_MISSION&&ELW_MISSION.active()))return null;const s=ELW_MISSION.current(W);if(!s)return null;
+ const m=ELW_MISSION.MISSIONS.find(x=>x.id===ELW_MISSION.state().id);if(m&&roomTopic(m.room||"living")!==roomTopic(W.room))return null;const next=s.next(W),a=ACT[next];return{m,s,next,a}}
+function updateGuide(){const mg=missionGuide();if(mg){$id("guideText").textContent=`Nhiệm vụ “${mg.m.title_en}” · Bước ${mg.s.n}/${mg.m.steps.length}: ${mg.a?mg.a.label:mg.next} → bấm để làm bước này`;guideAct=()=>{if(!pumping&&ACT[mg.next])enqueue(mg.next)};return}
+ const t=$id("guideText"),due=dueList(),fresh=ACTIONS.find(a=>a.room===W.room&&!stage(a.id)&&!a.pre());if(pumping){t.textContent="Đang chạy chuỗi hành động… bạn có thể chọn thêm hành động.";return}
  if(due.length){t.textContent=`Hôm nay có ${due.length} câu cần ôn. Ôn ngay để không quên nhé!`;guideAct=startReview}
  else if(fresh){t.textContent=`Thử hành động mới: “${fresh.label}” (${fresh.labelVi}).`;guideAct=()=>{selectObject(fresh.obj);enqueue(fresh.id)}}
- else{const n=nextDue();t.textContent=n?`Giỏi lắm! Lượt ôn tiếp theo sau ${fmtWait(n-Date.now())}. Bấm ↺ Dọn phòng để làm lại các hành động.`:"Bạn đã thành thạo tất cả! 🎉";guideAct=openBook}}
+ else{const n=nextDue(),out=roomTopic(W.room)!=="home";t.textContent=n?`Giỏi lắm! Lượt ôn tiếp theo sau ${fmtWait(n-Date.now())}. Bấm ${out?"↺ Reset đoạn hội thoại":"↺ Dọn phòng"} để làm lại các hành động.`:"Bạn đã thành thạo tất cả! 🎉";guideAct=openBook}}
 function toastG(msg){$id("guideText").textContent=msg;clearTimeout(gTimer);gTimer=setTimeout(updateGuide,4000)}
 
 /* =====================================================================
@@ -1212,8 +1436,8 @@ function toastG(msg){$id("guideText").textContent=msg;clearTimeout(gTimer);gTime
 let voice=null;
 function pickVoice(){const v=speechSynthesis.getVoices().filter(v=>v.lang.startsWith("en"));voice=v.find(v=>/en-US/.test(v.lang))||v[0]||null}
 if("speechSynthesis" in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice}
-function say(t,rate=1){if(window.ELW_VOICES)return ELW_VOICES.speak(t,narr.voice||"adult_female",{rate});return new Promise(r=>{if(!("speechSynthesis" in window)){toastG("Trình duyệt không hỗ trợ phát âm.");return r()}
- speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="en-US";if(voice)u.voice=voice;u.rate=rate;u.onend=r;u.onerror=r;speechSynthesis.speak(u);setTimeout(r,8000)})}
+function say(t,rate=1){if(window.ELW_VOICES)return speechQuiet().then(()=>ELW_VOICES.speak(t,narr.voice||"adult_female",{rate}));return speechQuiet().then(()=>new Promise(r=>{if(!("speechSynthesis" in window)){toastG("Trình duyệt không hỗ trợ phát âm.");return r()}
+ const u=new SpeechSynthesisUtterance(t);u.lang="en-US";if(voice)u.voice=voice;u.rate=rate;u.onend=r;u.onerror=r;speechSynthesis.speak(u);setTimeout(r,8000)}))}
 let rec=null,chunks=[],myUrl=null;
 function setupRec(btn,pbtn,res){
  if(!navigator.mediaDevices||!window.MediaRecorder){btn.disabled=true;res.textContent="Trình duyệt không hỗ trợ thu âm. Hãy nhại theo to lên.";return}
@@ -1242,17 +1466,22 @@ function listenTo(target,out,cb){
 const panel=$id("panel");let selObj=null,cur=null,step="look";
 const STEPS=[["look","👀 Xem"],["listen","👂 Nghe"],["shadow","🔁 Nhại"],["disc","🎯 Phân biệt"],["speak","🎤 Nói"],["recall","🧠 Tự nhớ"]];
 function selectObject(id){selObj=id;cur=null;document.querySelectorAll(".obj").forEach(o=>o.classList.toggle("sel",o.dataset.obj===id));renderObject();say(OBJECTS[id].en)}
+// Hành động đã làm / đang chờ: bấm lại chỉ PHÁT LẠI câu, không thêm bản trùng, không làm lại
+function actStatus(id){const q=queue.filter(x=>x.id===id&&!x.auto);if(q.some(x=>x.status==="pending"||x.status==="running"))return"pending";if(q.some(x=>x.status==="done"))return"done";return null}
+function actClick(id){const st=actStatus(id);if(st){const a=ACT[id];charSay(a.sentence);const rp=npcReplyOf(a);const t=say(a.sentence,.92);if(rp)waitTalk(t).then(()=>showNpc(rp));const b=panel.querySelector(`[data-act="${id}"]`);if(b){b.classList.remove("replaying");void b.offsetWidth;b.classList.add("replaying")}return}enqueue(id);renderObject()}
 function renderObject(){
- const o=OBJECTS[selObj];const acts=o.acts.map(i=>ACT[i]);
+ const o=OBJECTS[selObj],curTp=roomTopic(W.room);const acts=(o.acts||[]).map(i=>ACT[i]).filter(a=>a&&(a.room==="*"||roomTopic(a.room)===curTp));
  const learned=acts.filter(a=>stage(a.id)>0).length,busyQ=pumping||queue.some(q=>q.status==="pending");
  panel.innerHTML=`<div class="ohead"><b>${o.en}</b><span>${o.ipa} · ${trObj(selObj,o)}</span><button class="iconbtn" data-say="${o.en}">🔊</button><span style="margin-left:auto" class="meta">${learned}/${acts.length} đã học</span></div>
  <p class="hint">${busyQ?"Đang chạy chuỗi: hành động bạn chọn sẽ được <b>thêm vào cuối chuỗi</b>.":"Chọn hành động — nhân vật làm ngay và thêm vào chuỗi của bạn:"}</p>
- <div class="acts">${acts.map(a=>{const why=busyQ?null:a.pre();return `<div style="display:flex;gap:6px"><button class="act" style="flex:1" data-act="${a.id}" ${why?"disabled":""}>
+ <div class="acts">${acts.map(a=>{const st=actStatus(a.id),why=(busyQ||st)?null:a.pre(),canRedo=st==="done"&&!busyQ&&!a.pre();return `<div style="display:flex;gap:6px"><button class="act ${st?"act-"+st:""}" style="flex:1" data-act="${a.id}" ${why?"disabled":""} title="${st?"Bấm để nghe lại câu":""}">
   <span class="dot" style="background:${stageColor(stage(a.id))}" title="${LABELS[stage(a.id)]}"></span>
-  <span style="flex:1"><b>${a.label}</b><small>${trLabel(a)}</small>${why?`<span class="why">${why}</span>`:""}</span><span>＋</span></button>
+  <span style="flex:1"><b>${a.label}</b><small>${trLabel(a)}</small>${why?`<span class="why">${why}</span>`:""}${st?`<span class="replay">${st==="done"?"✓ đã làm · 🔊 bấm để nghe lại":"⏳ đang làm · 🔊 bấm để nghe lại"}</span>`:""}</span><span>${st?"🔊":"＋"}</span></button>
+  ${canRedo?`<button class="iconbtn" data-redo="${a.id}" title="Làm lại hành động này">↻</button>`:""}
   <button class="iconbtn" data-learn="${a.id}" title="Học câu này">📖</button></div>`}).join("")}</div>`;
  panel.querySelector("[data-say]").onclick=()=>say(o.en,.8);
- panel.querySelectorAll("[data-act]").forEach(b=>b.onclick=()=>{enqueue(b.dataset.act);renderObject()});
+ panel.querySelectorAll("[data-act]").forEach(b=>b.onclick=()=>actClick(b.dataset.act));
+ panel.querySelectorAll("[data-redo]").forEach(b=>b.onclick=()=>{enqueue(b.dataset.redo);renderObject()});
  panel.querySelectorAll("[data-learn]").forEach(b=>b.onclick=()=>openLesson(b.dataset.learn));
 }
 function openLesson(id){const a=ACT[id];selObj=a.obj;cur=a;step="look";render();say(a.sentence,.95)}
@@ -1322,11 +1551,10 @@ function pulse(obj){const o=document.querySelector(`[data-obj="${obj}"]`);if(!o)
 function bindObj(o){const go=()=>{if(!running)selectObject(o.dataset.obj)};
  o.addEventListener("click",go);o.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();go()}})}
 document.querySelectorAll(".obj").forEach(bindObj);
-world.addEventListener("click",e=>{if(running)return;const o=e.target.closest(".obj");if(o&&o.dataset.obj)selectObject(o.dataset.obj)});
 charG.style.cursor="pointer";
 charG.addEventListener("click",()=>{if(running)return;const h=W.hand;if(W.sitting)selectObject(W.sofa?"sofa":"chair");else if(h&&OBJECTS[h])selectObject(h);else if(h==="milk")selectObject("fridge");else toastG(W.sitting?"Bạn đang ngồi. Chọn ghế → Get up để đứng dậy.":"Xin chào! Hãy nhấn vào một đồ vật để mình làm cho bạn xem.")});
 $id("btnTags").onclick=()=>room.classList.toggle("show-tags");
-$id("btnReset").onclick=()=>askReset();
+$id("btnReset").onclick=()=>{if(roomTopic(W.room)!=="home"){confirmReset=false;resetScene(true);toastG("Đã reset lại đoạn hội thoại. Nhân vật vẫn đứng tại chủ đề hiện tại.")}else askReset()};
 
 /* =====================================================================
    8. MODAL: sổ từ & phiên ôn
@@ -1399,7 +1627,8 @@ const PKEY="elw_prefs_v1";
 let narr={mode:"live",storyMode:"natural",rich:true,showVi:true};
 try{Object.assign(narr,JSON.parse(localStorage.getItem(PKEY))||{})}catch(e){}
 const savePrefs=()=>{try{localStorage.setItem(PKEY,JSON.stringify(narr))}catch(e){}};
-function narrate(a){if(narr.mode==="live")say(a.sentence,.95)} // không await: chuyển động chạy tiếp
+function speechQuiet(max=6000){return new Promise(r=>{const t0=Date.now();const ck=()=>{let b=false;try{b=speechSynthesis.speaking}catch(e){}if(!b||Date.now()-t0>max)r();else setTimeout(ck,120)};ck()})}
+function narrate(a){if(narr.mode==="live")return speechQuiet().then(()=>say(a.sentence,.95));return null} // không await: chuyển động chạy tiếp
 function speechStop(){try{speechSynthesis.cancel()}catch(e){}}
 
 /* Action log (sự kiện thật) → đoạn văn (biên tập). Đoạn văn KHÔNG bao giờ được dùng làm trạng thái. */
@@ -1443,6 +1672,7 @@ const VERBS=new Set(["open","close","take","put","pick","pour","drink","wipe","c
  "hang","lie","read","spread","eat","find","bring","hold","leave","wake","go","walk","plug","unplug","cut","fry","dry","empty","shake","feed","sleep","buy","keep","begin","choose",
  "wear","see","do","boil","cook","wash","serve","heat","toast","brew","check","look","brush","fold","fluff","charge","rinse","relax","carry","sip","smile","enjoy","finish",
  "start","sweep","press","stir","scrub","chop","add","use","leave","move","help","switch","plug","toss","pack","tidy","straighten","put","set","sink","settle","ease"]);
+try{for(const a of ACTIONS){const v=String(a.label||"").split(" ")[0].toLowerCase();if(/^[a-z]+$/.test(v)&&v.length>2)VERBS.add(v)}}catch(e){}
 ["pet","fluff","fold","lie","stretch","call","play","listen","feed","brush","sink"].forEach(v=>VERBS.add(v));DOUBLE.add("pet");
 const ADV=/^(\w+ly|also|then|still|always|just|now|again|soon)$/i;
 function third(v){if(v==="have")return"has";if(v==="do")return"does";if(v==="go")return"goes";if(/(s|sh|ch|x|z|o)$/.test(v))return v+"es";if(/[^aeiou]y$/.test(v))return v.slice(0,-1)+"ies";return v+"s"}
@@ -1466,7 +1696,10 @@ function povEn(text,pv,tense,ctx){ctx=ctx||{sent:0};if(pv==="i"&&tense!=="past")
  return tk.join("").replace(/(^|[.!?]\s+)([a-z])/g,(m,a,b)=>a+b.toUpperCase())}
 function povVi(text,pv,tense){const name=POV[pv].vi;let t=text.replace(/(^|[\s,.(])([Tt])ôi(?=[\s,.)])/g,(m,a,T)=>a+(T==="T"?name[0].toUpperCase()+name.slice(1):name));
  if(tense==="past")t=t.replace(new RegExp("("+name.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+")\\s(?!đã|đang)","gi"),"$1 đã ");return t}
-const storyFinal=()=>{const c={sent:0};return buildStory().map(x=>({...x,en:povEn(x.en,narr.pov||"i",narr.tense||"present",c),vi:povVi(x.vi,narr.pov||"i",narr.tense||"present")}))};
+const storyFinal=()=>{const c={sent:0},past=(narr.tense||"present")==="past";return buildStory().map(x=>{let en=povEn(x.en,narr.pov||"i",narr.tense||"present",c),vi=povVi(x.vi,narr.pov||"i",narr.tense||"present");
+  for(const u of x.uids||[]){const q=queue.find(z=>z.uid===u);if(q&&q.reply){const r=q.reply,ask=/\?\s*$/.test(r.en),who=r.who==="Barista"?"the barista":r.who==="Cashier"?"the cashier":"the "+String(r.who).toLowerCase();
+   en+=` ${who[0].toUpperCase()+who.slice(1)} ${ask?(past?"asked":"asks"):(past?"said":"says")}, “${r.en}”`;vi+=` ${r.who==="Barista"?"Nhân viên pha chế":r.who==="Cashier"?"Thu ngân":r.who} ${ask?"hỏi":"nói"}: “${r.vi||r.en}”`}}
+  return{...x,en,vi}})};
 const storyText=()=>storyFinal().map(x=>x.en).join(" ");
 /* ---------- Ngôn ngữ dịch: Việt + 10 ngôn ngữ ---------- */
 const I18N=window.ELW_I18N||{langs:{},actions:{},objects:{}};
@@ -1496,13 +1729,13 @@ async function readAloud(t){t=t.replace(/‿/g," ");
 // Đánh dấu nối âm: phụ âm cuối + nguyên âm đầu (pick‿up, turn‿on), và "r" nối (for‿a)
 function linkify(t){if(window.ELW_READING)return ELW_READING.linkify(t,lvl());return t.replace(/\b([A-Za-z']*[bcdfgklmnpqrstvxz]|[A-Za-z']*[^aeiou\s]e|[A-Za-z']*r)\s+(?=[aeiouAEIOU]\w)/g,(m,w)=>{
  if(/^(a|the|to|I)$/i.test(w))return m;return w+"‿"})}
-function speakStory(){const t=storyText();if(t)readAloud(t)}
+function speakStory(){const t=storyText();if(t){readAloud(t);try{window.ELW_CHALLENGE&&ELW_CHALLENGE.onListen();window.ELW_CHALLENGE&&ELW_CHALLENGE.markStoryHeard&&ELW_CHALLENGE.markStoryHeard()}catch(e){}}}
 
 /* ---------- Diễn lại toàn bộ chuỗi trong lúc đọc đoạn văn ---------- */
 let reenacting=false;
 async function reenactStory(){
  const segs=storyFinal();if(!segs.length||pumping||reenacting)return;
- reenacting=true;paused=true;resetScene();const tk=token;renderStory();
+ reenacting=true;paused=true;resetScene(false);const tk=token;renderStory();
  try{for(let k=0;k<segs.length;k++){alive(tk);const sg=segs[k];
    storyCard.querySelectorAll(".s").forEach((el,i)=>el.classList.toggle("hl",i===k));hlUid=sg.uids;renderSeq();
    const talk=readAloud(sg.en);
@@ -1576,17 +1809,18 @@ let confirmReset=false,renaming=-1;
 const ST_LABEL={pending:"chờ",running:"▶ đang làm",done:"✓ xong",blocked:"⛔ không làm được",cancelled:"✕ đã huỷ"};
 const seqCard=$id("seqCard");
 function renderSeq(){
- const seqs=loadSeqs(),nDone=queue.filter(q=>q.status==="done").length;
+ const seqs=loadSeqs(),nDone=queue.filter(q=>q.status==="done").length,isOut=roomTopic(W.room)!=="home";
+ try{syncResetBtn()}catch(e){}
  seqCard.innerHTML=`<h2>🎬 Chuỗi hành động của tôi <span class="meta">${queue.length?`${nDone}/${queue.length} xong${paused&&queue.some(q=>q.status==="pending")?" · đang tạm dừng":""}`:""}</span></h2>
  <div class="ctrls">
   <button class="iconbtn ${paused?"":"on"}" id="qPlay">${paused?"▶ Chạy":"⏸ Tạm dừng"}</button>
   <button class="iconbtn" id="qRewind" title="Dừng và đưa chuỗi về đầu, không đổi căn phòng">⏮ Về đầu</button>
-  <button class="iconbtn" id="qReplay" title="Đặt lại phòng rồi chạy lại cả chuỗi">🔁 Phát lại</button>
+  <button class="iconbtn" id="qReplay" title="${isOut?"Reset lại đoạn hội thoại rồi chạy lại cả chuỗi":"Đặt lại phòng rồi chạy lại cả chuỗi"}">🔁 Phát lại</button>
   <button class="iconbtn" id="qClear">🧹 Xoá chuỗi</button>
-  <button class="iconbtn" id="qReset">↺ Đặt lại phòng</button>
+  <button class="iconbtn" id="qReset">${isOut?"↺ Reset lại đoạn hội thoại":"↺ Đặt lại phòng"}</button>
  </div>
- ${confirmReset?`<div class="confirm">Đưa nhân vật và mọi đồ vật về vị trí ban đầu? Điểm, lịch ôn và sổ từ <b>không</b> bị ảnh hưởng.
-   <div class="ctrls" style="margin:6px 0 0"><button class="iconbtn on" id="cYes">Đặt lại</button><button class="iconbtn" id="cNo">Huỷ</button></div></div>`:""}
+ ${confirmReset?`<div class="confirm">${isOut?"Reset lại đoạn hội thoại và trạng thái tại chủ đề này? Nhân vật vẫn đứng tại chủ đề hiện tại; điểm, lịch ôn và sổ từ <b>không</b> bị ảnh hưởng.":"Đưa nhân vật và mọi đồ vật về vị trí ban đầu? Điểm, lịch ôn và sổ từ <b>không</b> bị ảnh hưởng."}
+   <div class="ctrls" style="margin:6px 0 0"><button class="iconbtn on" id="cYes">${isOut?"Reset đoạn hội thoại":"Đặt lại"}</button><button class="iconbtn" id="cNo">Huỷ</button></div></div>`:""}
  ${queue.length?`<ol class="q">${queue.map((q,i)=>{const a=ACT[q.id];return `<li class="${q.status} ${hlUid&&hlUid.includes(q.uid)?"hl":""}">
    <span class="n">${i+1}</span><span class="t"><b>${a.label}</b>${q.auto?" <i class='meta'>(tự thêm)</i>":""}<small>${trLabel(a)} · ${a.object.en}${q.status==="blocked"?" — "+q.why:""}</small></span>
    <span class="st">${ST_LABEL[q.status]}</span>
@@ -1601,7 +1835,7 @@ function renderSeq(){
  $q("#qReplay").onclick=replay;
  $q("#qClear").onclick=()=>{token++;speechStop();queue=[];paused=false;hlUid=null;renderSeq();renderStory();if(selObj&&!cur)renderObject()};
  $q("#qReset").onclick=askReset;
- if(confirmReset){$q("#cYes").onclick=()=>{confirmReset=false;resetScene();toastG("Đã đặt lại phòng. Tiến độ học vẫn giữ nguyên.")};$q("#cNo").onclick=()=>{confirmReset=false;renderSeq()}}
+ if(confirmReset){$q("#cYes").onclick=()=>{confirmReset=false;resetScene(true);toastG(isOut?"Đã reset lại đoạn hội thoại. Nhân vật vẫn đứng tại chủ đề hiện tại.":"Đã đặt lại phòng. Tiến độ học vẫn giữ nguyên.")};$q("#cNo").onclick=()=>{confirmReset=false;renderSeq()}}
  seqCard.querySelectorAll("[data-up]").forEach(b=>b.onclick=()=>moveItem(+b.dataset.up,-1));
  seqCard.querySelectorAll("[data-dn]").forEach(b=>b.onclick=()=>moveItem(+b.dataset.dn,1));
  seqCard.querySelectorAll("[data-rm]").forEach(b=>b.onclick=()=>{queue.splice(+b.dataset.rm,1);renderSeq()});
@@ -1617,21 +1851,25 @@ function renderSeq(){
 function moveItem(i,d){const j=i+d;if(j<0||j>=queue.length||queue[j].status!=="pending")return;[queue[i],queue[j]]=[queue[j],queue[i]];renderSeq()}
 function askReset(){confirmReset=true;renderSeq();seqCard.scrollIntoView({block:"nearest",behavior:"smooth"})}
 function replay(){if(!queue.length){toastG("Chuỗi đang trống.");return}
- const ids=queue.filter(q=>!q.auto).map(q=>q.id);resetScene();queue=ids.map(mkItem);paused=false;hlUid=null;renderSeq();renderStory();pump()}
+ const curR=W.room||"living",isOut=roomTopic(curR)!=="home";
+ const ids=queue.filter(q=>!q.auto&&!(isOut&&q.id==="go_"+curR)).map(q=>q.id);resetScene(false);queue=ids.map(mkItem);paused=false;hlUid=null;renderSeq();renderStory();pump()}
 
 /* =====================================================================
    11. HỌC THÊM: chunks, từ mới, ngữ pháp theo trình độ
    ===================================================================== */
 let xTab="chunks";
 function renderExtras(st){const box=$id("extras");if(!box)return;
- if(!st.length||!window.ELW_LEVELS||narr.storyMode==="simple"){box.innerHTML="";return}
- let x;try{x=ELW_LEVELS.extras(queue.filter(q=>q.status==="done").map(q=>({uid:q.uid,id:q.id,ctx:q.ctx||{}})),narr.storyMode,{rich:narr.rich,fallback:id=>STORY[id]?[STORY[id][0],STORY[id][2]]:null})}catch(e){box.innerHTML="";return}
- const T={chunks:"🧩 Chunks",words:"📚 Từ mới",grammar:"📐 Ngữ pháp"};
- const body=xTab==="chunks"?x.chunks.map(c=>`<div><button class="iconbtn" data-x="${c.en}">🔊</button><b>${c.en}</b><small>${c.vi}</small></div>`).join("")
-  :xTab==="words"?x.words.map(w=>`<div><button class="iconbtn" data-x="${w.en}">🔊</button><b>${w.en}</b><small>${w.ipa||""} · ${w.vi}</small></div>`).join("")
-  :x.grammar.map(g=>`<div style="display:block"><b>${g.title}</b><br><small>${g.vi_explain}</small><br><i>${g.example}</i></div>`).join("");
- box.innerHTML=`<div class="xtabs">${Object.entries(T).map(([k,t])=>`<button class="iconbtn ${xTab===k?"on":""}" data-xt="${k}">${t}</button>`).join("")}</div><div class="xlist">${body||'<span class="empty2">Chưa có mục nào.</span>'}</div>`;
- box.querySelectorAll("[data-xt]").forEach(b=>b.onclick=()=>{xTab=b.dataset.xt;renderExtras(st)});
+ if(!window.ELW_LEVELS){box.innerHTML="";return}
+ const mode=narr.storyMode==="simple"?"A2":narr.storyMode;
+ let x={chunks:[],words:[],grammar:[]};
+ if(st.length){try{x=ELW_LEVELS.extras(queue.filter(q=>q.status==="done").map(q=>({uid:q.uid,id:q.id,ctx:q.ctx||{}})),mode,{rich:narr.rich,fallback:id=>STORY[id]?[STORY[id][0],STORY[id][2]]:null})||x}catch(e){}}
+ const T={chunks:"🧩 Chunks",words:"📚 Từ mới",grammar:"📐 Ngữ pháp",book:"📒 Sổ từ"};
+ const emptyHint='<span class="empty2">Thực hiện vài hành động ở tab 🎮 Chơi để mở cụm từ, từ vựng và điểm ngữ pháp của đoạn văn.</span>';
+ const body=xTab==="chunks"?(x.chunks&&x.chunks.length?x.chunks.map(c=>`<div><button class="iconbtn" data-x="${c.en}">🔊</button><b>${c.en}</b><small>${c.vi}</small></div>`).join(""):emptyHint)
+  :xTab==="words"?(x.words&&x.words.length?x.words.map(w=>`<div><button class="iconbtn" data-x="${w.en}">🔊</button><b>${w.en}</b><small>${w.ipa||""} · ${w.vi}</small></div>`).join(""):emptyHint)
+  :(x.grammar&&x.grammar.length?x.grammar.map(g=>`<div style="display:block"><b>${g.title}</b><br><small>${g.vi_explain}</small><br><i>${g.example}</i></div>`).join(""):emptyHint);
+ box.innerHTML=`<div class="xtabs">${Object.entries(T).map(([k,t])=>`<button class="iconbtn ${xTab===k?"on":""}" data-xt="${k}">${t}</button>`).join("")}</div><div class="xlist">${body}</div>`;
+ box.querySelectorAll("[data-xt]").forEach(b=>b.onclick=()=>{if(b.dataset.xt==="book"){const bk=$id("btnBook");if(bk)bk.click();return}xTab=b.dataset.xt;renderExtras(st)});
  box.querySelectorAll("[data-x]").forEach(b=>b.onclick=()=>say(b.dataset.x,.85));
 }
 
@@ -1639,21 +1877,55 @@ function renderExtras(st){const box=$id("extras");if(!box)return;
    12. NHIỀU PHÒNG: phòng khách, bếp, phòng ngủ
    ===================================================================== */
 const shellLiving=$id("shell-living"),shellOther=$id("shell-other");
-[...world.children].forEach(e=>{if(e.id!=="char")e.dataset.room="living"});
+[...world.children].forEach(e=>{if(e.id!=="char"&&e.id!=="o-cat")e.dataset.room="living"});
 (function injectCss(){let c=Object.values(ROOMS).map(r=>r.css||"").join("\n");if(window.ELW_DIALOGUE)c+="\n"+ELW_DIALOGUE.css;const st=document.createElement("style");st.textContent=c;document.head.appendChild(st)})();
-function renderTabs(){const t=$id("roomTabs");if(!t)return;
- t.innerHTML=Object.entries(ROOM_NAMES).map(([id,[en,vi]])=>`<button role="tab" aria-selected="${W.room===id}" class="${W.room===id?"on":""}" data-room="${id}" title="${en}">${{living:"🛋",kitchen:"🍳",bedroom:"🛏",bathroom:"🛁",garage:"🚗",garden:"🌻"}[id]||"🚪"} ${vi}</button>`).join("");
- t.querySelectorAll("[data-room]").forEach(b=>b.onclick=()=>{if(b.dataset.room!==W.room)enqueue("go_"+b.dataset.room)})}
+const TOPIC_AREAS={
+ home:["🛋 Phòng khách","🍳 Phòng bếp","🛏 Phòng ngủ","🛁 Phòng tắm","🚗 Nhà để xe","🌳 Sân vườn"],
+ cafe:[["☕ Quầy order & thanh toán","barista"],["🧋 Quầy pha chế & lấy đồ","espressomachine"],["🛋️ Khu ngồi trong nhà","velvetsofa"],["💻 Sân thượng & góc làm việc","terrace"]],
+ market:[["🧺 Cửa vào & Giỏ","basketstack"],["🍎 Quầy rau củ","producestand"],["🥛 Tủ sữa & Lạnh","dairyfridge"],["🥖 Quầy bánh mì","bakeryshelf"],["💳 Quầy thu ngân","checkout"]],
+ park:[["⛲ Đài phun nước","fountain"],["🦆 Hồ vịt","duckpond"],["🌳 Ghế dưới tán sồi","parkbench"],["🍦 Xe kem & Giải khát","icecreamcart"],["🚲 Trạm xe đạp","bikerack"]],
+ restaurant:[["🛎️ Quầy đón khách","hoststand"],["🍜 Bàn ăn chính","diningtable"],["👨‍🍳 Quầy bếp mở","kitchenpass"],["🍰 Tủ tráng miệng","dessertcase"],["🧾 Quầy thu ngân","cashierdesk"]],
+ outdoor:[["⛺ Bãi cắm trại","tent"],["🔥 Vòng lửa trại","campfire"],["🌲 Đường mòn & Bản đồ","trailmap"],["🔭 Đồi ngắm cảnh","lookout"],["🚣 Bến thuyền hồ","lakedock"]],
+ school:[["👩‍🏫 Bục giảng & Bảng","blackboard"],["🪑 Bàn học sinh","studentdesk"],["📚 Góc thư viện","bookshelf"],["🔬 Góc khoa học","microscope"],["🗄️ Tủ đồ cá nhân","locker"]]
+};
+function renderTabs(){const t=$id("roomTabs");if(!t)return;try{syncFriendBtn();syncResetBtn()}catch(e){}
+ const pendGo=queue.slice().reverse().find(q=>q&&(q.status==="pending"||q.status==="running")&&/^go_/.test(q.id));
+ const effRm=pendGo?(pendGo.id==="go_home"?(pendGo.targetRoom||"living"):pendGo.id.slice(3)):W.room;
+ if(roomTopic(effRm)!==curTopic){curTopic=roomTopic(effRm);try{window.ELW_TOPICS&&ELW_TOPICS.sync&&setTimeout(ELW_TOPICS.sync,0)}catch(e){}}
+ const isHome=curTopic==="home";
+ const topicRooms=Object.entries(ROOM_NAMES).filter(([id])=>roomTopic(id)===curTopic).sort(([a],[b])=>((ROOMS[a]&&ROOMS[a].zoneOrder)||0)-((ROOMS[b]&&ROOMS[b].zoneOrder)||0));
+ const hasZones=isHome||topicRooms.length>1;
+ t.setAttribute("data-topic-mode",hasZones?"home":"outdoor");
+ t.style.setProperty("--zone-cols",String(Math.max(1,topicRooms.length)));
+ const ICONS={living:"🛋",kitchen:"🍳",bedroom:"🛏",bathroom:"🛁",garage:"🚗",garden:"🌳",cafe:"☕",market:"🛒",park:"🌳",restaurant:"🍜",outdoor:"⛺",school:"🏫"};
+ let html=topicRooms.map(([id,[en,vi]])=>`<button role="tab" aria-selected="${effRm===id}" class="${effRm===id?"on":""}" data-room="${id}" title="${vi} · ${en}" aria-label="${vi}">${(ROOMS[id]&&ROOMS[id].icon)||ICONS[id]||"🚪"}<span class="rn">${vi.replace(/^Phòng |^Nhà |^Khu /,"")}</span></button>`).join("");
+ if(!hasZones&&TOPIC_AREAS[curTopic]){
+  html+=TOPIC_AREAS[curTopic].map(([lbl,oid])=>`<button type="button" class="area-chip" data-area-obj="${oid}" title="Khu vực: ${lbl}">${lbl}</button>`).join("");
+ }
+ t.innerHTML=html;
+ t.querySelectorAll("[data-room]").forEach(b=>b.onclick=()=>{if(b.dataset.room!==W.room)enqueue("go_"+b.dataset.room)});
+ t.querySelectorAll("[data-area-obj]").forEach(b=>b.onclick=()=>{const oid=b.dataset.areaObj;if(OBJECTS[oid]){selectObject(oid);pulse(oid);try{window.ELW_CONTEXT&&ELW_CONTEXT.refresh&&ELW_CONTEXT.refresh()}catch(e){}}});
+ try{window.ELW_CHALLENGE&&ELW_CHALLENGE.refresh&&ELW_CHALLENGE.refresh()}catch(e){}
+ try{window.ELW_WORLD3D&&ELW_WORLD3D.syncTopic&&ELW_WORLD3D.syncTopic()}catch(e){}
+ try{window.ELW_CONTEXT&&ELW_CONTEXT.refresh&&ELW_CONTEXT.refresh()}catch(e){}}
 let shownRoom=null;
-function renderRoom(){if(shownRoom===W.room)return;shownRoom=W.room;
+function renderRoom(){if(shownRoom===W.room)return;shownRoom=W.room;setTimeout(renderPeople,50);
  const liv=W.room==="living";shellLiving.style.display=liv?"":"none";
  [...world.children].forEach(e=>{if(e.dataset.room==="living")e.style.display=liv?"":"none"});
  world.querySelectorAll(":scope > [data-room]:not([data-room=living])").forEach(e=>e.remove());
  shellOther.innerHTML="";
- if(!liv){const r=ROOMS[W.room];if(r){shellOther.innerHTML=r.shellSvg||"";const g=document.createElementNS(SVGNS,"g");g.innerHTML=r.worldSvg||"";
-  [...g.children].forEach(e=>{e.dataset.room=r.id;world.appendChild(e);if(e.classList&&e.classList.contains("obj"))bindObj(e);if(e.querySelectorAll)e.querySelectorAll(".obj").forEach(bindObj)});}}
+ if(!liv){const r=ROOMS[W.room];shellOther.innerHTML=r.shellSvg;const g=document.createElementNS(SVGNS,"g");g.innerHTML=r.worldSvg;
+  [...g.children].forEach(e=>{e.dataset.room=r.id;world.appendChild(e);if(e.classList.contains("obj"))bindObj(e)});
+  ["k_","b_"].forEach(()=>{});}
  if(selObj&&OBJECTS[selObj]&&OBJECTS[selObj].room!==W.room&&!cur){selObj=null;panel.innerHTML=`<div class="empty">👈 ${ROOM_NAMES[W.room][1]}: nhấn vào một đồ vật.</div>`}
  if(inv)inv.refresh&&inv.refresh();
+ if($id("evTray"))$id("evTray").hidden=roomTopic(W.room)!=="home";
+ try{if(typeof renderFridgeCard==="function")renderFridgeCard()}catch(e){}
+ try{window.ELW_LIFE&&ELW_LIFE.onRoomEnter&&ELW_LIFE.onRoomEnter(W.room)}catch(e){}
+ try{window.ELW_PET_INTERACTION&&ELW_PET_INTERACTION.syncScenePet&&ELW_PET_INTERACTION.syncScenePet()}catch(e){}
+ try{window.ELW_WORLD3D&&ELW_WORLD3D.syncTopic&&ELW_WORLD3D.syncTopic()}catch(e){}
+ try{window.ELW_CHALLENGE&&ELW_CHALLENGE.refresh&&ELW_CHALLENGE.refresh()}catch(e){}
+ try{window.ELW_CONTEXT&&ELW_CONTEXT.refresh&&ELW_CONTEXT.refresh()}catch(e){}
 }
 async function switchRoom(id,tk){setTimeout(()=>{lighting();decorateNeeds()},700);room.style.opacity=0;await sleep(reduceMotion?10:260);alive(tk);
  W.room=id;W.activity=null;renderRoom();const e=id==="living"?{x:120,y:600,d:1}:ROOMS[id].entry;W.x=e.x;W.y=e.y;W.dir=e.d;applyState();
@@ -1692,32 +1964,41 @@ if(window.ELW_INVENTORY){inv=ELW_INVENTORY.mount($id("invWrap"),{getCatalog:()=>
  onSelectInteractive:id=>{const c=CAT.find(x=>x.id===id),k=c&&objForCatalog(c);if(k){selectObject(k);pulse(k);$id("room").scrollIntoView({block:"nearest",behavior:"smooth"})}},
  speak:t=>say(t,.85),isLearned:id=>!!P.inv[id],toggleLearned:id=>{P.inv[id]=!P.inv[id];save()}});}
 
-const qc=document.createElement("section");qc.className="card2";qc.id="quickCard";const rpc=document.createElement("section");rpc.className="card2";rpc.id="rpCard";rpc.hidden=true;$id("leftSlot").replaceWith($id("panel"),qc,rpc,$id("storyCard"));/* ---------- Cô Mai: gợi ý nhanh + thói quen hằng ngày ---------- */
+const qc=document.createElement("section");qc.className="card2";qc.id="quickCard";const evc=document.createElement("section");evc.className="card2";evc.id="evTray";const rpc=document.createElement("section");rpc.className="card2";rpc.id="rpCard";rpc.hidden=true;const msc=document.createElement("section");msc.className="card2";msc.id="missionCard";$id("leftSlot").replaceWith($id("panel"));const sideCol=document.querySelector(".side");if(sideCol){sideCol.insertBefore(msc,sideCol.firstChild);sideCol.append(evc,qc,rpc)}/* ---------- Cô Mai: gợi ý nhanh + thói quen hằng ngày ---------- */
 let lastDone=null;
-function renderQuick(){const c=$id("quickCard");if(!c)return;if(!window.ELW_FLOW){c.hidden=true;return}
- const hour=new Date().getHours();
- const sug=ELW_FLOW.suggest(lastDone,W,{hour,isPossible:id=>ACT[id]&&!ACT[id].pre()});
- c.innerHTML=`<h2>🧑‍🏫 Cô Mai gợi ý <span class="meta">${lastDone?"tiếp theo sau “"+ACT[lastDone].label+"”":ELW_FLOW.greet_vi(hour,W)}</span></h2><div id="qChips"></div>
-  <details style="margin-top:8px"><summary class="meta" style="cursor:pointer">🗓 Thói quen hằng ngày (chạy cả chuỗi)</summary><div id="qRoutines" style="margin-top:6px"></div></details>`;
+function renderQuick(){const c=$id("quickCard");if(!c)return;
+ const mg=missionGuide();
+ if(mg){c.hidden=false;const left=mg.m.steps.filter(x=>x.n>=mg.s.n);
+  c.innerHTML=`<h2>🧑‍🏫 Cô Mai hướng dẫn <span class="meta">${mg.m.title_en} · bước ${mg.s.n}/${mg.m.steps.length}</span></h2>
+  <div class="note"><b>${mg.s.icon} ${mg.s.title_en}</b> — ${mg.s.title_vi}<br>“${mg.s.say_en}” <button class="iconbtn" id="qSay">🔊</button><br><small>💡 ${mg.s.hint.vi}</small></div>
+  <div class="ctrls"><button class="btn" id="qDo" ${pumping?"disabled":""}>▶ ${mg.a?mg.a.label:mg.next}</button><span class="meta">Hành động tiếp theo đúng quy trình</span></div>
+  <ol class="meta" style="margin:6px 0 0;padding-left:18px">${left.slice(1).map(x=>`<li>🔒 ${x.title_en}</li>`).join("")}</ol>`;
+  c.querySelector("#qSay").onclick=()=>say(mg.s.say_en,.9);c.querySelector("#qDo").onclick=()=>{if(!pumping&&ACT[mg.next])enqueue(mg.next)};return}
+ if(!window.ELW_FLOW){c.hidden=true;return}
+ const hour=new Date().getHours(),curTp=roomTopic(W.room);
+ const sug=ELW_FLOW.suggest(lastDone,W,{hour,isPossible:id=>ACT[id]&&!ACT[id].pre()&&!recentActs.includes(id)&&roomTopic(ACT[id].room==="*"?"living":ACT[id].room)===curTp});
+ const topicRoutines=(ELW_FLOW.ROUTINES||[]).filter(r=>(r.ids||[]).every(i=>ACT[i]&&roomTopic(ACT[i].room==="*"?"living":ACT[i].room)===curTp));
+ c.innerHTML=`<h2>🧑‍🏫 Cô Mai gợi ý <span class="meta">${lastDone&&ACT[lastDone]&&roomTopic(ACT[lastDone].room==="*"?"living":ACT[lastDone].room)===curTp?"tiếp theo sau “"+ACT[lastDone].label+"”":ELW_FLOW.greet_vi(hour,W)}</span></h2><div id="qChips"></div>
+  ${topicRoutines.length?`<details style="margin-top:8px"><summary class="meta" style="cursor:pointer">🗓 Thói quen hằng ngày (chạy cả chuỗi)</summary><div id="qRoutines" style="margin-top:6px"></div></details>`:""}`;
  ELW_FLOW.renderChips(c.querySelector("#qChips"),sug,id=>({en:ACT[id].label,vi:trLabel(ACT[id])}),id=>{enqueue(id)});
- ELW_FLOW.renderRoutines(c.querySelector("#qRoutines"),ELW_FLOW.ROUTINES,r=>{if(!pumping&&!queue.some(q=>q.status==="pending"))queue=[];r.ids.filter(i=>ACT[i]).forEach(i=>queue.push(mkItem(i)));paused=false;renderSeq();pump();toastG("Bắt đầu: "+r.titleVi)});
+ if(topicRoutines.length)ELW_FLOW.renderRoutines(c.querySelector("#qRoutines"),topicRoutines,r=>{if(!pumping&&!queue.some(q=>q.status==="pending"))queue=[];r.ids.filter(i=>ACT[i]&&roomTopic(ACT[i].room==="*"?"living":ACT[i].room)===curTp).forEach(i=>queue.push(mkItem(i)));paused=false;renderSeq();pump();toastG("Bắt đầu: "+r.titleVi)});
  if(sug[0]){$id("guideText").textContent=`${sug[0].why_vi} → “${ACT[sug[0].id].label}”`;guideAct=()=>enqueue(sug[0].id)}
 }
 const _renderSeqQ=renderSeq;renderSeq=function(){_renderSeqQ();if(!pumping)renderQuick()};
-(function(){const ls=$id("langSel");ls.innerHTML=Object.entries(LANGS).map(([k,v])=>`<option value="${k}">${v.flag||""} ${v.name}</option>`).join("");ls.value=curLang();
- ls.onchange=e=>{narr.lang=e.target.value;savePrefs();renderStory();renderSeq();if(selObj&&!cur)renderObject();else if(cur)render();renderQuick()}})();
+(function(){const ls=$id("langSel");ls.innerHTML=Object.entries(LANGS).map(([k,v])=>`<option value="${k}" title="${v.name}">${v.flag||""} ${k.toUpperCase()}</option>`).join("");ls.value=curLang();ls.title="Ngôn ngữ dịch: "+((LANGS[curLang()]||{}).name||"Tiếng Việt");
+ ls.onchange=e=>{narr.lang=e.target.value;ls.title="Ngôn ngữ dịch: "+((LANGS[curLang()]||{}).name||"Tiếng Việt");savePrefs();renderStory();renderSeq();if(selObj&&!cur)renderObject();else if(cur)render();renderQuick()}})();
 (function(){const st=document.createElement("style");st.textContent=(window.ELW_READING&&ELW_READING.css)||"";document.head.appendChild(st)})();
-renderRoom();room.classList.add("dusty");applyState();pose("idle");refresh();renderSeq();renderStory();renderDlg();
+renderRoom();room.classList.add("dusty");applyState();pose("idle");refresh();renderSeq();renderStory();$id("dlgCard").hidden=true; /* Hội thoại với Mẹ đã được thay bằng Nhiệm vụ + nhập vai theo hành động */
 /* ===== Sửa câu mạnh hơn: thay bộ sửa của speaking-coach bằng ELW_GRAMMAR, lưu lỗi vào sổ ===== */
 if(window.ELW_SPEAKING&&window.ELW_GRAMMAR){const old=t=>({text:t,tips:["Câu của bạn ổn! Thử nói dài hơn với một lý do hoặc chi tiết."]});
  window.ELW_CORRECT=function(text){let r;try{r=ELW_GRAMMAR.check(text)}catch(e){return old(text)}
-  try{if(window.ELW_DAY)ELW_DAY.onSpeak(text)}catch(e){}
+  try{if(window.ELW_DAY)ELW_DAY.onSpeak(text)}catch(e){}try{window.ELW_CHALLENGE&&ELW_CHALLENGE.onSpeak(text)}catch(e){}
   const real=r.issues.filter(i=>i.type!=="punctuation");
   if(real.length&&window.ELW_MISTAKES){try{ELW_MISTAKES.add(r,{source:"speaking"});renderMistakes()}catch(e){}}
   const tips=r.issues.map(i=>`${i.from?`“${i.from}” → “${i.to}”: `:""}${i.msg_vi}`);
   if(real.length)tips.unshift(`Câu đúng: “${r.corrected}”`);
   return{text:r.corrected,tips:tips.length?tips:old(text).tips}};ELW_SPEAKING.correction=window.ELW_CORRECT}
-if(window.ELW_SPEAKING)try{const st=document.createElement("style");st.textContent=ELW_SPEAKING.css||"";document.head.appendChild(st);ELW_SPEAKING.mount($id("speakingCard"),{speak:(t)=>say(t,.95)})}catch(e){console.error(e);$id("speakingCard").hidden=true}
+if(window.ELW_SPEAKING)try{const st=document.createElement("style");st.textContent=ELW_SPEAKING.css||"";document.head.appendChild(st);ELW_SPEAKING.mount($id("speakingCard"),{speak:(t)=>say(t,.95)});const scH2=$id("speakingCard")&&$id("speakingCard").querySelector("h2");if(scH2)scH2.innerHTML='🎙️ Luyện nói & hội thoại <span class="meta">(sắp có · cần API)</span>';const scAi=$id("speakingCard")&&$id("speakingCard").querySelector(".sc-ai summary");if(scAi)scAi.textContent="⚙️ Kết nối AI tùy chọn (sắp có)"}catch(e){console.error(e);$id("speakingCard").hidden=true}
 else $id("speakingCard").hidden=true;
 
 /* ===== Sổ lỗi ===== */
@@ -1727,16 +2008,17 @@ function renderMistakes(){const c=$id("mistakeCard");if(!window.ELW_MISTAKES){c.
 /* ===== Thế giới có trí nhớ + một ngày tiếng Anh + nhập vai ===== */
 let dayItems=[],pendingScene=null,rpPlayer=null;const rpHistory=[];
 function lighting(){if(!window.ELW_DAY)return;try{ELW_DAY.applyLighting(room,ELW_DAY.phase(),{weather:ELW_DAY.state.weather})}catch(e){}}
-function decorateNeeds(){if(!window.ELW_NEEDS)return;try{ELW_NEEDS.decorate(world,W);ELW_NEEDS.renderPanel($id("needsCard"),{speak:t=>say(t,.9),enqueue:id=>{if(ACT[id])enqueue(id)},W,level:narr.storyMode})}catch(e){console.error(e)}}
+function decorateNeeds(){if(!window.ELW_NEEDS)return;const nc=$id("needsCard");if(roomTopic(W.room)!=="home"){if(nc)nc.hidden=true;return}try{ELW_NEEDS.decorate(world,W);ELW_NEEDS.renderPanel(nc,{speak:t=>say(t,.9),enqueue:id=>{if(ACT[id])enqueue(id)},W,level:narr.storyMode})}catch(e){console.error(e)}}
 function onWorldAction(it,a){
  if(!it.auto)dayItems.push({uid:it.uid,id:it.id,ctx:it.ctx||{}});
  if(window.ELW_NEEDS){ELW_NEEDS.onAction(a.id);ELW_NEEDS.save&&ELW_NEEDS.save()}
+ if(window.ELW_PET_ADVENTURE&&ELW_PET_ADVENTURE.onWorldAction)try{ELW_PET_ADVENTURE.onWorldAction(a.id,W)}catch(e){}
+ if(window.ELW_PET_PERSONALITY&&ELW_PET_PERSONALITY.onWorldAction)try{ELW_PET_PERSONALITY.onWorldAction(a.id,W,a)}catch(e){}
  if(window.ELW_DAY){const r=ELW_DAY.onAction(a.id)||{};if(r.endOfDay)setTimeout(showDiary,600)}
- if(window.ELW_EVENTS){ELW_EVENTS.onAction(a.id,W)}
- if(window.ELW_CHALLENGE){ELW_CHALLENGE.onAction(a.id,W)}
- if(window.ELW_COOKING){ELW_COOKING.onAction(a.id,W)}
- if(window.ELW_FAMILY){ELW_FAMILY.onAction(a.id,W)}
- lighting();decorateNeeds();
+ if(window.ELW_FOOD){try{ELW_FOOD.onActionDone(a.id,W);saveW();renderFridgeCard()}catch(e){console.error(e)}}
+ if(window.ELW_EVENTS)try{ELW_EVENTS.onAction(a.id,W)}catch(e){console.error(e)}
+ if(window.ELW_CHALLENGE&&!it.auto)try{ELW_CHALLENGE.onAction(a.id,W)}catch(e){console.error(e)}
+ lighting();decorateNeeds();renderPeople();
  if(window.ELW_ROLEPLAY&&!it.auto&&!(rpPlayer&&rpPlayer.isRunning())&&!pendingScene){
   const sc=ELW_ROLEPLAY.shouldTrigger(a.id,{...W,roleplayRunning:!!(rpPlayer&&rpPlayer.isRunning())},rpHistory);if(sc)pendingScene=sc}
 }
@@ -1744,7 +2026,7 @@ function afterQueueIdle(){if(pendingScene){const sc=pendingScene;pendingScene=nu
 function startScene(sc){const c=$id("rpCard");if(!c||!window.ELW_ROLEPLAY)return;c.hidden=false;rpHistory.push("scene:"+sc);
  if(!rpPlayer)rpPlayer=ELW_ROLEPLAY.createPlayer({container:c,speak:(t,v)=>window.ELW_VOICES?ELW_VOICES.speak(t,v):say(t),
   enqueue:id=>{if(ACT[id])enqueue(id)},correction:t=>{const r=window.ELW_SPEAKING?ELW_SPEAKING.correction(t):{tips:[]};return r},
-  listen:listenOnce,onEnd:(id,stats)=>{try{window.ELW_DAY&&ELW_DAY.onRoleplay(id)}catch(e){};setTimeout(()=>{if(!rpPlayer.isRunning())c.hidden=true},4000)}});
+  listen:listenOnce,onEnd:(id,stats)=>{try{window.ELW_DAY&&ELW_DAY.onRoleplay(id)}catch(e){};try{window.ELW_CHALLENGE&&ELW_CHALLENGE.onRoleplay(id)}catch(e){};setTimeout(()=>{if(!rpPlayer.isRunning())c.hidden=true},4000)}});
  rpPlayer.start(sc);c.scrollIntoView({block:"nearest",behavior:"smooth"})}
 function listenOnce(){return new Promise((res,rej)=>{const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return rej(new Error("unsupported"));
  const r=new SR();r.lang="en-US";r.interimResults=false;r.onresult=e=>{const t=e.results[0][0].transcript;try{window.ELW_DAY&&ELW_DAY.onSpeak(t)}catch(_){};res(t)};r.onerror=e=>rej(e);r.start()})}
@@ -1759,14 +2041,110 @@ if(window.ELW_DAY){try{const st=document.createElement("style");st.textContent=E
 if(window.ELW_NEEDS){try{const st=document.createElement("style");st.textContent=ELW_NEEDS.css||"";document.head.appendChild(st);ELW_NEEDS.load&&ELW_NEEDS.load();
  ELW_NEEDS.setRealTime&&ELW_NEEDS.setRealTime(true);ELW_NEEDS.catchUp&&ELW_NEEDS.catchUp(Date.now())}catch(e){console.error(e)}}else $id("needsCard").hidden=true;
 if(window.ELW_ROLEPLAY){const st=document.createElement("style");st.textContent=ELW_ROLEPLAY.css||"";document.head.appendChild(st)}
-if(window.ELW_EVENTS&&$id("eventCard"))try{ELW_EVENTS.mountHud($id("eventCard"),{enqueue,speak:t=>say(t,.9)})}catch(e){console.error(e)}
-if(window.ELW_CHALLENGE&&$id("challengeCard"))try{ELW_CHALLENGE.mountHud($id("challengeCard"),{enqueue,speak:t=>say(t,.9)})}catch(e){console.error(e)}
-if(window.ELW_COOKING&&$id("fridgeCard"))try{ELW_COOKING.mountHud($id("fridgeCard"),{enqueue,speak:t=>say(t,.9)})}catch(e){console.error(e)}
-if(window.ELW_COOKING){ACTIONS.forEach(a=>{const oldPre=a.pre;a.pre=function(st){const c=ELW_COOKING.checkRecipeRequirements(a.id);if(c&&!c.allowed)return c.messageVi;return oldPre?oldPre(st||W):null;}})}
-if(window.ELW_FAMILY&&$id("familyCard"))try{ELW_FAMILY.mountHud($id("familyCard"),{speak:t=>say(t,.9)})}catch(e){console.error(e)}
 renderMistakes();setTimeout(()=>{lighting();decorateNeeds()},300);
+/* ===== Thực phẩm: bảng tủ lạnh ===== */
+function renderFridgeCard(){const c=$id("fridgeCard");if(!window.ELW_FOOD||roomTopic(W.room)!=="home"){if(c)c.hidden=true;return}
+ try{ELW_FOOD.renderPanel(c,W,{enqueue:id=>{if(ACT[id])enqueue(id)},speak:t=>say(t,.9)})}catch(e){console.error(e)}}
+const speakV=(t,v)=>{if(!window.ELW_VOICES)return say(t);const ok=ELW_VOICES.PROFILES.some(p=>p.id===v);return ELW_VOICES.speak(t,ok?v:(v==="elderly_female"?"adult_female":"adult_female"))};
+/* ===== Người nhà: hoạt động nền ===== */
+let lastPhase=null;
+function renderPeople(){if(!window.ELW_NPCS)return;const ph=window.ELW_DAY?ELW_DAY.phase():"morning";
+ try{ELW_NPCS.clear(world);ELW_NPCS.render(world,W.room,ph,{roomExists:id=>id==="living"||!!ROOMS[id],sortDepth,
+   onClick:id=>{const d=(ELW_NPCS.describe(W.room,ph)||[]).find(x=>x.npc===id);if(d){toastG(d.en+" — "+d.vi);speakV(d.en,"adult_female")}}});sortDepth();
+  ELW_NPCS.renderPeoplePanel($id("peopleCard"),W.room,ph,{speak:speakV,onTalk:()=>{try{window.ELW_CHALLENGE&&ELW_CHALLENGE.onSpeak()}catch(e){}}})}catch(e){console.error(e)}
+ lastPhase=ph}
+if(!window.ELW_NPCS)$id("peopleCard").hidden=true;
+/* ===== Sự kiện ngẫu nhiên ===== */
+if(window.ELW_EVENTS){try{const st=document.createElement("style");st.textContent=ELW_EVENTS.css||"";document.head.appendChild(st);
+ ELW_EVENTS.init({getW:()=>W,actionExists:id=>!!ACT[id],objectExists:(id,room)=>!!OBJECTS[id]&&(!room||OBJECTS[id].room===room||OBJECTS[id].room==="*"),
+  enqueue:id=>{if(ACT[id])enqueue(id)},addXp:n=>{try{window.ELW_DAY&&ELW_DAY.addXp(n)}catch(e){}},speak:speakV,toast:toastG,
+  isBusy:()=>!!(rpPlayer&&rpPlayer.isRunning())||reenacting,setState:(k,v)=>{W[k]=v;applyState();decorateNeeds()}});
+ ELW_EVENTS.renderTray($id("evTray"));ELW_EVENTS.start()}catch(e){console.error(e);$id("evTray").hidden=true}}else $id("evTray").hidden=true;
+/* ===== Thử thách ===== */
+if(window.ELW_CHALLENGE){try{const st=document.createElement("style");st.textContent=ELW_CHALLENGE.css||"";document.head.appendChild(st);
+ ELW_CHALLENGE.renderPanel($id("chCard"),{getTopic:()=>roomTopic(W.room),speak:t=>say(t,.9),reenact:()=>{if(!storyFinal().length)return false;reenactStory();return true},enqueue:id=>{if(ACT[id])enqueue(id)},actionExists:id=>!!ACT[id],
+  actionLabel:id=>ACT[id]?{en:ACT[id].label,vi:trLabel(ACT[id])}:{en:id,vi:id},addXp:n=>{try{window.ELW_DAY&&ELW_DAY.addXp(n)}catch(e){}},
+  buildStory:items=>{const segs=window.ELW_LEVELS?ELW_LEVELS.build(items.map((x,i)=>({uid:x.uid||i+1,id:x.id||x,ctx:x.ctx||{}})),narr.storyMode==="simple"?"A2":narr.storyMode,{rich:narr.rich,fallback:id=>STORY[id]?[STORY[id][0],STORY[id][2]]:null}):[];return segs.map(x=>x.en).join(" ")}})}catch(e){console.error(e);$id("chCard").hidden=true}}else $id("chCard").hidden=true;
+setTimeout(()=>{renderFridgeCard();renderPeople()},350);
+/* ===== Nhiệm vụ (mission.js) — 1 hệ thống cho Chơi / Gợi ý / Làm ngay ===== */
+function sceneBubble(anchor,o){o={...o,showVi:o&&o.showVi!==undefined?o.showVi:false};if(!o.ttlMs)o.ttlMs=o.kind==="request"?6000:3500;if(window.ELW_UI_SCENE&&ELW_UI_SCENE.bubble){try{ELW_UI_SCENE.clearAll&&ELW_UI_SCENE.clearAll();return ELW_UI_SCENE.bubble(anchor,o)}catch(e){console.error(e)}}toastG((o.who?o.who+": ":"")+o.en)}
+function renderMission(){const c=$id("missionCard");if(!window.ELW_MISSION){c.hidden=true;return}
+ const mCur=ELW_MISSION.active()&&ELW_MISSION.MISSIONS.find(x=>x.id===ELW_MISSION.state().id);
+ const v=(!mCur||roomTopic(mCur.room||"living")===roomTopic(W.room))?ELW_MISSION.view(W):null;
+ if(!v){c.innerHTML=`<h2 class="mhead">🎯 Nhiệm vụ <span class="meta">vuốt ngang để chọn</span></h2><div class="mchips">${ELW_MISSION.MISSIONS.filter(m=>roomTopic(m.room||"living")===curTopic).map(m=>`<button class="mchip" data-mstart="${m.id}" title="${m.title_vi}"><b>${m.giver.avatar}</b><span>${m.title_en}</span><small>${m.title_vi}</small></button>`).join("")}</div>`;
+  c.querySelectorAll("[data-mstart]").forEach(b=>b.onclick=()=>ELW_MISSION.start(b.dataset.mstart));return}
+ const cb={onHintToggle:on=>ELW_MISSION.setHints(on),onAuto:()=>ELW_MISSION.auto(),onStep:()=>{},onSpeak:t=>say(t,.9),onClose:()=>ELW_MISSION.stop()};
+ if(window.ELW_UI_MISSION&&ELW_UI_MISSION.render){try{ELW_UI_MISSION.render(c,v,cb);return}catch(e){console.error(e)}}
+ ELW_MISSION.renderFallback(c,v,cb)}
+if(window.ELW_MISSION){const st=document.createElement("style");st.textContent=(ELW_MISSION.fallbackCss||"")+((window.ELW_UI_MISSION&&ELW_UI_MISSION.css)||"")+((window.ELW_UI_SCENE&&ELW_UI_SCENE.css)||"");document.head.appendChild(st);
+ try{window.ELW_UI_SCENE&&ELW_UI_SCENE.init&&ELW_UI_SCENE.init(room,{reducedMotion:reduceMotion})}catch(e){console.error(e)}
+ ELW_MISSION.setHost({recap:(step,w,go)=>{const id=(step.actions||[]).find(i=>ACT[i]);const txt=id?ACT[id].sentence:(step.say_en||step.title_en);charSay(txt);toastG(`✓ Bước ${step.n} đã xong sẵn: “${txt}”`);let once=false;const nx=()=>{if(!once){once=true;go()}};Promise.resolve(say(txt,.92)).then(()=>setTimeout(nx,150),nx);setTimeout(nx,Math.max(2500,txt.length*110))},getW:()=>W,enqueue:id=>{if(ACT[id])enqueue(id)},isIdle:()=>!pumping&&!queue.some(q=>q.status==="pending"),actionExists:id=>!!ACT[id],
+  speak:(t,v)=>v?speakV(t,v):say(t,.9),bubble:sceneBubble,onComplete:()=>{try{window.ELW_DAY&&ELW_DAY.addXp(30)}catch(e){}}});
+ ELW_MISSION.subscribe(renderMission);if(window.ELW_MISSIONS_PACK)ELW_MISSION.register(ELW_MISSIONS_PACK);if(window.ELW_CAFE)ELW_MISSION.register(ELW_CAFE.missions);if(window.ELW_MARKET)ELW_MISSION.register(ELW_MARKET.missions);if(window.ELW_PARK)ELW_MISSION.register(ELW_PARK.missions);if(window.ELW_RESTAURANT)ELW_MISSION.register(ELW_RESTAURANT.missions);if(window.ELW_OUTDOOR)ELW_MISSION.register(ELW_OUTDOOR.missions);if(window.ELW_SCHOOL)ELW_MISSION.register(ELW_SCHOOL.missions);renderMission();
+ // Nhiệm vụ và Thử thách: chỉ chạy một chế độ một lúc để không chặn nhau
+ const mStart=ELW_MISSION.start;ELW_MISSION.start=function(id,h){try{if(window.ELW_CHALLENGE&&ELW_CHALLENGE.current()&&ELW_CHALLENGE.pause){ELW_CHALLENGE.pause();toastG("Đã tạm dừng thử thách để làm nhiệm vụ. Xong nhiệm vụ sẽ tiếp tục.")}}catch(e){}return mStart(id,h)};
+ if(window.ELW_CHALLENGE&&ELW_CHALLENGE.start){const cStart=ELW_CHALLENGE.start;ELW_CHALLENGE.start=function(){if(ELW_MISSION.active()){ELW_MISSION.stop();toastG("Đã dừng nhiệm vụ để bắt đầu thử thách.")}return cStart.apply(this,arguments)}}
+ ELW_MISSION.subscribe(()=>{try{if(!ELW_MISSION.active()&&window.ELW_CHALLENGE&&ELW_CHALLENGE.current()&&ELW_CHALLENGE.resume)ELW_CHALLENGE.resume()}catch(e){};updateGuide();renderQuick()})}else $id("missionCard").hidden=true;
+if(window.ELW_UI_MOBILE)try{ELW_UI_MOBILE.init({})}catch(e){console.error(e)}
+setInterval(()=>{if(window.ELW_DAY&&ELW_DAY.phase()!==lastPhase)renderPeople()},15000);
 loadAssets();
-window.ELW={startScene:id=>startScene(id),showDiary:()=>showDiary(),linkify:t=>linkify(t),chunksOf:t=>chunksOf(t),readCfg:()=>readCfg(),reenact:()=>reenactStory(),setPov:(p,t)=>{narr.pov=p;narr.tense=t;renderStory()},storyFinal:()=>storyFinal(),ACTIONS,state:()=>W,queue:()=>queue,story:()=>buildStory(),enqueue,replay,resetScene,assets:assetStatus,idle:()=>!pumping&&!queue.some(q=>q.status==="pending")};
+window.ELW={mission:()=>window.ELW_MISSION,OBJECTS:()=>OBJECTS,startScene:id=>startScene(id),showDiary:()=>showDiary(),linkify:t=>linkify(t),chunksOf:t=>chunksOf(t),readCfg:()=>readCfg(),reenact:()=>reenactStory(),setPov:(p,t)=>{narr.pov=p;narr.tense=t;renderStory()},storyFinal:()=>storyFinal(),ACTIONS,state:()=>W,queue:()=>queue,story:()=>buildStory(),enqueue,replay,resetScene,assets:assetStatus,idle:()=>!pumping&&!queue.some(q=>q.status==="pending"),addPts:n=>{P.pts=Math.max(0,(P.pts||0)+n);save();refresh();return P.pts},getPts:()=>P.pts||0};
+
+/* ---------- Chủ đề (topics): Nhà ở chạy được; các chủ đề khác chọn trước, build sau ---------- */
+(function(){
+ const TOPICS=[
+  {id:"home",icon:"🏠",vi:"Nhà ở",en:"At home",live:true,words:"6 phòng · 11 nhiệm vụ",home:"living",areas:TOPIC_AREAS.home},
+  {id:"park",icon:"🌳",vi:"Công viên",en:"At the park",get words(){const r=window.ELW_ROOMS&&ELW_ROOMS.park;return (r&&r.objects?Object.keys(r.objects).length+" đồ vật · ":"")+ACTIONS.filter(a=>a.room==="park").length+" hành động"},built:()=>!!window.ELW_PARK,home:"park",areas:TOPIC_AREAS.park.map(x=>x[0])},
+  {id:"restaurant",icon:"🍜",vi:"Quán ăn",en:"At a restaurant",get words(){const r=window.ELW_ROOMS&&ELW_ROOMS.restaurant;return (r&&r.objects?Object.keys(r.objects).length+" đồ vật · ":"")+ACTIONS.filter(a=>a.room==="restaurant").length+" hành động"},built:()=>!!window.ELW_RESTAURANT,home:"restaurant",areas:TOPIC_AREAS.restaurant.map(x=>x[0])},
+  {id:"cafe",icon:"☕",vi:"Quán cà phê",en:"At the coffee shop",get words(){const rs=Object.values(window.ELW_ROOMS||{}).filter(r=>r&&r.topic==="cafe");const nObj=rs.reduce((s,r)=>s+Object.keys(r.objects||{}).length,0);return (nObj?nObj+" đồ vật · ":"")+ACTIONS.filter(a=>roomTopic(a.room)==="cafe").length+" hành động"},built:()=>!!window.ELW_CAFE,home:"cafe_counter",areas:TOPIC_AREAS.cafe.map(x=>x[0])},
+  {id:"market",icon:"🛒",vi:"Siêu thị",en:"At the supermarket",get words(){const rs=Object.values(window.ELW_ROOMS||{}).filter(r=>r&&r.topic==="market");const nObj=rs.reduce((s,r)=>s+Object.keys(r.objects||{}).length,0);return (nObj?nObj+" đồ vật · ":"")+ACTIONS.filter(a=>roomTopic(a.room)==="market").length+" hành động"},built:()=>!!window.ELW_MARKET,home:"market_entrance",areas:TOPIC_AREAS.market.map(x=>x[0])},
+  {id:"outdoor",icon:"⛺",vi:"Hoạt động ngoài trời",en:"Outdoor activities",get words(){const r=window.ELW_ROOMS&&ELW_ROOMS.outdoor;return (r&&r.objects?Object.keys(r.objects).length+" đồ vật · ":"")+ACTIONS.filter(a=>a.room==="outdoor").length+" hành động"},built:()=>!!window.ELW_OUTDOOR,home:"outdoor",areas:TOPIC_AREAS.outdoor.map(x=>x[0])},
+  {id:"school",icon:"🏫",vi:"Trường học",en:"At school",get words(){const r=window.ELW_ROOMS&&ELW_ROOMS.school;return (r&&r.objects?Object.keys(r.objects).length+" đồ vật · ":"")+ACTIONS.filter(a=>a.room==="school").length+" hành động"},built:()=>!!window.ELW_SCHOOL,home:"school",areas:TOPIC_AREAS.school.map(x=>x[0])}];
+ const K="elw_topics_v1";let st={picked:[]};try{st=JSON.parse(localStorage.getItem(K))||st}catch(e){}
+ const save=()=>{try{localStorage.setItem(K,JSON.stringify(st))}catch(e){}};
+ const sh=document.createElement("div");sh.id="topicSheet";sh.hidden=true;sh.setAttribute("role","dialog");sh.setAttribute("aria-label","Chọn chủ đề");document.body.appendChild(sh);
+ function askCode(){const i=sh.querySelector("#tsCode");if(i){i.focus();sh.querySelector("#tsMsg").textContent="Chủ đề này đang khóa. Nhập mã để mở."}}
+ function draw(){sh.innerHTML=`<div class="ts"><h3>Chủ đề học</h3><p class="sub">“Nhà ở” đang chơi được. ${st.unlocked?"Đã mở khóa: tích chọn chủ đề muốn học tiếp, app làm theo thứ tự bạn chọn.":"Các chủ đề khác đang khóa 🔒. Nhập mã để mở khóa."}</p>${st.unlocked?"":`<form id="tsLock" class="tslock"><input id="tsCode" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="Mã 4 số" aria-label="Mã mở khóa"><button type="submit">🔓 Mở khóa</button><span id="tsMsg" role="status"></span></form>`}<div class="tgrid">${TOPICS.map(t=>{const p=st.picked.indexOf(t.id);return `<button class="tcard ${curTopic===t.id||t.live||(st.unlocked&&t.built&&t.built())?"live":p>=0?"picked":""}" data-topic="${t.id}" aria-pressed="${t.live||p>=0}"><span class="tb">${curTopic===t.id?"Đang học":t.live?"Vào học":!st.unlocked?"🔒 Khóa":t.built&&t.built()?"▶ Vào học":p>=0?"✓ Đã chọn #"+(p+1):"Sắp có"}</span><span class="ti">${t.icon}</span><span class="tn">${t.vi}</span><span class="te">${t.en}</span><span class="tw">${t.words}</span><span class="tareas">${(t.areas||[]).map(a=>`<i>${a}</i>`).join("")}</span></button>`}).join("")}</div><label class="tsfriend"><input type="checkbox" id="tsFriend" ${window.ELW_LIFE&&ELW_LIFE.companionOn()?"checked":""}> 🧑‍🦱 Đi cùng bạn Linh khi ra ngoài <small>(quán cà phê, siêu thị, công viên, nhà hàng, dã ngoại, trường học…)</small></label><div class="tsfoot"><button id="tsClose" style="background:#e8743b;color:#fff">Xong</button></div></div>`;
+  sh.querySelectorAll("[data-topic]").forEach(b=>b.onclick=()=>{const t=TOPICS.find(x=>x.id===b.dataset.topic);if(t.live){enterTopic("home");return}if(!st.unlocked){askCode();return}if(t.built&&t.built()){enterTopic(t.id);return}const i=st.picked.indexOf(t.id);i>=0?st.picked.splice(i,1):st.picked.push(t.id);save();draw()});
+  const lk=sh.querySelector("#tsLock");if(lk)lk.onsubmit=e=>{e.preventDefault();const v=sh.querySelector("#tsCode").value.trim();if(v==="6789"){st.unlocked=true;save();draw()}else{const m=sh.querySelector("#tsMsg");m.textContent="Sai mã, thử lại nhé.";sh.querySelector("#tsCode").value=""}};
+  $id("tsClose").onclick=()=>sh.hidden=true;const fr=$id("tsFriend");if(fr)fr.onchange=()=>{try{ELW_LIFE.setCompanion(fr.checked);syncFriendBtn()}catch(e){}}}
+ sh.addEventListener("click",e=>{if(e.target===sh)sh.hidden=true});
+ function label(){const t=TOPICS.find(x=>x.id===curTopic)||TOPICS[0];const b=$id("btnTopic");if(b)b.textContent=t.icon+" "+t.vi+" ▾"}
+ function enterTopic(id){const t=TOPICS.find(x=>x.id===id);if(!t)return;curTopic=id;st.current=id;save();sh.hidden=true;label();
+  if(roomTopic(W.room)!==id&&ACT["go_"+t.home])enqueue(id==="home"&&ACT.go_home?"go_home":"go_"+t.home);
+  renderTabs();try{renderMission()}catch(e){}try{window.ELW_CONTEXT&&ELW_CONTEXT.refresh&&ELW_CONTEXT.refresh()}catch(e){}}
+ if(roomTopic(W.room)!==curTopic){curTopic=roomTopic(W.room);st.current=curTopic;save()}
+ label();
+ const b=$id("btnTopic");if(b)b.onclick=()=>{draw();sh.hidden=false};
+ window.ELW_TOPICS={list:TOPICS,areas:TOPIC_AREAS,picked:()=>st.picked.slice(),sync:()=>{st.current=curTopic;save();label();try{renderMission()}catch(e){}try{updateGuide()}catch(e){}try{window.ELW_CHALLENGE&&ELW_CHALLENGE.refresh&&ELW_CHALLENGE.refresh()}catch(e){}try{window.ELW_WORLD3D&&ELW_WORLD3D.syncTopic&&ELW_WORLD3D.syncTopic()}catch(e){}try{window.ELW_CONTEXT&&ELW_CONTEXT.refresh&&ELW_CONTEXT.refresh()}catch(e){}}};
+})();
+</script>
+<script>
+/* ===== Life talk: bạn đồng hành, thời tiết, khách ghé thăm (modules/life-talk.js) ===== */
+(function(){if(!window.ELW_LIFE||!window.ELW)return;try{
+ const svg=document.getElementById("room"),world=document.getElementById("world");
+ let box=document.getElementById("ltCard");if(!box){box=document.createElement("div");box.id="ltCard";box.setAttribute("aria-live","polite");svg.insertAdjacentElement("afterend",box)}
+ ELW_LIFE.init({getW:()=>ELW.state(),room:()=>ELW.state().room,svg,world,container:box,
+  bubble:(a,o)=>typeof sceneBubble==="function"?sceneBubble(a,o):null,say:(t,v)=>speechQuiet().then(()=>v&&window.ELW_VOICES?ELW_VOICES.speak(t,v,{rate:.95}):say(t,.92)),charSay:t=>typeof charSay==="function"?charSay(t):null,
+  isBusy:()=>!ELW.idle()||(typeof reenacting!=="undefined"&&reenacting)||!!(typeof rpPlayer!=="undefined"&&rpPlayer&&rpPlayer.isRunning()),
+  enqueue:id=>ELW.enqueue(id)});
+ const fb=document.getElementById("btnFriend");if(fb)fb.onclick=()=>{ELW_LIFE.setCompanion(!ELW_LIFE.companionOn());syncFriendBtn()};syncFriendBtn();syncResetBtn();
+ const M=window.ELW_MISSION;if(M){M.register(ELW_LIFE.missions);const LIDS=ELW_LIFE.missions.map(m=>m.id),st0=M.start;M.start=function(id){if(LIDS.includes(id)&&!ELW_LIFE.companionOn()){ELW_LIFE.setCompanion(true);syncFriendBtn();toastG("Nhiệm vụ này đi cùng bạn Linh nên Linh sẽ đi cùng bạn.")}return st0.apply(this,arguments)}}
+}catch(e){console.error(e)}})();
+/* Thử thách đời sống cho các chủ đề */
+(function(){try{const C=window.ELW_CHALLENGE&&ELW_CHALLENGE.CHALLENGES;if(!C)return;for(const m of [window.ELW_CAFE,window.ELW_MARKET,window.ELW_PARK,window.ELW_RESTAURANT,window.ELW_OUTDOOR,window.ELW_SCHOOL])if(m&&m.challenges)for(const c of m.challenges)if(!C.some(x=>x.id===c.id))C.push(c);window.ELW_CHALLENGE.refresh&&window.ELW_CHALLENGE.refresh()}catch(e){console.error(e)}})();
+/* ===== English Life World 2.0: 3D Stage, Context Engine, Pet Survival, 3000 Words & PRO ===== */
+(function(){
+ try{if(window.ELW_PREMIUM)ELW_PREMIUM.init({toast:toastG})}catch(e){console.error(e)}
+ try{if(window.ELW_CONTEXT)ELW_CONTEXT.init({getW:()=>W,say:(t,v)=>speechQuiet().then(()=>v&&window.ELW_VOICES?ELW_VOICES.speak(t,v,{rate:.95}):say(t,.92)),charSay:t=>typeof charSay==="function"?charSay(t):null,toast:toastG})}catch(e){console.error(e)}
+ try{if(window.ELW_PET)ELW_PET.init({getW:()=>W,say:t=>say(t,.92),toast:toastG})}catch(e){console.error(e)}
+ try{if(window.ELW_PET_PERSONALITY&&ELW_PET_PERSONALITY.init)ELW_PET_PERSONALITY.init({getW:()=>W,toast:toastG})}catch(e){console.error(e)}
+ try{if(window.ELW_PET_FOLLOW&&ELW_PET_FOLLOW.init)ELW_PET_FOLLOW.init()}catch(e){console.error(e)}
+ try{if(window.ELW_PET_ANIM&&ELW_PET_ANIM.init)ELW_PET_ANIM.init()}catch(e){console.error(e)}
+ try{if(window.ELW_VOCAB3000)ELW_VOCAB3000.init({say:t=>say(t,.9),charSay:t=>typeof charSay==="function"?charSay(t):null,toast:toastG})}catch(e){console.error(e)}
+ try{if(window.ELW_WORLD3D)ELW_WORLD3D.init({getW:()=>W,getTopic:()=>roomTopic(W.room),renderFridge:renderFridgeCard})}catch(e){console.error(e)}
+ try{if(window.ELW_UI_MOBILE&&ELW_UI_MOBILE.sync)ELW_UI_MOBILE.sync()}catch(e){console.error(e)}
+})();
 </script>
 </body>
 </html>

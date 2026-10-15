@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 640" width="1000" height="640" style="pointer-events: none;">
+  <defs>
+    <radialGradient id="coldVignette" cx="50%" cy="50%" r="65%">
+      <stop offset="50%" stop-color="#e0f2fe" stop-opacity="0"/>
+      <stop offset="85%" stop-color="#bae6fd" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#7dd3fc" stop-opacity="0.32"/>
+    </radialGradient>
+    <linearGradient id="frostBreath" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#f0f9ff" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="frostBlur">
+      <feGaussianBlur stdDeviation="8"/>
+    </filter>
+  </defs>
+
+  <!-- Cool Frost Vignette -->
+  <rect width="1000" height="640" fill="url(#coldVignette)"/>
+
+  <!-- Frost Patterns in Corners -->
+  <!-- Top Left Corner Frost -->
+  <path d="M0 0 L140 0 C110 40 70 80 40 90 C20 120 10 150 0 160 Z" fill="#e0f2fe" opacity="0.35" filter="url(#frostBlur)"/>
+  <!-- Top Right Corner Frost -->
+  <path d="M1000 0 L860 0 C890 40 930 80 960 90 C980 120 990 150 1000 160 Z" fill="#e0f2fe" opacity="0.35" filter="url(#frostBlur)"/>
+  <!-- Bottom Corners Frost -->
+  <path d="M0 640 L160 640 C120 600 80 570 0 540 Z" fill="#bae6fd" opacity="0.28" filter="url(#frostBlur)"/>
+  <path d="M1000 640 L840 640 C880 600 920 570 1000 540 Z" fill="#bae6fd" opacity="0.28" filter="url(#frostBlur)"/>
+
+  <!-- Cold Breath Vapors (soft translucent puffs in mid-air) -->
+  <ellipse cx="480" cy="280" rx="90" ry="24" fill="url(#frostBreath)" filter="url(#frostBlur)"/>
+  <ellipse cx="620" cy="240" rx="70" ry="18" fill="url(#frostBreath)" filter="url(#frostBlur)"/>
+
+  <!-- Soft Snowflakes drifting down -->
+  <g>
+    <circle cx="23" cy="17" r="2.0" fill="#ffffff" opacity="0.40"/><path d="M19.4 17 L26.6 17 M23 13.4 L23 20.6" stroke="#e0f2fe" stroke-width="1.2" stroke-linecap="round" opacity="0.40"/><circle cx="70" cy="48" r="3.2" fill="#ffffff" opacity="0.55"/><circle cx="117" cy="79" r="4.4" fill="#ffffff" opacity="0.70"/><circle cx="164" cy="110" r="5.6" fill="#ffffff" opacity="0.85"/><circle cx="211" cy="141" r="6.8" fill="#ffffff" opacity="0.40"/><path d="M198.76 141 L223.24 141 M211 128.76 L211 153.24" stroke="#e0f2fe" stroke-width="1.2" stroke-linecap="round" opacity="0.40"/><circle cx="258" cy="172" r="2.0" fill="#ffffff" opacity="0.55"/><circle cx="305" cy="203" r="3.2" fill="#ffffff" opacity="0.70"/><circle cx="352" cy="234" r="4.4" fill="#ffffff" opacity="0.85"/><circle cx="399" cy="265" r="5.6" fill="#ffffff" opacity="0.40"/><path d="M388.92 265 L409.08 265 M399 254.92 L399 275.08" stroke="#e0f2fe" stroke-width="1.2" stroke-linecap="round" opacity="0.40"/><circle cx="446" cy="296" r="6.8" fill="#ffffff" opacity="0.55"/><circle cx="493" cy="327" r="2.0" fill="#ffffff" opacity="0.70"/><circle cx="540" cy="358" r="3.2" fill="#ffffff" opacity="0.85"/><circle cx="587" cy="389" r="4.4" fill="#ffffff" opacity="0.40"/><path d="M579.08 389 L594.92 389 M587 381.08 L587 396.92" stroke="#e0f2fe" stroke-width="1.2" stroke-linecap="round" opacity="0.40"/><circle cx="634" cy="420" r="5.6" fill="#ffffff" opacity="0.55"/><circle cx="681" cy="451" r="6.8" fill="#ffffff" opacity="0.70"/><circle cx="728" cy="482" r="2.0" fill="#ffffff" opacity="0.85"/><circle cx="775" cy="513" r="3.2" fill="#ffffff" opacity="0.40"/><path d="M769.24 513 L780.76 513 M775 507.24 L775 518.76" stroke="#e0f2fe" stroke-width="1.2" stroke-linecap="round" opacity="0.40"/><circle cx="822" cy="544" r="4.4" fill="#ffffff" opacity="0.55"/><circle cx="869" cy="575" r="5.6" fill="#ffffff" opacity="0.70"/><circle cx="916" cy="606" r="6.8" fill="#ffffff" opacity="0.85"/><circle cx="963" cy="637" r="2.0" fill="#ffffff" opacity="0.40"/><path d="M959.4 637 L966.6 637 M963 633.4 L963 640.6" stroke="#e0f2fe" stroke-width="1.2" stroke-linecap="round" opacity="0.40"/><circle cx="10" cy="28" r="3.2" fill="#ffffff" opacity="0.55"/><circle cx="57" cy="59" r="4.4" fill="#ffffff" opacity="0.70"/><circle cx="104" cy="90" r="5.6" fill="#ffffff" opacity="0.85"/><circle cx="151" cy="121" r="6.8" fill="#ffffff" opacity="0.40"/><path d="M138.76 121 L163.24 121 M151 108.76 L151 133.24" stroke="#e0f2fe" stroke-width="1.2" stroke-linecap="round" opacity="0.40"/><circle cx="198" cy="152" r="2.0" fill="#ffffff" opacity="0.55"/><circle cx="245" cy="183" r="3.2" fill="#ffffff" opacity="0.70"/><circle cx="292" cy="214" r="4.4" fill="#ffffff" opacity="0.85"/><circle cx="339" cy="245" r="5.6" fill="#ffffff" opacity="0.40"/><path d="M328.92 245 L349.08 245 M339 234.92 L339 255.08" stroke="#e0f2fe" stroke-width="1.2" stroke-linecap="round" opacity="0.40"/><circle cx="386" cy="276" r="6.8" fill="#ffffff" opacity="0.55"/><circle cx="433" cy="307" r="2.0" fill="#ffffff" opacity="0.70"/><circle cx="480" cy="338" r="3.2" fill="#ffffff" opacity="0.85"/><circle cx="527" cy="369" r="4.4" fill="#ffffff" opacity="0.40"/><path d="M519.08 369 L534.92 369 M527 361.08 L527 376.92" stroke="#e0f2fe" stroke-width="1.2" stroke-linecap="round" opacity="0.40"/><circle cx="574" cy="400" r="5.6" fill="#ffffff" opacity="0.55"/><circle cx="621" cy="431" r="6.8" fill="#ffffff" opacity="0.70"/><circle cx="668" cy="462" r="2.0" fill="#ffffff" opacity="0.85"/><circle cx="715" cy="493" r="3.2" fill="#ffffff" opacity="0.40"/><path d="M709.24 493 L720.76 493 M715 487.24 L715 498.76" stroke="#e0f2fe" stroke-width="1.2" stroke-linecap="round" opacity="0.40"/><circle cx="762" cy="524" r="4.4" fill="#ffffff" opacity="0.55"/><circle cx="809" cy="555" r="5.6" fill="#ffffff" opacity="0.70"/><circle cx="856" cy="586" r="6.8" fill="#ffffff" opacity="0.85"/><circle cx="903" cy="617" r="2.0" fill="#ffffff" opacity="0.40"/><path d="M899.4 617 L906.6 617 M903 613.4 L903 620.6" stroke="#e0f2fe" stroke-width="1.2" stroke-linecap="round" opacity="0.40"/><circle cx="950" cy="8" r="3.2" fill="#ffffff" opacity="0.55"/><circle cx="997" cy="39" r="4.4" fill="#ffffff" opacity="0.70"/><circle cx="44" cy="70" r="5.6" fill="#ffffff" opacity="0.85"/><circle cx="91" cy="101" r="6.8" fill="#ffffff" opacity="0.40"/><path d="M78.76 101 L103.24 101 M91 88.76 L91 113.24" stroke="#e0f2fe" stroke-width="1.2" stroke-linecap="round" opacity="0.40"/><circle cx="138" cy="132" r="2.0" fill="#ffffff" opacity="0.55"/><circle cx="185" cy="163" r="3.2" fill="#ffffff" opacity="0.70"/><circle cx="232" cy="194" r="4.4" fill="#ffffff" opacity="0.85"/><circle cx="279" cy="225" r="5.6" fill="#ffffff" opacity="0.40"/><path d="M268.92 225 L289.08 225 M279 214.92 L279 235.08" stroke="#e0f2fe" stroke-width="1.2" stroke-linecap="round" opacity="0.40"/><circle cx="326" cy="256" r="6.8" fill="#ffffff" opacity="0.55"/>
+  </g>
+</svg>

@@ -1,5 +1,16 @@
+.env
+.env.*
+*.pem
+dist/
 node_modules/
+__pycache__/
 *.log
+english-life-world*.html
+test-results/
+playwright-report/
+.wrangler/
+modules/*.png
+tmp/
+temp/
 .DS_Store
 Thumbs.db
-

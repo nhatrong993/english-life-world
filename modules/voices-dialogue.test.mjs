@@ -3,12 +3,20 @@ import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
+import fs from "node:fs";
 const root = execSync("npm root -g").toString().trim();
 let chromium = null;
-try {
-  const mod = await import(pathToFileURL(path.join(root, "playwright/index.mjs")).href);
-  chromium = mod.chromium;
-} catch (e) {}
+const candidates = [
+  path.join(root, "playwright/index.mjs"),
+  "C:/Users/Nhat/AppData/Local/npm-cache/_npx/e41f203b7505f1fb/node_modules/playwright/index.mjs",
+  "C:/Users/Nhat/AppData/Local/npm-cache/_npx/9833c18b2d85bc59/node_modules/playwright/index.mjs"
+];
+for (const c of candidates) {
+  try {
+    const mod = await import(pathToFileURL(c).href);
+    if (mod && mod.chromium) { chromium = mod.chromium; break; }
+  } catch (e) {}
+}
 const dir = path.dirname(fileURLToPath(import.meta.url));
 const url = "file://" + path.join(dir, "dialogue-harness.html");
 let fails = 0; const ok = (c, m) => { console.log((c ? "PASS " : "FAIL ") + m); if (!c) fails++; };
@@ -26,7 +34,8 @@ if (!chromium) {
   process.exit(fails ? 1 : 0);
 }
 
-const browser = await chromium.launch();
+const exeFallback = "C:/Users/Nhat/AppData/Local/ms-playwright/chromium-1228/chrome-win64/chrome.exe";
+const browser = await chromium.launch(fs.existsSync(exeFallback) ? { executablePath: exeFallback } : {});
 const page = await browser.newPage({ viewport: { width: 900, height: 620 } });
 const errors = []; page.on("pageerror", e => errors.push(e.message));
 await page.goto(url);

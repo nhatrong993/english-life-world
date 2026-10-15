@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>So Sánh Cảnh Quán Cà Phê: SVG vs 2.5D PNG Assets</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 24px;
+    font-family: system-ui, -apple-system, sans-serif;
+    background: #fdfaf6;
+    color: #3b2412;
+  }
+  h1 { font-size: 24px; margin-bottom: 6px; color: #2d1607; }
+  p.subtitle { color: #7a5a3e; margin-top: 0; margin-bottom: 24px; font-size: 14px; }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+  .card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 4px 16px rgba(45, 22, 7, 0.08);
+    border: 1px solid #ebd9c8;
+  }
+  .card h2 {
+    font-size: 17px;
+    margin: 0 0 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .badge {
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: #f3ece4;
+    color: #634327;
+    font-weight: 700;
+  }
+  .badge.new {
+    background: #e8743b;
+    color: #fff;
+  }
+  .scene-box {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1000 / 640;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #eedcc9;
+    border: 2px solid #dfc7b0;
+  }
+  .scene-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .scene-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .obj-sprite {
+    position: absolute;
+    transform: translate(-50%, -100%);
+    filter: drop-shadow(0 4px 8px rgba(35, 18, 6, 0.22));
+    transition: transform 0.2s;
+  }
+  .obj-label {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid #e8743b;
+    color: #3b2412;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 6px;
+    transform: translate(-50%, 0);
+    white-space: nowrap;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  }
+  .icons-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-around;
+    padding: 12px;
+    background: #fff8f2;
+    border-radius: 12px;
+    border: 1px solid #f6dcc7;
+  }
+  .icon-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #5a3d1f;
+  }
+  .icon-item img {
+    width: 52px;
+    height: 52px;
+  }
+  .full-width {
+    grid-column: 1 / -1;
+  }
+</style>
+</head>
+<body>
+
+<h1>☕ Quán Cà Phê — So Sánh Thực Tế Giao Diện & Hình Ảnh (P3)</h1>
+<p class="subtitle">English Life World · Kiểm thử tích hợp hình ảnh 2.5D phẳng (Flat 2.5D, nét mềm, kem/gỗ/cam #e8743b) với 12 đồ vật tương tác & 6 icon hành động.</p>
+
+<div class="grid">
+  <!-- Cột 1: Cảnh SVG Hiện Tại (Từ topic card & phác thảo vector) -->
+  <div class="card">
+    <h2>
+      <span>1. Cảnh SVG Vector Ban Đầu (Fallback/Mock)</span>
+      <span class="badge">SVG Vector 360×240</span>
+    </h2>
+    <div class="scene-box">
+      <img src="../assets/topics/cafe.svg" class="scene-bg" alt="SVG Cafe Scene">
+    </div>
+    <p style="font-size:12px;color:#785c45;margin:10px 0 0;">
+      ✓ Phong cách đồ họa vector 2D, tỷ lệ gọn, dùng cho thẻ chủ đề hoặc fallback khi thiết bị mạng yếu.
+    </p>
+  </div>
+
+  <!-- Cột 2: Cảnh 2.5D Mới Hoàn Chỉnh (cafe-bg.png + 12 PNG objects) -->
+  <div class="card">
+    <h2>
+      <span>2. Cảnh 2.5D Mới Hoàn Chỉnh (Assets Bộ Mới)</span>
+      <span class="badge new">PNG 2000×1280 + 12 Sprites</span>
+    </h2>
+    <div class="scene-box" id="compositeScene">
+      <!-- Nền quán 2000x1280 sạch không vật thể tương tác -->
+      <img src="../assets/cafe/cafe-bg.png" class="scene-bg" alt="Cafe Background">
+      
+      <!-- Lớp phủ 12 đồ vật tương tác -->
+      <div class="scene-overlay">
+        <!-- 1. menuboard (treo tường trái) -->
+        <img src="../assets/cafe/menuboard.png" class="obj-sprite" style="left:26%;top:42%;width:18%;">
+        <span class="obj-label" style="left:26%;top:43%;">menuboard · bảng menu</span>
+
+        <!-- 2. barista (đứng sau quầy) -->
+        <img src="../assets/cafe/barista.png" class="obj-sprite" style="left:48%;top:58%;width:12%;">
+        <span class="obj-label" style="left:48%;top:59%;">barista · nhân viên pha chế</span>
+
+        <!-- 3. cafecounter (quầy bar chính) -->
+        <img src="../assets/cafe/cafecounter.png" class="obj-sprite" style="left:48%;top:76%;width:38%;">
+        <span class="obj-label" style="left:48%;top:77%;">cafecounter · quầy bar</span>
+
+        <!-- 4. cashregister (trên quầy phải) -->
+        <img src="../assets/cafe/cashregister.png" class="obj-sprite" style="left:60%;top:54%;width:10%;">
+        <span class="obj-label" style="left:60%;top:55%;">cashregister · máy thu ngân</span>
+
+        <!-- 5. espressomachine (trên quầy trái) -->
+        <img src="../assets/cafe/espressomachine.png" class="obj-sprite" style="left:38%;top:54%;width:15%;">
+        <span class="obj-label" style="left:38%;top:55%;">espressomachine · máy pha cà phê</span>
+
+        <!-- 6. pastrycase (tủ bánh cạnh quầy) -->
+        <img src="../assets/cafe/pastrycase.png" class="obj-sprite" style="left:72%;top:64%;width:17%;">
+        <span class="obj-label" style="left:72%;top:65%;">pastrycase · tủ bánh ngọt</span>
+
+        <!-- 7. cupstack (chồng cốc) -->
+        <img src="../assets/cafe/cupstack.png" class="obj-sprite" style="left:30%;top:54%;width:9%;">
+        <span class="obj-label" style="left:30%;top:55%;">cupstack · chồng cốc</span>
+
+        <!-- 8. condiments (khay gia vị & sữa) -->
+        <img src="../assets/cafe/condiments.png" class="obj-sprite" style="left:28%;top:78%;width:14%;">
+        <span class="obj-label" style="left:28%;top:79%;">condiments · đường & sữa</span>
+
+        <!-- 9. cafetable (bàn tròn phía trước) -->
+        <img src="../assets/cafe/cafetable.png" class="obj-sprite" style="left:52%;top:96%;width:22%;">
+        <span class="obj-label" style="left:52%;top:97%;">cafetable · bàn cà phê</span>
+
+        <!-- 10. windowseat (chỗ ngồi cạnh cửa sổ) -->
+        <img src="../assets/cafe/windowseat.png" class="obj-sprite" style="left:88%;top:74%;width:22%;">
+        <span class="obj-label" style="left:88%;top:75%;">windowseat · chỗ ngồi cửa sổ</span>
+
+        <!-- 11. wifisign (biển wifi) -->
+        <img src="../assets/cafe/wifisign.png" class="obj-sprite" style="left:12%;top:58%;width:9%;">
+        <span class="obj-label" style="left:12%;top:59%;">wifisign · biển Wi-Fi</span>
+
+        <!-- 12. recyclingbin (thùng rác phân loại) -->
+        <img src="../assets/cafe/recyclingbin.png" class="obj-sprite" style="left:10%;top:86%;width:13%;">
+        <span class="obj-label" style="left:10%;top:87%;">recyclingbin · thùng tái chế</span>
+      </div>
+    </div>
+    <p style="font-size:12px;color:#785c45;margin:10px 0 0;">
+      ✓ Nền 2000×1280 phối cảnh chiều sâu 2.5D, đúng bảng màu cam #e8743b, gỗ ấm, kem mềm; 12 đồ vật tách nền trong suốt sẵn sàng tương tác click/tap.
+    </p>
+  </div>
+
+  <!-- Hàng 3: 6 Icon Hành Động -->
+  <div class="card full-width">
+    <h2>
+      <span>3. Bộ 6 Icon Hành Động Quán Cà Phê (128×128 RGBA)</span>
+      <span class="badge new">6 Action Icons</span>
+    </h2>
+    <div class="icons-row">
+      <div class="icon-item">
+        <img src="../assets/cafe/order.png" alt="order">
+        <span>order (gọi món)</span>
+      </div>
+      <div class="icon-item">
+        <img src="../assets/cafe/pay.png" alt="pay">
+        <span>pay (thanh toán)</span>
+      </div>
+      <div class="icon-item">
+        <img src="../assets/cafe/wait.png" alt="wait">
+        <span>wait (chờ đồ)</span>
+      </div>
+      <div class="icon-item">
+        <img src="../assets/cafe/pickup.png" alt="pickup">
+        <span>pickup (nhận đồ)</span>
+      </div>
+      <div class="icon-item">
+        <img src="../assets/cafe/sit.png" alt="sit">
+        <span>sit (tìm chỗ ngồi)</span>
+      </div>
+      <div class="icon-item">
+        <img src="../assets/cafe/wifi.png" alt="wifi">
+        <span>wifi (hỏi mật khẩu)</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

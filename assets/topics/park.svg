@@ -1,0 +1,143 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 240" width="360" height="240">
+  <defs>
+    <linearGradient id="pSky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#bfe5f7"/>
+      <stop offset="65%" stop-color="#e3f4fd"/>
+      <stop offset="100%" stop-color="#f5fbf7"/>
+    </linearGradient>
+    <linearGradient id="pHillFar" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#9dd492"/>
+      <stop offset="100%" stop-color="#80be75"/>
+    </linearGradient>
+    <linearGradient id="pHillNear" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#72b866"/>
+      <stop offset="100%" stop-color="#55994a"/>
+    </linearGradient>
+    <linearGradient id="pPond" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#72c5eb"/>
+      <stop offset="100%" stop-color="#4ea9d6"/>
+    </linearGradient>
+    <linearGradient id="pPath" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#f5e6cc"/>
+      <stop offset="100%" stop-color="#ebd1a7"/>
+    </linearGradient>
+    <linearGradient id="pSun" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fff8db"/>
+      <stop offset="100%" stop-color="#fcdb77"/>
+    </linearGradient>
+    <filter id="pDrop" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-opacity="0.18" flood-color="#2a3d24"/>
+    </filter>
+  </defs>
+
+  <!-- Sky -->
+  <rect width="360" height="240" fill="url(#pSky)"/>
+
+  <!-- Sun & Clouds -->
+  <circle cx="295" cy="48" r="22" fill="url(#pSun)" opacity="0.9"/>
+  <circle cx="295" cy="48" r="32" fill="#fff" opacity="0.25"/>
+  <g fill="#ffffff" opacity="0.85">
+    <ellipse cx="65" cy="42" rx="24" ry="12"/>
+    <ellipse cx="80" cy="38" rx="18" ry="14"/>
+    <ellipse cx="50" cy="44" rx="14" ry="10"/>
+    <ellipse cx="210" cy="62" rx="18" ry="8"/>
+    <ellipse cx="222" cy="59" rx="12" ry="10"/>
+  </g>
+
+  <!-- Distant Hills -->
+  <path d="M-10 135 Q70 100 160 125 T370 115 L370 240 L-10 240 Z" fill="url(#pHillFar)"/>
+
+  <!-- Distant mini trees -->
+  <g fill="#619d57" opacity="0.75">
+    <circle cx="110" cy="118" r="10"/><circle cx="122" cy="116" r="12"/><circle cx="134" cy="120" r="9"/>
+    <circle cx="280" cy="112" r="11"/><circle cx="294" cy="110" r="14"/><circle cx="308" cy="114" r="10"/>
+  </g>
+
+  <!-- Foreground Hill -->
+  <path d="M-10 160 Q110 145 220 170 T370 160 L370 240 L-10 240 Z" fill="url(#pHillNear)"/>
+
+  <!-- Winding Path -->
+  <path d="M120 240 Q150 195 210 185 T280 165 L310 168 Q240 195 170 205 T90 240 Z" fill="url(#pPath)"/>
+
+  <!-- Pond on Left -->
+  <ellipse cx="78" cy="198" rx="64" ry="30" fill="url(#pPond)" filter="url(#pDrop)"/>
+  <ellipse cx="78" cy="198" rx="56" ry="24" fill="#62bde6" opacity="0.6"/>
+  <!-- Ripple rings -->
+  <ellipse cx="85" cy="202" rx="34" ry="12" fill="none" stroke="#a4def7" stroke-width="1.5" opacity="0.8"/>
+  <ellipse cx="60" cy="194" rx="18" ry="6" fill="none" stroke="#a4def7" stroke-width="1.2" opacity="0.6"/>
+  <!-- Lily pad -->
+  <ellipse cx="115" cy="204" rx="11" ry="5.5" fill="#3b8c4d"/>
+  <circle cx="118" cy="202" r="2.5" fill="#fcdb77"/>
+
+  <!-- Cute Yellow Duck -->
+  <g transform="translate(68, 186)">
+    <!-- Water ripple -->
+    <ellipse cx="8" cy="13" rx="16" ry="4.5" fill="none" stroke="#c0ebfc" stroke-width="1.5"/>
+    <!-- Body -->
+    <ellipse cx="8" cy="8" rx="11" ry="7" fill="#f8cd3a"/>
+    <ellipse cx="15" cy="4" rx="3" ry="4" fill="#f8cd3a" transform="rotate(25 15 4)"/>
+    <!-- Wing -->
+    <path d="M4 7 Q10 4 12 9 Q8 11 4 7 Z" fill="#ebbe27"/>
+    <!-- Head -->
+    <circle cx="15" cy="3" r="5.5" fill="#f8cd3a"/>
+    <!-- Eye -->
+    <circle cx="17" cy="2" r="1" fill="#2d2216"/>
+    <!-- Beak -->
+    <polygon points="19,2 24,4 19,5" fill="#e8743b"/>
+  </g>
+
+  <!-- Big Oak Tree (Right) -->
+  <g filter="url(#pDrop)">
+    <!-- Trunk -->
+    <path d="M260 215 Q265 175 272 145 Q278 175 284 215 Z" fill="#6e4623"/>
+    <path d="M265 160 Q252 140 244 135" stroke="#6e4623" stroke-width="5" stroke-linecap="round" fill="none"/>
+    <path d="M275 155 Q288 135 296 130" stroke="#6e4623" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+    <!-- Foliage Layers -->
+    <circle cx="270" cy="115" r="42" fill="#3f7d37"/>
+    <circle cx="242" cy="120" r="30" fill="#4d9443"/>
+    <circle cx="295" cy="118" r="32" fill="#488c3f"/>
+    <circle cx="270" cy="95" r="34" fill="#58a54d"/>
+    <circle cx="254" cy="98" r="26" fill="#68b85b"/>
+    <circle cx="282" cy="100" r="24" fill="#78c76b"/>
+    <!-- Highlights -->
+    <circle cx="258" cy="88" r="14" fill="#90dc83" opacity="0.6"/>
+  </g>
+
+  <!-- Park Bench on grass -->
+  <g transform="translate(162, 172)" filter="url(#pDrop)">
+    <!-- Legs -->
+    <rect x="4" y="16" width="3" height="18" rx="1.5" fill="#2f4a33"/>
+    <rect x="37" y="16" width="3" height="18" rx="1.5" fill="#2f4a33"/>
+    <rect x="6" y="24" width="32" height="2.5" fill="#2f4a33"/>
+    <!-- Seat Slats -->
+    <rect x="0" y="14" width="44" height="4" rx="2" fill="#c08149"/>
+    <rect x="0" y="19" width="44" height="3" rx="1.5" fill="#a46835"/>
+    <!-- Backrest Slats -->
+    <rect x="2" y="2" width="42" height="3.5" rx="1.5" fill="#c08149"/>
+    <rect x="2" y="7" width="42" height="3.5" rx="1.5" fill="#a46835"/>
+    <path d="M4 2 L4 16" stroke="#2f4a33" stroke-width="2.5"/>
+    <path d="M39 2 L39 16" stroke="#2f4a33" stroke-width="2.5"/>
+  </g>
+
+  <!-- Kite in the Sky -->
+  <g transform="translate(145, 52) rotate(-18)">
+    <polygon points="0,-18 13,0 0,18 -13,0" fill="#e8743b"/>
+    <polygon points="0,-18 0,18 -13,0" fill="#d25a22"/>
+    <line x1="0" y1="-18" x2="0" y2="18" stroke="#fcdb77" stroke-width="1.2"/>
+    <line x1="-13" y1="0" x2="13" y2="0" stroke="#fcdb77" stroke-width="1.2"/>
+    <!-- Tail -->
+    <path d="M0 18 Q-4 28 4 36 T-2 52" fill="none" stroke="#eedcc9" stroke-width="1.2"/>
+    <polygon points="0,26 -4,28 -3,24" fill="#fcdb77"/>
+    <polygon points="3,38 7,40 6,36" fill="#3b8de8"/>
+    <polygon points="-2,48 -6,50 -5,46" fill="#e8743b"/>
+  </g>
+
+  <!-- Flowers on grass -->
+  <g fill="#ff7f6e">
+    <circle cx="150" cy="225" r="2.5"/><circle cx="156" cy="227" r="2"/>
+    <circle cx="228" cy="228" r="2.5"/><circle cx="234" cy="226" r="2"/>
+  </g>
+  <g fill="#ffd863">
+    <circle cx="153" cy="226" r="1.2"/><circle cx="231" cy="227" r="1.2"/>
+  </g>
+</svg>

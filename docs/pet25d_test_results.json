@@ -1,0 +1,329 @@
+{
+  "bundleUsed": "D:\\tools\\Hoc tieng anh\\english-life-world-ban-day-du.html",
+  "timestamp": "2026-10-15T03:31:18.166Z",
+  "tests": {
+    "modulesCheck": {
+      "hasScene": true,
+      "hasPersonality": true,
+      "hasFollow": true,
+      "hasAnim": true,
+      "hasNeeds": true,
+      "hasRewards": true,
+      "hasAdventure": true,
+      "hasInteraction": true,
+      "profilesCount": 10
+    },
+    "livingMovement": {
+      "settledStartMode": "idle",
+      "sawWalkOrRun": true,
+      "sawRightFlip": true,
+      "sawLeftFlip": true,
+      "resumedOnWalkLeft": true,
+      "obstacleViolations": 0,
+      "rightStopDist": 89,
+      "rightStopMode": "idle",
+      "rightDataBase": 459,
+      "rightPetY": 457,
+      "leftStopDist": 93,
+      "leftStopMode": "idle",
+      "leftDataBase": 576,
+      "leftPetY": 574,
+      "sampleCount": 24
+    },
+    "roomSwitching": {
+      "kitchen": {
+        "visible": true,
+        "petMovedDelta": 114,
+        "distToChar": 94,
+        "roomRecorded": "kitchen"
+      },
+      "cafe_counter": {
+        "visible": true,
+        "petMovedDelta": 97,
+        "distToChar": 94,
+        "roomRecorded": "cafe_counter"
+      },
+      "market_produce": {
+        "visible": true,
+        "petMovedDelta": 95,
+        "distToChar": 94,
+        "roomRecorded": "market_produce"
+      },
+      "park": {
+        "visible": true,
+        "petMovedDelta": 52,
+        "distToChar": 95,
+        "roomRecorded": "park"
+      },
+      "market_meat": {
+        "visible": true,
+        "petMovedDelta": 107,
+        "distToChar": 94,
+        "roomRecorded": "market_meat"
+      },
+      "living": {
+        "visible": true,
+        "petMovedDelta": 15,
+        "distToChar": 88,
+        "roomRecorded": "living"
+      }
+    },
+    "needsAndIdle": {
+      "tiredMetrics": {
+        "maxSpeed": 110,
+        "energyMode": "tired",
+        "spriteState": "tired",
+        "spriteSrc": "assets/pets/milu/tired.png"
+      },
+      "normalMetrics": {
+        "maxSpeed": 215,
+        "energyMode": "normal",
+        "spriteState": "walking_adventure",
+        "spriteSrc": "assets/pets/milu/walking_adventure.png"
+      },
+      "excitedMetrics": {
+        "maxSpeed": 245,
+        "energyMode": "excited",
+        "spriteState": "excited",
+        "spriteSrc": "assets/pets/milu/excited.png"
+      },
+      "idleTransforms": [
+        "translate(0px, -0.04px) rotate(3.46deg) scale(1.03, 0.941)",
+        "translate(0px, -0.08px) rotate(3.43deg) scale(1.029, 0.941)",
+        "translate(0px, -0.11px) rotate(3.39deg) scale(1.029, 0.942)",
+        "translate(0px, -0.15px) rotate(3.35deg) scale(1.029, 0.943)",
+        "translate(0px, -0.18px) rotate(3.32deg) scale(1.028, 0.943)"
+      ],
+      "uniqueIdleTransforms": 5
+    },
+    "personality": {
+      "mochiFish": {
+        "petId": "mochi",
+        "petName": "Mochi",
+        "species": "cat",
+        "mood": "love",
+        "funDelta": 15,
+        "bondDelta": 6,
+        "rewardMultiplier": 1.5,
+        "emotionState": "excited",
+        "lineEn": "Fresh fish! Purr, I love salmon at the seafood counter!",
+        "lineVi": "Cá tươi kìa! Grừ, mình mê cá hồi ở quầy hải sản lắm!",
+        "text": "Fresh fish! Purr, I love salmon at the seafood counter!",
+        "icon": "💖",
+        "matchedTokens": [
+          "order_fresh_salmon",
+          "fish",
+          "salmon",
+          "market_meat",
+          "sunny"
+        ],
+        "matchedTags": [
+          "order_fresh_salmon",
+          "fish",
+          "salmon",
+          "market_meat",
+          "sunny"
+        ],
+        "context": {
+          "actionId": "order_fresh_salmon",
+          "room": "market_meat",
+          "item": "fish",
+          "weather": "sunny"
+        },
+        "reward": {
+          "granted": true,
+          "duplicate": false,
+          "objectiveKey": "pet25d_react:mochi:market_meat:order_fresh_salmon:fish:sunny",
+          "reward": {
+            "stars": 2,
+            "xp": 6,
+            "treats": 0,
+            "water": 0,
+            "toys": 0,
+            "bond": 0,
+            "labelVi": "Fresh fish! Purr, I love salmon at the seafood counter!"
+          },
+          "ledgerEntry": {
+            "objectiveKey": "pet25d_react:mochi:market_meat:order_fresh_salmon:fish:sunny",
+            "claimed": true,
+            "claimedAt": 1792035093775,
+            "reward": {
+              "stars": 2,
+              "xp": 6,
+              "treats": 0,
+              "water": 0,
+              "toys": 0,
+              "bond": 0,
+              "labelVi": "Fresh fish! Purr, I love salmon at the seafood counter!"
+            }
+          }
+        }
+      },
+      "funBeforeMochi": 50,
+      "funAfterMochi": 65,
+      "bubbleVisible": true,
+      "miluBall": {
+        "petId": "milu",
+        "petName": "Milu",
+        "species": "dog",
+        "mood": "love",
+        "funDelta": 15,
+        "bondDelta": 6,
+        "rewardMultiplier": 1.5,
+        "emotionState": "excited",
+        "lineEn": "Woof! Throw the ball! I can catch it every time!",
+        "lineVi": "Gâu! Ném bóng đi! Mình bắt trúng mọi quả luôn!",
+        "text": "Woof! Throw the ball! I can catch it every time!",
+        "icon": "💖",
+        "matchedTokens": [
+          "throw_the_ball",
+          "ball",
+          "park",
+          "sunny"
+        ],
+        "matchedTags": [
+          "throw_the_ball",
+          "ball",
+          "park",
+          "sunny"
+        ],
+        "context": {
+          "actionId": "throw_the_ball",
+          "room": "park",
+          "item": "ball",
+          "weather": "sunny"
+        },
+        "reward": {
+          "granted": true,
+          "duplicate": false,
+          "objectiveKey": "pet25d_react:milu:park:throw_the_ball:ball:sunny",
+          "reward": {
+            "stars": 2,
+            "xp": 6,
+            "treats": 0,
+            "water": 0,
+            "toys": 0,
+            "bond": 0,
+            "labelVi": "Woof! Throw the ball! I can catch it every time!"
+          },
+          "ledgerEntry": {
+            "objectiveKey": "pet25d_react:milu:park:throw_the_ball:ball:sunny",
+            "claimed": true,
+            "claimedAt": 1792035093790,
+            "reward": {
+              "stars": 2,
+              "xp": 6,
+              "treats": 0,
+              "water": 0,
+              "toys": 0,
+              "bond": 0,
+              "labelVi": "Woof! Throw the ball! I can catch it every time!"
+            }
+          }
+        }
+      },
+      "funBeforeMilu": 65,
+      "funAfterMilu": 80,
+      "mochiWater": {
+        "petId": "mochi",
+        "petName": "Mochi",
+        "species": "cat",
+        "mood": "dislike",
+        "funDelta": -6,
+        "bondDelta": -1,
+        "rewardMultiplier": 1,
+        "emotionState": "sad_lonely",
+        "lineEn": "Hiss! Meow! Keep that water and bath away from my fur!",
+        "lineVi": "Khè! Meo! Tránh xa nước tắm ra khỏi bộ lông của mình nha!",
+        "text": "Hiss! Meow! Keep that water and bath away from my fur!",
+        "icon": "💦",
+        "matchedTokens": [
+          "take_a_shower",
+          "water",
+          "shower",
+          "rainy"
+        ],
+        "matchedTags": [
+          "take_a_shower",
+          "water",
+          "shower",
+          "rainy"
+        ],
+        "context": {
+          "actionId": "take_a_shower",
+          "room": "bathroom",
+          "item": "water",
+          "weather": "rainy"
+        },
+        "reward": null
+      },
+      "emberGrillMood": "love",
+      "pipSnowMood": "love",
+      "aquaWaterMood": "love"
+    },
+    "rewardsAndPremium": {
+      "firstClaimGranted": true,
+      "secondClaimGranted": false,
+      "secondClaimDuplicate": true,
+      "starsBefore": 16,
+      "starsAfterFirst": 19,
+      "starsAfterSecond": 19,
+      "starsAfterReact1": 21,
+      "starsAfterReact2": 21,
+      "bobaUnlocked": false,
+      "emberUnlocked": false,
+      "activeAfterPremiumAttempt": "milu"
+    },
+    "performanceAndReducedMotion": {
+      "frames": 300,
+      "computeMsFor300Frames": 32.9,
+      "avgFrameComputeMs": 0.11,
+      "heapDeltaMB": 0,
+      "rmHopTransform1": "translate(0px, 0px) rotate(0deg) scale(1, 1)",
+      "rmHopTransform2": "translate(0px, 0px) rotate(0deg) scale(1, 1)",
+      "rmSpriteTired": "tired",
+      "rmSpriteHappy": "excited"
+    },
+    "mobile390": {
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "noHorizontalScroll": true,
+      "mobileTabsCount": 3,
+      "mobileTabs": [
+        "🎮 Chơi\n        Ngữ cảnh · Cô Mai",
+        "📖 Học\n        Đoạn văn · Kho 1225 từ",
+        "🎯 Nhiệm vụ\n        Thử thách · Pet\n        !"
+      ],
+      "tabSwitchOk": [
+        "play",
+        "learn",
+        "mission"
+      ]
+    },
+    "regression": {
+      "linhHiddenAtHome": true,
+      "cafeMission": {
+        "found": true,
+        "completed": true,
+        "stepsRun": 4
+      },
+      "marketMission": {
+        "found": true,
+        "completed": true,
+        "stepsRun": 4
+      }
+    }
+  },
+  "metrics": {
+    "jsErrorsCount": 0,
+    "avgFrameComputeMs": 0.11,
+    "heapDeltaMB": 0
+  },
+  "screenshots": [
+    "docs/pet25d-living-follow.png",
+    "docs/pet25d-rooms-zones.png",
+    "docs/pet25d-tired-excited.png",
+    "docs/pet25d-personality-bubble.png",
+    "docs/pet25d-mobile-390.png"
+  ]
+}
