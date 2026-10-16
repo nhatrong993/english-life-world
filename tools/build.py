@@ -8,16 +8,18 @@ s = open(os.path.join(root, 'index.html'), encoding='utf-8').read()
 missing = []
 
 STAGE_NAMES = ('baby', 'young', 'teen', 'adult', 'elite')
-STAGE_EMBED_BUDGET_BYTES = int(os.environ.get('ELW_STAGE_EMBED_BUDGET_KB', '1400')) * 1024
+STAGE_EMBED_BUDGET_BYTES = int(os.environ.get('ELW_STAGE_EMBED_BUDGET_KB', '1800')) * 1024
 SKIP_STAGE_EMBED = os.environ.get('ELW_SKIP_STAGE_EMBED', '0') == '1'
 
 # 1. Nhúng toàn bộ ảnh pet cơ sở (assets/pets/<id>/<state>.png)
 pet_assets = {}
 stage_embedded_count = 0
 stage_embedded_bytes = 0
+milu_stage_count = 0
 pets_dir = os.path.join(root, 'assets', 'pets')
 if os.path.isdir(pets_dir):
-    for pet_id in sorted(os.listdir(pets_dir)):
+    all_pet_ids = sorted(os.listdir(pets_dir))
+    for pet_id in all_pet_ids:
         pdir = os.path.join(pets_dir, pet_id)
         if not os.path.isdir(pdir):
             continue
@@ -29,8 +31,13 @@ if os.path.isdir(pets_dir):
                 b64 = base64.b64encode(raw).decode('ascii')
                 pet_assets[rel_path] = f"data:image/png;path={rel_path};base64,{b64}"
 
-        # 2. Nhúng ảnh theo stage (assets/pets/<id>/<stage>/<state>.png) trong giới hạn dung lượng hợp lý
-        if not SKIP_STAGE_EMBED:
+    # 2. Nhúng ĐỦ 50 ảnh stage của milu (assets/pets/milu/<stage>/<state>.png) và các pet khác trong giới hạn dung lượng
+    if not SKIP_STAGE_EMBED:
+        ordered_for_stage = (['milu'] if 'milu' in all_pet_ids else []) + [pid for pid in all_pet_ids if pid != 'milu']
+        for pet_id in ordered_for_stage:
+            pdir = os.path.join(pets_dir, pet_id)
+            if not os.path.isdir(pdir):
+                continue
             for stage_name in STAGE_NAMES:
                 sdir = os.path.join(pdir, stage_name)
                 if not os.path.isdir(sdir):
@@ -40,13 +47,15 @@ if os.path.isdir(pets_dir):
                     if not (os.path.isfile(full_sfn) and fn.lower().endswith('.png')):
                         continue
                     raw_stage = open(full_sfn, 'rb').read()
-                    if stage_embedded_bytes + len(raw_stage) > STAGE_EMBED_BUDGET_BYTES:
+                    if pet_id != 'milu' and (stage_embedded_bytes + len(raw_stage) > STAGE_EMBED_BUDGET_BYTES):
                         continue
                     rel_stage_path = f"assets/pets/{pet_id}/{stage_name}/{fn}"
                     b64_stage = base64.b64encode(raw_stage).decode('ascii')
                     pet_assets[rel_stage_path] = f"data:image/png;path={rel_stage_path};base64,{b64_stage}"
                     stage_embedded_count += 1
                     stage_embedded_bytes += len(raw_stage)
+                    if pet_id == 'milu':
+                        milu_stage_count += 1
 
 asset_bootstrap = (
     "<script>\n"
@@ -75,7 +84,14 @@ asset_bootstrap = (
     "          configurable: true,\n"
     "          enumerable: true,\n"
     "          get: function(){ return srcDesc.get.call(this); },\n"
-    "          set: function(v){ srcDesc.set.call(this, window.resolvePetAsset(v)); }\n"
+    "          set: function(v){\n"
+    "            if (typeof v === 'string' && /^(\\.\\/)?assets\\/objects\\//.test(v)) {\n"
+    "              var self = this;\n"
+    "              setTimeout(function(){ if (typeof self.onerror === 'function') self.onerror(); }, 0);\n"
+    "              return;\n"
+    "            }\n"
+    "            srcDesc.set.call(this, window.resolvePetAsset(v));\n"
+    "          }\n"
     "        });\n"
     "      }\n"
     "    }\n"
@@ -107,6 +123,12 @@ asset_bootstrap = (
     "</script>\n"
 )
 
+if 'assets/pets/milu/idle_happy.png' in pet_assets:
+    s = s.replace(
+        'href="assets/pets/milu/idle_happy.png"',
+        'href="' + pet_assets['assets/pets/milu/idle_happy.png'] + '"'
+    )
+
 first_script_injected = False
 def inl(m):
     global first_script_injected
@@ -124,6 +146,7 @@ out = sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(root), 
 open(out, 'w', encoding='utf-8').write(b)
 print(
     'built', out, len(b) // 1024, 'KB; embedded_pet_pngs:', len(pet_assets),
-    f'(base={len(pet_assets)-stage_embedded_count}, stage={stage_embedded_count}, stage_kb={stage_embedded_bytes//1024});',
+    f'(base={len(pet_assets)-stage_embedded_count}, stage={stage_embedded_count}, milu_stage={milu_stage_count}, stage_kb={stage_embedded_bytes//1024});',
     'missing:', missing
 )
+

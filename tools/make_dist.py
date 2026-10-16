@@ -22,10 +22,28 @@ def should_include_module(path: Path) -> bool:
     return True
 
 
+def build_audio_manifest() -> int:
+    audio_dir = ROOT / "assets" / "audio"
+    if not audio_dir.is_dir():
+        return 0
+    hashes = sorted(p.stem for p in audio_dir.glob("*.mp3") if p.is_file())
+    manifest_path = ROOT / "assets" / "audio-manifest.js"
+    items_js = ",".join(f'"{h}"' for h in hashes)
+    content = (
+        "// Auto-generated list of pre-rendered audio hashes in assets/audio/\n"
+        f"window.ELW_AUDIO_MANIFEST = new Set([{items_js}]);\n"
+    )
+    manifest_path.write_text(content, encoding="utf-8")
+    return len(hashes)
+
+
 def main() -> None:
     if DIST.exists():
         shutil.rmtree(DIST)
     DIST.mkdir(parents=True, exist_ok=True)
+
+    # 0. Refresh assets/audio-manifest.js from assets/audio/*.mp3
+    audio_count = build_audio_manifest()
 
     # 1. Copy index.html
     shutil.copy2(ROOT / "index.html", DIST / "index.html")
@@ -47,8 +65,12 @@ def main() -> None:
     if src_assets.is_dir():
         shutil.copytree(src_assets, dst_assets, dirs_exist_ok=True)
 
-    print(f"Created clean dist/ at {DIST} (index.html, {copied_modules} module files, assets/)")
+    print(
+        f"Created clean dist/ at {DIST} "
+        f"(index.html, {copied_modules} module files, assets/ with {audio_count} audio hashes)"
+    )
 
 
 if __name__ == "__main__":
     main()
+

@@ -36,10 +36,10 @@
     { id: "v_symptom",  domain: "health", lv: "B1", en: "symptom", ipa: "/ˈsɪmp.təm/", vi: "triệu chứng", ex: "A sore throat and fever are common flu symptoms." },
     { id: "v_pharmacy", domain: "health", lv: "A2", en: "pharmacy", ipa: "/ˈfɑː.mə.si/", vi: "hiệu thuốc", ex: "I stopped by the pharmacy to pick up some painkillers." },
     { id: "v_deadline", domain: "work",   lv: "B1", en: "deadline", ipa: "/ˈded.laɪn/", vi: "hạn chót", ex: "We need to finish this report before Friday's deadline." },
-    { id: "v_colleague",domain: "work",   lv: "A2", en: "colleague", ipa: "/ˈkɒl.iːɡ/", vi: "đồng nghiệp", ex: "My colleagues are very supportive and friendly." },
+    { id: "v_colleague",domain: "work",   lv: "A2", en: "colleague", ipa: "/ˈkɑl.iːɡ/", vi: "đồng nghiệp", ex: "My colleagues are very supportive and friendly." },
     { id: "v_fitting",  domain: "shopping",lv:"A2", en: "fitting room", ipa: "/ˈfɪt.ɪŋ ruːm/", vi: "phòng thử đồ", ex: "Excuse me, where is the fitting room?" },
     { id: "v_refund",   domain: "shopping",lv:"B1", en: "refund", ipa: "/ˈriː.fʌnd/", vi: "hoàn tiền", ex: "Can I get a refund if the jacket doesn't fit?" },
-    { id: "v_confident",domain: "social", lv: "B1", en: "confident", ipa: "/ˈkɒn.fɪ.dənt/", vi: "tự tin", ex: "Practicing every day makes me feel confident speaking English." },
+    { id: "v_confident",domain: "social", lv: "B1", en: "confident", ipa: "/ˈkɑn.fɪ.dənt/", vi: "tự tin", ex: "Practicing every day makes me feel confident speaking English." },
     { id: "v_exhausted",domain: "social", lv: "B1", en: "exhausted", ipa: "/ɪɡˈzɔː.stɪd/", vi: "kiệt sức", ex: "I was exhausted after hiking up the mountain trail." }
   ];
 
@@ -589,7 +589,7 @@
     const speakLiveFrame = () => {
       const f = FRAMES[S.activeFrame] || FRAMES[0];
       const a = f.slotA[S.slotA % f.slotA.length] || f.slotA[0];
-      const b = f.slotB[S.slotB % f.slotB.length] || f.slotB.length ? f.slotB[0] : ["", ""];
+      const b = f.slotB[S.slotB % f.slotB.length] || f.slotB[0] || ["", ""];
       const sent = f.template(a[0], b[0]);
       try { if (typeof window.charSay === "function") window.charSay(sent); } catch (e) {}
       try { if (typeof window.say === "function") window.say(sent, 0.94); } catch (e) {}

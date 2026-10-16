@@ -823,6 +823,8 @@
     cashier:   { id: "cashier",   baseId: "adult_female", label: "Cashier (Polite)",        vi: "Thu ngân (Lịch sự)",      pitch: 1.16, rate: 0.96, gender: "f", lang: "en-US", style: "polite",   line: "Did you find everything okay today? Cash or card, please?" },
     mom:       { id: "mom",       baseId: "adult_female", label: "Mom (Warm)",              vi: "Mẹ (Ấm áp)",              pitch: 1.18, rate: 0.95, gender: "f", lang: "en-US", style: "warm",     line: "Good morning, sweetie! Have a wonderful day." },
     dad:       { id: "dad",       baseId: "adult_male",   label: "Dad (Calm)",              vi: "Bố (Điềm đạm)",           pitch: 0.78, rate: 0.95, gender: "m", lang: "en-US", style: "calm",     line: "Hey kiddo, take your time." },
+    grandma:   { id: "grandma",   baseId: "adult_female", label: "Grandma (Gentle)",        vi: "Bà (Dịu dàng)",           pitch: 1.05, rate: 0.85, gender: "f", lang: "en-US", style: "gentle",   line: "Come here, my dear. Grandma has a story for you." },
+    grandpa:   { id: "grandpa",   baseId: "elderly",      label: "Grandpa (Kind)",          vi: "Ông (Hiền từ)",           pitch: 0.60, rate: 0.80, gender: "m", lang: "en-US", style: "kind",     line: "Well now, let me tell you something." },
     butcher:   { id: "butcher",   baseId: "adult_male",   label: "Butcher (Helpful)",       vi: "Đầu bếp quầy thịt",       pitch: 0.82, rate: 0.94, gender: "m", lang: "en-US", style: "helpful",  line: "Fresh salmon and prime beef cut to order today!" },
     baker:     { id: "baker",     baseId: "adult_female", label: "Baker (Warm)",            vi: "Thợ bánh (Ấm áp)",        pitch: 1.22, rate: 0.97, gender: "f", lang: "en-US", style: "warm",     line: "Careful, the sourdough just came out of the oven!" },
     clerk:     { id: "clerk",     baseId: "young_male",   label: "Store Clerk (Friendly)",  vi: "Nhân viên siêu thị",      pitch: 1.02, rate: 1.00, gender: "m", lang: "en-US", style: "friendly", line: "Right down aisle three on your left!" },
@@ -1297,6 +1299,7 @@
       function resume() { if (currentAudio && currentAudio.paused) { try { currentAudio.play(); } catch (e) {} } }
       function preloadByHash(hash, opts) {
         if (!hash || !canUseExternalAudio() || missingHashes.has(hash)) return null;
+        if (!isHashInManifest(hash, opts && opts.slowFile)) return null;
         if (preloadCache.has(hash)) return preloadCache.get(hash);
         try {
           var url = audioUrlForHash(hash, opts);
@@ -1339,10 +1342,22 @@
           if ("webkitPreservesPitch" in audio) audio.webkitPreservesPitch = true;
         } catch (e) {}
       }
+      // Manifest check: skip mp3 attempt if hash not in build manifest (avoids
+      // NotSupportedError delay from server returning HTML for missing files).
+      function isHashInManifest(hash, slowFile) {
+        try {
+          var w = (typeof window !== "undefined" ? window : (typeof root !== "undefined" ? root : {})) || {};
+          var m = w.ELW_AUDIO_MANIFEST;
+          if (!m || typeof m.has !== "function") return true;
+          return m.has(slowFile ? hash + "_slow" : hash);
+        } catch (e) { return true; }
+      }
+
       function playSingleHashMp3(hash, text, opts, gen) {
         return new Promise(function (resolve) {
           if (gen !== activeGeneration) return resolve({ ok: false, reason: "cancelled" });
           if (!hash || missingHashes.has(hash) || !canUseExternalAudio()) return resolve({ ok: false, reason: "unavailable" });
+          if (!isHashInManifest(hash, opts && opts.slowFile)) return resolve({ ok: false, reason: "not_in_manifest" });
           if (currentAudio) stopCurrentAudioElement();
           var url = audioUrlForHash(hash, opts);
           var audio = preloadCache.get(hash);
@@ -1438,7 +1453,12 @@
           return { mode: "empty", hashes: [] };
         }
         var gen = activeGeneration;
-        if (!canUseExternalAudio() || SYNTHETIC_TEST_NORMS.has(norm)) {
+        // Character-specific voices must use browser TTS — pre-generated MP3s use a generic voice
+        var CHARACTER_VOICES = ["mom","dad","grandma","grandpa","barista","cashier","waiter","teacher","librarian","nurse","ranger","clerk","service","butcher","baker","linh"];
+        var profId = String(profileOrVoiceId||"").toLowerCase();
+        var isCharacterVoice = false;
+        for (var ci=0; ci<CHARACTER_VOICES.length; ci++) { if (profId===CHARACTER_VOICES[ci] || profId.indexOf(CHARACTER_VOICES[ci])>=0) { isCharacterVoice=true; break; } }
+        if (!canUseExternalAudio() || SYNTHETIC_TEST_NORMS.has(norm) || isCharacterVoice) {
           fallbackCount++;
           if (typeof fallbackSegmentFn === "function") await fallbackSegmentFn(cleaned, profileOrVoiceId, o);
           if (typeof o.onend === "function") { try { o.onend(); } catch (e) {} }

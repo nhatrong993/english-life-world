@@ -15,15 +15,15 @@
      1. BATHROOM (Phòng tắm)
      ====================================================================== */
   const BV = {
-    wash: ["wash", "/wɒʃ/", "rửa"], hands: ["hands", "/hændz/", "đôi tay"], soap: ["soap", "/səʊp/", "xà phòng"],
+    wash: ["wash", "/wɑʃ/", "rửa"], hands: ["hands", "/hændz/", "đôi tay"], soap: ["soap", "/soʊp/", "xà phòng"],
     brush: ["brush", "/brʌʃ/", "đánh (răng)"], teeth: ["teeth", "/tiːθ/", "răng"], toothpaste: ["toothpaste", "/ˈtuːθ.peɪst/", "kem đánh răng"],
     face: ["face", "/feɪs/", "khuôn mặt"], water: ["water", "/ˈwɔː.tər/", "nước"], mirror: ["mirror", "/ˈmɪr.ər/", "gương"],
-    look: ["look into", "/lʊk ˈɪn.tuː/", "nhìn vào"], comb: ["comb", "/kəʊm/", "chải (tóc)"], hair: ["hair", "/heər/", "tóc"],
+    look: ["look into", "/lʊk ˈɪn.tuː/", "nhìn vào"], comb: ["comb", "/koʊm/", "chải (tóc)"], hair: ["hair", "/herr/", "tóc"],
     shower: ["take a shower", "/teɪk ə ˈʃaʊ.ər/", "tắm vòi sen"], bath: ["take a bath", "/teɪk ə bɑːθ/", "tắm bồn"],
     towel: ["towel", "/ˈtaʊ.əl/", "khăn tắm"], dry: ["dry", "/draɪ/", "lau khô"], scale: ["scale", "/skeɪl/", "cái cân"],
     weigh: ["weigh", "/weɪ/", "cân (trọng lượng)"], flush: ["flush", "/flʌʃ/", "xả nước"], toilet: ["toilet", "/ˈtɔɪ.lət/", "bồn cầu"],
-    tap: ["tap", "/tæp/", "vòi nước"], turnoff: ["turn off", "/tɜːn ɒf/", "khóa, tắt"], mat: ["bath mat", "/ˈbɑːθ mæt/", "thảm chùi chân"],
-    step: ["step on", "/step ɒn/", "bước lên"], rinse: ["rinse", "/rɪns/", "súc miệng"]
+    tap: ["tap", "/tæp/", "vòi nước"], turnoff: ["turn off", "/tɜːn ɑf/", "khóa, tắt"], mat: ["bath mat", "/ˈbɑːθ mæt/", "thảm chùi chân"],
+    step: ["step on", "/step ɑn/", "bước lên"], rinse: ["rinse", "/rɪns/", "súc miệng"]
   };
 
   const mkActB = (id, obj, label, labelVi, sentence, vi, vk, disc, pre, seq, story, sitOk) => ({
@@ -92,7 +92,7 @@
     towel_rack: { en: "towel rack", vi: "giá treo khăn", ipa: "/ˈtaʊ.əl ræk/", acts: ["dry_with_towel"] },
     scale: { en: "scale", vi: "cái cân", ipa: "/skeɪl/", acts: ["weigh_self"] },
     toothbrush: { en: "toothbrush", vi: "bàn chải", ipa: "/ˈtuːθ.brʌʃ/", acts: ["brush_teeth"] },
-    hairbrush: { en: "hairbrush", vi: "lược chải tóc", ipa: "/ˈheə.brʌʃ/", acts: ["comb_hair"] },
+    hairbrush: { en: "hairbrush", vi: "lược chải tóc", ipa: "/ˈher.brʌʃ/", acts: ["comb_hair"] },
     bath_mat: { en: "bath mat", vi: "thảm chùi chân", ipa: "/ˈbɑːθ mæt/", acts: ["wash_hands"] }
   };
 
@@ -177,8 +177,8 @@
   const GV = {
     car: ["car", "/kɑːr/", "xe ô tô"], inspect: ["inspect", "/ɪnˈspekt/", "kiểm tra"], hood: ["hood", "/hʊd/", "nắp ca-pô"],
     oil: ["engine oil", "/ˈen.dʒɪn ɔɪl/", "dầu máy"], bike: ["bicycle", "/ˈbaɪ.sɪ.kəl/", "xe đạp"], pump: ["pump up", "/pʌmp ʌp/", "bơm căng"],
-    tire: ["tire", "/taɪər/", "lốp xe"], wrench: ["wrench", "/rentʃ/", "cờ lê"], toolbox: ["toolbox", "/ˈtuːl.bɒks/", "hộp đồ nghề"],
-    sweep: ["sweep", "/swiːp/", "quét sạch"], floor: ["floor", "/flɔːr/", "sàn"], wash: ["wash", "/wɒʃ/", "rửa, lau"],
+    tire: ["tire", "/taɪrr/", "lốp xe"], wrench: ["wrench", "/rentʃ/", "cờ lê"], toolbox: ["toolbox", "/ˈtuːl.bɑks/", "hộp đồ nghề"],
+    sweep: ["sweep", "/swiːp/", "quét sạch"], floor: ["floor", "/flɔːr/", "sàn"], wash: ["wash", "/wɑʃ/", "rửa, lau"],
     battery: ["battery", "/ˈbæt.ər.i/", "bình ắc quy"], charge: ["charge", "/tʃɑːdʒ/", "sạc điện"], store: ["store", "/stɔːr/", "cất gọn"],
     tools: ["tools", "/tuːlz/", "dụng cụ"], light: ["light", "/laɪt/", "đèn"], ride: ["ride", "/raɪd/", "lái, đi xe"]
   };
@@ -240,7 +240,7 @@
     car: { en: "car", vi: "xe ô tô", ipa: "/kɑːr/", acts: ["inspect_car", "wash_car"] },
     car_hood: { en: "car hood", vi: "nắp ca-pô", ipa: "/hʊd/", acts: ["open_car_hood", "check_engine_oil"] },
     bicycle: { en: "bicycle", vi: "xe đạp", ipa: "/ˈbaɪ.sɪ.kəl/", acts: ["pump_bicycle_tire", "ride_bicycle"] },
-    toolbox: { en: "toolbox", vi: "hộp đồ nghề", ipa: "/ˈtuːl.bɒks/", acts: ["grab_wrench"] },
+    toolbox: { en: "toolbox", vi: "hộp đồ nghề", ipa: "/ˈtuːl.bɑks/", acts: ["grab_wrench"] },
     workbench: { en: "workbench", vi: "bàn thợ", ipa: "/ˈwɜːk.bentʃ/", acts: ["store_tools"] },
     charger: { en: "battery charger", vi: "bộ sạc bình", ipa: "/ˈbæt.ər.i ˈtʃɑː.dʒər/", acts: ["charge_battery"] },
     garage_broom: { en: "heavy broom", vi: "chổi cán dài", ipa: "/bruːm/", acts: ["sweep_garage"] },
@@ -328,14 +328,14 @@
      3. GARDEN (Khu vườn)
      ====================================================================== */
   const GDV = {
-    flower: ["flowers", "/ˈflaʊ.əz/", "những bông hoa"], water: ["water", "/ˈwɔː.tər/", "tưới nước"], rose: ["rose", "/rəʊz/", "hoa hồng"],
+    flower: ["flowers", "/ˈflaʊ.əz/", "những bông hoa"], water: ["water", "/ˈwɔː.tər/", "tưới nước"], rose: ["rose", "/roʊz/", "hoa hồng"],
     smell: ["smell", "/smel/", "ngửi hương"], tree: ["tree", "/triː/", "cái cây"], apple: ["apple", "/ˈæp.əl/", "quả táo"],
     pick: ["pick", "/pɪk/", "hái (quả)"], bird: ["birds", "/bɜːdz/", "những chú chim"], feed: ["feed", "/fiːd/", "cho ăn"],
     seed: ["seeds", "/siːdz/", "hạt giống"], veggie: ["vegetables", "/ˈvedʒ.tə.bəlz/", "rau củ"], harvest: ["harvest", "/ˈhɑː.vɪst/", "thu hoạch"],
     weed: ["weed", "/wiːd/", "nhổ cỏ dại"], prune: ["prune", "/pruːn/", "tỉa (cành)"], branch: ["branches", "/ˈbrɑːn.tʃɪz/", "cành cây"],
-    fountain: ["fountain", "/ˈfaʊn.tɪn/", "đài phun nước"], turnon: ["turn on", "/tɜːn ɒn/", "bật"], turnoff: ["turn off", "/tɜːn ɒf/", "tắt"],
-    bench: ["bench", "/bentʃ/", "ghế băng"], sit: ["sit on", "/sɪt ɒn/", "ngồi lên"], gate: ["garden gate", "/ˈɡɑː.dən ɡeɪt/", "cổng vườn"],
-    open: ["open", "/ˈəʊ.pən/", "mở"], hose: ["hose", "/həʊz/", "vòi nước tưới"]
+    fountain: ["fountain", "/ˈfaʊn.tɪn/", "đài phun nước"], turnon: ["turn on", "/tɜːn ɑn/", "bật"], turnoff: ["turn off", "/tɜːn ɑf/", "tắt"],
+    bench: ["bench", "/bentʃ/", "ghế băng"], sit: ["sit on", "/sɪt ɑn/", "ngồi lên"], gate: ["garden gate", "/ˈɡɑː.dən ɡeɪt/", "cổng vườn"],
+    open: ["open", "/ˈoʊ.pən/", "mở"], hose: ["hose", "/hoʊz/", "vòi nước tưới"]
   };
 
   const mkActGD = (id, obj, label, labelVi, sentence, vi, vk, disc, pre, seq, story, sitOk) => ({
@@ -393,11 +393,11 @@
 
   const gardenObjects = {
     flowerbed: { en: "flowerbed", vi: "luống hoa", ipa: "/ˈflaʊ.ə.bed/", acts: ["water_flowers", "weed_garden"] },
-    garden_hose: { en: "garden hose", vi: "vòi xịt nước", ipa: "/həʊz/", acts: ["turn_off_garden_hose"] },
+    garden_hose: { en: "garden hose", vi: "vòi xịt nước", ipa: "/hoʊz/", acts: ["turn_off_garden_hose"] },
     apple_tree: { en: "apple tree", vi: "cây táo", ipa: "/ˈæp.əl triː/", acts: ["pick_apple", "prune_branches"] },
     bird_feeder: { en: "bird feeder", vi: "máng chim ăn", ipa: "/bɜːd ˈfiː.dər/", acts: ["feed_birds"] },
     vegetable_patch: { en: "vegetable patch", vi: "vườn rau", ipa: "/ˈvedʒ.tə.bəl pætʃ/", acts: ["harvest_vegetables"] },
-    rose_bush: { en: "rose bush", vi: "bụi hoa hồng", ipa: "/rəʊz bʊʃ/", acts: ["smell_rose"] },
+    rose_bush: { en: "rose bush", vi: "bụi hoa hồng", ipa: "/roʊz bʊʃ/", acts: ["smell_rose"] },
     fountain: { en: "fountain", vi: "đài phun nước", ipa: "/ˈfaʊn.tɪn/", acts: ["turn_on_fountain"] },
     garden_bench: { en: "garden bench", vi: "ghế băng vườn", ipa: "/ˈɡɑː.dən bentʃ/", acts: ["sit_on_garden_bench"] },
     garden_gate: { en: "garden gate", vi: "cổng rào vườn", ipa: "/ɡeɪt/", acts: ["water_flowers"] },
@@ -513,13 +513,13 @@
       catalog: [
         { id: "bt_shampoo", en: "shampoo", vi: "dầu gội", ipa: "/ʃæmˈpuː/", category: "hygiene" },
         { id: "bt_conditioner", en: "conditioner", vi: "dầu xả", ipa: "/kənˈdɪʃ.ən.ər/", category: "hygiene" },
-        { id: "bt_soap", en: "soap", vi: "xà phòng", ipa: "/səʊp/", category: "hygiene" },
+        { id: "bt_soap", en: "soap", vi: "xà phòng", ipa: "/soʊp/", category: "hygiene" },
         { id: "bt_sponge", en: "body sponge", vi: "bông tắm", ipa: "/spʌndʒ/", category: "hygiene" },
-        { id: "bt_robe", en: "bathrobe", vi: "áo choàng tắm", ipa: "/ˈbɑːθ.rəʊb/", category: "clothing" },
+        { id: "bt_robe", en: "bathrobe", vi: "áo choàng tắm", ipa: "/ˈbɑːθ.roʊb/", category: "clothing" },
         { id: "bt_slippers", en: "slippers", vi: "dép đi trong nhà", ipa: "/ˈslɪp.əz/", category: "clothing" },
-        { id: "bt_lotion", en: "body lotion", vi: "sữa dưỡng thể", ipa: "/ˈləʊ.ʃən/", category: "skincare" },
+        { id: "bt_lotion", en: "body lotion", vi: "sữa dưỡng thể", ipa: "/ˈloʊ.ʃən/", category: "skincare" },
         { id: "bt_shaver", en: "razor", vi: "dao cạo râu", ipa: "/ˈreɪ.zər/", category: "hygiene" },
-        { id: "bt_dryer", en: "hair dryer", vi: "máy sấy tóc", ipa: "/ˈheə ˌdraɪ.ər/", category: "appliance" },
+        { id: "bt_dryer", en: "hair dryer", vi: "máy sấy tóc", ipa: "/ˈher ˌdraɪ.ər/", category: "appliance" },
         { id: "bt_curtain", en: "shower curtain", vi: "rèm phòng tắm", ipa: "/ˈʃaʊ.ə ˌkɜː.tən/", category: "decor" }
       ]
     },
@@ -572,11 +572,11 @@
         { id: "gd_seeds", en: "flower seeds", vi: "hạt giống hoa", ipa: "/siːdz/", category: "nature" },
         { id: "gd_gloves", en: "gardening gloves", vi: "găng tay làm vườn", ipa: "/ɡlʌvz/", category: "tools" },
         { id: "gd_trowel", en: "hand trowel", vi: "xẻng nhỏ cầm tay", ipa: "/ˈtraʊ.əl/", category: "tools" },
-        { id: "gd_shears", en: "pruning shears", vi: "kéo tỉa cành", ipa: "/ʃɪəz/", category: "tools" },
+        { id: "gd_shears", en: "pruning shears", vi: "kéo tỉa cành", ipa: "/ʃɪrz/", category: "tools" },
         { id: "gd_rake", en: "garden rake", vi: "cào lá", ipa: "/reɪk/", category: "tools" },
-        { id: "gd_wheelbarrow", en: "wheelbarrow", vi: "xe cút kít", ipa: "/ˈwiːlˌbær.əʊ/", category: "equipment" },
+        { id: "gd_wheelbarrow", en: "wheelbarrow", vi: "xe cút kít", ipa: "/ˈwiːlˌbær.oʊ/", category: "equipment" },
         { id: "gd_spade", en: "spade", vi: "cái thuổng", ipa: "/speɪd/", category: "tools" },
-        { id: "gd_pot", en: "terracotta pot", vi: "chậu đất nung", ipa: "/pɒt/", category: "decor" },
+        { id: "gd_pot", en: "terracotta pot", vi: "chậu đất nung", ipa: "/pɑt/", category: "decor" },
         { id: "gd_butterfly", en: "butterfly", vi: "bươm bướm", ipa: "/ˈbʌt.ə.flaɪ/", category: "fauna" }
       ]
     }

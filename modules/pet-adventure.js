@@ -41,7 +41,7 @@
   });
 
   const PLACE_META = Object.freeze({
-    home:       { id: "home",       nameVi: "Ở nhà",                  nameEn: "At Home",             npcName: "Mom",           npcLabel: "Mom 👩",            npcIcon: "👩",   voice: "mom" },
+    home:       { id: "home",       nameVi: "nhà",                     nameEn: "Home",                npcName: "Mom",           npcLabel: "Mom 👩",            npcIcon: "👩",   voice: "mom" },
     park:       { id: "park",       nameVi: "Công viên",              nameEn: "Greenwood Park",      npcName: "Park Staff",    npcLabel: "Park Staff 🌳",     npcIcon: "🌳",   voice: "clerk" },
     cafe:       { id: "cafe",       nameVi: "Quán cà phê",            nameEn: "Cozy Café",           npcName: "Barista",       npcLabel: "Barista 🧑‍🍳",      npcIcon: "🧑‍🍳", voice: "barista" },
     market:     { id: "market",     nameVi: "Siêu thị",               nameEn: "Fresh Supermarket",   npcName: "Store Greeter", npcLabel: "Store Greeter 💁",  npcIcon: "💁",   voice: "clerk" },
@@ -1673,6 +1673,36 @@
       } catch (e) {}
     }
 
+    // 2b. Record to evolution progression (so quest actions count toward pet evolution)
+    // This fixes the disconnect where quest completion gave XP but didn't increment
+    // care/interaction/stageMissions counters required for evolution.
+    try {
+      const needsApi2 = getNeedsEngine();
+      if (needsApi2 && !wasAlreadyDone) {
+        const actionId = payload && payload.actionId ? String(payload.actionId).toLowerCase() : "";
+        if (normId === "greet_context") {
+          // Talking to pet = interaction
+          if (typeof needsApi2.recordInteraction === "function") {
+            needsApi2.recordInteraction({ type: "talk", source: "adventure_quest" });
+          }
+        } else if (normId === "care_bond") {
+          // Care actions: determine type from actionId (pet:feed, pet:water, pet:pet, pet:play)
+          let careType = "care";
+          if (actionId.indexOf("feed") !== -1) careType = "feed";
+          else if (actionId.indexOf("water") !== -1) careType = "water";
+          else if (actionId.indexOf("play") !== -1) careType = "play";
+          else if (actionId.indexOf("pet") !== -1) careType = "pet";
+          if (typeof needsApi2.recordCareAction === "function") {
+            needsApi2.recordCareAction({ type: careType, source: "adventure_quest" });
+          }
+          if (typeof needsApi2.recordInteraction === "function") {
+            needsApi2.recordInteraction({ type: careType, source: "adventure_quest" });
+          }
+        }
+        // Note: recordStageMission is called when all 3 objectives complete (see below)
+      }
+    } catch (e) {}
+
     // 3. Mark done in session.completedObjectives
     const completedList = extractCompletedList(session.completedObjectives, place);
     if (completedList.indexOf(normId) === -1) {
@@ -1689,11 +1719,21 @@
     const petProfile = readActivePetProfile(session.petId);
     session.objectives = buildObjectivesForContext(session, petProfile, orderedCompleted);
     session.completedObjectives = attachCompletedObjectivesHelpers(orderedCompleted, place);
+    const wasComplete = session.isComplete;
     session.isComplete = orderedCompleted.length >= OBJECTIVE_IDS.length;
     session.updatedAt = Date.now();
 
     if (session.isComplete) {
       session.resultSummary = buildResultSummary(session, petProfile, session.objectives, session.sessionId);
+      // Record stage mission completion for evolution (only on first completion)
+      if (!wasComplete) {
+        try {
+          const needsApi3 = getNeedsEngine();
+          if (needsApi3 && typeof needsApi3.recordStageMission === "function") {
+            needsApi3.recordStageMission({ missionId: "adventure_quest_" + place, source: "adventure_quest" });
+          }
+        } catch (e) {}
+      }
     }
 
     writeSessionToStorage(session);

@@ -754,13 +754,13 @@
     let maxSpeed = 185 * stageMult;
     if (energy < 25) {
       state.energyMode = "tired";
-      maxSpeed = 110 * stageMult;
+      maxSpeed = 55 * stageMult;
     } else if (fun >= 78 && energy >= 50) {
       state.energyMode = "excited";
-      maxSpeed = 245 * stageMult;
+      maxSpeed = 120 * stageMult;
     } else {
       state.energyMode = "normal";
-      maxSpeed = (distToTarget > 160 ? 215 : 185) * stageMult;
+      maxSpeed = (distToTarget > 160 ? 105 : 90) * stageMult;
     }
 
     if (isCharWalking || distToChar > 130) {
@@ -769,19 +769,19 @@
         const over = clamp((d - 150) / 30, 0, 1);
         const catchupSpeed =
           energy < 25
-            ? (190 + over * 95) * Math.max(0.95, stageMult)
+            ? (95 + over * 45) * Math.max(0.95, stageMult)
             : state.energyMode === "excited"
-            ? (360 + over * 240) * stageMult
-            : (270 + over * 180) * Math.max(0.95, stageMult);
+            ? (180 + over * 120) * stageMult
+            : (135 + over * 90) * Math.max(0.95, stageMult);
         maxSpeed = Math.max(maxSpeed, catchupSpeed);
       } else if (isCharWalking && d > 95) {
         const over = clamp((d - 95) / 55, 0, 1);
         const paceBoost =
           energy < 25
-            ? (110 + over * 105) * stageMult
+            ? (55 + over * 50) * stageMult
             : state.energyMode === "excited"
-            ? (245 + over * 185) * stageMult
-            : (185 + over * 135) * stageMult;
+            ? (120 + over * 90) * stageMult
+            : (90 + over * 65) * stageMult;
         maxSpeed = Math.max(maxSpeed, paceBoost);
       }
     }

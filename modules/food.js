@@ -9,24 +9,24 @@
 // [id, en (plural/mass as used in "the …"), vi, ipa, category, shelf, default count, prep:{wash,peel}]
 const ROWS = [
   ["milk", "milk", "sữa", "/mɪlk/", "dairy", "door", 2, {}],
-  ["water", "bottled water", "nước đóng chai", "/ˈbɒt.əld ˈwɔː.tər/", "drinks", "door", 4, {}],
+  ["water", "bottled water", "nước đóng chai", "/ˈbɑt.əld ˈwɔː.tər/", "drinks", "door", 4, {}],
   ["butter", "butter", "bơ", "/ˈbʌt.ər/", "dairy", "door", 1, {}],
   ["eggs", "eggs", "trứng", "/eɡz/", "dairy", "door", 6, {}],
   ["fish", "fish", "cá", "/fɪʃ/", "meat/fish", "freezer", 2, {}],
   ["cheese", "cheese", "phô mai", "/tʃiːz/", "dairy", "top", 2, {}],
-  ["yogurt", "yogurt", "sữa chua", "/ˈjɒɡ.ət/", "dairy", "top", 4, {}],
-  ["leftovers", "leftovers", "đồ ăn thừa", "/ˈleftˌəʊ.vəz/", "leftovers", "top", 1, {}],
+  ["yogurt", "yogurt", "sữa chua", "/ˈjɑɡ.ət/", "dairy", "top", 4, {}],
+  ["leftovers", "leftovers", "đồ ăn thừa", "/ˈleftˌoʊ.vəz/", "leftovers", "top", 1, {}],
   ["bread", "bread", "bánh mì", "/bred/", "leftovers", "top", 4, {}],
-  ["tomatoes", "tomatoes", "cà chua", "/təˈmɑː.təʊz/", "vegetables", "middle", 4, { wash: 1 }],
+  ["tomatoes", "tomatoes", "cà chua", "/təˈmɑː.toʊz/", "vegetables", "middle", 4, { wash: 1 }],
   ["cucumbers", "cucumbers", "dưa chuột", "/ˈkjuː.kʌm.bəz/", "vegetables", "middle", 2, { wash: 1 }],
   ["bananas", "bananas", "chuối", "/bəˈnɑː.nəz/", "fruit", "middle", 3, { peel: 1 }],
-  ["oranges", "oranges", "cam", "/ˈɒr.ɪn.dʒɪz/", "fruit", "middle", 3, { peel: 1 }],
+  ["oranges", "oranges", "cam", "/ˈɑr.ɪn.dʒɪz/", "fruit", "middle", 3, { peel: 1 }],
   ["chicken", "chicken", "thịt gà", "/ˈtʃɪk.ɪn/", "meat/fish", "bottom", 2, {}],
   ["beef", "beef", "thịt bò", "/biːf/", "meat/fish", "bottom", 2, {}],
   ["lettuce", "lettuce", "rau xà lách", "/ˈlet.ɪs/", "vegetables", "bottom", 2, { wash: 1 }],
   ["apples", "apples", "táo", "/ˈæp.əlz/", "fruit", "bottom", 4, { wash: 1 }],
   ["carrots", "carrots", "cà rốt", "/ˈkær.əts/", "vegetables", "drawer", 4, { wash: 1, peel: 1 }],
-  ["potatoes", "potatoes", "khoai tây", "/pəˈteɪ.təʊz/", "vegetables", "drawer", 4, { wash: 1, peel: 1 }],
+  ["potatoes", "potatoes", "khoai tây", "/pəˈteɪ.toʊz/", "vegetables", "drawer", 4, { wash: 1, peel: 1 }],
   ["onions", "onions", "hành tây", "/ˈʌn.jənz/", "vegetables", "drawer", 3, { peel: 1 }],
   ["garlic", "garlic", "tỏi", "/ˈɡɑː.lɪk/", "vegetables", "drawer", 3, { peel: 1 }]
 ];
@@ -95,13 +95,13 @@ const useSteps = (W, use) => { const r = consume(W, use); return r ? [["set", "c
 const V = (en, ipa, vi) => [en, ipa, vi];
 const VOC = {
   take: V("take out", "/teɪk aʊt/", "lấy ra"), back: V("put back", "/pʊt bæk/", "cất lại"), fridge: V("fridge", "/frɪdʒ/", "tủ lạnh"),
-  wash: V("wash", "/wɒʃ/", "rửa"), peel: V("peel", "/piːl/", "gọt vỏ, bóc vỏ"), cut: V("cut", "/kʌt/", "cắt"), knife: V("knife", "/naɪf/", "con dao"),
-  board: V("cutting board", "/ˈkʌt.ɪŋ bɔːd/", "cái thớt"), bowl: V("bowl", "/bəʊl/", "cái bát"), salad: V("salad", "/ˈsæl.əd/", "món salad"),
+  wash: V("wash", "/wɑʃ/", "rửa"), peel: V("peel", "/piːl/", "gọt vỏ, bóc vỏ"), cut: V("cut", "/kʌt/", "cắt"), knife: V("knife", "/naɪf/", "con dao"),
+  board: V("cutting board", "/ˈkʌt.ɪŋ bɔːd/", "cái thớt"), bowl: V("bowl", "/boʊl/", "cái bát"), salad: V("salad", "/ˈsæl.əd/", "món salad"),
   sandwich: V("sandwich", "/ˈsæn.wɪdʒ/", "bánh mì kẹp"), glass: V("glass", "/ɡlɑːs/", "cái cốc thuỷ tinh"), pour: V("pour", "/pɔːr/", "rót"),
   eat: V("eat", "/iːt/", "ăn"), drink: V("drink", "/drɪŋk/", "uống"), soup: V("soup", "/suːp/", "món súp, canh"), fry: V("fry", "/fraɪ/", "chiên, rán"),
-  cook: V("cook", "/kʊk/", "nấu"), buy: V("buy", "/baɪ/", "mua"), groceries: V("groceries", "/ˈɡrəʊ.sər.iz/", "thực phẩm, đồ đi chợ"),
+  cook: V("cook", "/kʊk/", "nấu"), buy: V("buy", "/baɪ/", "mua"), groceries: V("groceries", "/ˈɡroʊ.sər.iz/", "thực phẩm, đồ đi chợ"),
   putaway: V("put away", "/pʊt əˈweɪ/", "cất đi"), microwave: V("microwave", "/ˈmaɪ.krə.weɪv/", "lò vi sóng"), vegetables: V("vegetables", "/ˈvedʒ.tə.bəlz/", "rau củ"),
-  fruit: V("fruit", "/fruːt/", "trái cây"), stove: V("stove", "/stəʊv/", "bếp nấu"), spread: V("spread", "/spred/", "phết"), toast: V("toast", "/təʊst/", "bánh mì nướng"),
+  fruit: V("fruit", "/fruːt/", "trái cây"), stove: V("stove", "/stoʊv/", "bếp nấu"), spread: V("spread", "/spred/", "phết"), toast: V("toast", "/toʊst/", "bánh mì nướng"),
   slice: V("slice", "/slaɪs/", "lát; thái lát"), counter: V("counter", "/ˈkaʊn.tər/", "mặt bàn bếp")
 };
 const iv = id => [ITEMS[id].en, ITEMS[id].ipa, ITEMS[id].vi];

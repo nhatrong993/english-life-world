@@ -79,10 +79,10 @@
   });
 
   var STAGE_SCALE_MULTIPLIERS = Object.freeze({
-    baby: 0.88,
-    young: 0.95,
-    teen: 1.0,
-    adult: 1.06,
+    baby: 0.78,
+    young: 0.88,
+    teen: 0.96,
+    adult: 1.04,
     elite: 1.12
   });
 
@@ -91,7 +91,7 @@
       level: 1,
       stage: "baby",
       minXp: 0,
-      scaleMultiplier: 0.88,
+      scaleMultiplier: 0.78,
       stageBadge: "🌱 Lv.1 Bạn Mới Đáng Yêu",
       stageNameVi: "Bạn Mới Đáng Yêu",
       stageNameEn: "Little Sprout Buddy"
@@ -100,7 +100,7 @@
       level: 2,
       stage: "young",
       minXp: 100,
-      scaleMultiplier: 0.95,
+      scaleMultiplier: 0.88,
       stageBadge: "🌿 Lv.2 Bạn Nhỏ Thân Thiết",
       stageNameVi: "Bạn Nhỏ Thân Thiết",
       stageNameEn: "Curious Companion"
@@ -109,7 +109,7 @@
       level: 3,
       stage: "teen",
       minXp: 250,
-      scaleMultiplier: 1.0,
+      scaleMultiplier: 0.96,
       stageBadge: "🌸 Lv.3 Đôi Bạn Ăn Ý",
       stageNameVi: "Đôi Bạn Ăn Ý",
       stageNameEn: "Playful Explorer"
@@ -118,7 +118,7 @@
       level: 4,
       stage: "adult",
       minXp: 450,
-      scaleMultiplier: 1.06,
+      scaleMultiplier: 1.04,
       stageBadge: "🌟 Lv.4 Tri Kỷ Tỏa Sáng",
       stageNameVi: "Tri Kỷ Tỏa Sáng",
       stageNameEn: "Shining Star Partner"
@@ -2546,6 +2546,76 @@
     return getSnapshot();
   }
 
+  function setPetStageForTest(petId, stage) {
+    var targetId = getActivePetId();
+    var rawStage = stage;
+    if (stage === undefined && typeof petId === "string" && STAGES.indexOf(petId.trim().toLowerCase()) !== -1) {
+      rawStage = petId;
+    } else if (normalizeCanonicalPetId(petId)) {
+      targetId = normalizeCanonicalPetId(petId);
+    }
+    var targetStage = normalizeStage(rawStage, "baby");
+    var targetLevel = LEVEL_BY_STAGE[targetStage] || 1;
+    var now = Date.now();
+    var rec = ensurePetRecord(targetId, now);
+    var prevStage = rec.stage || "baby";
+    var prevLevel = rec.level || LEVEL_BY_STAGE[prevStage] || 1;
+    var req = STAGE_REQUIREMENTS[targetStage] || STAGE_REQUIREMENTS.baby;
+
+    rec.initialized = true;
+    rec.stage = targetStage;
+    rec.level = targetLevel;
+    rec.xp = Math.max(0, req.minXp);
+    var lvlInfo = computeStageLevelInfo(rec.xp, targetLevel);
+    rec.stageBadge = lvlInfo.stageBadge;
+    rec.lastSeen = now;
+    rec._pendingEvolutionReceipt = null;
+
+    var floorCount = Math.max(0, targetLevel - 1);
+    rec.progression.care = floorCount;
+    rec.progression.interaction = floorCount;
+    rec.progression.stageMissions = floorCount;
+    rec.progression.stageCare = 0;
+    rec.progression.stageInteraction = 0;
+    rec.progression.stageMissionsCurrent = 0;
+    rec.progression.stageSkillUses = 0;
+    syncProgressionAliases(rec.progression);
+    rec.unlockedSkills = buildUnlockedSkillsForLevel(targetId, targetLevel);
+
+    if (targetId === state.activePetId) {
+      syncRootMirrorsFromActivePet();
+    }
+    try {
+      getStorage().setItem("elw_pet_stage", targetStage);
+    } catch (e) {}
+    save();
+
+    var receipt = {
+      evolved: prevStage !== targetStage,
+      petId: targetId,
+      from: prevStage,
+      to: targetStage,
+      fromLevel: prevLevel,
+      toLevel: targetLevel,
+      stage: targetStage,
+      level: targetLevel,
+      xp: rec.xp,
+      missing: [],
+      at: now,
+      consumed: false,
+      notifiedFns: []
+    };
+    emitStageUpEvent(receipt);
+    notifyListeners("change", {
+      petId: targetId,
+      from: prevStage,
+      to: targetStage,
+      stage: targetStage,
+      level: targetLevel
+    });
+    return getPetProgress(targetId);
+  }
+
   function buildByPetIdSnapshot() {
     var out = {};
     for (var i = 0; i < PET_IDS.length; i++) {
@@ -2688,6 +2758,7 @@
     applyOfflineDecay: applyOfflineDecay,
     simulateElapsed: simulateElapsed,
     resetForTest: resetForTest,
+    setPetStageForTest: setPetStageForTest,
     resetPetProgress: resetPetProgress,
     getRoster: function () { return PET_LIST.slice(); },
     getAllPets: function () { return PET_LIST.slice(); },
@@ -2723,6 +2794,9 @@
     recordSkillUse: recordSkillUse,
     recordStageMission: recordStageMission,
     checkStageEvolution: checkStageEvolution,
+    evaluateEvolution: function (petId) {
+      return checkStageEvolution(petId || getActivePetId());
+    },
     subscribe: subscribe,
     get state() {
       return getState();

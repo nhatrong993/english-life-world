@@ -16,25 +16,25 @@ const mk = (id, obj, label, labelVi, sentence, vi, key, vocab, grammar, chunks, 
   id, obj, label, labelVi, sentence, vi, key, vocab, grammar, chunks, disc: { ans: disc[0], opts: disc.slice() }, patterns, pre, seq, story, sitOk: !!sitOk
 });
 const V = {
-  look: ["look at", "/lʊk æt/", "nhìn vào"], clock: ["clock", "/klɒk/", "đồng hồ"], time: ["time", "/taɪm/", "thời gian, giờ"],
+  look: ["look at", "/lʊk æt/", "nhìn vào"], clock: ["clock", "/klɑk/", "đồng hồ"], time: ["time", "/taɪm/", "thời gian, giờ"],
   straighten: ["straighten", "/ˈstreɪ.tən/", "làm cho thẳng"], picture: ["picture", "/ˈpɪk.tʃər/", "bức tranh"], crooked: ["crooked", "/ˈkrʊk.ɪd/", "bị lệch, cong"],
-  turnon: ["turn on", "/tɜːn ɒn/", "bật"], turnoff: ["turn off", "/tɜːn ɒf/", "tắt"], ceiling: ["ceiling light", "/ˈsiː.lɪŋ laɪt/", "đèn trần"], switch: ["light switch", "/ˈlaɪt swɪtʃ/", "công tắc đèn"],
-  ac: ["air conditioner", "/ˈeə kənˌdɪʃ.ən.ər/", "máy điều hoà"], cool: ["cool", "/kuːl/", "mát"], hot: ["hot", "/hɒt/", "nóng"],
-  dust: ["dust", "/dʌst/", "phủi bụi; bụi"], frame: ["photo frame", "/ˈfəʊ.təʊ freɪm/", "khung ảnh"], family: ["family", "/ˈfæm.əl.i/", "gia đình"], photo: ["photo", "/ˈfəʊ.təʊ/", "bức ảnh"],
-  light: ["light", "/laɪt/", "thắp, châm (lửa)"], candle: ["candle", "/ˈkæn.dəl/", "cây nến"], blowout: ["blow out", "/bləʊ aʊt/", "thổi tắt"], match: ["match", "/mætʃ/", "que diêm"],
+  turnon: ["turn on", "/tɜːn ɑn/", "bật"], turnoff: ["turn off", "/tɜːn ɑf/", "tắt"], ceiling: ["ceiling light", "/ˈsiː.lɪŋ laɪt/", "đèn trần"], switch: ["light switch", "/ˈlaɪt swɪtʃ/", "công tắc đèn"],
+  ac: ["air conditioner", "/ˈer kənˌdɪʃ.ən.ər/", "máy điều hoà"], cool: ["cool", "/kuːl/", "mát"], hot: ["hot", "/hɑt/", "nóng"],
+  dust: ["dust", "/dʌst/", "phủi bụi; bụi"], frame: ["photo frame", "/ˈfoʊ.toʊ freɪm/", "khung ảnh"], family: ["family", "/ˈfæm.əl.i/", "gia đình"], photo: ["photo", "/ˈfoʊ.toʊ/", "bức ảnh"],
+  light: ["light", "/laɪt/", "thắp, châm (lửa)"], candle: ["candle", "/ˈkæn.dəl/", "cây nến"], blowout: ["blow out", "/bloʊ aʊt/", "thổi tắt"], match: ["match", "/mætʃ/", "que diêm"],
   tidy: ["tidy", "/ˈtaɪ.di/", "dọn gọn gàng"], bookshelf: ["bookshelf", "/ˈbʊk.ʃelf/", "giá sách"], books: ["books", "/bʊks/", "những quyển sách"],
-  spin: ["spin", "/spɪn/", "quay tròn"], globe: ["globe", "/ɡləʊb/", "quả địa cầu"], find: ["find", "/faɪnd/", "tìm"], vietnam: ["Vietnam", "/ˌvjetˈnæm/", "Việt Nam"], map: ["map", "/mæp/", "bản đồ"],
-  puton: ["put on", "/pʊt ɒn/", "mặc vào, đi vào"], takeoff: ["take off", "/teɪk ɒf/", "cởi ra"], jacket: ["jacket", "/ˈdʒæk.ɪt/", "áo khoác"], hangup: ["hang up", "/hæŋ ʌp/", "treo lên"], hook: ["hook", "/hʊk/", "cái móc"],
+  spin: ["spin", "/spɪn/", "quay tròn"], globe: ["globe", "/ɡloʊb/", "quả địa cầu"], find: ["find", "/faɪnd/", "tìm"], vietnam: ["Vietnam", "/ˌvjetˈnæm/", "Việt Nam"], map: ["map", "/mæp/", "bản đồ"],
+  puton: ["put on", "/pʊt ɑn/", "mặc vào, đi vào"], takeoff: ["take off", "/teɪk ɑf/", "cởi ra"], jacket: ["jacket", "/ˈdʒæk.ɪt/", "áo khoác"], hangup: ["hang up", "/hæŋ ʌp/", "treo lên"], hook: ["hook", "/hʊk/", "cái móc"],
   vacuum: ["vacuum", "/ˈvæk.juːm/", "hút bụi"], rug: ["rug", "/rʌɡ/", "tấm thảm"], crumbs: ["crumbs", "/krʌmz/", "vụn bánh"],
   slippers: ["slippers", "/ˈslɪp.əz/", "dép đi trong nhà"], feet: ["feet", "/fiːt/", "bàn chân (số nhiều)"],
   take: ["take", "/teɪk/", "lấy, mang theo"], umbrella: ["umbrella", "/ʌmˈbrel.ə/", "cái ô"], rain: ["rain", "/reɪn/", "mưa"], putback: ["put back", "/pʊt bæk/", "để lại chỗ cũ"], stand: ["umbrella stand", "/ʌmˈbrel.ə stænd/", "ống đựng ô"],
   smell: ["smell", "/smel/", "ngửi"], flowers: ["flowers", "/ˈflaʊ.əz/", "những bông hoa"], vase: ["vase", "/vɑːz/", "lọ hoa"], change: ["change", "/tʃeɪndʒ/", "thay"], fresh: ["fresh", "/freʃ/", "tươi, sạch, mới"], water: ["water", "/ˈwɔː.tər/", "nước; tưới"],
   hanging: ["hanging plant", "/ˈhæŋ.ɪŋ plɑːnt/", "chậu cây treo"], thirsty: ["thirsty", "/ˈθɜː.sti/", "khát nước"],
-  open: ["open", "/ˈəʊ.pən/", "mở"], close: ["close", "/kləʊz/", "đóng"], breadbox: ["bread box", "/ˈbred bɒks/", "hộp đựng bánh mì"], bread: ["bread", "/bred/", "bánh mì"],
-  recycle: ["recycle", "/ˌriːˈsaɪ.kəl/", "tái chế"], bottle: ["bottle", "/ˈbɒt.əl/", "cái chai"], bin: ["recycling bin", "/riːˈsaɪ.klɪŋ bɪn/", "thùng rác tái chế"], plastic: ["plastic", "/ˈplæs.tɪk/", "nhựa"],
-  fairy: ["fairy lights", "/ˈfeə.ri laɪts/", "dây đèn trang trí"], cosy: ["cosy", "/ˈkəʊ.zi/", "ấm cúng"],
+  open: ["open", "/ˈoʊ.pən/", "mở"], close: ["close", "/kloʊz/", "đóng"], breadbox: ["bread box", "/ˈbred bɑks/", "hộp đựng bánh mì"], bread: ["bread", "/bred/", "bánh mì"],
+  recycle: ["recycle", "/ˌriːˈsaɪ.kəl/", "tái chế"], bottle: ["bottle", "/ˈbɑt.əl/", "cái chai"], bin: ["recycling bin", "/riːˈsaɪ.klɪŋ bɪn/", "thùng rác tái chế"], plastic: ["plastic", "/ˈplæs.tɪk/", "nhựa"],
+  fairy: ["fairy lights", "/ˈfer.ri laɪts/", "dây đèn trang trí"], cosy: ["cosy", "/ˈkoʊ.zi/", "ấm cúng"],
   squeeze: ["squeeze", "/skwiːz/", "bóp"], duck: ["rubber duck", "/ˈrʌb.ə dʌk/", "vịt cao su"], squeak: ["squeak", "/skwiːk/", "kêu chít chít"],
-  check: ["check", "/tʃek/", "kiểm tra"], extinguisher: ["fire extinguisher", "/ˈfaɪər ɪkˌstɪŋ.ɡwɪ.ʃər/", "bình chữa cháy"], gauge: ["gauge", "/ɡeɪdʒ/", "đồng hồ đo"], safety: ["safety", "/ˈseɪf.ti/", "sự an toàn"],
+  check: ["check", "/tʃek/", "kiểm tra"], extinguisher: ["fire extinguisher", "/ˈfaɪrr ɪkˌstɪŋ.ɡwɪ.ʃər/", "bình chữa cháy"], gauge: ["gauge", "/ɡeɪdʒ/", "đồng hồ đo"], safety: ["safety", "/ˈseɪf.ti/", "sự an toàn"],
   fill: ["fill", "/fɪl/", "đổ đầy"], birdbath: ["bird bath", "/ˈbɜːd bɑːθ/", "bồn nước cho chim"], birds: ["birds", "/bɜːdz/", "những con chim"]
 };
 const v = (...k) => k.map(x => { if (!V[x]) throw new Error("details vocab " + x); return V[x]; });
@@ -42,14 +42,14 @@ const idle = ["pose", "idle", 1];
 
 /* ---------------- 20 objects ---------------- */
 const LIV_OBJ = {
-  wallclock: { en: "wall clock", vi: "đồng hồ treo tường", ipa: "/ˌwɔːl ˈklɒk/", acts: ["check_the_time"] },
+  wallclock: { en: "wall clock", vi: "đồng hồ treo tường", ipa: "/ˌwɔːl ˈklɑk/", acts: ["check_the_time"] },
   wallpicture: { en: "picture", vi: "bức tranh", ipa: "/ˈpɪk.tʃər/", acts: ["straighten_picture"] },
   ceilinglight: { en: "ceiling light", vi: "đèn trần", ipa: "/ˈsiː.lɪŋ laɪt/", acts: ["turn_on_ceiling_light", "turn_off_ceiling_light"] },
-  aircon: { en: "air conditioner", vi: "máy điều hoà", ipa: "/ˈeə kənˌdɪʃ.ən.ər/", acts: ["turn_on_air_conditioner", "turn_off_air_conditioner"] },
-  photoframe: { en: "photo frame", vi: "khung ảnh", ipa: "/ˈfəʊ.təʊ freɪm/", acts: ["dust_photo_frame", "look_at_family_photo"] },
+  aircon: { en: "air conditioner", vi: "máy điều hoà", ipa: "/ˈer kənˌdɪʃ.ən.ər/", acts: ["turn_on_air_conditioner", "turn_off_air_conditioner"] },
+  photoframe: { en: "photo frame", vi: "khung ảnh", ipa: "/ˈfoʊ.toʊ freɪm/", acts: ["dust_photo_frame", "look_at_family_photo"] },
   shelfcandle: { en: "candle", vi: "cây nến", ipa: "/ˈkæn.dəl/", acts: ["light_candle", "blow_out_candle"] },
   bookshelf: { en: "bookshelf", vi: "giá sách", ipa: "/ˈbʊk.ʃelf/", acts: ["tidy_bookshelf"] },
-  globe: { en: "globe", vi: "quả địa cầu", ipa: "/ɡləʊb/", acts: ["spin_globe", "find_vietnam_on_globe"] },
+  globe: { en: "globe", vi: "quả địa cầu", ipa: "/ɡloʊb/", acts: ["spin_globe", "find_vietnam_on_globe"] },
   jacket: { en: "jacket", vi: "áo khoác", ipa: "/ˈdʒæk.ɪt/", acts: ["put_on_jacket", "hang_up_jacket"] },
   livrug: { en: "rug", vi: "tấm thảm", ipa: "/rʌɡ/", acts: ["vacuum_rug"] },
   livslippers: { en: "slippers", vi: "dép đi trong nhà", ipa: "/ˈslɪp.əz/", acts: ["put_on_slippers", "take_off_slippers"] },
@@ -59,12 +59,12 @@ const LIV_OBJ = {
 };
 const OTHER_OBJ = {
   kitchen: {
-    breadbox: { en: "bread box", vi: "hộp đựng bánh mì", ipa: "/ˈbred bɒks/", acts: ["open_bread_box", "close_bread_box"] },
+    breadbox: { en: "bread box", vi: "hộp đựng bánh mì", ipa: "/ˈbred bɑks/", acts: ["open_bread_box", "close_bread_box"] },
     recyclingbin: { en: "recycling bin", vi: "thùng rác tái chế", ipa: "/riːˈsaɪ.klɪŋ bɪn/", acts: ["recycle_bottle"] }
   },
-  bedroom: { fairylights: { en: "fairy lights", vi: "dây đèn trang trí", ipa: "/ˈfeə.ri laɪts/", acts: ["turn_on_fairy_lights", "turn_off_fairy_lights"] } },
+  bedroom: { fairylights: { en: "fairy lights", vi: "dây đèn trang trí", ipa: "/ˈfer.ri laɪts/", acts: ["turn_on_fairy_lights", "turn_off_fairy_lights"] } },
   bathroom: { rubberduck: { en: "rubber duck", vi: "vịt cao su", ipa: "/ˈrʌb.ə dʌk/", acts: ["squeeze_rubber_duck"] } },
-  garage: { extinguisher: { en: "fire extinguisher", vi: "bình chữa cháy", ipa: "/ˈfaɪər ɪkˌstɪŋ.ɡwɪ.ʃər/", acts: ["check_fire_extinguisher"] } },
+  garage: { extinguisher: { en: "fire extinguisher", vi: "bình chữa cháy", ipa: "/ˈfaɪrr ɪkˌstɪŋ.ɡwɪ.ʃər/", acts: ["check_fire_extinguisher"] } },
   garden: { birdbath: { en: "bird bath", vi: "bồn nước cho chim", ipa: "/ˈbɜːd bɑːθ/", acts: ["fill_bird_bath"] } }
 };
 

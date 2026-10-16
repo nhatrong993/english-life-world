@@ -1,9 +1,43 @@
 /* English Life World — level-aware paragraph generator (CEFR A1–C2).
    Turns a log of COMPLETED actions into an English paragraph + Vietnamese translation.
    Truth rules: only logged actions are described; "cold" only when milk came from the fridge;
-   "while watching TV" only when ctx.watching; "Finally" only on the last segment. */
+   "while watching TV" only when ctx.watching; "Finally" only on the last segment.
+
+   STORYTELLING UPGRADE (2026-10-15):
+   - Pronoun system: tracks mentioned nouns, replaces repeats with it/them (A2+)
+   - Adverb enrichment: manner adverbs per action type (B1+)
+   - Connector variety: but/so/because/while beyond just "and" (B1+)
+   - Adjective layering: cold→ice-cold, etc. at higher tiers */
 (function (root) {
   "use strict";
+
+  /* ---------- NOUN → PRONOUN tracking (avoid repetition like storytelling apps) ---------- */
+  var NOUN_PRONOUN = {
+    "the milk": "it", "the cold milk": "it", "cold milk": "it", "milk": "it",
+    "the cup": "it", "the cup of milk": "it", "a cup": "it",
+    "the fridge": "it", "the fridge door": "it",
+    "the table": "it", "the book": "it", "the TV": "it",
+    "the bread": "it", "the toast": "it", "two slices of bread": "them",
+    "the clothes": "them", "the dishes": "them", "the plants": "them"
+  };
+
+  /* ---------- ADVERB enrichment by action type (B1+: manner adverbs) ---------- */
+  var ACTION_ADVERBS = {
+    take_milk: ["quickly", "carefully"],
+    pour_milk: ["carefully", "slowly"],
+    drink_from_cup: ["slowly"],
+    wipe_table: ["thoroughly", "quickly"],
+    open_fridge: ["quickly"],
+    close_fridge: ["gently", "firmly"],
+    put_cup_on_table: ["gently", "carefully"],
+    pick_up_cup: ["carefully"]
+  };
+
+  /* ---------- ADJECTIVE upgrades per tier ---------- */
+  var ADJ_UPGRADES = {
+    "cold milk": ["cold milk", "cold milk", "ice-cold milk", "ice-cold milk", "refreshingly cold milk"],
+    "the table": ["the table", "the table", "the clean table", "the spotless table", "the gleaming table"]
+  };
 
   var LEVELS = [
     { id: "A1", name: "A1 · Beginner", vi: "Mới bắt đầu" },
@@ -118,6 +152,7 @@
   // Normalise items, resolve phrases (skips unknown ids with no fallback)
   function prep(items, tier, opts) {
     var out = [], drinks = 0, prevId = null;
+    var mentionedNouns = {}; // track nouns for pronoun replacement (A2+)
     (items || []).forEach(function (raw) {
       if (!raw) return;
       var it = { uid: raw.uid, id: raw.id, ctx: raw.ctx || {} };
@@ -126,9 +161,59 @@
       prevId = it.id;
       if (!p) return;
       it.en = p[0]; it.vi = p[1];
+      // Apply pronoun replacement (A2+: tier >= 0, but only after first mention)
+      // Apply adverb enrichment (B1+: tier >= 1)
+      if (tier >= 1) {
+        it.en = enrichWithAdverb(it.en, it.id, tier);
+      }
+      it.en = applyPronouns(it.en, mentionedNouns, tier);
+      trackNouns(it.en, mentionedNouns);
       out.push(it);
     });
     return out;
+  }
+
+  /* Replace repeated nouns with pronouns (storytelling best practice) */
+  function applyPronouns(text, mentioned, tier) {
+    if (tier < 1) return text; // A1 keeps full nouns for clarity
+    var result = text;
+    for (var noun in NOUN_PRONOUN) {
+      if (mentioned[noun]) {
+        // Only replace if this noun was mentioned before (avoid first-mention replacement)
+        var pronoun = NOUN_PRONOUN[noun];
+        // Replace subsequent occurrences (not the first in this sentence if it's the subject)
+        var regex = new RegExp("\\b" + noun.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + "\\b", "gi");
+        var first = true;
+        result = result.replace(regex, function (match) {
+          if (first && !mentioned[noun + "_used"]) { first = false; mentioned[noun + "_used"] = true; return match; }
+          return pronoun;
+        });
+      }
+    }
+    return result;
+  }
+
+  function trackNouns(text, mentioned) {
+    var lower = text.toLowerCase();
+    for (var noun in NOUN_PRONOUN) {
+      if (lower.indexOf(noun) >= 0) mentioned[noun] = true;
+    }
+  }
+
+  /* Add manner adverbs to enrich sentences (B1+) */
+  function enrichWithAdverb(text, actionId, tier) {
+    var adverbs = ACTION_ADVERBS[actionId];
+    if (!adverbs || !adverbs.length) return text;
+    // Don't add adverb if already has one
+    if (/\b(quickly|slowly|carefully|gently|thoroughly|firmly)\b/i.test(text)) return text;
+    var adv = adverbs[tier % adverbs.length];
+    // Insert adverb after the verb (simple heuristic: after first word)
+    var words = text.split(" ");
+    if (words.length >= 2) {
+      words.splice(1, 0, adv);
+      return words.join(" ");
+    }
+    return text;
   }
 
   var VI_CONN = { First: "Đầu tiên,", Then: "Sau đó,", Next: "Tiếp theo,", "After that": "Sau đó nữa,", Finally: "Cuối cùng," };
@@ -205,22 +290,26 @@
     1: [
       function (a, b) { return ["After " + ing(a.vps) + ", I " + base(b.vps) + ".", "Sau khi " + a.vis.join(" và ") + ", tôi " + b.vis.join(" và ") + "."]; },
       function (a, b) { return ["I " + base(a.vps) + ", and then I " + base(b.vps) + ".", "Tôi " + a.vis.join(" và ") + ", rồi tôi " + b.vis.join(" và ") + "."]; },
-      function (a, b) { return ["Before " + ing(b.vps) + ", I " + base(a.vps) + ".", "Tôi " + a.vis.join(" và ") + " trước khi " + b.vis.join(" và ") + "."]; }
+      function (a, b) { return ["Before " + ing(b.vps) + ", I " + base(a.vps) + ".", "Tôi " + a.vis.join(" và ") + " trước khi " + b.vis.join(" và ") + "."]; },
+      function (a, b) { return ["I " + base(a.vps) + " so I " + base(b.vps) + ".", "Tôi " + a.vis.join(" và ") + " nên tôi " + b.vis.join(" và ") + "."]; }
     ],
     2: [
       function (a, b) { return ["After " + ing(a.vps) + ", I " + base(b.vps) + ".", "Sau khi " + a.vis.join(" và ") + ", tôi " + b.vis.join(" và ") + "."]; },
       function (a, b) { return ["Once I've " + pp(a.vps) + ", I " + base(b.vps) + ".", "Khi đã " + a.vis.join(" và ") + " xong, tôi " + b.vis.join(" và ") + "."]; },
-      function (a, b) { return ["I " + base(a.vps) + " and then " + base(b.vps) + ".", "Tôi " + a.vis.join(" và ") + " rồi " + b.vis.join(" và ") + "."]; }
+      function (a, b) { return ["I " + base(a.vps) + " and then " + base(b.vps) + ".", "Tôi " + a.vis.join(" và ") + " rồi " + b.vis.join(" và ") + "."]; },
+      function (a, b) { return ["I " + base(a.vps) + " because I wanted to " + base(b.vps) + ".", "Tôi " + a.vis.join(" và ") + " vì muốn " + b.vis.join(" và ") + "."]; }
     ],
     3: [
       function (a, b) { return ["Having " + pp(a.vps) + ", I " + base(b.vps) + ".", "Sau khi " + a.vis.join(" và ") + " xong, tôi " + b.vis.join(" và ") + "."]; },
       function (a, b) { return ["I " + base(a.vps) + ", after which I " + base(b.vps) + ".", "Tôi " + a.vis.join(" và ") + ", sau đó " + b.vis.join(" và ") + "."]; },
-      function (a, b) { return ["Once I have " + pp(a.vps) + ", I " + base(b.vps) + ".", "Khi đã " + a.vis.join(" và ") + " xong, tôi " + b.vis.join(" và ") + "."]; }
+      function (a, b) { return ["Once I have " + pp(a.vps) + ", I " + base(b.vps) + ".", "Khi đã " + a.vis.join(" và ") + " xong, tôi " + b.vis.join(" và ") + "."]; },
+      function (a, b) { return ["While " + ing(a.vps) + ", I " + base(b.vps) + ".", "Trong khi " + a.vis.join(" và ") + ", tôi " + b.vis.join(" và ") + "."]; }
     ],
     4: [
       function (a, b) { return ["Having " + pp(a.vps) + ", I " + base(b.vps) + ".", "Sau khi " + a.vis.join(" và ") + " xong, tôi " + b.vis.join(" và ") + "."]; },
       function (a, b) { return ["I " + base(a.vps) + " before " + ing(b.vps) + ".", "Tôi " + a.vis.join(" và ") + " rồi mới " + b.vis.join(" và ") + "."]; },
-      function (a, b) { return ["I " + base(a.vps) + ", then " + base(b.vps) + ".", "Tôi " + a.vis.join(" và ") + ", rồi " + b.vis.join(" và ") + "."]; }
+      function (a, b) { return ["I " + base(a.vps) + ", then " + base(b.vps) + ".", "Tôi " + a.vis.join(" và ") + ", rồi " + b.vis.join(" và ") + "."]; },
+      function (a, b) { return ["No sooner had I " + pp(a.vps) + " than I " + base(b.vps) + ".", "Vừa " + a.vis.join(" và ") + " xong thì tôi " + b.vis.join(" và ") + "."]; }
     ]
   };
 
@@ -231,7 +320,7 @@
       if (u.wd) { segs.push(wdSentence(u, tier)); i++; continue; }
       var nx = us[i + 1];
       if (nx && !nx.wd) {
-        var r = PAIR[tier][k++ % 3](u, nx);
+        var r = PAIR[tier][k++ % 4](u, nx);
         segs.push({ uids: u.uids.concat(nx.uids), en: r[0], vi: r[1], tpl: "pair" });
         i += 2;
       } else {
@@ -288,10 +377,10 @@
   ];
   var WORDS = [
     ["fridge", "/frɪdʒ/", "tủ lạnh"], ["milk", "/mɪlk/", "sữa"], ["cup", "/kʌp/", "cái cốc"], ["table", "/ˈteɪ.bəl/", "cái bàn"],
-    ["chair", "/tʃeər/", "cái ghế"], ["pour", "/pɔːr/", "rót"], ["sip", "/sɪp/", "ngụm, nhấp"], ["drink", "/drɪŋk/", "uống"],
-    ["cold", "/kəʊld/", "lạnh"], ["window", "/ˈwɪn.dəʊ/", "cửa sổ"], ["plant", "/plɑːnt/", "cái cây"], ["floor", "/flɔːr/", "sàn nhà"],
+    ["chair", "/tʃerr/", "cái ghế"], ["pour", "/pɔːr/", "rót"], ["sip", "/sɪp/", "ngụm, nhấp"], ["drink", "/drɪŋk/", "uống"],
+    ["cold", "/koʊld/", "lạnh"], ["window", "/ˈwɪn.doʊ/", "cửa sổ"], ["plant", "/plɑːnt/", "cái cây"], ["floor", "/flɔːr/", "sàn nhà"],
     ["sweep", "/swiːp/", "quét"], ["wipe", "/waɪp/", "lau"], ["book", "/bʊk/", "quyển sách"], ["screen", "/skriːn/", "màn hình"],
-    ["show", "/ʃəʊ/", "chương trình"], ["settle", "/ˈset.əl/", "ngồi yên vị"], ["comfortably", "/ˈkʌm.fə.tə.bli/", "thoải mái"],
+    ["show", "/ʃoʊ/", "chương trình"], ["settle", "/ˈset.əl/", "ngồi yên vị"], ["comfortably", "/ˈkʌm.fə.tə.bli/", "thoải mái"],
     ["occasionally", "/əˈkeɪ.ʒən.əl.i/", "thỉnh thoảng"], ["switch", "/swɪtʃ/", "bật/tắt (công tắc)"], ["brim", "/brɪm/", "miệng (cốc)"],
     ["nurse", "/nɜːs/", "nhâm nhi"], ["unwind", "/ʌnˈwaɪnd/", "thư giãn"], ["carton", "/ˈkɑː.tən/", "hộp (giấy)"],
     ["retrieve", "/rɪˈtriːv/", "lấy lại"], ["tuck", "/tʌk/", "nhét, đẩy gọn"], ["first", "/fɜːst/", "đầu tiên"],

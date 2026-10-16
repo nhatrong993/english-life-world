@@ -257,17 +257,16 @@
     while (layer.firstChild) layer.removeChild(layer.firstChild);
     const byId = id => svg.querySelector("#o-" + id) || (id === "sink" ? svg.querySelector("#o-dishrack") : null);
     const add = (n, objId, emo) => {
+      if (objId === "cat" || n === "catHunger" || n === "catThirst" || n === "mood" || n === "catBowlDirty") return;
       const v = sev(bad(n, s)); if (!v) return;
-      let b = svgBox(byId(objId), svg); if (!b) return;
-      if (objId === "cat" && b.height > 50) b = { x: b.x, y: b.y + b.height - 50, width: b.width, height: 50 }; // ignore zZ / tag above the cat
+      const el = byId(objId); if (!el) return;
+      if (W && W.room && el.dataset && el.dataset.room && el.dataset.room !== W.room) return;
+      let b = svgBox(el, svg); if (!b) return;
       const g = bubble(layer, b, emo, v, n);
-      if (n === "catThirst" || n === "mood") g.setAttribute("transform", `translate(${n === "mood" ? -38 : 38},0)`);
-      if (n === "catBowlDirty") g.setAttribute("transform", "translate(0,-40)");
       if (n === "dirtyDishes" && v >= 2) for (let i = 0; i < v + 1; i++) mk("ellipse", { cx: b.x + b.width / 2, cy: b.y + 6 - i * 5, rx: 14, ry: 3.5, fill: "#f6f1e8", stroke: "#b9a68a", "stroke-width": 1.5 }, g);
       if (n === "laundryPile" && v >= 3) ["#7aa3d6", "#e58a8a", "#9bc48a"].forEach((c, i) => mk("rect", { x: b.x + 4 + i * 12, y: b.y - 6 + (i % 2) * 3, width: 14, height: 8, rx: 3, fill: c }, g));
     };
-    add("catHunger", "cat", "🍽️"); add("catThirst", "cat", "💧"); add("mood", "cat", "💔");
-    add("catBowlDirty", "cat", "🥣"); add("plantThirst", "plant", "💧");
+    add("plantThirst", "plant", "💧");
     add("laundryPile", "laundry", "🧺"); add("dirtyDishes", "sink", "🍽️"); add("trashFull", "trashbin", "🗑️");
     // plant droop
     const pl = svg.querySelector("#o-plant");

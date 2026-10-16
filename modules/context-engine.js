@@ -1315,7 +1315,10 @@
           root.ELW_LIFE.draw3DSpeechBubble(responder.anchor, responder.name, responder.icon, p.replyEn, p.replyVi, "say", 5000);
         }
         if (root.ELW_VOICES && p.replyEn && !isPet) {
-          root.ELW_VOICES.speak(p.replyEn, responder.voice || "adult_female", { rate: 0.95 }).catch(() => {});
+          /* Use unified NPC voice mapping if available */
+          var vId = responder.voice || "adult_female";
+          try{ if(root.NPC_VOICE && root.NPC_VOICE[vId]) vId = root.NPC_VOICE[vId]; }catch(e){}
+          root.ELW_VOICES.speak(p.replyEn, vId, { rate: 0.95 }).catch(() => {});
         }
       }, 250);
       ctxReplyTimers.add(tid);

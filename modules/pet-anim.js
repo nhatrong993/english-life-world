@@ -54,6 +54,16 @@
     elite: 5
   };
 
+  var STAGE_SCALES = Object.freeze({
+    baby: 0.78,
+    young: 0.88,
+    teen: 0.96,
+    adult: 1.04,
+    elite: 1.12
+  });
+
+  var failedStageAssets = Object.create(null);
+
   var STAGE_TITLES = {
     baby: "Baby",
     young: "Young",
@@ -564,13 +574,62 @@
     return "adult";
   }
 
+  function hasStageAssetAvailable(petId, stage, stateName) {
+    var stagePath = "assets/pets/" + petId + "/" + stage + "/" + stateName + ".png";
+    if (failedStageAssets[stagePath]) return false;
+
+    if (typeof window !== "undefined") {
+      var assets = window.ELW_PET_ASSETS || window.ELW_EMBEDDED_PET_ASSETS;
+      if (assets && typeof assets === "object") {
+        if (Object.prototype.hasOwnProperty.call(assets, stagePath) && assets[stagePath]) {
+          return true;
+        }
+        if (assets[petId] && typeof assets[petId] === "object" && assets[petId][stage] && assets[petId][stage][stateName]) {
+          return true;
+        }
+      }
+
+      var manifest = window.ELW_PET_MANIFEST || window.PET_MANIFEST;
+      if (Array.isArray(manifest)) {
+        for (var i = 0; i < manifest.length; i++) {
+          var e = manifest[i];
+          if (e && (e === stagePath || e.assetPath === stagePath || (e.petId === petId && e.stage === stage && e.state === stateName))) {
+            return true;
+          }
+        }
+      } else if (manifest && typeof manifest === "object") {
+        if (manifest[stagePath]) return true;
+        if (Array.isArray(manifest.entries)) {
+          for (var j = 0; j < manifest.entries.length; j++) {
+            var it = manifest.entries[j];
+            if (it && (it === stagePath || it.assetPath === stagePath || (it.petId === petId && it.stage === stage && it.state === stateName))) {
+              return true;
+            }
+          }
+        }
+      }
+
+      if (!assets && window.location && /^https?:$/i.test(window.location.protocol || "")) {
+        return true;
+      }
+    }
+
+    if (petId === "milu") return true;
+    return false;
+  }
+
   function resolveStageAssetPath(petId, stateName, stageName) {
     ensureMiluStageAssetsRegistered();
     var validState = VALID_STATES.indexOf(stateName) !== -1 ? stateName : "idle_happy";
     var validStage = normalizeStage(stageName) || resolveCurrentStage(petId) || "adult";
     var cleanPetId = String(petId || "milu").toLowerCase().trim();
+    var stagePath = "assets/pets/" + cleanPetId + "/" + validStage + "/" + validState + ".png";
 
-    // 1. Prefer ELW_PET_NEEDS.getAssetPath(petId, state, stage) if available
+    if (hasStageAssetAvailable(cleanPetId, validStage, validState)) {
+      return stagePath;
+    }
+
+    // Check ELW_PET_NEEDS.getAssetPath(petId, state, stage) if available
     if (
       typeof window !== "undefined" &&
       window.ELW_PET_NEEDS &&
@@ -578,22 +637,56 @@
     ) {
       try {
         var fromNeeds = window.ELW_PET_NEEDS.getAssetPath(cleanPetId, validState, validStage);
-        if (typeof fromNeeds === "string" && fromNeeds.length > 0) {
-          // If pet is milu and getAssetPath returned legacy path because stage assets weren't registered yet,
-          // ensure we use the stage-specific path for milu
-          if (cleanPetId === "milu" && fromNeeds.indexOf("/" + validStage + "/") === -1) {
-            return "assets/pets/milu/" + validStage + "/" + validState + ".png";
-          }
+        if (typeof fromNeeds === "string" && fromNeeds.length > 0 && !failedStageAssets[fromNeeds]) {
           return fromNeeds;
         }
       } catch (_err) {}
     }
 
-    // 2. Fallback stage path resolution
-    if (cleanPetId === "milu") {
-      return "assets/pets/milu/" + validStage + "/" + validState + ".png";
-    }
     return "assets/pets/" + cleanPetId + "/" + validState + ".png";
+  }
+
+  function applyStageScaleToCatScale(stageArg) {
+    if (typeof document === "undefined") return 1.04;
+    var stage = normalizeStage(stageArg) || resolveCurrentStage() || "adult";
+    var sScale = STAGE_SCALES[stage] || 1.04;
+    var y = 485;
+    if (
+      typeof window !== "undefined" &&
+      window.ELW_PET_FOLLOW &&
+      window.ELW_PET_FOLLOW.state &&
+      Number.isFinite(window.ELW_PET_FOLLOW.state.y)
+    ) {
+      y = window.ELW_PET_FOLLOW.state.y;
+    } else {
+      var catPos = document.getElementById("catPos");
+      if (catPos && catPos.style && catPos.style.transform) {
+        var m = catPos.style.transform.match(/translate\(\s*[-\d.]+px\s*,\s*([-\d.]+)px\s*\)/i);
+        if (m && Number.isFinite(parseFloat(m[1]))) y = parseFloat(m[1]);
+      }
+    }
+    var baseScale = 0.95 + ((y - 330) / 310) * 0.5;
+    if (typeof window !== "undefined" && window.ELW_SCENE && typeof window.ELW_SCENE.charScale === "function") {
+      try {
+        var cs = window.ELW_SCENE.charScale(y);
+        if (Number.isFinite(cs)) baseScale = cs;
+      } catch (_e) {}
+    }
+    var finalScale = baseScale * 0.92 * sScale;
+    var catScale = document.getElementById("catScale");
+    if (catScale) {
+      catScale.style.transition = "none";
+      catScale.style.transformOrigin = "0px 0px";
+      catScale.style.transform = "scale(" + finalScale.toFixed(3) + ")";
+      catScale.setAttribute("data-stage", stage);
+      catScale.setAttribute("data-stage-scale", sScale.toFixed(2));
+    }
+    if (typeof window !== "undefined" && window.ELW_PET_FOLLOW && window.ELW_PET_FOLLOW.state) {
+      window.ELW_PET_FOLLOW.state.stage = stage;
+      window.ELW_PET_FOLLOW.state.stageScale = sScale;
+      window.ELW_PET_FOLLOW.state.scale = finalScale;
+    }
+    return sScale;
   }
 
   function getNeedsSnapshot() {
@@ -728,6 +821,12 @@
       ) {
         return window.ELW_EMBEDDED_PET_ASSETS[srcPath];
       }
+      if (
+        window.ELW_PET_ASSETS &&
+        typeof window.ELW_PET_ASSETS[srcPath] === "string"
+      ) {
+        return window.ELW_PET_ASSETS[srcPath];
+      }
       if (typeof window.resolvePetAsset === "function") {
         try {
           var resolved = window.resolvePetAsset(srcPath);
@@ -756,7 +855,7 @@
     var srcPath = resolveStageAssetPath(petId, state, stage);
     var resolvedSrc = resolvePetAssetUrl(srcPath, legacyFallbackPath);
 
-    // Keep ELW_PET_FOLLOW stageScale synchronized whenever stage changes
+    // Keep ELW_PET_FOLLOW and #catScale stageScale synchronized
     if (
       typeof window !== "undefined" &&
       window.ELW_PET_FOLLOW &&
@@ -772,6 +871,7 @@
         }
       } catch (_eSync) {}
     }
+    applyStageScaleToCatScale(stage);
 
     var changed =
       force ||
@@ -816,11 +916,18 @@
         if (!roomPetImg.__elwStageFallbackBound) {
           roomPetImg.__elwStageFallbackBound = true;
           roomPetImg.addEventListener("error", function () {
+            var attempted = roomPetImg.getAttribute("data-src-path");
+            if (attempted && attempted.indexOf("/" + (roomPetImg.getAttribute("data-stage") || "") + "/") !== -1) {
+              failedStageAssets[attempted] = true;
+            }
             var fb = roomPetImg.getAttribute("data-fallback-src");
-            if (fb && roomPetImg.getAttribute("href") !== fb) {
+            if (fb) {
               var resolvedFb = resolvePetAssetUrl(fb, fb);
-              roomPetImg.setAttribute("href", resolvedFb);
-              roomPetImg.setAttribute("src", resolvedFb);
+              if (roomPetImg.getAttribute("href") !== resolvedFb) {
+                roomPetImg.setAttribute("data-src-path", fb);
+                roomPetImg.setAttribute("href", resolvedFb);
+                roomPetImg.setAttribute("src", resolvedFb);
+              }
             }
           });
         }
@@ -990,7 +1097,7 @@
             Math.cos(stepPhase * 0.5) * gait.waddleSway;
         }
 
-        var squash = Math.cos(stepPhase * 2) * 0.03 * gait.squashMult;
+        var squash = Math.sin(stepPhase * 2) * 0.03 * gait.squashMult;
         scaleX = 1 - squash;
         scaleY = 1 + squash;
 
@@ -1048,13 +1155,13 @@
         ) {
           hopY = -Math.abs(Math.sin(t * 11)) * 11 * gait.ampMult;
           tiltDeg = Math.sin(t * 11) * 6;
-          var joySquash = Math.cos(t * 22) * 0.045;
+          var joySquash = Math.sin(t * 22) * 0.045;
           scaleX = 1 - joySquash;
           scaleY = 1 + joySquash;
         } else if (emotionType === "like") {
           hopY = -Math.abs(Math.sin(t * 8)) * 6.5 * gait.ampMult;
           tiltDeg = Math.sin(t * 8) * 4;
-          var likeSquash = Math.cos(t * 16) * 0.028;
+          var likeSquash = Math.sin(t * 16) * 0.028;
           scaleX = 1 - likeSquash;
           scaleY = 1 + likeSquash;
         } else if (emotionType === "curious") {
@@ -1289,8 +1396,11 @@
       } catch (_e2) {}
     }
 
+    stepPhase = 0;
+    idleClock = 0;
+    applyStageScaleToCatScale(norm);
     refreshVisualSprite(true);
-    updateFrame(getLatestFollowState(), 0.016);
+    updateFrame(getLatestFollowState(), 0);
     return norm;
   }
 
@@ -1351,7 +1461,7 @@
     if (!reduced && !missionActive) {
       triggerEmotionAnim("happy", 1200);
     } else {
-      updateFrame(getLatestFollowState(), 0.016);
+      updateFrame(getLatestFollowState(), 0);
     }
     if (catHop) {
       catHop.setAttribute("data-ceremony-phase", "3-morph");
@@ -1412,6 +1522,7 @@
     var now = Date.now();
     var dedupeKey = petId + ":" + newStage;
     if (dedupeKey === lastCeremonyDedupeKey && now - lastCeremonyTs < 800) {
+      setStage(newStage, petId);
       return;
     }
     lastCeremonyDedupeKey = dedupeKey;
@@ -1448,7 +1559,7 @@
     activeEmotion.untilTs = nowTs + dur;
 
     var followState = getLatestFollowState();
-    updateFrame(followState, 0.016);
+    updateFrame(followState, 0);
     return getState();
   }
 
@@ -1520,7 +1631,12 @@
               handleStageUpNotification(detail || snap);
               return;
             }
-            refreshVisualSprite(false);
+            var stg = (detail && normalizeStage(detail.stage || detail.to)) || (snap && normalizeStage(snap.stage)) || resolveCurrentStage();
+            if (stg) {
+              applyStageScaleToCatScale(stg);
+            }
+            refreshVisualSprite(true);
+            updateFrame(getLatestFollowState(), 0);
           });
         } catch (_err2) {}
       }
@@ -1683,11 +1799,13 @@
   }
 
   var api = {
+    STAGE_SCALES: STAGE_SCALES,
     STAGE_GAIT_PROFILES: STAGE_GAIT_PROFILES,
     init: init,
     getState: getState,
     getStage: resolveCurrentStage,
     setStage: setStage,
+    applyStageScaleToCatScale: applyStageScaleToCatScale,
     resolveStageAssetPath: resolveStageAssetPath,
     playStageUpCeremony: playStageUpCeremony,
     triggerEmotionAnim: triggerEmotionAnim,

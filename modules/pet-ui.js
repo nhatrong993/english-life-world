@@ -174,6 +174,44 @@
   background: linear-gradient(90deg, #f59e0b 0%, #10b981 100%);
   transition: width 0.3s ease;
 }
+.evo-panel {
+  margin-top: 8px;
+  padding: 8px 10px;
+  background: #fef3c7;
+  border: 1px solid #f59e0b;
+  border-radius: 8px;
+  font-size: 12px;
+}
+.evo-title {
+  font-weight: 700;
+  color: #92400e;
+  margin-bottom: 6px;
+}
+.evo-reqs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.evo-req {
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.evo-req.evo-ok {
+  background: #d1fae5;
+  color: #065f46;
+}
+.evo-req.evo-missing {
+  background: #fee2e2;
+  color: #991b1b;
+}
+.evo-xp-note {
+  margin-top: 6px;
+  font-size: 11px;
+  color: #92400e;
+  font-style: italic;
+}
 .pet-inv-row {
   display: flex;
   flex-wrap: wrap;
@@ -801,8 +839,68 @@
     return list.find(function (p) { return p.id === norm; }) || list[0];
   }
 
-  function getSnapshotData() {
-    const needsApi = getNeedsApi();
+  /* ---------- Evolution requirements panel ---------- */
+  function getXpDisplayHtml(stats, snap) {
+    const xp = stats.xp || 0;
+    const nextXp = stats.nextLevelXp || 100;
+    const level = stats.level || 1;
+    // If XP exceeds next level threshold but still same level = blocked by other requirements
+    if (xp >= nextXp && level < 5) {
+      return `Lv.${level} · <b>${xp} XP</b> <span style="color:#f59e0b" title="Đã đủ XP, cần hoàn thành điều kiện khác để lên level">⏳ chờ tiến hóa</span>`;
+    }
+    return `Lv.${level} · ${xp}/${nextXp} XP`;
+  }
+
+  function getEvolutionPanelHtml(snap) {
+    try {
+      const needsApi = getNeedsApi();
+      if (!needsApi || typeof needsApi.evaluateEvolution !== "function") return "";
+      const evo = needsApi.evaluateEvolution();
+      if (!evo || evo.toLevel >= 5 || evo.canEvolve) return "";
+
+      // Get current progression values
+      const prog = snap.progression || {};
+      const xp = snap.xp || 0;
+
+      // Stage requirements (must match pet-needs.js STAGE_REQUIREMENTS)
+      const REQ = {
+        2: { minXp: 100, care: 1, interaction: 1, stageMissions: 1, name: "Young" },
+        3: { minXp: 250, care: 2, interaction: 2, stageMissions: 2, name: "Teen" },
+        4: { minXp: 450, care: 3, interaction: 3, stageMissions: 3, name: "Adult" },
+        5: { minXp: 700, care: 4, interaction: 4, stageMissions: 4, name: "Elite" }
+      };
+      const req = REQ[evo.toLevel];
+      if (!req) return "";
+
+      const care = Math.max(prog.care || 0, prog.stageCare || 0);
+      const inter = Math.max(prog.interaction || 0, prog.stageInteraction || 0);
+      const missions = Math.max(prog.stageMissions || 0, prog.stageMissionsCurrent || 0);
+
+      const items = [
+        { ok: xp >= req.minXp, label: `XP ${xp}/${req.minXp}`, tip: "Kiếm XP bằng cách chăm sóc và chơi với pet" },
+        { ok: care >= req.care, label: `Chăm sóc ${care}/${req.care}`, tip: "Cho ăn, cho uống" },
+        { ok: inter >= req.interaction, label: `Tương tác ${inter}/${req.interaction}`, tip: "Vuốt ve, chơi đùa" },
+        { ok: missions >= req.stageMissions, label: `Nhiệm vụ ${missions}/${req.stageMissions}`, tip: "Hoàn thành nhiệm vụ trong mục Nhiệm vụ" }
+      ];
+
+      const html = items.map(function(it) {
+        const icon = it.ok ? "✅" : "❌";
+        const cls = it.ok ? "evo-ok" : "evo-missing";
+        return `<span class="evo-req ${cls}" title="${esc(it.tip)}">${icon} ${esc(it.label)}</span>`;
+      }).join("");
+
+      const xpBlocked = xp >= req.minXp && !evo.canEvolve;
+      const xpNote = xpBlocked ? `<div class="evo-xp-note">🌟 Đã đủ XP! Hoàn thành các điều kiện còn thiếu để tiến hóa.</div>` : "";
+
+      return `<div class="evo-panel">` +
+        `<div class="evo-title">🔄 Điều kiện tiến hóa lên Lv.${evo.toLevel} (${req.name})</div>` +
+        `<div class="evo-reqs">${html}</div>` +
+        xpNote +
+        `</div>`;
+    } catch (e) { return ""; }
+  }
+
+  function getSnapshotData() {    const needsApi = getNeedsApi();
     if (needsApi && typeof needsApi.getSnapshot === "function") {
       try {
         return needsApi.getSnapshot();
@@ -933,7 +1031,7 @@
 
     const session = unified.adventureSession || {};
     const ctx = unified.context || {};
-    const placeMeta = (advApi && advApi.PLACE_META && advApi.PLACE_META[ctx.place]) || { nameVi: "Ở nhà", nameEn: "At Home" };
+    const placeMeta = (advApi && advApi.PLACE_META && advApi.PLACE_META[ctx.place]) || { nameVi: "nhà", nameEn: "Home" };
     const wxMeta = (advApi && advApi.WEATHER_META && advApi.WEATHER_META[ctx.weather]) || { icon: "☀️", vi: "Nắng đẹp", en: "Sunny" };
     const sitMeta = (advApi && advApi.SITUATION_META && advApi.SITUATION_META[ctx.situation]) || { icon: "😊", vi: "Bình thường", en: "Normal" };
 
@@ -1024,7 +1122,7 @@
       `</button>` +
       `</div>` +
       `<div class="pet-adv-meta-badges">` +
-      `<span class="pet-adv-badge" data-badge-session>🆔 Phiên: <code>${esc(session.sessionId)}</code></span>` +
+      (window.ELW_DEBUG ? `<span class="pet-adv-badge" data-badge-session>🆔 Phiên: <code>${esc(session.sessionId)}</code></span>` : "") +
       `<span class="pet-adv-badge" data-badge-pet>${pet.icon || "🐕"} Pet: <b>${esc(pet.name)} (${esc(unified.activePetId)})</b></span>` +
       `<span class="pet-adv-badge" data-badge-sources>🚪 Nguồn vào: <b>${esc(entrySources.join(", "))}</b></span>` +
       `<span class="pet-adv-badge" data-badge-place>📍 ${esc(placeMeta.nameVi)} (${esc(ctx.place)}/${esc(ctx.zone)})</span>` +
@@ -1210,11 +1308,12 @@
       `</div>` +
       `<div class="pet-level-row">` +
       `<span>${esc(stats.stageBadge || ("Lv." + stats.level))}</span>` +
-      `<span>Lv.${stats.level} · ${stats.xp}/${stats.nextLevelXp} XP</span>` +
+      `<span>${getXpDisplayHtml(stats, snap)}</span>` +
       `</div>` +
       `<div class="pet-xp-track" title="Tiến độ cấp độ thú cưng: ${stats.progressPct}%">` +
       `<div class="pet-xp-fill" style="width:${stats.progressPct}%"></div>` +
       `</div>` +
+      getEvolutionPanelHtml(snap) +
       `<div class="pet-inv-row">` +
       `<span class="pet-inv-pill" data-inv-item="treats">🍖 Treats: <b>${inv.treats}</b></span>` +
       `<span class="pet-inv-pill" data-inv-item="water">💧 Water: <b>${inv.water}</b></span>` +

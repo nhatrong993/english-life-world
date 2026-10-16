@@ -1184,6 +1184,18 @@ body.reduced-motion .pet-sprite-img,
       } catch (e) {}
     }
 
+    // 2b. Record to evolution progression (every real user interaction counts)
+    if (needsApi) {
+      try {
+        var careTypes = ["feed", "water", "play", "rest", "walk"];
+        if (careTypes.indexOf(interaction.id) >= 0 && typeof needsApi.recordCareAction === "function") {
+          needsApi.recordCareAction(interaction.id);
+        } else if (typeof needsApi.recordInteraction === "function") {
+          needsApi.recordInteraction(interaction.id);
+        }
+      } catch (e) {}
+    }
+
     // 3. Add XP via ELW_PET_NEEDS.addXp(xp)
     let updatedXp = null;
     if (needsApi && interaction.xp > 0) {
@@ -1660,7 +1672,7 @@ body.reduced-motion .pet-sprite-img,
 
       // Compute head-mounted local coordinates inside #catScale (roomPetImg top is y = -68)
       let offX = 0;
-      let offY = -77;
+      let offY = -68;
 
       // Avoid intersecting character face bbox if pet happens to stand directly behind character
       if (W && Number.isFinite(W.x) && Number.isFinite(W.y)) {
@@ -1674,8 +1686,8 @@ body.reduced-motion .pet-sprite-img,
           Math.abs(clusterWorldX - faceX) < faceRadius + 24 &&
           Math.abs(clusterWorldY - faceY) < faceRadius + 18
         ) {
-          offX = petX >= faceX ? 24 : -24;
-          offY = -72;
+          offX = petX >= faceX ? 14 : -14;
+          offY = -66;
         }
       }
 
@@ -1705,7 +1717,7 @@ body.reduced-motion .pet-sprite-img,
         .join(",");
       if (cluster.getAttribute("data-sig") !== sig) {
         cluster.setAttribute("data-sig", sig);
-        const stepX = 21;
+        const stepX = 18;
         const startX = -((lowItems.length - 1) * stepX) / 2;
         cluster.innerHTML = lowItems
           .map(function (it, idx) {
@@ -1726,6 +1738,117 @@ body.reduced-motion .pet-sprite-img,
     }
   }
 
+  const SCENE_STAGE_SCALES = {
+    baby: 0.78,
+    young: 0.88,
+    teen: 0.96,
+    adult: 1.04,
+    elite: 1.12
+  };
+  const failedSceneStageAssets = Object.create(null);
+
+  function resolvePetStage(petId, needsApi, win) {
+    let stage = "";
+    if (needsApi && typeof needsApi.getPetProgress === "function") {
+      try {
+        const prog = needsApi.getPetProgress(petId);
+        if (prog && prog.stage && SCENE_STAGE_SCALES[prog.stage]) {
+          stage = prog.stage;
+        }
+      } catch (e) {}
+    }
+    if (!stage && needsApi && typeof needsApi.getState === "function") {
+      try {
+        const st = needsApi.getState();
+        if (st && st.byPetId && st.byPetId[petId] && SCENE_STAGE_SCALES[st.byPetId[petId].stage]) {
+          stage = st.byPetId[petId].stage;
+        } else if (st && st.stage && SCENE_STAGE_SCALES[st.stage]) {
+          stage = st.stage;
+        }
+      } catch (e) {}
+    }
+    if (!stage && win && win.localStorage) {
+      try {
+        const rawStage = win.localStorage.getItem("elw_pet_stage");
+        if (rawStage && SCENE_STAGE_SCALES[rawStage]) stage = rawStage;
+      } catch (e) {}
+    }
+    return SCENE_STAGE_SCALES[stage] ? stage : "baby";
+  }
+
+  function canUseStageAsset(petId, stage, visualState, needsApi, win) {
+    if (!petId || !stage || !SCENE_STAGE_SCALES[stage] || !visualState) return false;
+    const rel = `assets/pets/${petId}/${stage}/${visualState}.png`;
+    if (failedSceneStageAssets[rel]) return false;
+
+    const assetsMap = (win && (win.ELW_PET_ASSETS || win.ELW_EMBEDDED_PET_ASSETS)) || null;
+    if (assetsMap && typeof assetsMap === "object") {
+      if (assetsMap[rel]) return true;
+      return false;
+    }
+
+    const manifest = (win && (win.ELW_PET_MANIFEST || win.PET_MANIFEST)) || null;
+    if (manifest && Array.isArray(manifest.pets)) {
+      const entry = manifest.pets.find(function (p) { return p && p.id === petId; });
+      if (entry && entry.stages && entry.stages[stage]) {
+        const stEntry = entry.stages[stage];
+        if (typeof stEntry === "object" && stEntry[visualState]) return true;
+      }
+      if (entry && entry.stageAssets && entry.stageAssets[stage] && entry.stageAssets[stage][visualState]) {
+        return true;
+      }
+    }
+
+    if (needsApi && typeof needsApi.getAssetPath === "function") {
+      try {
+        const candidate = needsApi.getAssetPath(petId, visualState, stage);
+        if (typeof candidate === "string" && candidate.indexOf(`/${stage}/`) !== -1 && !failedSceneStageAssets[candidate]) {
+          return true;
+        }
+      } catch (e) {}
+    }
+
+    if (win && win.location && (win.location.protocol === "http:" || win.location.protocol === "https:")) {
+      return true;
+    }
+
+    return false;
+  }
+
+  function applyCatStageScale(doc, win, stage) {
+    if (!doc) return 1;
+    const catScaleEl = doc.getElementById("catScale");
+    if (!catScaleEl) return 1;
+    const st = SCENE_STAGE_SCALES[stage] ? stage : "baby";
+    const stageMult = SCENE_STAGE_SCALES[st] || 1;
+    const W = win && win.ELW && typeof win.ELW.state === "function" ? win.ELW.state() : null;
+    const followCtrl = win && win.ELW_PET_FOLLOW;
+    const fPos = followCtrl && typeof followCtrl.getPosition === "function" ? followCtrl.getPosition() : null;
+
+    let refY = 560;
+    if (fPos && Number.isFinite(fPos.y)) {
+      refY = fPos.y;
+    } else if (W && Number.isFinite(W.y)) {
+      refY = W.y + 12;
+    } else {
+      const catPosEl = doc.getElementById("catPos");
+      if (catPosEl && catPosEl.style && catPosEl.style.transform) {
+        const m = catPosEl.style.transform.match(/translate\([-\d.]+px,\s*([-\d.]+)px\)/);
+        if (m) refY = Number(m[1]) || 560;
+      }
+    }
+    const clampedY = Math.max(360, Math.min(628, refY));
+    const depthScale = 0.95 + ((clampedY - 330) / 310) * 0.5;
+    const finalScale = Math.max(0.45, Math.min(1.65, depthScale * 0.92 * stageMult));
+    catScaleEl.style.transform = `scale(${finalScale.toFixed(3)})`;
+    catScaleEl.setAttribute("data-stage", st);
+    catScaleEl.setAttribute("data-stage-scale", String(stageMult));
+    if (followCtrl && followCtrl.state && typeof followCtrl.state === "object") {
+      followCtrl.state.scale = finalScale;
+    }
+    return finalScale;
+  }
+
   function bindFollowAndNeedsSubscriptions() {
     const win = (root && root.window) || (typeof window !== "undefined" ? window : root);
     const doc = (root && root.document) || (typeof document !== "undefined" ? document : null);
@@ -1735,6 +1858,10 @@ body.reduced-motion .pet-sprite-img,
       try {
         followSubscribed = true;
         win.ELW_PET_FOLLOW.subscribe(function (pos) {
+          const activePet = getActivePet();
+          const needsApi = getNeedsEngine();
+          const st = resolvePetStage(activePet.id, needsApi, win);
+          applyCatStageScale(doc, win, st);
           syncPetNeedCluster(doc, win, pos);
         });
       } catch (e) {
@@ -1746,6 +1873,7 @@ body.reduced-motion .pet-sprite-img,
       try {
         needsSubscribed = true;
         win.ELW_PET_NEEDS.subscribe(function () {
+          syncScenePet();
           syncLegacyNeedsLayer(doc, win);
           syncPetNeedCluster(doc, win);
         });
@@ -1774,16 +1902,13 @@ body.reduced-motion .pet-sprite-img,
 
       const activePet = getActivePet();
       const visualState = getCurrentVisualState();
-      const fallbackRelPath = `assets/pets/${activePet.id}/${visualState}.png`;
-      let relPath = fallbackRelPath;
       const needsApi = getNeedsEngine();
-      if (activePet.id === "milu" && needsApi && typeof needsApi.getAssetPath === "function") {
-        try {
-          const candidatePath = needsApi.getAssetPath(activePet.id, visualState);
-          if (typeof candidatePath === "string" && candidatePath.length > 0) {
-            relPath = candidatePath;
-          }
-        } catch (e) {}
+      const currentStage = resolvePetStage(activePet.id, needsApi, win);
+      const fallbackRelPath = `assets/pets/${activePet.id}/${visualState}.png`;
+      const stageRelPath = `assets/pets/${activePet.id}/${currentStage}/${visualState}.png`;
+      let relPath = fallbackRelPath;
+      if (canUseStageAsset(activePet.id, currentStage, visualState, needsApi, win)) {
+        relPath = stageRelPath;
       }
       const resolvedSrc = resolvePetAsset(relPath);
 
@@ -1811,9 +1936,14 @@ body.reduced-motion .pet-sprite-img,
       if (!roomPetImg.__elwFallbackBound) {
         roomPetImg.__elwFallbackBound = true;
         roomPetImg.addEventListener("error", function () {
+          const attempted = roomPetImg.getAttribute("data-src-path") || "";
+          if (attempted && attempted.split("/").length >= 4) {
+            failedSceneStageAssets[attempted] = true;
+          }
           const fb = roomPetImg.getAttribute("data-fallback-src") || `assets/pets/${getActivePet().id}/idle_happy.png`;
           const resolvedFb = resolvePetAsset(fb);
           if (roomPetImg.getAttribute("href") !== resolvedFb) {
+            roomPetImg.setAttribute("data-src-path", fb);
             roomPetImg.setAttribute("src", resolvedFb);
             roomPetImg.setAttribute("href", resolvedFb);
           }
@@ -1852,6 +1982,7 @@ body.reduced-motion .pet-sprite-img,
       }
 
       roomPetImg.setAttribute("data-pet-sprite-id", activePet.id);
+      roomPetImg.setAttribute("data-stage", currentStage);
       roomPetImg.setAttribute("data-state", visualState);
       roomPetImg.setAttribute("data-src-path", relPath);
       roomPetImg.setAttribute("data-fallback-src", fallbackRelPath);
@@ -1860,6 +1991,7 @@ body.reduced-motion .pet-sprite-img,
       roomPetImg.style.display = "";
 
       oCat.setAttribute("data-pet-id", activePet.id);
+      oCat.setAttribute("data-stage", currentStage);
       oCat.setAttribute("data-state", visualState);
       oCat.setAttribute("data-visual-state", visualState);
       oCat.setAttribute("data-src-path", relPath);
@@ -1878,7 +2010,11 @@ body.reduced-motion .pet-sprite-img,
       if (followCtrl && typeof followCtrl.isControlling === "function" && followCtrl.isControlling()) {
         if (W && typeof followCtrl.syncOnRoomChange === "function") {
           let fPos = typeof followCtrl.getPosition === "function" ? followCtrl.getPosition() : null;
-          if (lastSyncedFollowRoom !== W.room || (fPos && fPos.room !== W.room)) {
+          const distToChar =
+            fPos && Number.isFinite(fPos.x) && Number.isFinite(fPos.y) && Number.isFinite(W.x) && Number.isFinite(W.y)
+              ? Math.hypot(fPos.x - W.x, fPos.y - W.y)
+              : 0;
+          if (lastSyncedFollowRoom !== W.room || (fPos && fPos.room !== W.room) || distToChar > 180) {
             lastSyncedFollowRoom = W.room;
             followCtrl.syncOnRoomChange(W.room, W.x, W.y, W.dir);
             fPos = typeof followCtrl.getPosition === "function" ? followCtrl.getPosition() : null;
@@ -1909,6 +2045,7 @@ body.reduced-motion .pet-sprite-img,
         }
       }
 
+      applyCatStageScale(doc, win, currentStage);
       syncPetNeedCluster(doc, win);
       return oCat;
     } catch (e) {
