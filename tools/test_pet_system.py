@@ -79,8 +79,11 @@ def expand_ctx_bar_if_needed(page):
 
 
 def open_pet_tab_if_needed(page):
-    """Ensure the Mission & Pet sidebar tab is active so #petSurvivalCard is visible."""
+    """Ensure welcome modal is dismissed and Mission & Pet sidebar tab is active so #petSurvivalCard is visible."""
     page.evaluate("""() => {
+        try { localStorage.setItem('elw_onboard_v1', '1'); } catch (e) {}
+        const w = document.getElementById('elwWelcome');
+        if (w) { w.hidden = true; w.remove(); }
         if (window.ELW_WORLD3D && typeof window.ELW_WORLD3D.setTab === 'function') {
             window.ELW_WORLD3D.setTab('mission');
         }
@@ -92,15 +95,15 @@ def open_pet_tab_if_needed(page):
 
 
 def run_t1_assets_and_manifest(page):
-    print("\n=== T1: Asset Integrity & Manifest Validation (100 Sprites) ===")
+    print("\n=== T1: Asset Integrity & Manifest Validation (100 Base + 50 Stage Sprites) ===")
     exists = MANIFEST_PATH.is_file()
     record("T1", "T1.1", "assets/pets/manifest.json exists on disk", exists, str(MANIFEST_PATH))
     if not exists:
         return
 
     manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
-    record("T1", "T1.2", "manifest.json is a JSON Array of 100 entries",
-           isinstance(manifest, list) and len(manifest) == 100,
+    record("T1", "T1.2", "manifest.json is a JSON Array of 100+ entries (100 base + 50 stage)",
+           isinstance(manifest, list) and len(manifest) in (100, 150),
            f"count={len(manifest) if isinstance(manifest, list) else 'not-list'}")
 
     required_fields = {
@@ -108,11 +111,11 @@ def run_t1_assets_and_manifest(page):
         "fileSize", "transparent", "animationType", "fallbackState", "verified"
     }
     all_fields_ok = all(required_fields.issubset(set(item.keys())) for item in manifest)
-    record("T1", "T1.3", "All 100 manifest items contain 11 required schema fields", all_fields_ok)
+    record("T1", "T1.3", "All manifest items contain 11 required schema fields", all_fields_ok)
 
     pet_set = {item["petId"] for item in manifest}
-    state_set = {item["state"] for item in manifest}
-    record("T1", "T1.4", "Manifest covers all 10 pets × 10 states",
+    state_set = {item["state"] for item in manifest if item["state"] in EXPECTED_STATES}
+    record("T1", "T1.4", "Manifest covers all 10 pets × 10 canonical states",
            pet_set == set(EXPECTED_PETS) and state_set == set(EXPECTED_STATES),
            f"pets={len(pet_set)}, states={len(state_set)}")
 
@@ -137,13 +140,13 @@ def run_t1_assets_and_manifest(page):
                 alpha_ok = False
                 bad_files.append(f"{item['assetPath']}(alpha={alpha_extrema})")
 
-    record("T1", "T1.5", "All 100 PNG files exist on disk with size > 500 bytes", disk_ok,
-           "100/100 files OK" if disk_ok else f"bad: {bad_files[:3]}")
-    record("T1", "T1.6", "All 100 PNGs are 320x320 RGBA with real alpha transparency",
+    record("T1", "T1.5", "All PNG files exist on disk with size > 500 bytes", disk_ok,
+           f"{len(manifest)}/{len(manifest)} files OK" if disk_ok else f"bad: {bad_files[:3]}")
+    record("T1", "T1.6", "All PNGs are 320x320 RGBA with real alpha transparency",
            rgba_ok and alpha_ok,
            "320x320 RGBA + transparent background verified" if (rgba_ok and alpha_ok) else f"bad: {bad_files[:3]}")
 
-    # Verify all 100 sprites load cleanly inside Chromium via Image()
+    # Verify all sprites load cleanly inside Chromium via Image()
     browser_load = page.evaluate("""async (paths) => {
         const results = await Promise.all(paths.map(p => new Promise(resolve => {
             const img = new Image();
@@ -160,8 +163,8 @@ def run_t1_assets_and_manifest(page):
         return { total: results.length, passed: results.length - failed.length, failed };
     }""", [item["assetPath"] for item in manifest])
 
-    record("T1", "T1.7", "All 100 PNG sprites decode in Chromium with naturalWidth=320 & naturalHeight=320",
-           browser_load["passed"] == 100,
+    record("T1", "T1.7", "All PNG sprites decode in Chromium with naturalWidth=320 & naturalHeight=320",
+           browser_load["passed"] == browser_load["total"] and browser_load["total"] >= 100,
            f"{browser_load['passed']}/{browser_load['total']} loaded")
 
 
@@ -312,8 +315,11 @@ def run_t3_needs_decay_and_zero_penalty(page):
 
 def run_t4_interactions_animations_and_fallback(page):
     print("\n=== T4: 8 Interactive Actions, Animations, Reduced Motion & Error Fallback ===")
-    # Ensure we are in Home room and click #o-cat
+    # Ensure we are in Home room, welcome dialog is dismissed, and click #o-cat
     page.evaluate("""() => {
+        try { localStorage.setItem('elw_onboard_v1', '1'); } catch (e) {}
+        const w = document.getElementById('elwWelcome');
+        if (w) { w.hidden = true; w.remove(); }
         window.ELW_PET_NEEDS.resetForTest();
         if (typeof window.pickTopic === 'function') window.pickTopic('home');
     }""")
@@ -321,7 +327,10 @@ def run_t4_interactions_animations_and_fallback(page):
 
     cat_exists = page.locator("#o-cat").count() > 0
     if cat_exists:
-        page.locator("#o-cat").click(force=True)
+        page.evaluate("""() => {
+            const c = document.getElementById('o-cat');
+            if (c) c.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+        }""")
     page.wait_for_timeout(150)
 
     quick_bar_info = page.evaluate("""(expectedActions) => {
@@ -521,6 +530,43 @@ def run_t5_unified_adventure_system(page):
            and quest_completion["hasSummary"] is True
            and quest_completion["bannerVisible"] is True,
            f"completed={quest_completion['completedObjectives']}, banner='{quest_completion['headlineVi']}'")
+
+    # Verify Lv.2 -> Lv.3 quest reset & evolution progression
+    stage_evo_check = page.evaluate("""() => {
+        // Ensure pet has 250 XP (ready for Lv.3 once Lv.2 care, interaction, and 2nd stageMission are done)
+        window.ELW_PET_NEEDS.addXp(250);
+        window.ELW_PET_NEEDS.recordCareAction({ type: 'feed' });
+        window.ELW_PET_NEEDS.recordInteraction({ type: 'play' });
+        if (window.ELW_PET_UI && window.ELW_PET_UI.refresh) window.ELW_PET_UI.refresh();
+        const evoPanelBefore = document.querySelector('#petSurvivalCard .evo-panel');
+        const evoPanelVisible = !!(evoPanelBefore && evoPanelBefore.textContent.includes('Lv.3'));
+
+        // Start a new Lv.2 quest at park (0/3)
+        const resetSession = window.ELW_PET_ADVENTURE.travelToQuestPlace('park');
+        const resetCount = (resetSession.completedObjectives || []).length;
+
+        // Complete the 3 Lv.2 objectives
+        window.ELW_PET_ADVENTURE.completeObjective('greet_context');
+        window.ELW_PET_ADVENTURE.completeObjective('care_bond');
+        window.ELW_PET_ADVENTURE.completeObjective('contextual_practice');
+
+        const snapAfter = window.ELW_PET_NEEDS.getSnapshot();
+        return {
+            evoPanelVisible,
+            resetCount,
+            isCompleteAfter: window.ELW_PET_ADVENTURE.getSharedSession().isComplete,
+            levelAfter: snapAfter.level,
+            stageAfter: snapAfter.stage,
+            missionsAfter: snapAfter.progression.stageMissions
+        };
+    }""")
+
+    record("T5", "T5.6", "Lv.2 quest resets to 0/3 at Park, displays .evo-panel, and completing 3/3 evolves Pet to Lv.3 (teen)",
+           stage_evo_check["evoPanelVisible"] is True
+           and stage_evo_check["resetCount"] == 0
+           and stage_evo_check["isCompleteAfter"] is True
+           and stage_evo_check["levelAfter"] >= 3,
+           f"resetCount={stage_evo_check['resetCount']}, levelAfter={stage_evo_check['levelAfter']}({stage_evo_check['stageAfter']}), missions={stage_evo_check['missionsAfter']}")
 
 
 def run_t6_one_time_reward_ledger(page):

@@ -495,6 +495,54 @@
 .pet-adv-btn.primary.is-done {
   background: #059669;
 }
+.pet-stage-quest-banner {
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  border: 1.5px solid #f59e0b;
+  border-radius: 12px;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+  color: #78350f;
+}
+.pet-sq-title {
+  font-size: 12px;
+  font-weight: 800;
+  color: #92400e;
+  margin-bottom: 3px;
+}
+.pet-sq-desc {
+  font-size: 11px;
+  color: #78350f;
+  line-height: 1.35;
+  margin-bottom: 6px;
+}
+.pet-sq-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.pet-sq-btn {
+  padding: 5px 10px;
+  border-radius: 9px;
+  border: 1.5px solid #d97706;
+  background: #f59e0b;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.pet-sq-btn.secondary {
+  background: #ffffff;
+  color: #92400e;
+}
+.pet-adv-hint {
+  font-size: 10.5px;
+  color: #047857;
+  background: #ecfdf5;
+  border-radius: 6px;
+  padding: 3px 7px;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
 
 /* Adventure Result (#petAdventureResult) */
 .pet-adventure-result {
@@ -856,48 +904,74 @@
       const needsApi = getNeedsApi();
       if (!needsApi || typeof needsApi.evaluateEvolution !== "function") return "";
       const evo = needsApi.evaluateEvolution();
-      if (!evo || evo.toLevel >= 5 || evo.canEvolve) return "";
+      const fromLv = Number((evo && evo.fromLevel) || (snap && snap.level) || (snap && snap.stats && snap.stats.level) || 1);
+      if (!evo || fromLv >= 5 || evo.canEvolve) return "";
 
-      // Get current progression values
       const prog = snap.progression || {};
       const xp = snap.xp || 0;
 
       // Stage requirements (must match pet-needs.js STAGE_REQUIREMENTS)
       const REQ = {
-        2: { minXp: 100, care: 1, interaction: 1, stageMissions: 1, name: "Young" },
-        3: { minXp: 250, care: 2, interaction: 2, stageMissions: 2, name: "Teen" },
-        4: { minXp: 450, care: 3, interaction: 3, stageMissions: 3, name: "Adult" },
-        5: { minXp: 700, care: 4, interaction: 4, stageMissions: 4, name: "Elite" }
+        2: { minXp: 100, care: 1, interaction: 1, stageMissions: 1, name: "Young", destVi: "🏠 Nhà", topic: "home" },
+        3: { minXp: 250, care: 2, interaction: 2, stageMissions: 2, name: "Teen", destVi: "🌳 Công viên", topic: "park" },
+        4: { minXp: 450, care: 3, interaction: 3, stageMissions: 3, name: "Adult", destVi: "🛒 Siêu thị", topic: "market" },
+        5: { minXp: 700, care: 4, interaction: 4, stageMissions: 4, name: "Elite", destVi: "⛺ Khu Cắm trại", topic: "outdoor" }
       };
-      const req = REQ[evo.toLevel];
+      const targetLv = Number(evo.toLevel) || Math.min(5, fromLv + 1);
+      const req = REQ[targetLv];
       if (!req) return "";
 
-      const care = Math.max(prog.care || 0, prog.stageCare || 0);
-      const inter = Math.max(prog.interaction || 0, prog.stageInteraction || 0);
-      const missions = Math.max(prog.stageMissions || 0, prog.stageMissionsCurrent || 0);
+      const totalCare = Number(prog.care || 0);
+      const stageCare = Number(prog.stageCare || 0);
+      const totalInter = Number(prog.interaction || 0);
+      const stageInter = Number(prog.stageInteraction || 0);
+      const totalMissions = Number(prog.stageMissions || 0);
+      const stageMissionsCur = Number(prog.stageMissionsCurrent || 0);
+
+      const careOk = stageCare >= 1 || totalCare >= req.care;
+      const interOk = stageInter >= 1 || totalInter >= req.interaction;
+      const missionsOk = stageMissionsCur >= 1 || totalMissions >= req.stageMissions;
+
+      const careDisplay = careOk ? Math.max(totalCare, req.care) : totalCare;
+      const interDisplay = interOk ? Math.max(totalInter, req.interaction) : totalInter;
+      const missionsDisplay = missionsOk ? Math.max(totalMissions, req.stageMissions) : totalMissions;
 
       const items = [
-        { ok: xp >= req.minXp, label: `XP ${xp}/${req.minXp}`, tip: "Kiếm XP bằng cách chăm sóc và chơi với pet" },
-        { ok: care >= req.care, label: `Chăm sóc ${care}/${req.care}`, tip: "Cho ăn, cho uống" },
-        { ok: inter >= req.interaction, label: `Tương tác ${inter}/${req.interaction}`, tip: "Vuốt ve, chơi đùa" },
-        { ok: missions >= req.stageMissions, label: `Nhiệm vụ ${missions}/${req.stageMissions}`, tip: "Hoàn thành nhiệm vụ trong mục Nhiệm vụ" }
+        { ok: xp >= req.minXp, label: `XP ${xp}/${req.minXp}`, tip: "Kiếm XP bằng cách chăm sóc, chơi đùa và hoàn thành nhiệm vụ cùng Pet" },
+        { ok: careOk, label: `Chăm sóc ${careDisplay}/${req.care}`, tip: "Cho ăn 🍖 hoặc cho uống 💧 ở cấp độ này" },
+        { ok: interOk, label: `Tương tác ${interDisplay}/${req.interaction}`, tip: "Vuốt ve 🤗, chơi đùa 🎾 hoặc trò chuyện 💬" },
+        { ok: missionsOk, label: `Nhiệm vụ ${missionsDisplay}/${req.stageMissions}`, tip: `Hoàn thành 3/3 bước Pet Adventure Quest (Gợi ý: ${req.destVi})` }
       ];
 
-      const html = items.map(function(it) {
+      const html = items.map(function (it) {
         const icon = it.ok ? "✅" : "❌";
         const cls = it.ok ? "evo-ok" : "evo-missing";
         return `<span class="evo-req ${cls}" title="${esc(it.tip)}">${icon} ${esc(it.label)}</span>`;
       }).join("");
 
       const xpBlocked = xp >= req.minXp && !evo.canEvolve;
-      const xpNote = xpBlocked ? `<div class="evo-xp-note">🌟 Đã đủ XP! Hoàn thành các điều kiện còn thiếu để tiến hóa.</div>` : "";
+      const questCtaHtml = !missionsOk
+        ? `<div style="margin-top:5px;display:flex;flex-wrap:wrap;gap:5px;align-items:center">` +
+          `<button type="button" class="pet-sq-btn" data-adv-go-place="${esc(req.topic)}" style="font-size:10.5px;padding:3px 8px">` +
+          `🚀 Tới ${esc(req.destVi)} làm Nhiệm vụ Tiến hóa Lv.${targetLv}` +
+          `</button>` +
+          `</div>`
+        : "";
+      const xpNote = xpBlocked
+        ? `<div class="evo-xp-note">🌟 Đã đủ XP! Hoàn thành điều kiện còn thiếu (${!missionsOk ? "Nhiệm vụ 3/3 tại " + req.destVi : "Chăm sóc / Tương tác"}) để tiến hóa lên Lv.${targetLv}!</div>`
+        : "";
 
-      return `<div class="evo-panel">` +
-        `<div class="evo-title">🔄 Điều kiện tiến hóa lên Lv.${evo.toLevel} (${req.name})</div>` +
+      return (
+        `<div class="evo-panel">` +
+        `<div class="evo-title">🔄 Điều kiện tiến hóa lên Lv.${targetLv} (${req.name})</div>` +
         `<div class="evo-reqs">${html}</div>` +
         xpNote +
-        `</div>`;
-    } catch (e) { return ""; }
+        questCtaHtml +
+        `</div>`
+      );
+    } catch (e) {
+      return "";
+    }
   }
 
   function getSnapshotData() {    const needsApi = getNeedsApi();
@@ -1035,11 +1109,41 @@
     const wxMeta = (advApi && advApi.WEATHER_META && advApi.WEATHER_META[ctx.weather]) || { icon: "☀️", vi: "Nắng đẹp", en: "Sunny" };
     const sitMeta = (advApi && advApi.SITUATION_META && advApi.SITUATION_META[ctx.situation]) || { icon: "😊", vi: "Bình thường", en: "Normal" };
 
+    const stageQuest = session.stageQuest || (advApi && typeof advApi.getStageQuestMeta === "function"
+      ? advApi.getStageQuestMeta((snap.stats && snap.stats.level) || 1, ctx.place)
+      : {
+          fromLevel: (snap.stats && snap.stats.level) || 1,
+          toLevel: Math.min(5, ((snap.stats && snap.stats.level) || 1) + 1),
+          targetPlace: "park",
+          targetTopic: "park",
+          icon: "🌳",
+          titleVi: "Nhiệm vụ Tiến hóa: Dẫn Pet đi khám phá",
+          descVi: "Hoàn thành 3 bước bên dưới cùng Pet để tích lũy nhiệm vụ tiến hóa!",
+          isAtTargetPlace: true
+        });
+    const targetPlaceMeta = (advApi && advApi.PLACE_META && advApi.PLACE_META[stageQuest.targetPlace]) || { nameVi: "Công viên", nameEn: "Park" };
+
     const entrySources = Array.isArray(session.entrySources) && session.entrySources.length
       ? session.entrySources
       : ["chưa kích hoạt"];
     const objectives = Array.isArray(session.objectives) ? session.objectives : [];
     const doneCount = objectives.filter(function (o) { return o && o.done; }).length;
+
+    const stageBannerHtml =
+      `<div class="pet-stage-quest-banner" data-stage-quest-level="${esc(stageQuest.fromLevel)}" data-stage-quest-place="${esc(stageQuest.targetPlace)}">` +
+      `<div class="pet-sq-title">${stageQuest.icon || "🌟"} ${esc(stageQuest.titleVi)}</div>` +
+      `<div class="pet-sq-desc">${esc(stageQuest.descVi)}</div>` +
+      `<div class="pet-sq-btns">` +
+      (!stageQuest.isAtTargetPlace || session.isComplete
+        ? `<button type="button" class="pet-sq-btn" data-adv-go-place="${esc(stageQuest.targetTopic || stageQuest.targetPlace)}">` +
+          `🚀 Đưa ${esc(pet.name)} tới ${esc(targetPlaceMeta.nameVi)} làm nhiệm vụ` +
+          `</button>`
+        : `<span class="pet-adv-badge" style="border-color:#f59e0b;color:#92400e">📍 Đang ở đúng địa điểm nhiệm vụ: <b>${esc(placeMeta.nameVi)}</b></span>`) +
+      `<button type="button" class="pet-sq-btn secondary" id="btnAdvResetQuest" data-adv-reset-quest>` +
+      `🔄 Nhiệm vụ mới (0/3)` +
+      `</button>` +
+      `</div>` +
+      `</div>`;
 
     const objectivesHtml = objectives.map(function (obj) {
       const objStatus = (rewardsApi && typeof rewardsApi.getObjectiveStatus === "function")
@@ -1053,6 +1157,10 @@
         ? `<span class="pet-obj-reward is-claimed" data-reward-claimed="true" data-objective-key="${esc(obj.objectiveKey)}">✓ Đã nhận thưởng 1 lần (Chống farm)</span>`
         : `<span class="pet-obj-reward is-unclaimed" data-reward-claimed="false" data-objective-key="${esc(obj.objectiveKey)}">+${stars}⭐ +${xp}XP</span>`;
 
+      const hintHtml = obj.actionHintVi
+        ? `<div class="pet-adv-hint">${esc(obj.actionHintVi)}</div>`
+        : "";
+
       return (
         `<div class="pet-adv-obj ${obj.done ? "is-done" : ""}" ` +
         `data-objective-id="${esc(obj.id)}" data-objective-key="${esc(obj.objectiveKey)}" data-objective-done="${obj.done ? "true" : "false"}">` +
@@ -1063,6 +1171,7 @@
         `</div>` +
         rewardBadgeHtml +
         `</div>` +
+        hintHtml +
         `<div class="pet-adv-sentence">` +
         `<div class="pas-en">“${esc(obj.sentenceEn || obj.en)}”</div>` +
         `<div class="pas-vi">${esc(obj.sentenceVi || obj.vi)}</div>` +
@@ -1080,7 +1189,7 @@
     const resultSummary = session.resultSummary || {
       headlineVi: `Hoàn thành Nhiệm vụ Phiêu lưu cùng ${pet.name} tại ${placeMeta.nameVi}!`,
       summaryVi: `Bạn và ${pet.name} đã thực hành các câu giao tiếp tiếng Anh theo ngữ cảnh tại ${placeMeta.nameVi} (${wxMeta.vi}).`,
-      rewards: { stars: 35, xp: 47, treats: 3, water: 1, toys: 1, bond: 12 }
+      rewards: { stars: 35, xp: 60, treats: 3, water: 1, toys: 1, bond: 12 }
     };
     const showResult = Boolean(session.isComplete || forceShowResult);
 
@@ -1095,14 +1204,18 @@
       `<div style="font-size:11.5px;margin-bottom:4px">${esc(resultSummary.summaryVi)}</div>` +
       `<div class="pet-adv-res-stats">` +
       `<span class="pet-adv-res-pill">⭐ Tổng thưởng: +${(resultSummary.rewards && resultSummary.rewards.stars) || 35}⭐</span>` +
-      `<span class="pet-adv-res-pill">✨ +${(resultSummary.rewards && resultSummary.rewards.xp) || 47} XP</span>` +
+      `<span class="pet-adv-res-pill">✨ +${(resultSummary.rewards && resultSummary.rewards.xp) || 60} XP</span>` +
       `<span class="pet-adv-res-pill">💖 Gắn kết: ${Math.round((snap.needs && snap.needs.bond) || 50)}%</span>` +
       `<span class="pet-adv-res-pill">🍖 Độ no: ${Math.round((snap.needs && snap.needs.hunger) || 80)}%</span>` +
       `</div>` +
       `<ul class="pet-adv-res-Quotes" style="margin:0 0 8px;padding-left:16px">${practicedSentencesHtml}</ul>` +
       `<div class="pet-adv-res-btns">` +
-      `<button type="button" class="pet-adv-res-btn primary" id="btnAdvExploreOther" data-adv-result-action="explore">🔄 Khám phá chủ đề khác</button>` +
-      `<button type="button" class="pet-adv-res-btn" id="btnAdvRestHome" data-adv-result-action="rest">🏠 Nghỉ ngơi tại nhà</button>` +
+      `<button type="button" class="pet-adv-res-btn primary" data-adv-go-place="${esc(stageQuest.targetTopic || stageQuest.targetPlace)}">` +
+      `🚀 Tới ${esc(targetPlaceMeta.nameVi)} (Nhiệm vụ Lv.${stageQuest.fromLevel})` +
+      `</button>` +
+      `<button type="button" class="pet-adv-res-btn" data-adv-reset-quest>🔄 Nhiệm vụ mới (0/3)</button>` +
+      `<button type="button" class="pet-adv-res-btn" id="btnAdvExploreOther" data-adv-result-action="explore">🗺️ Đổi chủ đề</button>` +
+      `<button type="button" class="pet-adv-res-btn" id="btnAdvRestHome" data-adv-result-action="rest">🏠 Nghỉ ngơi</button>` +
       `</div>` +
       `</div>`;
 
@@ -1121,6 +1234,7 @@
       `${session.active ? "🟢 Đang đi chơi (Bấm để nghỉ)" : "🦮 Bắt đầu Đi chơi cùng " + esc(pet.name)}` +
       `</button>` +
       `</div>` +
+      stageBannerHtml +
       `<div class="pet-adv-meta-badges">` +
       (window.ELW_DEBUG ? `<span class="pet-adv-badge" data-badge-session>🆔 Phiên: <code>${esc(session.sessionId)}</code></span>` : "") +
       `<span class="pet-adv-badge" data-badge-pet>${pet.icon || "🐕"} Pet: <b>${esc(pet.name)} (${esc(unified.activePetId)})</b></span>` +
@@ -1413,7 +1527,37 @@
       };
     });
 
-    // Adventure Result Buttons
+    // Adventure Result & Stage Quest Buttons
+    card.querySelectorAll("[data-adv-go-place]").forEach(function (goBtn) {
+      goBtn.onclick = function (ev) {
+        if (ev && typeof ev.stopPropagation === "function") ev.stopPropagation();
+        forceShowResult = false;
+        const targetPlace = goBtn.getAttribute("data-adv-go-place") || "park";
+        if (advApi && typeof advApi.travelToQuestPlace === "function") {
+          advApi.travelToQuestPlace(targetPlace);
+        } else if (root && typeof root.pickTopic === "function") {
+          root.pickTopic(targetPlace);
+          if (advApi && typeof advApi.enterAdventure === "function") {
+            advApi.enterAdventure({ place: targetPlace, entrySource: "stage_quest_travel", forceNew: true });
+          }
+        }
+        render();
+      };
+    });
+
+    card.querySelectorAll("[data-adv-reset-quest]").forEach(function (rstBtn) {
+      rstBtn.onclick = function (ev) {
+        if (ev && typeof ev.stopPropagation === "function") ev.stopPropagation();
+        forceShowResult = false;
+        if (advApi && typeof advApi.startNewQuest === "function") {
+          advApi.startNewQuest();
+        } else if (advApi && typeof advApi.enterAdventure === "function") {
+          advApi.enterAdventure({ entrySource: "quest_reset", forceNew: true });
+        }
+        render();
+      };
+    });
+
     const exploreBtn = card.querySelector("#btnAdvExploreOther");
     if (exploreBtn) {
       exploreBtn.onclick = function () {
@@ -1980,6 +2124,9 @@
                 w.dir = entry.d || 1;
               }
             }
+          }
+          if (typeof root.renderTabs === "function") {
+            root.renderTabs();
           }
           if (typeof root.renderRoom === "function") {
             root.renderRoom();

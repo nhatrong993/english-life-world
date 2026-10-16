@@ -69,6 +69,162 @@
     lost:     { id: "lost",     icon: "🔍", vi: "Tìm đồ thất lạc",        en: "Lost & Found" }
   });
 
+  /* Stage Evolution Quest Chains (Lv.1 -> Lv.5) */
+  const STAGE_QUEST_CHAINS = Object.freeze({
+    1: {
+      fromLevel: 1,
+      toLevel: 2,
+      stageId: "baby",
+      nextStageName: "Young (Lv.2)",
+      targetPlace: "home",
+      targetTopic: "home",
+      icon: "🏠",
+      titleVi: "Nhiệm vụ Tiến hóa Lv.1 → Lv.2: Chăm Pet ở Nhà & Lấy sữa tươi",
+      titleEn: "Lv.1 → Lv.2 Evolution Quest: Home Care & Fridge Milk",
+      descVi: "Trò chuyện làm quen với Pet ở nhà, mở tủ lạnh lấy sữa/cho Pet ăn uống và xin phép Mẹ dẫn Pet đi dạo."
+    },
+    2: {
+      fromLevel: 2,
+      toLevel: 3,
+      stageId: "young",
+      nextStageName: "Teen (Lv.3)",
+      targetPlace: "park",
+      targetTopic: "park",
+      icon: "🌳",
+      titleVi: "Nhiệm vụ Tiến hóa Lv.2 → Lv.3: Đưa Pet ra Công viên đi dạo & Chơi quanh hồ",
+      titleEn: "Lv.2 → Lv.3 Evolution Quest: Park Walk & Fountain Play",
+      descVi: "Dẫn Pet tới Công viên 🌳, đi dạo quanh hồ nước/đài phun nước, cho Pet uống nước mát và hỏi đường nhân viên công viên."
+    },
+    3: {
+      fromLevel: 3,
+      toLevel: 4,
+      stageId: "teen",
+      nextStageName: "Adult (Lv.4)",
+      targetPlace: "market",
+      targetTopic: "market",
+      icon: "🛒",
+      titleVi: "Nhiệm vụ Tiến hóa Lv.3 → Lv.4: Đi Siêu thị mua sữa tươi & Bánh thưởng cho Pet",
+      titleEn: "Lv.3 → Lv.4 Evolution Quest: Supermarket Shopping for Pet Treats",
+      descVi: "Dẫn Pet tới Siêu thị 🛒, lấy giỏ mua sắm, chọn mua sữa tươi/táo giòn & bánh thưởng cho Pet rồi thanh toán ở quầy thu ngân."
+    },
+    4: {
+      fromLevel: 4,
+      toLevel: 5,
+      stageId: "adult",
+      nextStageName: "Elite (Lv.5)",
+      targetPlace: "outdoor",
+      targetTopic: "outdoor",
+      icon: "⛺",
+      titleVi: "Nhiệm vụ Tiến hóa Lv.4 → Lv.5: Cắm trại Dã ngoại, Dựng lều & Lửa trại cùng Pet",
+      titleEn: "Lv.4 → Lv.5 Evolution Quest: Outdoor Camping & Nature Trail",
+      descVi: "Đưa Pet tới Khu Cắm trại ⛺, cùng dựng lều/sưởi ấm bên lửa trại, tiếp nước cho Pet và hỏi chú Kiểm lâm đường lên đài ngắm cảnh."
+    },
+    5: {
+      fromLevel: 5,
+      toLevel: 5,
+      stageId: "elite",
+      nextStageName: "Max Elite (Lv.5)",
+      targetPlace: "cafe",
+      targetTopic: "cafe",
+      icon: "👑",
+      titleVi: "Nhiệm vụ Thú cưng Huyền thoại Lv.5: Dạo phố Quán Cà phê & Nhà hàng",
+      titleEn: "Lv.5 Elite Companion Quest: Cozy Café & Bistro Hangout",
+      descVi: "Cùng Pet cấp Huyền thoại đi thư giãn tại Quán Cà phê ☕ hoặc Nhà hàng 🍽️, gọi món yêu thích và giao tiếp tiếng Anh tự nhiên."
+    }
+  });
+
+  /* Place-specific Concrete Quest Step Titles & Action Hints */
+  const PLACE_QUEST_SPECS = Object.freeze({
+    home: {
+      step1TitleVi: "Gọi {pet} ở phòng khách & rủ chuẩn bị đi chơi",
+      step1TitleEn: "Call {pet} in the Living Room & Get Ready",
+      step1HintVi: "💡 Mẹo: Bấm vào Pet trên sân khấu (Gọi lại gần / Trò chuyện) hoặc bấm Hoàn thành bước bên dưới.",
+      step2TitleVi: "Mở tủ lạnh lấy sữa tươi / Cho {pet} ăn uống no bụng",
+      step2TitleEn: "Get Fresh Milk from the Fridge & Feed {pet}",
+      step2HintVi: "💡 Mẹo: Bấm vào Tủ lạnh ở Bếp (Lấy sữa) hoặc bấm Cho ăn 🍖 / Cho uống 💧.",
+      step3TitleVi: "Xin phép Mẹ dẫn {pet} ra ngoài đi dạo & luyện tiếng Anh",
+      step3TitleEn: "Ask Mom before Taking {pet} Out for a Walk",
+      step3HintVi: "💡 Mẹo: Bấm Thực hành câu với Mẹ 👩 hoặc tương tác đồ vật trong nhà."
+    },
+    park: {
+      step1TitleVi: "Cùng {pet} đi dạo quanh Đài phun nước & Hồ công viên",
+      step1TitleEn: "Walk with {pet} Around the Park Fountain & Pond",
+      step1HintVi: "💡 Mẹo: Bấm vào Đài phun nước / Hồ cá / Ghế đá trong Công viên hoặc nói câu mở đầu.",
+      step2TitleVi: "Cho {pet} uống nước mát ở vòi nước / Thưởng bánh & ném bóng",
+      step2TitleEn: "Give {pet} Fresh Water by the Fountain & Play Fetch",
+      step2HintVi: "💡 Mẹo: Bấm Vòi nước công viên / Xe kem hoặc bấm Cho uống 💧 / Chơi đùa 🎾.",
+      step3TitleVi: "Hỏi Nhân viên Công viên 🌳 về lối đi bộ ven hồ cho {pet}",
+      step3TitleEn: "Ask Park Staff 🌳 About the Pet-Friendly Lakeside Trail",
+      step3HintVi: "💡 Mẹo: Bấm Thực hành câu giao tiếp với Park Staff 🌳."
+    },
+    market: {
+      step1TitleVi: "Lấy giỏ hàng ở lối vào Siêu thị & dặn {pet} đi ngoan cạnh xe đẩy",
+      step1TitleEn: "Grab a Shopping Basket & Guide {pet} by the Cart",
+      step1HintVi: "💡 Mẹo: Bấm vào Giỏ hàng / Cửa vào Siêu thị hoặc nói câu mở đầu cùng Pet.",
+      step2TitleVi: "Mua sữa tươi, táo hữu cơ & bánh thưởng cho {pet}",
+      step2TitleEn: "Buy Fresh Milk, Organic Apples & Pet Treats for {pet}",
+      step2HintVi: "💡 Mẹo: Bấm vào Quầy Sữa / Quầy Rau quả ở Siêu thị hoặc bấm Cho ăn 🍖.",
+      step3TitleVi: "Hỏi Nhân viên Siêu thị 💁 kệ bánh thưởng & thanh toán tại Quầy thu ngân",
+      step3TitleEn: "Ask Store Staff 💁 for the Pet Aisle & Pay at Checkout",
+      step3HintVi: "💡 Mẹo: Bấm vào Quầy thu ngân (Checkout) hoặc bấm Thực hành câu bên dưới."
+    },
+    cafe: {
+      step1TitleVi: "Chọn bàn ngoài hiên Quán Cà phê & cho {pet} ngồi cạnh",
+      step1TitleEn: "Pick a Sunny Patio Table at the Café with {pet}",
+      step1HintVi: "💡 Mẹo: Bấm vào Bàn cà phê / Menu tại Quán hoặc nói câu mở đầu cùng Pet.",
+      step2TitleVi: "Gọi bát nước mát & thưởng bánh cho {pet} tại bàn",
+      step2TitleEn: "Give {pet} a Water Bowl & Pet Snack at the Patio",
+      step2HintVi: "💡 Mẹo: Bấm Cho uống 💧 / Cho ăn 🍖 hoặc tương tác Quầy bánh ngọt.",
+      step3TitleVi: "Gọi đồ uống (Oat Milk Latte & Croissant) với Barista 🧑‍🍳",
+      step3TitleEn: "Order an Oat Milk Latte & Croissant from the Barista 🧑‍🍳",
+      step3HintVi: "💡 Mẹo: Bấm vào Quầy Pha chế (Order) hoặc bấm Thực hành câu bên dưới."
+    },
+    restaurant: {
+      step1TitleVi: "Chọn bàn sân vườn Nhà hàng thân thiện với {pet}",
+      step1TitleEn: "Find a Pet-Friendly Garden Table at the Bistro with {pet}",
+      step1HintVi: "💡 Mẹo: Bấm vào Bàn ăn / Thực đơn Nhà hàng hoặc nói câu mở đầu.",
+      step2TitleVi: "Thưởng thức bữa ăn & chia phần bánh thưởng cho {pet}",
+      step2TitleEn: "Share a Tasty Treat & Water with {pet} by the Table",
+      step2HintVi: "💡 Mẹo: Bấm Cho ăn 🍖 / Vuốt ve 🤗 hoặc tương tác món ăn trên bàn.",
+      step3TitleVi: "Đặt bàn ngoài hiên & gọi món bằng tiếng Anh với Bồi bàn 🍽️",
+      step3TitleEn: "Request a Patio Table & Menu from the Waiter 🍽️",
+      step3HintVi: "💡 Mẹo: Bấm Thực hành câu giao tiếp với Waiter 🍽️."
+    },
+    outdoor: {
+      step1TitleVi: "Khám phá Rừng thông, dựng lều trại & dạo suối cùng {pet}",
+      step1TitleEn: "Pitch the Camp Tent & Explore the Pine Trail with {pet}",
+      step1HintVi: "💡 Mẹo: Bấm vào Lều trại / Suối đá / Biển chỉ đường ở Khu Cắm trại.",
+      step2TitleVi: "Sưởi ấm bên Lửa trại & tiếp nước, thức ăn cho {pet}",
+      step2TitleEn: "Warm Up by the Campfire & Refill {pet}'s Water & Treats",
+      step2HintVi: "💡 Mẹo: Bấm vào Lửa trại / Bếp nướng hoặc bấm Cho ăn 🍖 / Cho uống 💧.",
+      step3TitleVi: "Hỏi Chú Kiểm lâm 🏕️ đường mòn lên Đài ngắm cảnh cùng {pet}",
+      step3TitleEn: "Ask the Park Ranger 🏕️ for the Scenic Lookout Trail",
+      step3HintVi: "💡 Mẹo: Bấm vào Đài ngắm cảnh / Kiểm lâm hoặc bấm Thực hành câu bên dưới."
+    },
+    camping: {
+      step1TitleVi: "Khám phá Rừng thông, dựng lều trại & dạo suối cùng {pet}",
+      step1TitleEn: "Pitch the Camp Tent & Explore the Pine Trail with {pet}",
+      step1HintVi: "💡 Mẹo: Bấm vào Lều trại / Suối đá ở Khu Cắm trại.",
+      step2TitleVi: "Sưởi ấm bên Lửa trại & tiếp nước, thức ăn cho {pet}",
+      step2TitleEn: "Warm Up by the Campfire & Refill {pet}'s Water & Treats",
+      step2HintVi: "💡 Mẹo: Bấm vào Lửa trại hoặc bấm Cho ăn 🍖 / Cho uống 💧.",
+      step3TitleVi: "Hỏi Chú Kiểm lâm 🏕️ đường mòn lên Đài ngắm cảnh cùng {pet}",
+      step3TitleEn: "Ask the Park Ranger 🏕️ for the Scenic Lookout Trail",
+      step3HintVi: "💡 Mẹo: Bấm Thực hành câu với Park Ranger 🏕️."
+    },
+    school: {
+      step1TitleVi: "Đưa {pet} tới sân trường vào Ngày hội Thú cưng",
+      step1TitleEn: "Bring {pet} to the School Pet Show & Tell Day",
+      step1HintVi: "💡 Mẹo: Bấm vào Bảng đen / Bàn học hoặc nói câu mở đầu cùng Pet.",
+      step2TitleVi: "Chăm sóc & khen thưởng {pet} ngoan ngoãn trước lớp",
+      step2TitleEn: "Praise & Reward {pet} Before Sharing with the Class",
+      step2HintVi: "💡 Mẹo: Bấm Vuốt ve 🤗 / Cho ăn 🍖.",
+      step3TitleVi: "Xin phép Cô giáo 👩‍🏫 kể câu chuyện tiếng Anh về {pet}",
+      step3TitleEn: "Ask the Teacher 👩‍🏫 to Share Your English Story About {pet}",
+      step3HintVi: "💡 Mẹo: Bấm Thực hành câu với Teacher 👩‍🏫."
+    }
+  });
+
   let memorySession = null;
   let lastObservedEngineCtx = null;
   let validatorState = {
@@ -177,10 +333,70 @@
     return raw;
   }
 
-  function makeObjectiveKey(place, objId) {
+  function readCurrentPetStageState(petIdOverride) {
+    const needsApi = getNeedsEngine();
+    if (needsApi) {
+      try {
+        const snap = typeof needsApi.getSnapshot === "function" ? needsApi.getSnapshot() : null;
+        const evo = typeof needsApi.evaluateEvolution === "function" ? needsApi.evaluateEvolution(petIdOverride) : null;
+        const level = Number((snap && snap.level) || (snap && snap.stats && snap.stats.level) || (evo && evo.fromLevel) || 1);
+        const prog = (snap && snap.progression) || {};
+        const reqMap = { 1: 1, 2: 2, 3: 3, 4: 4, 5: 4 };
+        return {
+          level: Math.max(1, Math.min(5, level)),
+          toLevel: Math.min(5, Math.max(1, level) + 1),
+          stage: (snap && snap.stage) || (evo && evo.from) || "baby",
+          xp: Number((snap && snap.xp) || (evo && evo.xp) || 0),
+          stageMissionsCurrent: Number(prog.stageMissionsCurrent || 0),
+          stageMissionsTotal: Number(prog.stageMissions || 0),
+          stageMissionsRequired: reqMap[level] || 1,
+          canEvolve: Boolean(evo && evo.canEvolve),
+          missing: (evo && evo.missing) || {}
+        };
+      } catch (e) {}
+    }
+    return {
+      level: 1,
+      toLevel: 2,
+      stage: "baby",
+      xp: 0,
+      stageMissionsCurrent: 0,
+      stageMissionsTotal: 0,
+      stageMissionsRequired: 1,
+      canEvolve: false,
+      missing: {}
+    };
+  }
+
+  function getStageQuestMeta(levelOverride, currentPlace) {
+    const st = readCurrentPetStageState();
+    const lv = Math.max(1, Math.min(5, Number(levelOverride) || st.level || 1));
+    const chain = STAGE_QUEST_CHAINS[lv] || STAGE_QUEST_CHAINS[1];
+    const normCurPlace = normalizePlaceAndZone({ place: currentPlace || "home" }).place;
+    const isAtTarget = normCurPlace === chain.targetPlace || (chain.targetPlace === "outdoor" && normCurPlace === "camping");
+    return Object.assign({}, chain, {
+      currentLevel: lv,
+      currentPlace: normCurPlace,
+      isAtTargetPlace: isAtTarget,
+      stageMissionsCurrent: st.stageMissionsCurrent,
+      stageMissionsTotal: st.stageMissionsTotal,
+      stageMissionsRequired: st.stageMissionsRequired
+    });
+  }
+
+  function makeObjectiveKey(place, objId, stageLevelOverride, cycleOverride) {
     const normPlace = normalizePlaceAndZone({ place: place }).place;
     const normObj = normalizeObjectiveId(objId);
-    return "adv:" + normPlace + ":" + normObj;
+    const lvl = stageLevelOverride !== undefined
+      ? Number(stageLevelOverride)
+      : (memorySession && Number(memorySession.questStageLevel)) || 1;
+    const cyc = cycleOverride !== undefined
+      ? Number(cycleOverride)
+      : (memorySession && Number(memorySession.questCycle)) || 0;
+    if (lvl <= 1 && cyc <= 0) {
+      return "adv:" + normPlace + ":" + normObj;
+    }
+    return "adv:lv" + lvl + (cyc > 0 ? ":c" + cyc : "") + ":" + normPlace + ":" + normObj;
   }
 
   /* ---------- Direct Readers from Shared Engines ---------- */
@@ -854,11 +1070,12 @@
   }
 
   /* ---------- Build 3 Contextual Objectives & Dialogue List ---------- */
-  function attachCompletedObjectivesHelpers(arr, place) {
+  function attachCompletedObjectivesHelpers(arr, place, stageLevel, cycle) {
     const cleanIds = Array.isArray(arr) ? arr.slice() : [];
     cleanIds.forEach(function (id) {
       const normId = normalizeObjectiveId(id);
-      const key = makeObjectiveKey(place, normId);
+      const key = makeObjectiveKey(place, normId, stageLevel, cycle);
+      const baseKey = makeObjectiveKey(place, normId, 1, 0);
       try {
         Object.defineProperty(cleanIds, normId, {
           value: true,
@@ -872,12 +1089,20 @@
           configurable: true,
           writable: true
         });
+        if (baseKey !== key) {
+          Object.defineProperty(cleanIds, baseKey, {
+            value: true,
+            enumerable: false,
+            configurable: true,
+            writable: true
+          });
+        }
       } catch (e) {}
     });
     return cleanIds;
   }
 
-  function extractCompletedList(rawCompleted, place) {
+  function extractCompletedList(rawCompleted, place, stageLevel, cycle) {
     const set = new Set();
     if (Array.isArray(rawCompleted)) {
       rawCompleted.forEach(function (item) {
@@ -892,9 +1117,9 @@
         }
       });
     }
-    // Also sync with rewardLedger if already claimed for this place in persistent ledger
+    // Sync with rewardLedger for the current stageLevel + cycle key
     OBJECTIVE_IDS.forEach(function (objId) {
-      const key = makeObjectiveKey(place, objId);
+      const key = makeObjectiveKey(place, objId, stageLevel, cycle);
       if (isObjectiveClaimedInLedger(key)) {
         set.add(objId);
       }
@@ -904,7 +1129,11 @@
     });
   }
 
-  function buildObjectivesForContext(ctx, petProfile, completedList) {
+  function formatPetTemplate(tpl, petName) {
+    return String(tpl || "").replace(/\{pet\}/g, petName || "Milu");
+  }
+
+  function buildObjectivesForContext(ctx, petProfile, completedList, stageLevelOverride, cycleOverride) {
     const place = (ctx && ctx.place) || "home";
     const zone = (ctx && ctx.zone) || place;
     const weather = (ctx && ctx.weather) || "sunny";
@@ -913,16 +1142,24 @@
     const needs = readNeeds();
     const placeInfo = PLACE_META[place] || PLACE_META.home;
     const wxInfo = WEATHER_META[weather] || WEATHER_META.sunny;
+    const placeSpec = PLACE_QUEST_SPECS[place] || PLACE_QUEST_SPECS.home;
 
-    const doneSet = new Set(extractCompletedList(completedList, place));
+    const stageLevel = stageLevelOverride !== undefined
+      ? Number(stageLevelOverride)
+      : (ctx && ctx.questStageLevel !== undefined ? Number(ctx.questStageLevel) : ((memorySession && Number(memorySession.questStageLevel)) || 1));
+    const cycle = cycleOverride !== undefined
+      ? Number(cycleOverride)
+      : (ctx && ctx.questCycle !== undefined ? Number(ctx.questCycle) : ((memorySession && Number(memorySession.questCycle)) || 0));
+
+    const doneSet = new Set(extractCompletedList(completedList, place, stageLevel, cycle));
 
     const greetLine = buildGreetSentenceForContext(place, zone, weather, situation, pet);
     const careLine = buildCareSentenceForContext(place, weather, pet, needs);
     const practiceLine = buildPracticeSentenceForContext(place, zone, weather, situation, pet);
 
-    const obj1Key = makeObjectiveKey(place, "greet_context");
-    const obj2Key = makeObjectiveKey(place, "care_bond");
-    const obj3Key = makeObjectiveKey(place, "contextual_practice");
+    const obj1Key = makeObjectiveKey(place, "greet_context", stageLevel, cycle);
+    const obj2Key = makeObjectiveKey(place, "care_bond", stageLevel, cycle);
+    const obj3Key = makeObjectiveKey(place, "contextual_practice", stageLevel, cycle);
 
     const obj1Done = doneSet.has("greet_context") || isObjectiveClaimedInLedger(obj1Key);
     const obj2Done = doneSet.has("care_bond") || isObjectiveClaimedInLedger(obj2Key);
@@ -938,9 +1175,10 @@
         zone: zone,
         weather: weather,
         situation: situation,
-        titleEn: `Greet ${pet.name} (${placeInfo.nameEn} · ${wxInfo.en})`,
-        titleVi: `Trò chuyện mở đầu cùng ${pet.name} (${placeInfo.nameVi} · ${wxInfo.vi})`,
-        descVi: `Bấm nói câu chào mở đầu chuyến đi cùng ${pet.name} phù hợp với bối cảnh ${placeInfo.nameVi} khi trời ${wxInfo.vi.toLowerCase()}.`,
+        titleEn: `${formatPetTemplate(placeSpec.step1TitleEn, pet.name)} (${placeInfo.nameEn} · ${wxInfo.en})`,
+        titleVi: `${formatPetTemplate(placeSpec.step1TitleVi, pet.name)} (${placeInfo.nameVi} · ${wxInfo.vi})`,
+        descVi: `Bấm nói câu mở đầu cùng ${pet.name} hoặc tương tác tại ${placeInfo.nameVi} khi trời ${wxInfo.vi.toLowerCase()}.`,
+        actionHintVi: formatPetTemplate(placeSpec.step1HintVi, pet.name),
         sentenceEn: greetLine.en,
         sentenceVi: greetLine.vi,
         en: greetLine.en,
@@ -957,7 +1195,7 @@
         rewardClaimed: isObjectiveClaimedInLedger(obj1Key),
         rewardSpec: {
           stars: 10,
-          xp: 12,
+          xp: 15,
           treats: 1,
           water: 0,
           toys: 0,
@@ -978,9 +1216,10 @@
         zone: zone,
         weather: weather,
         situation: situation,
-        titleEn: `Care for ${pet.name}'s Needs on the Trip`,
-        titleVi: `Chăm sóc nhu cầu của ${pet.name} trong chuyến đi`,
-        descVi: `Vuốt ve, cho ăn, cho uống nước hoặc chơi đùa để giữ năng lượng và độ gắn kết của ${pet.name} luôn tràn đầy.`,
+        titleEn: formatPetTemplate(placeSpec.step2TitleEn, pet.name),
+        titleVi: formatPetTemplate(placeSpec.step2TitleVi, pet.name),
+        descVi: `Thực hiện hành động chăm sóc ${pet.name} (cho ăn, uống nước, lấy sữa, mua bánh thưởng hoặc chơi đùa).`,
+        actionHintVi: formatPetTemplate(placeSpec.step2HintVi, pet.name),
         sentenceEn: careLine.en,
         sentenceVi: careLine.vi,
         en: careLine.en,
@@ -998,7 +1237,7 @@
         rewardClaimed: isObjectiveClaimedInLedger(obj2Key),
         rewardSpec: {
           stars: 10,
-          xp: 15,
+          xp: 20,
           treats: 1,
           water: 1,
           toys: 0,
@@ -1022,9 +1261,10 @@
         zone: zone,
         weather: weather,
         situation: situation,
-        titleEn: `Practice English with ${practiceLine.responder} at ${placeInfo.nameEn}`,
-        titleVi: `Thực hành giao tiếp tiếng Anh tại ${placeInfo.nameVi}`,
-        descVi: `Thực hành mẫu câu giao tiếp thực tế với ${practiceLine.who} (hoặc trên thẻ Ngữ cảnh) tại ${placeInfo.nameVi}.`,
+        titleEn: formatPetTemplate(placeSpec.step3TitleEn, pet.name),
+        titleVi: formatPetTemplate(placeSpec.step3TitleVi, pet.name),
+        descVi: `Thực hành mẫu câu giao tiếp thực tế với ${practiceLine.who} tại ${placeInfo.nameVi}.`,
+        actionHintVi: formatPetTemplate(placeSpec.step3HintVi, pet.name),
         sentenceEn: practiceLine.en,
         sentenceVi: practiceLine.vi,
         en: practiceLine.en,
@@ -1041,7 +1281,7 @@
         rewardClaimed: isObjectiveClaimedInLedger(obj3Key),
         rewardSpec: {
           stars: 15,
-          xp: 20,
+          xp: 25,
           treats: 1,
           water: 0,
           toys: 1,
@@ -1154,8 +1394,11 @@
     const c = ctx || readLiveContext();
     const pid = activePetId || readActivePetId();
     const pet = readActivePetProfile(pid);
-    const completed = extractCompletedList([], c.place);
-    const objectives = buildObjectivesForContext(c, pet, completed);
+    const stageState = readCurrentPetStageState(pid);
+    const questStageLevel = stageState.level || 1;
+    const questCycle = 0;
+    const completed = extractCompletedList([], c.place, questStageLevel, questCycle);
+    const objectives = buildObjectivesForContext(c, pet, completed, questStageLevel, questCycle);
     const isComplete = completed.length >= OBJECTIVE_IDS.length;
 
     return {
@@ -1163,6 +1406,9 @@
       active: false,
       petId: pid,
       activePetId: pid,
+      questStageLevel: questStageLevel,
+      questCycle: questCycle,
+      stageQuest: getStageQuestMeta(questStageLevel, c.place),
       entrySources: [],
       lastEntrySource: null,
       place: c.place,
@@ -1170,7 +1416,7 @@
       weather: c.weather,
       situation: c.situation,
       objectives: objectives,
-      completedObjectives: attachCompletedObjectivesHelpers(completed, c.place),
+      completedObjectives: attachCompletedObjectivesHelpers(completed, c.place, questStageLevel, questCycle),
       completedByPlace: {
         [c.place]: completed.slice()
       },
@@ -1197,6 +1443,9 @@
       }
     });
 
+    const stageState = readCurrentPetStageState(petProfile && petProfile.id);
+    const nextChain = STAGE_QUEST_CHAINS[stageState.level] || STAGE_QUEST_CHAINS[1];
+
     return {
       sessionId: sessionId || "adv_session",
       petId: petProfile.id,
@@ -1213,9 +1462,12 @@
       totalCount: OBJECTIVE_IDS.length,
       objectivesCompleted: OBJECTIVE_IDS.slice(),
       rewards: totals,
+      petLevel: stageState.level,
+      nextRecommendedPlace: nextChain.targetPlace,
+      nextRecommendedTitleVi: nextChain.titleVi,
       headlineEn: `Adventure Quest Complete with ${petProfile.name} at ${placeInfo.nameEn}!`,
       headlineVi: `Hoàn thành Nhiệm vụ Phiêu lưu cùng ${petProfile.name} tại ${placeInfo.nameVi}!`,
-      summaryVi: `Xuất sắc! Bạn và ${petProfile.name} đã hoàn thành 3/3 mục tiêu tại ${placeInfo.nameVi} (${wxInfo.vi}).`,
+      summaryVi: `Xuất sắc! Bạn và ${petProfile.name} đã hoàn thành 3/3 mục tiêu tại ${placeInfo.nameVi} (${wxInfo.vi}). Bấm "Nhiệm vụ mới (0/3)" hoặc chuyển tới địa điểm tiếp theo để tiếp tục tiến hóa!`,
       completedAt: Date.now()
     };
   }
@@ -1239,15 +1491,21 @@
 
   function writeSessionToStorage(session) {
     if (!session || typeof session !== "object") return;
+    const questStageLevel = Number(session.questStageLevel) || 1;
+    const questCycle = Number(session.questCycle) || 0;
     const cleanCompleted = Array.isArray(session.completedObjectives)
       ? session.completedObjectives.slice()
-      : extractCompletedList(session.completedObjectives, session.place);
+      : extractCompletedList(session.completedObjectives, session.place, questStageLevel, questCycle);
 
     const serializable = {
       sessionId: String(session.sessionId || ("adv_" + Date.now())),
       active: Boolean(session.active),
       petId: String(session.petId || readActivePetId()),
       activePetId: String(session.petId || readActivePetId()),
+      questStageLevel: questStageLevel,
+      questCycle: questCycle,
+      completedAtStageLevel: Number(session.completedAtStageLevel) || questStageLevel,
+      stageQuest: getStageQuestMeta(questStageLevel, session.place || "home"),
       entrySources: Array.isArray(session.entrySources) ? session.entrySources.slice() : [],
       lastEntrySource: session.lastEntrySource || null,
       place: session.place || "home",
@@ -1266,7 +1524,7 @@
     };
 
     memorySession = Object.assign({}, serializable, {
-      completedObjectives: attachCompletedObjectivesHelpers(cleanCompleted, serializable.place)
+      completedObjectives: attachCompletedObjectivesHelpers(cleanCompleted, serializable.place, questStageLevel, questCycle)
     });
 
     const store = getStorage();
@@ -1295,10 +1553,12 @@
 
   /* ---------- Synchronize Shared Session with Live Context & Pet ---------- */
   function getSharedSession(ctxOverride) {
+    const isColdLoad = memorySession === null;
     const raw = readRawSessionFromStorage();
     const activePetId = readActivePetId();
     const petProfile = readActivePetProfile(activePetId);
     const liveCtx = readLiveContext(ctxOverride);
+    const stageState = readCurrentPetStageState(activePetId);
 
     if (!raw) {
       const fresh = createDefaultSession(liveCtx, activePetId);
@@ -1319,15 +1579,41 @@
       ? normalizeSituation(ctxOverride.situation)
       : (liveCtx.situation || raw.situation || "normal");
 
-    const completedByPlace = (raw.completedByPlace && typeof raw.completedByPlace === "object")
+    let questStageLevel = Number(raw.questStageLevel) || 1;
+    let questCycle = Number(raw.questCycle) || 0;
+    const completedAtStageLevel = Number(raw.completedAtStageLevel) || questStageLevel;
+
+    // Auto-reset quest when:
+    // 1. Pet evolved AFTER completing the quest (stageState.level > completedAtStageLevel), OR
+    // 2. Page cold-loads or switches place while a Lv.2+ pet still needs its current stage mission (stageMissionsCurrent === 0) and is stuck at 3/3
+    const petLeveledUpAfterQuest = stageState.level > completedAtStageLevel;
+    const placeChangedWhileStuck = place !== raw.place && stageState.level > 1 && stageState.stageMissionsCurrent === 0 && Boolean(raw.isComplete);
+    const coldLoadStuckAtLv2Plus = isColdLoad && stageState.level > 1 && stageState.stageMissionsCurrent === 0 && Boolean(raw.isComplete);
+    const needsAutoReset = petLeveledUpAfterQuest || placeChangedWhileStuck || coldLoadStuckAtLv2Plus;
+
+    let completedByPlace = (raw.completedByPlace && typeof raw.completedByPlace === "object")
       ? Object.assign({}, raw.completedByPlace)
       : {};
 
-    const rawPlaceCompleted = raw.place === place
-      ? (completedByPlace[place] || raw.completedObjectives || [])
-      : (completedByPlace[place] || []);
+    if (needsAutoReset) {
+      questStageLevel = stageState.level;
+      questCycle = questCycle + 1;
+      completedByPlace = {};
+    }
 
-    const completedList = extractCompletedList(rawPlaceCompleted, place);
+    const rawPlaceCompleted = needsAutoReset
+      ? []
+      : (raw.place === place
+          ? (completedByPlace[place] || raw.completedObjectives || [])
+          : (completedByPlace[place] || []));
+
+    // Update memorySession stage/cycle before calling extractCompletedList & buildObjectivesForContext
+    memorySession = Object.assign({}, memorySession || {}, {
+      questStageLevel: questStageLevel,
+      questCycle: questCycle
+    });
+
+    const completedList = extractCompletedList(rawPlaceCompleted, place, questStageLevel, questCycle);
     completedByPlace[place] = completedList.slice();
 
     const syncCtx = {
@@ -1335,11 +1621,13 @@
       zone: zone,
       weather: weather,
       situation: situation,
+      questStageLevel: questStageLevel,
+      questCycle: questCycle,
       withPet: Boolean(raw.active || liveCtx.withPet),
       withLinh: Boolean(liveCtx.withLinh)
     };
 
-    const objectives = buildObjectivesForContext(syncCtx, petProfile, completedList);
+    const objectives = buildObjectivesForContext(syncCtx, petProfile, completedList, questStageLevel, questCycle);
     const isComplete = completedList.length >= OBJECTIVE_IDS.length;
 
     const syncedSession = {
@@ -1347,6 +1635,10 @@
       active: Boolean(raw.active),
       petId: activePetId,
       activePetId: activePetId,
+      questStageLevel: questStageLevel,
+      questCycle: questCycle,
+      completedAtStageLevel: needsAutoReset ? questStageLevel : completedAtStageLevel,
+      stageQuest: getStageQuestMeta(questStageLevel, place),
       entrySources: Array.isArray(raw.entrySources) ? raw.entrySources.slice() : [],
       lastEntrySource: raw.lastEntrySource || null,
       place: place,
@@ -1354,11 +1646,11 @@
       weather: weather,
       situation: situation,
       objectives: objectives,
-      completedObjectives: attachCompletedObjectivesHelpers(completedList, place),
+      completedObjectives: attachCompletedObjectivesHelpers(completedList, place, questStageLevel, questCycle),
       completedByPlace: completedByPlace,
       isComplete: isComplete,
       resultSummary: isComplete
-        ? (raw.resultSummary && raw.resultSummary.place === place && raw.resultSummary.petId === activePetId
+        ? (raw.resultSummary && raw.resultSummary.place === place && raw.resultSummary.petId === activePetId && !needsAutoReset
             ? raw.resultSummary
             : buildResultSummary(syncCtx, petProfile, objectives, raw.sessionId))
         : null,
@@ -1366,8 +1658,85 @@
       updatedAt: Number(raw.updatedAt) || Date.now()
     };
 
-    memorySession = syncedSession;
+    if (needsAutoReset) {
+      writeSessionToStorage(syncedSession);
+    } else {
+      memorySession = syncedSession;
+    }
     return syncedSession;
+  }
+
+  /* ---------- Start a Fresh 0/3 Quest Cycle or Travel to Stage Quest Place ---------- */
+  function startNewQuest(opts) {
+    const options = opts && typeof opts === "object" ? opts : {};
+    const activePetId = readActivePetId();
+    const petProfile = readActivePetProfile(activePetId);
+    const stageState = readCurrentPetStageState(activePetId);
+    const current = getSharedSession(options);
+
+    const nextStageLevel = stageState.level || current.questStageLevel || 1;
+    const nextCycle = (Number(current.questCycle) || 0) + 1;
+    const liveCtx = readLiveContext(options);
+
+    memorySession = Object.assign({}, current, {
+      questStageLevel: nextStageLevel,
+      questCycle: nextCycle
+    });
+
+    const completedList = [];
+    const completedByPlace = { [liveCtx.place]: [] };
+    const objectives = buildObjectivesForContext(liveCtx, petProfile, completedList, nextStageLevel, nextCycle);
+
+    const session = {
+      sessionId: "adv_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7),
+      active: true,
+      petId: activePetId,
+      activePetId: activePetId,
+      questStageLevel: nextStageLevel,
+      questCycle: nextCycle,
+      stageQuest: getStageQuestMeta(nextStageLevel, liveCtx.place),
+      entrySources: Array.isArray(current.entrySources) && current.entrySources.length ? current.entrySources.slice() : ["quest_reset"],
+      lastEntrySource: "quest_reset",
+      place: liveCtx.place,
+      zone: liveCtx.zone,
+      weather: liveCtx.weather,
+      situation: liveCtx.situation,
+      objectives: objectives,
+      completedObjectives: attachCompletedObjectivesHelpers(completedList, liveCtx.place, nextStageLevel, nextCycle),
+      completedByPlace: completedByPlace,
+      isComplete: false,
+      resultSummary: null,
+      startedAt: Date.now(),
+      updatedAt: Date.now()
+    };
+
+    writeSessionToStorage(session);
+    notifySubscribers();
+    return session;
+  }
+
+  function travelToQuestPlace(targetPlaceOverride) {
+    const stageMeta = getStageQuestMeta();
+    const targetTopic = String(targetPlaceOverride || stageMeta.targetTopic || stageMeta.targetPlace || "park").toLowerCase().trim();
+    try {
+      const win = (root && root.window) || (typeof window !== "undefined" ? window : root);
+      if (win && typeof win.pickTopic === "function") {
+        win.pickTopic(targetTopic);
+      } else if (root && typeof root.pickTopic === "function") {
+        root.pickTopic(targetTopic);
+      }
+    } catch (e) {}
+
+    const current = getSharedSession({ place: targetTopic, room: targetTopic, zone: targetTopic });
+    if (current && current.isComplete) {
+      return startNewQuest({ place: targetTopic, room: targetTopic, zone: targetTopic });
+    }
+    return enterAdventure({
+      place: targetTopic,
+      room: targetTopic,
+      zone: targetTopic,
+      entrySource: "stage_quest_travel"
+    });
   }
 
   /* ---------- Unified Entry Point: enterAdventure(opts) ---------- */
@@ -1405,6 +1774,17 @@
     // 3. Read current live context (allowing optional place/weather/situation overrides in opts)
     const liveCtx = readLiveContext(options);
     const current = getSharedSession(liveCtx);
+    const stageState = readCurrentPetStageState(activePetId);
+    const questStageLevel = stageState.level || (current && current.questStageLevel) || 1;
+    let questCycle = (current && Number(current.questCycle)) || 0;
+    if (forceNew) {
+      questCycle = questCycle + 1;
+    }
+
+    memorySession = Object.assign({}, current || {}, {
+      questStageLevel: questStageLevel,
+      questCycle: questCycle
+    });
 
     let session;
     if (current && current.active === true && !forceNew) {
@@ -1420,12 +1800,14 @@
       }
       const completedList = extractCompletedList(
         (current.completedByPlace && current.completedByPlace[liveCtx.place]) || current.completedObjectives,
-        liveCtx.place
+        liveCtx.place,
+        questStageLevel,
+        questCycle
       );
       const completedByPlace = Object.assign({}, current.completedByPlace || {}, {
         [liveCtx.place]: completedList.slice()
       });
-      const objectives = buildObjectivesForContext(liveCtx, petProfile, completedList);
+      const objectives = buildObjectivesForContext(liveCtx, petProfile, completedList, questStageLevel, questCycle);
       const isComplete = completedList.length >= OBJECTIVE_IDS.length;
 
       session = {
@@ -1433,6 +1815,9 @@
         active: true,
         petId: activePetId,
         activePetId: activePetId,
+        questStageLevel: questStageLevel,
+        questCycle: questCycle,
+        stageQuest: getStageQuestMeta(questStageLevel, liveCtx.place),
         entrySources: sources,
         lastEntrySource: entrySource,
         place: liveCtx.place,
@@ -1440,7 +1825,7 @@
         weather: liveCtx.weather,
         situation: liveCtx.situation,
         objectives: objectives,
-        completedObjectives: attachCompletedObjectivesHelpers(completedList, liveCtx.place),
+        completedObjectives: attachCompletedObjectivesHelpers(completedList, liveCtx.place, questStageLevel, questCycle),
         completedByPlace: completedByPlace,
         isComplete: isComplete,
         resultSummary: isComplete
@@ -1453,17 +1838,19 @@
       // Initialize a new active adventure session
       const newSessionId = "adv_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7);
       const completedList = forceNew
-        ? extractCompletedList([], liveCtx.place)
+        ? extractCompletedList([], liveCtx.place, questStageLevel, questCycle)
         : extractCompletedList(
             (current && current.completedByPlace && current.completedByPlace[liveCtx.place]) || [],
-            liveCtx.place
+            liveCtx.place,
+            questStageLevel,
+            questCycle
           );
       const completedByPlace = forceNew
         ? { [liveCtx.place]: completedList.slice() }
         : Object.assign({}, (current && current.completedByPlace) || {}, {
             [liveCtx.place]: completedList.slice()
           });
-      const objectives = buildObjectivesForContext(liveCtx, petProfile, completedList);
+      const objectives = buildObjectivesForContext(liveCtx, petProfile, completedList, questStageLevel, questCycle);
       const isComplete = completedList.length >= OBJECTIVE_IDS.length;
       const initSources = [entrySource];
       if (entrySource === "home_pet_click") initSources.push("home_pet");
@@ -1474,6 +1861,9 @@
         active: true,
         petId: activePetId,
         activePetId: activePetId,
+        questStageLevel: questStageLevel,
+        questCycle: questCycle,
+        stageQuest: getStageQuestMeta(questStageLevel, liveCtx.place),
         entrySources: initSources,
         lastEntrySource: entrySource,
         place: liveCtx.place,
@@ -1481,7 +1871,7 @@
         weather: liveCtx.weather,
         situation: liveCtx.situation,
         objectives: objectives,
-        completedObjectives: attachCompletedObjectivesHelpers(completedList, liveCtx.place),
+        completedObjectives: attachCompletedObjectivesHelpers(completedList, liveCtx.place, questStageLevel, questCycle),
         completedByPlace: completedByPlace,
         isComplete: isComplete,
         resultSummary: isComplete
@@ -1571,7 +1961,7 @@
       return {
         valid: true,
         objId: normId,
-        objectiveKey: target ? target.objectiveKey : makeObjectiveKey(s.place, normId),
+        objectiveKey: target ? target.objectiveKey : makeObjectiveKey(s.place, normId, s.questStageLevel, s.questCycle),
         alreadyDone: Boolean(target && target.done),
         status: target ? target.status : "active",
         verifiedAt: validatorState.lastVerifiedAt
@@ -1630,10 +2020,12 @@
     }
 
     const place = session.place || "home";
-    const objectiveKey = makeObjectiveKey(place, normId);
+    const questStageLevel = Number(session.questStageLevel) || 1;
+    const questCycle = Number(session.questCycle) || 0;
+    const objectiveKey = makeObjectiveKey(place, normId, questStageLevel, questCycle);
     const targetObj = (session.objectives || []).find(function (o) {
       return o.id === normId;
-    }) || buildObjectivesForContext(session, readActivePetProfile(session.petId), session.completedObjectives).find(function (o) {
+    }) || buildObjectivesForContext(session, readActivePetProfile(session.petId), session.completedObjectives, questStageLevel, questCycle).find(function (o) {
       return o.id === normId;
     });
 
@@ -1674,19 +2066,15 @@
     }
 
     // 2b. Record to evolution progression (so quest actions count toward pet evolution)
-    // This fixes the disconnect where quest completion gave XP but didn't increment
-    // care/interaction/stageMissions counters required for evolution.
     try {
       const needsApi2 = getNeedsEngine();
       if (needsApi2 && !wasAlreadyDone) {
         const actionId = payload && payload.actionId ? String(payload.actionId).toLowerCase() : "";
         if (normId === "greet_context") {
-          // Talking to pet = interaction
           if (typeof needsApi2.recordInteraction === "function") {
             needsApi2.recordInteraction({ type: "talk", source: "adventure_quest" });
           }
         } else if (normId === "care_bond") {
-          // Care actions: determine type from actionId (pet:feed, pet:water, pet:pet, pet:play)
           let careType = "care";
           if (actionId.indexOf("feed") !== -1) careType = "feed";
           else if (actionId.indexOf("water") !== -1) careType = "water";
@@ -1698,13 +2086,16 @@
           if (typeof needsApi2.recordInteraction === "function") {
             needsApi2.recordInteraction({ type: careType, source: "adventure_quest" });
           }
+        } else if (normId === "contextual_practice") {
+          if (typeof needsApi2.recordInteraction === "function") {
+            needsApi2.recordInteraction({ type: "practice", source: "adventure_quest" });
+          }
         }
-        // Note: recordStageMission is called when all 3 objectives complete (see below)
       }
     } catch (e) {}
 
     // 3. Mark done in session.completedObjectives
-    const completedList = extractCompletedList(session.completedObjectives, place);
+    const completedList = extractCompletedList(session.completedObjectives, place, questStageLevel, questCycle);
     if (completedList.indexOf(normId) === -1) {
       completedList.push(normId);
     }
@@ -1717,23 +2108,29 @@
     });
 
     const petProfile = readActivePetProfile(session.petId);
-    session.objectives = buildObjectivesForContext(session, petProfile, orderedCompleted);
-    session.completedObjectives = attachCompletedObjectivesHelpers(orderedCompleted, place);
+    session.objectives = buildObjectivesForContext(session, petProfile, orderedCompleted, questStageLevel, questCycle);
+    session.completedObjectives = attachCompletedObjectivesHelpers(orderedCompleted, place, questStageLevel, questCycle);
     const wasComplete = session.isComplete;
     session.isComplete = orderedCompleted.length >= OBJECTIVE_IDS.length;
     session.updatedAt = Date.now();
 
     if (session.isComplete) {
-      session.resultSummary = buildResultSummary(session, petProfile, session.objectives, session.sessionId);
-      // Record stage mission completion for evolution (only on first completion)
+      // Record stage mission completion for evolution (only on first completion of this cycle)
       if (!wasComplete) {
         try {
           const needsApi3 = getNeedsEngine();
           if (needsApi3 && typeof needsApi3.recordStageMission === "function") {
-            needsApi3.recordStageMission({ missionId: "adventure_quest_" + place, source: "adventure_quest" });
+            needsApi3.recordStageMission({
+              missionId: "adventure_quest_" + place + "_lv" + questStageLevel + "_c" + questCycle,
+              source: "adventure_quest"
+            });
           }
         } catch (e) {}
       }
+      const postStage = readCurrentPetStageState(session.petId);
+      session.completedAtStageLevel = postStage.level || questStageLevel;
+      session.resultSummary = buildResultSummary(session, petProfile, session.objectives, session.sessionId);
+      session.stageQuest = getStageQuestMeta(postStage.level || questStageLevel, place);
     }
 
     writeSessionToStorage(session);
@@ -1767,7 +2164,6 @@
 
     const session = getSharedSession();
     if (!session.active && !(payload && payload.autoCompleteInInactive)) {
-      // Even if session wasn't explicitly started yet, if withPet is true in context, sync it
       const liveCtx = readLiveContext();
       if (liveCtx.withPet) {
         enterAdventure({ entrySource: "home_pet" });
@@ -1857,8 +2253,12 @@
       return updatedSession;
     }
 
-    // Pet care actions in world scene
-    if (/cat_pet|cat_feed|dog_pet|pet_care|pet_feed|pet_water|pet_play/.test(act)) {
+    // Pet care / food / water / shopping / campfire actions in world scene
+    if (
+      /cat_pet|cat_feed|dog_pet|pet_cat|feed_cat|give_cat_water|play_with_cat|brush_cat|pet_care|pet_feed|pet_water|pet_play|take_milk|open_fridge|drink_water|eat_snack|water_fountain|buy_icecream|pick_milk|pick_apple|pick_veg|pick_bread|camp_fire|camp_grill/.test(
+        act
+      )
+    ) {
       return completeObjective("care_bond", { actionId: act, world: W });
     }
 
@@ -2023,9 +2423,15 @@
     PLACE_META: PLACE_META,
     WEATHER_META: WEATHER_META,
     SITUATION_META: SITUATION_META,
+    STAGE_QUEST_CHAINS: STAGE_QUEST_CHAINS,
+    PLACE_QUEST_SPECS: PLACE_QUEST_SPECS,
     init: init,
     enterAdventure: enterAdventure,
     startAdventure: enterAdventure,
+    startNewQuest: startNewQuest,
+    resetQuestCycle: startNewQuest,
+    travelToQuestPlace: travelToQuestPlace,
+    getStageQuestMeta: getStageQuestMeta,
     leaveAdventure: leaveAdventure,
     exitAdventure: leaveAdventure,
     stopAdventure: leaveAdventure,

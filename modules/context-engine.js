@@ -1382,7 +1382,7 @@
               <input type="checkbox" class="ctx-tick-input" id="ctxTickSurprise" data-sidechar-tick="surprise" ${surpriseOn ? "checked" : ""} />
               <span>👥 Nhân vật phụ bất ngờ</span>
             </label>
-            <label class="ctx-pill ctx-linh-pill ctx-tick-pill ${linhTickOn ? "on" : ""}" id="ctxBtnLinh" for="ctxTickLinh" title="Đi cùng Linh (chỉ xuất hiện ở các chủ đề ngoài nhà khi bật)">
+            <label class="ctx-pill ctx-linh-pill ctx-tick-pill ${linhTickOn ? "on" : ""}" id="ctxBtnLinh" for="ctxTickLinh" style="${homeMode ? "display:none" : ""}" title="Đi cùng Linh (chỉ xuất hiện ở các chủ đề ngoài nhà khi bật)">
               <input type="checkbox" class="ctx-tick-input" id="ctxTickLinh" data-sidechar-tick="linh" ${linhTickOn ? "checked" : ""} />
               <span>🧑‍🦱 Đi cùng Linh</span>
             </label>

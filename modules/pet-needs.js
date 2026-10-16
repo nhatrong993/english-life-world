@@ -1853,11 +1853,15 @@
       }
       return {
         evolved: true,
+        canEvolve: false,
         petId: targetId,
         from: receipt.from,
         to: receipt.to,
+        fromLevel: receipt.fromLevel,
+        toLevel: receipt.toLevel,
         stage: receipt.to,
         level: receipt.toLevel,
+        xp: rec.xp,
         missing: []
       };
     }
@@ -1871,22 +1875,53 @@
       emitStageUpEvent(pending);
       return {
         evolved: true,
+        canEvolve: false,
         petId: targetId,
         from: pending.from,
         to: pending.to,
+        fromLevel: pending.fromLevel,
+        toLevel: pending.toLevel,
         stage: pending.to,
         level: pending.toLevel,
+        xp: rec.xp,
         missing: []
       };
     }
 
     return {
       evolved: false,
+      canEvolve: evalRes.canEvolve,
       petId: targetId,
       from: evalRes.from,
       to: evalRes.to,
+      fromLevel: evalRes.fromLevel,
+      toLevel: evalRes.toLevel,
       stage: rec.stage,
       level: rec.level,
+      xp: rec.xp,
+      missing: evalRes.missing.slice()
+    };
+  }
+
+  function evaluateEvolution(petId) {
+    var targetId = normalizeCanonicalPetId(petId) || getActivePetId();
+    var rec = ensurePetRecord(targetId);
+    var evalRes = evaluateEvolutionCandidate(rec);
+    if (evalRes.canEvolve) {
+      applyStageEvolutionToRecord(rec, evalRes, Date.now());
+      evalRes = evaluateEvolutionCandidate(rec);
+    }
+    return {
+      canEvolve: evalRes.canEvolve,
+      evolved: false,
+      petId: targetId,
+      from: evalRes.from,
+      to: evalRes.to,
+      fromLevel: evalRes.fromLevel,
+      toLevel: evalRes.toLevel,
+      stage: rec.stage,
+      level: rec.level,
+      xp: rec.xp,
       missing: evalRes.missing.slice()
     };
   }
@@ -2794,9 +2829,7 @@
     recordSkillUse: recordSkillUse,
     recordStageMission: recordStageMission,
     checkStageEvolution: checkStageEvolution,
-    evaluateEvolution: function (petId) {
-      return checkStageEvolution(petId || getActivePetId());
-    },
+    evaluateEvolution: evaluateEvolution,
     subscribe: subscribe,
     get state() {
       return getState();
