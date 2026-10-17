@@ -419,7 +419,7 @@ body.w3d-iso .w3d-stage-wrap {
     document.addEventListener("click", e => {
       if (!fridgeOpen) return;
       if (fc.contains(e.target)) return;
-      if (e.target.closest("#o-fridge") || e.target.closest(".w3d-open-fridge-btn")) return;
+      if (e.target.closest("#o-fridge") || e.target.closest(".w3d-open-fridge-btn") || e.target.closest("#panel")) return;
       closeFridge();
     });
 
@@ -427,7 +427,7 @@ body.w3d-iso .w3d-stage-wrap {
     fc.addEventListener("click", e => {
       const actBtn = e.target.closest("button[data-act], .fd-act, .act");
       if (actBtn && !actBtn.classList.contains("w3d-fridge-close-btn") && window.innerWidth <= 760) {
-        setTimeout(() => closeFridge(), 160);
+        setTimeout(() => closeFridge({ uiOnly: true }), 160);
       }
     });
 
@@ -479,10 +479,23 @@ body.w3d-iso .w3d-stage-wrap {
     }
   }
 
-  function closeFridge() {
+  function closeFridge(opts) {
     const fc = document.getElementById("fridgeCard");
     fridgeOpen = false;
     if (fc) fc.hidden = true;
+    if (opts && opts.uiOnly) return;
+    try {
+      const W = root.ELW && root.ELW.state ? root.ELW.state() : null;
+      if (W && W.fridge === "open") {
+        W.fridge = "closed";
+        const fEl = document.getElementById("o-fridge");
+        if (fEl) fEl.classList.remove("fridge-open");
+        if (typeof root.applyState === "function") root.applyState();
+        if (typeof root.renderObject === "function" && !document.querySelector("#panel .steps")) {
+          root.renderObject();
+        }
+      }
+    } catch (e) {}
   }
 
   function toggleFridge() {

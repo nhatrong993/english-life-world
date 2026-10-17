@@ -1282,7 +1282,7 @@ function makeTemp(name){const g=document.createElementNS(SVGNS,"g");g.classList.
 let queue=[],paused=false,pumping=false,uidN=1,hlUid=null;
 let running=false; // đang chạy một hành động
 const mkItem=id=>({uid:uidN++,id,status:"pending",why:"",ctx:null,auto:false});
-function enqueue(id){if(paused&&!queue.some(q=>q.status==="pending"))paused=false;queue.push(mkItem(id));renderSeq();if(/^go_/.test(id)){try{renderTabs()}catch(e){}try{window.ELW_CONTEXT&&ELW_CONTEXT.refresh&&ELW_CONTEXT.refresh()}catch(e){}}if(!paused)pump()}
+function enqueue(id){if(!paused&&queue.some(q=>q.id===id&&(q.status==="pending"||q.status==="running")))return;if(paused&&!queue.some(q=>q.status==="pending"))paused=false;queue.push(mkItem(id));renderSeq();if(/^go_/.test(id)){try{renderTabs()}catch(e){}try{window.ELW_CONTEXT&&ELW_CONTEXT.refresh&&ELW_CONTEXT.refresh()}catch(e){}}if(!paused)pump()}
 async function pump(){
  if(pumping)return;pumping=true;const tk=token;
  try{while(!paused&&tk===token){const it=queue.find(q=>q.status==="pending");if(!it)break;await execItem(it,tk)}}
@@ -1369,7 +1369,7 @@ async function execItem(it,tk){
  let why=mg||a.pre();
  // Đã ở trạng thái đó rồi (vd. cửa sổ đang mở): coi như hoàn thành, chỉ đọc lại câu
  const chTask=!!(window.ELW_CHALLENGE&&ELW_CHALLENGE.active&&ELW_CHALLENGE.active()&&ELW_CHALLENGE.nextTaskIds&&ELW_CHALLENGE.nextTaskIds().includes(a.id));
- if(why&&!mg&&!it.auto&&isAlready(why)&&(chTask||!ALREADY_FIX[a.id])){it.status="done";it.already=true;renderSeq();
+ if(why&&!mg&&!it.auto&&isAlready(why)&&(chTask||!ALREADY_FIX[a.id])){it.status="done";it.already=true;const prev=queue.find(q=>q!==it&&q.id===it.id&&q.status==="done");if(prev){prev.count=(prev.count||1)+1;const idx=queue.indexOf(it);if(idx>=0)queue.splice(idx,1)}renderSeq();
   const sb=sayBubble(a);toastG(`✓ “${a.label}”: ${why} Tính là đã hoàn thành.`);
   try{window.ELW_CHALLENGE&&ELW_CHALLENGE.onAction(a.id,W)}catch(e){}try{window.ELW_MISSION&&ELW_MISSION.onAction(a.id,"done",W)}catch(e){}
   lastDone=a.id;recentActs.push(a.id);if(recentActs.length>6)recentActs.shift();renderStory();await waitTalk(sb);return}
@@ -1390,7 +1390,7 @@ async function execItem(it,tk){
   try{window.ELW_MISSION&&!it.auto&&ELW_MISSION.onAction(a.id,"done",W)}catch(e){console.error(e)}
   if(W.activity!=="watching"&&!W.sitting)await pose("idle");else if(!charG.classList.contains("idle"))pose("idle");
  }catch(e){if(e instanceof Abort){it.status="cancelled"}throw e}
- finally{renderSeq();renderStory();if(dlgPlayer&&!it.auto&&(it.status==="done"||it.status==="blocked"))dlgPlayer.actionDone(it.id,it.status==="done");if(rpPlayer&&!it.auto&&(it.status==="done"||it.status==="blocked"))rpPlayer.actionDone(it.id,it.status==="done")}
+ finally{if(it.status==="done"){const prev=queue.find(q=>q!==it&&q.id===it.id&&q.status==="done");if(prev){prev.count=(prev.count||1)+1;if(!it.auto)prev.auto=false;if(it.reply&&!prev.reply)prev.reply=it.reply;const idx=queue.indexOf(it);if(idx>=0)queue.splice(idx,1)}}renderSeq();renderStory();if(dlgPlayer&&!it.auto&&(it.status==="done"||it.status==="blocked"))dlgPlayer.actionDone(it.id,it.status==="done");if(rpPlayer&&!it.auto&&(it.status==="done"||it.status==="blocked"))rpPlayer.actionDone(it.id,it.status==="done")}
 }
 function resetScene(clearConv){
  token++;speechStop();
@@ -1550,9 +1550,10 @@ function selectObject(id){
   try{say(obj.en)}catch(e){}
  }catch(e){console.error("[selectObject] failed:",e)}
 }
-// Hành động đã làm / đang chờ: bấm lại chỉ PHÁT LẠI câu, không thêm bản trùng, không làm lại
-function actStatus(id){const q=queue.filter(x=>x.id===id&&!x.auto);if(q.some(x=>x.status==="pending"||x.status==="running"))return"pending";if(q.some(x=>x.status==="done"))return"done";return null}
-function actClick(id){const st=actStatus(id);if(st){const a=ACT[id];charSay(a.sentence);const rp=npcReplyOf(a);const t=say(a.sentence,.92);if(rp)waitTalk(t).then(()=>showNpc(rp));const b=panel.querySelector(`[data-act="${id}"]`);if(b){b.classList.remove("replaying");void b.offsetWidth;b.classList.add("replaying")}return}enqueue(id);renderObject()}
+// Tách 3 luồng: (A) actClick luôn thực thi khi hợp lệ theo trạng thái hiện tại; (B) sayAct nghe lại riêng; (C) narrationHistory chống trùng đoạn văn
+function actStatus(id){if(queue.some(x=>x.id===id&&(x.status==="pending"||x.status==="running")))return"pending";const q=queue.filter(x=>x.id===id&&!x.auto);if(q.some(x=>x.status==="done"))return"done";return null}
+function sayAct(id){const a=ACT[id];if(!a)return;charSay(a.sentence);const rp=npcReplyOf(a);const t=say(a.sentence,.92);if(rp)waitTalk(t).then(()=>showNpc(rp));const b=panel.querySelector(`[data-say-sent="${id}"]`)||panel.querySelector(`[data-act="${id}"]`);if(b){b.classList.remove("replaying");void b.offsetWidth;b.classList.add("replaying")}}
+function actClick(id){const a=ACT[id];if(!a)return;if(actStatus(id)==="pending")return;const busyQ=pumping||queue.some(q=>q.status==="pending"),why=busyQ?null:a.pre();if(why){toastG(`💡 “${a.label}”: ${why}`);renderObject();return}enqueue(id);renderObject()}
 function renderObject(){
  try{
  const o=OBJECTS[selObj];if(!o){panel.innerHTML=`<p class="hint">Không tìm thấy đồ vật.</p>`;return}
@@ -1576,14 +1577,14 @@ function renderObject(){
  }catch(e){}
  panel.innerHTML=`<div class="ohead"><b>${o.en}</b><span>${o.ipa} · ${trObj(selObj,o)}</span><button class="iconbtn" data-say="${o.en}">🔊</button><span style="margin-left:auto" class="meta">${learned}/${acts.length} đã học</span></div>
  <p class="hint">${busyQ?"Đang chạy chuỗi: hành động bạn chọn sẽ được <b>thêm vào cuối chuỗi</b>.":"Chọn hành động — nhân vật làm ngay và thêm vào chuỗi của bạn:"}</p>
- <div class="acts">${acts.map(a=>{const st=actStatus(a.id),why=(busyQ||st)?null:a.pre(),canRedo=st==="done"&&!busyQ&&!a.pre();return `<div style="display:flex;gap:6px"><button class="act ${st?"act-"+st:""}" style="flex:1" data-act="${a.id}" ${why?"disabled":""} title="${st?"Bấm để nghe lại câu":""}">
+ <div class="acts">${acts.map(a=>{const st=actStatus(a.id),why=busyQ?null:a.pre();return `<div style="display:flex;gap:6px"><button class="act ${st?"act-"+st:""}" style="flex:1" data-act="${a.id}" ${why?"disabled":""} title="${why||a.sentence}">
   <span class="dot" style="background:${stageColor(stage(a.id))}" title="${LABELS[stage(a.id)]}"></span>
-  <span style="flex:1"><b>${a.label}</b><small>${trLabel(a)}</small>${why?`<span class="why">${why}</span>`:""}${st?`<span class="replay">${st==="done"?"✓ đã làm · 🔊 bấm để nghe lại":"⏳ đang làm · 🔊 bấm để nghe lại"}</span>`:""}</span><span>${st?"🔊":"＋"}</span></button>
-  ${canRedo?`<button class="iconbtn" data-redo="${a.id}" title="Làm lại hành động này">↻</button>`:""}
+  <span style="flex:1"><b>${a.label}</b><small>${trLabel(a)}</small>${why?`<span class="why">${why}</span>`:""}${st?`<span class="replay">${st==="done"?"✓ đã làm":"⏳ đang làm"}</span>`:""}</span><span>${st==="pending"?"⏳":"＋"}</span></button>
+  <button class="iconbtn" data-say-sent="${a.id}" title="Nghe lại câu: ${a.sentence}">🔊</button>
   <button class="iconbtn" data-learn="${a.id}" title="Học câu này">📖</button></div>`}).join("")}</div>${npcQHtml}`;
  panel.querySelector("[data-say]").onclick=()=>say(o.en,.8);
  panel.querySelectorAll("[data-act]").forEach(b=>b.onclick=()=>actClick(b.dataset.act));
- panel.querySelectorAll("[data-redo]").forEach(b=>b.onclick=()=>{enqueue(b.dataset.redo);renderObject()});
+ panel.querySelectorAll("[data-say-sent]").forEach(b=>b.onclick=()=>sayAct(b.dataset.saySent));
  panel.querySelectorAll("[data-learn]").forEach(b=>b.onclick=()=>openLesson(b.dataset.learn));
  panel.querySelectorAll("[data-npcq]").forEach(b=>b.onclick=()=>{
   const [npcId,qi]=b.dataset.npcq.split(":");
@@ -1749,8 +1750,9 @@ function vpOf(it,rich){const d=STORY[it.id];if(!d)return[ACT[it.id].label.toLowe
  let en=rich?d[1]:d[0];
  if(it.id==="pour_milk"&&rich&&!it.ctx.milkFromFridge)en="slowly pour milk into the cup"; // chỉ nói "cold" khi sữa vừa lấy từ tủ lạnh
  return[en,d[2]]}
+function narrationHistory(){const seen=new Set();return queue.filter(q=>q.status==="done"&&!seen.has(q.id)&&seen.add(q.id))}
 function buildStory(){
- const done=queue.filter(q=>q.status==="done");if(!done.length)return[];
+ const done=narrationHistory();if(!done.length)return[];
  if(narr.storyMode!=="simple"&&window.ELW_LEVELS){if(!/^[ABC][12]$/.test(narr.storyMode))narr.storyMode="A2";
   return ELW_LEVELS.build(done.map(q=>({uid:q.uid,id:q.id,ctx:q.ctx||{}})),narr.storyMode,{rich:narr.rich,fallback:id=>STORY[id]?[STORY[id][narr.rich?1:0],STORY[id][2]]:null})}
  if(narr.storyMode==="simple")return done.map(it=>{const [en,vi]=vpOf(it,false);return{uids:[it.uid],en:`I ${en}.`,vi:`Tôi ${vi}.`}});
@@ -1980,7 +1982,7 @@ function renderExtras(st){const box=$id("extras");if(!box)return;
  if(!window.ELW_LEVELS){box.innerHTML="";return}
  const mode=narr.storyMode==="simple"?"A2":narr.storyMode;
  let x={chunks:[],words:[],grammar:[]};
- if(st.length){try{x=ELW_LEVELS.extras(queue.filter(q=>q.status==="done").map(q=>({uid:q.uid,id:q.id,ctx:q.ctx||{}})),mode,{rich:narr.rich,fallback:id=>STORY[id]?[STORY[id][0],STORY[id][2]]:null})||x}catch(e){}}
+ if(st.length){try{x=ELW_LEVELS.extras(narrationHistory().map(q=>({uid:q.uid,id:q.id,ctx:q.ctx||{}})),mode,{rich:narr.rich,fallback:id=>STORY[id]?[STORY[id][0],STORY[id][2]]:null})||x}catch(e){}}
  const T={chunks:"🧩 Chunks",words:"📚 Từ mới",grammar:"📐 Ngữ pháp",book:"📒 Sổ từ"};
  const emptyHint='<span class="empty2">Thực hiện vài hành động ở tab 🎮 Chơi để mở cụm từ, từ vựng và điểm ngữ pháp của đoạn văn.</span>';
  const body=xTab==="chunks"?(x.chunks&&x.chunks.length?x.chunks.map(c=>`<div><button class="iconbtn" data-x="${c.en}">🔊</button><b>${c.en}</b><small>${c.vi}</small></div>`).join(""):emptyHint)
@@ -2143,12 +2145,13 @@ let dayItems=[],pendingScene=null,rpPlayer=null;const rpHistory=[];
 function lighting(){if(!window.ELW_DAY)return;try{ELW_DAY.applyLighting(room,ELW_DAY.phase(),{weather:ELW_DAY.state.weather})}catch(e){}}
 function decorateNeeds(){if(!window.ELW_NEEDS)return;const nc=$id("needsCard");if(roomTopic(W.room)!=="home"){if(nc)nc.hidden=true;return}try{ELW_NEEDS.decorate(world,W);ELW_NEEDS.renderPanel(nc,{speak:t=>say(t,.9),enqueue:id=>{if(ACT[id])enqueue(id)},W,level:narr.storyMode})}catch(e){console.error(e)}}
 function onWorldAction(it,a){
- if(!it.auto)dayItems.push({uid:it.uid,id:it.id,ctx:it.ctx||{}});
+ if(!it.auto&&!dayItems.some(d=>d.id===it.id))dayItems.push({uid:it.uid,id:it.id,ctx:it.ctx||{}});
  if(window.ELW_NEEDS){ELW_NEEDS.onAction(a.id);ELW_NEEDS.save&&ELW_NEEDS.save()}
  if(window.ELW_PET_ADVENTURE&&ELW_PET_ADVENTURE.onWorldAction)try{ELW_PET_ADVENTURE.onWorldAction(a.id,W)}catch(e){}
  if(window.ELW_PET_PERSONALITY&&ELW_PET_PERSONALITY.onWorldAction)try{ELW_PET_PERSONALITY.onWorldAction(a.id,W,a)}catch(e){}
  if(window.ELW_DAY){const r=ELW_DAY.onAction(a.id)||{};if(r.endOfDay)setTimeout(showDiary,600)}
  if(window.ELW_FOOD){try{ELW_FOOD.onActionDone(a.id,W);saveW();renderFridgeCard()}catch(e){console.error(e)}}
+ if(a.id==="close_fridge"&&window.ELW_WORLD3D&&ELW_WORLD3D.closeFridge){try{ELW_WORLD3D.closeFridge({uiOnly:true})}catch(e){}}
  if(window.ELW_EVENTS)try{ELW_EVENTS.onAction(a.id,W)}catch(e){console.error(e)}
  if(window.ELW_CHALLENGE&&!it.auto)try{ELW_CHALLENGE.onAction(a.id,W)}catch(e){console.error(e)}
  lighting();decorateNeeds();renderPeople();
@@ -2174,7 +2177,7 @@ if(window.ELW_DAY){try{const st=document.createElement("style");st.textContent=E
  if(ELW_DAY.startDay&&!ELW_DAY.state.ended&&!(ELW_DAY.state.quests||[]).length)ELW_DAY.startDay({});
  ELW_DAY.renderHud($id("dayHud"),{speak:t=>say(t,.9),onStartDay:()=>{dayItems=[];lighting()},onEndDay:showDiary});
  ELW_DAY.subscribe&&ELW_DAY.subscribe(()=>lighting())}catch(e){console.error(e)}}
-if(window.ELW_NEEDS){try{const st=document.createElement("style");st.textContent=ELW_NEEDS.css||"";document.head.appendChild(st);ELW_NEEDS.load&&ELW_NEEDS.load();
+if(window.ELW_NEEDS){try{Object.defineProperty(ELW_NEEDS,"__elwPetDecoratePatched",{get(){return!!(this.decorate&&this.decorate.__elwPetDecoratePatched)},set(){},configurable:true});const st=document.createElement("style");st.textContent=ELW_NEEDS.css||"";document.head.appendChild(st);ELW_NEEDS.load&&ELW_NEEDS.load();
  ELW_NEEDS.setRealTime&&ELW_NEEDS.setRealTime(true);ELW_NEEDS.catchUp&&ELW_NEEDS.catchUp(Date.now())}catch(e){console.error(e)}}else $id("needsCard").hidden=true;
 if(window.ELW_ROLEPLAY){const st=document.createElement("style");st.textContent=ELW_ROLEPLAY.css||"";document.head.appendChild(st)}
 renderMistakes();setTimeout(()=>{lighting();decorateNeeds()},300);
